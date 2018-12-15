@@ -10,7 +10,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Description:
@@ -23,9 +25,4 @@ public class TestController {
     @Autowired
     private StudentMapper studentMapper;
 
-    @RequestMapping("/test")
-    @ResponseBody
-    public User test(){
-        return studentMapper.findById(1);
-    }
 }
