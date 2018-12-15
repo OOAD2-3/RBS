@@ -26,10 +26,12 @@ public class UserDao {
      * @Time: 16:34 2018/12/15
     */
     public User getUserByUsername(String username) {
-        User user=teacherMapper.findByAccount(username);
+        return studentMapper.findByAccount(username);
+        /*User user=teacherMapper.findByAccount(username);
         if(user==null){
             user=studentMapper.findByAccount(username);
         }
-        return user;
+        user=studentMapper.findByAccount(username);
+        return user;*/
     }
 }

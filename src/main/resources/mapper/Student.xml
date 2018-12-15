@@ -13,4 +13,8 @@
     <select id="findById" parameterType="Integer" resultMap="tab_student">
         SELECT * FROM student WHERE id = #{id}
     </select>
+
+    <select id="findByAccount" parameterType="String" resultMap="tab_student">
+        SELECT * FROM student WHERE account = #{account}
+    </select>
 </mapper>

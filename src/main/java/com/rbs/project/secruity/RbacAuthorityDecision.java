@@ -25,10 +25,6 @@ public class RbacAuthorityDecision {
         boolean hasPermission = false;
 
         System.out.println(request.getRequestURI());
-        if (request.getMethod() == "OPTIONS") {
-            return true;
-        }
-
         if (userInfo instanceof UserDetails) {
 
             String username = ((UserDetails) userInfo).getUsername();
