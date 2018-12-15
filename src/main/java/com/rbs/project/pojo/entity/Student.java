@@ -12,6 +12,9 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Student extends User{
     private int id;
+    /**
+     * 学生姓名
+     */
     private String studentName;
 
     public int getId() {
