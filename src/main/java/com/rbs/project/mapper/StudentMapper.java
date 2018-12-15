@@ -17,4 +17,11 @@ public interface StudentMapper {
      * @return
      */
     Student findById(int id);
+
+    /**
+     * 通过用户名锁定一个学生
+     * @param account
+     * @return
+     */
+    Student findByAccount(String account);
 }

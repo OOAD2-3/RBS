@@ -1,5 +1,6 @@
 package com.rbs.project.secruity;
 
+
 import com.rbs.project.secruity.jwt.JwtAuthenticationTokenFilter;
 import com.rbs.project.secruity.jwt.JwtUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,18 +9,22 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsUtils;
 
 /**
+ * Description:
+ *
  * @Author: 17Wang
- * @Date: 16:01 2018/12/5
- * Description: 开放所有权限
+ * @Date: 23:42 2018/12/9
  */
 @Configuration
+@EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
-public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+public class MySecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private JwtUserDetailsService jwtUserDetailsService;
@@ -66,7 +71,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
                 .and()
                 .authorizeRequests()
-                //.requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
+                .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
+                .antMatchers("/common/test").permitAll()
 
                 .anyRequest()
                 .access("@rbacauthorityservice.hasPermission(request,authentication)")
@@ -96,6 +102,4 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         //禁用缓存
         http.headers().cacheControl();
     }
-
-
 }
