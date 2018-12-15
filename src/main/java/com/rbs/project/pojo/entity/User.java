@@ -6,6 +6,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 
+
 /**
  * Description: teacher和student的父类，也用于secruity身份认证
  *
