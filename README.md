@@ -5,7 +5,7 @@
 - [数据库标准](https://github.com/Black-W/DatabaseStandard) 
 ## 2. RestfulAPI
 由Controller标准组提供：
-- [API标准](https://app.swaggerhub.com/apis/OOAD2018Controller/OOAD2018RestfulAPInew/1.0-oas3) 
+- [API标准](https://github.com/TanYJie/ControllerWorkingGroup) 
 ## 3. 需求说明
 
 ## 4. 界面说明
