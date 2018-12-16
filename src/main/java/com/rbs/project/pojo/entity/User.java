@@ -14,11 +14,23 @@ import java.util.Collection;
  * @Date: 15:14 2018/12/15
  */
 public abstract class User implements UserDetails {
-
+    private int id;
     private String account;
     private String password;
     private boolean active;
     private String email;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getAccount() {
+        return account;
+    }
 
     public void setUsername(String account) {
         this.account = account;

@@ -1,4 +1,4 @@
-package com.rbs.project.pojo.entity;
+package com.rbs.project.pojo;
 
 /**
  * @Author: 17Wang

@@ -1,7 +1,7 @@
 package com.rbs.project.secruity;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.rbs.project.pojo.entity.RespInfo;
+import com.rbs.project.pojo.RespInfo;
 import com.rbs.project.utils.JwtTokenUtil;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;

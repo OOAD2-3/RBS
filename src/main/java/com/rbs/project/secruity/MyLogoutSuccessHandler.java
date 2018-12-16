@@ -1,7 +1,7 @@
 package com.rbs.project.secruity;
 
 import com.alibaba.fastjson.JSON;
-import com.rbs.project.pojo.entity.RespInfo;
+import com.rbs.project.pojo.RespInfo;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 import org.springframework.stereotype.Component;

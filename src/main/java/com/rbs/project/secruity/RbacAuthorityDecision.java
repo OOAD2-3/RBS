@@ -30,13 +30,13 @@ public class RbacAuthorityDecision {
 
         //获取资源
         Set<String> urls = new HashSet();
+        urls.add("/user/**");
         if (userInfo instanceof Student) {
             System.out.println("我是学生");
 
             // 这些 url 都是要登录后才能访问，且其他的 url 都不能访问！
             // 学生的接口权限
-            urls.add("/common/**");
-            urls.add("/g");
+            urls.add("/student/**");
 
 
         } else if (userInfo instanceof Teacher) {
@@ -44,8 +44,7 @@ public class RbacAuthorityDecision {
 
             // 这些 url 都是要登录后才能访问，且其他的 url 都不能访问！
             // 老师的接口权限
-            urls.add("/common/**");
-            urls.add("/g");
+            urls.add("/teacher/**");
 
         } else {
             return false;

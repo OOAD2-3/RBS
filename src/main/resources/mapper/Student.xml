@@ -11,10 +11,15 @@
     </resultMap>
 
     <select id="findById" parameterType="Integer" resultMap="tab_student">
-        SELECT * FROM student WHERE id = #{id}
+        SELECT id,account,password,is_active,student_name,email FROM student WHERE id = #{id}
     </select>
 
     <select id="findByAccount" parameterType="String" resultMap="tab_student">
-        SELECT * FROM student WHERE account = #{account}
+        SELECT id,account,password,is_active,student_name,email FROM student WHERE account = #{account}
     </select>
+
+    <update id="updatePasswordAndEmailAndActiveById" parameterType="com.rbs.project.pojo.entity.Student">
+        UPDATE student SET password=#{password},email=#{email},is_active=#{active}
+        WHERE id=#{id}
+    </update>
 </mapper>
