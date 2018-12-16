@@ -32,7 +32,7 @@ public class MyAuthenticationSuccessHandler implements AuthenticationSuccessHand
         respInfo.setMsg("Login Success!");
 
         //生成token
-        String jwtToken = JwtTokenUtil.generateToken(username, 300);
+        String jwtToken = JwtTokenUtil.generateToken(username, 7*24*60*60);
         respInfo.setJwtToken(jwtToken);
 
         httpServletResponse.setHeader("wangshiqi", "success");

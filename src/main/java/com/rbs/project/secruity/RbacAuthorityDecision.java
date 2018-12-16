@@ -1,5 +1,8 @@
 package com.rbs.project.secruity;
 
+import com.rbs.project.pojo.entity.Student;
+import com.rbs.project.pojo.entity.Teacher;
+import org.springframework.context.annotation.Bean;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
@@ -16,36 +19,47 @@ import java.util.Set;
  * @Author: 17Wang
  * @Date: 12:52 2018/12/10
  */
-@Component("rbacauthorityservice")
+@Component("RBAC")
 public class RbacAuthorityDecision {
+
     public boolean hasPermission(HttpServletRequest request, Authentication authentication) {
 
         Object userInfo = authentication.getPrincipal();
 
         boolean hasPermission = false;
 
-        System.out.println(request.getRequestURI());
-        if (userInfo instanceof UserDetails) {
+        //获取资源
+        Set<String> urls = new HashSet();
+        if (userInfo instanceof Student) {
+            System.out.println("我是学生");
 
-            String username = ((UserDetails) userInfo).getUsername();
+            // 这些 url 都是要登录后才能访问，且其他的 url 都不能访问！
+            // 学生的接口权限
+            urls.add("/common/**");
+            urls.add("/g");
 
-            //获取资源
-            Set<String> urls = new HashSet();
 
-            urls.add("/common/**"); // 这些 url 都是要登录后才能访问，且其他的 url 都不能访问！
+        } else if (userInfo instanceof Teacher) {
+            System.out.println("我是老师");
 
-            AntPathMatcher antPathMatcher = new AntPathMatcher();
+            // 这些 url 都是要登录后才能访问，且其他的 url 都不能访问！
+            // 老师的接口权限
+            urls.add("/common/**");
+            urls.add("/g");
 
-            for (String url : urls) {
-                if (antPathMatcher.match(url, request.getRequestURI())) {
-                    hasPermission = true;
-                    break;
-                }
-            }
-
-            return hasPermission;
         } else {
             return false;
         }
+
+        //当前接口和权限接口进行匹配
+        AntPathMatcher antPathMatcher = new AntPathMatcher();
+        for (String url : urls) {
+            if (antPathMatcher.match(url, request.getRequestURI())) {
+                hasPermission = true;
+                break;
+            }
+        }
+
+        return hasPermission;
     }
 }

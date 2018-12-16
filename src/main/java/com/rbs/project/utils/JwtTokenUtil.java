@@ -13,14 +13,16 @@ import java.util.Date;
  * @Date: 12:34 2018/12/10
  */
 public class JwtTokenUtil {
-    // 寻找证书文件
+    // 加盐
     private static String salt="wangshiqi";
 
     public static String generateToken(String subject, int expirationSeconds) {
         return Jwts.builder()
                 .setClaims(null)
                 .setSubject(subject)
+                //设置过期时间
                 .setExpiration(new Date(System.currentTimeMillis() + expirationSeconds * 1000))
+                //设置加密方式
                 .signWith(SignatureAlgorithm.HS512, salt)
                 .compact();
     }
