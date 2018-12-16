@@ -16,6 +16,8 @@ import java.security.GeneralSecurityException;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * @Author: WinstonDeng
@@ -113,6 +115,13 @@ public class EmailUtils {
             flag = false;
         }
         return flag;
+    }
+
+    public static boolean checkEmailFormat(String email){
+        String check = "^([a-z0-9A-Z]+[-|\\.]?)+[a-z0-9A-Z]@([a-z0-9A-Z]+(-[a-z0-9A-Z]+)?\\.)+[a-zA-Z]{2,}$";
+        Pattern regex = Pattern.compile(check);
+        Matcher matcher = regex.matcher(email);
+        return matcher.matches();
     }
 }
 

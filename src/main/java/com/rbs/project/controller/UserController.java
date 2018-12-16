@@ -1,7 +1,11 @@
 package com.rbs.project.controller;
 
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.rbs.project.dao.UserDao;
+import com.rbs.project.exception.MyException;
+import com.rbs.project.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * Description: user资源接口
@@ -12,5 +16,13 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/user")
 public class UserController {
+    @Autowired
+    private UserService userService;
+
+    @GetMapping("/password")
+    @ResponseBody
+    public ResponseEntity<Boolean> getPassword(@RequestParam("account") String account) throws MyException {
+        return ResponseEntity.ok().body(userService.getPassword(account));
+    }
 
 }
