@@ -1,6 +1,5 @@
 package com.rbs.project.pojo.entity;
 
-import java.math.BigInteger;
 
 /**
  * @Author: WinstonDeng
@@ -11,15 +10,15 @@ import java.math.BigInteger;
 public class TeamValidApplication {
     //基本信息
 
-    private BigInteger id;
+    private long id;
     /**
      * 队伍id
      */
-    private BigInteger teamId;
+    private long teamId;
     /**
      * 教师id
      */
-    private BigInteger teacherId;
+    private long teacherId;
     /**
      * 申请原因
      */
@@ -41,27 +40,28 @@ public class TeamValidApplication {
 
     //==================================================getter AND setter==================================================//
 
-    public BigInteger getId() {
+
+    public long getId() {
         return id;
     }
 
-    public void setId(BigInteger id) {
+    public void setId(long id) {
         this.id = id;
     }
 
-    public BigInteger getTeamId() {
+    public long getTeamId() {
         return teamId;
     }
 
-    public void setTeamId(BigInteger teamId) {
+    public void setTeamId(long teamId) {
         this.teamId = teamId;
     }
 
-    public BigInteger getTeacherId() {
+    public long getTeacherId() {
         return teacherId;
     }
 
-    public void setTeacherId(BigInteger teacherId) {
+    public void setTeacherId(long teacherId) {
         this.teacherId = teacherId;
     }
 

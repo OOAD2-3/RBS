@@ -1,7 +1,6 @@
 package com.rbs.project.pojo.entity;
 
 import java.math.BigDecimal;
-import java.math.BigInteger;
 
 /**
  * @Author: WinstonDeng
@@ -13,11 +12,11 @@ public class SeminarScore {
     /**
      * 班级讨论课id
      */
-    private BigInteger cClassSeminarId;
+    private long cClassSeminarId;
     /**
      * 队伍id
      */
-    private BigInteger teamId;
+    private long teamId;
     /**
      * 本次讨论课总分
      */
@@ -47,19 +46,19 @@ public class SeminarScore {
 
     //==================================================getter AND setter==================================================//
 
-    public BigInteger getcClassSeminarId() {
+    public long getcClassSeminarId() {
         return cClassSeminarId;
     }
 
-    public void setcClassSeminarId(BigInteger cClassSeminarId) {
+    public void setcClassSeminarId(long cClassSeminarId) {
         this.cClassSeminarId = cClassSeminarId;
     }
 
-    public BigInteger getTeamId() {
+    public long getTeamId() {
         return teamId;
     }
 
-    public void setTeamId(BigInteger teamId) {
+    public void setTeamId(long teamId) {
         this.teamId = teamId;
     }
 

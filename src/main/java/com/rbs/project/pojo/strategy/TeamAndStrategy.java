@@ -1,7 +1,5 @@
 package com.rbs.project.pojo.strategy;
 
-import java.math.BigInteger;
-
 /**
  * @Author: WinstonDeng
  * @Description: “与”组队策略
@@ -9,7 +7,7 @@ import java.math.BigInteger;
  * @Modified by:
  */
 public class TeamAndStrategy {
-    private BigInteger id;
+    private long id;
     /**
      *  “与”组队策略1实现类名称
      */
@@ -17,7 +15,7 @@ public class TeamAndStrategy {
     /**
      * “与”组队策略1_id
      */
-    private BigInteger strategyAId;
+    private long strategyAId;
     /**
      *  “与”组队策略2实现类名称
      */
@@ -25,15 +23,15 @@ public class TeamAndStrategy {
     /**
      * “与”组队策略2_id
      */
-    private BigInteger strategyBId;
+    private long strategyBId;
 
     //==================================================getter AND setter==================================================//
 
-    public BigInteger getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(BigInteger id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -45,11 +43,11 @@ public class TeamAndStrategy {
         this.strategyAName = strategyAName;
     }
 
-    public BigInteger getStrategyAId() {
+    public long getStrategyAId() {
         return strategyAId;
     }
 
-    public void setStrategyAId(BigInteger strategyAId) {
+    public void setStrategyAId(long strategyAId) {
         this.strategyAId = strategyAId;
     }
 
@@ -61,11 +59,11 @@ public class TeamAndStrategy {
         this.strategyBName = strategyBName;
     }
 
-    public BigInteger getStrategyBId() {
+    public long getStrategyBId() {
         return strategyBId;
     }
 
-    public void setStrategyBId(BigInteger strategyBId) {
+    public void setStrategyBId(long strategyBId) {
         this.strategyBId = strategyBId;
     }
 }

@@ -1,7 +1,7 @@
 package com.rbs.project.pojo.entity;
 
 import java.math.BigDecimal;
-import java.math.BigInteger;
+
 
 /**
  * @Author:17Wang
@@ -11,23 +11,23 @@ import java.math.BigInteger;
 public class Question {
     //基本信息
 
-    private BigInteger id;
+    private long id;
     /**
      * 班级讨论课id
      */
-    private BigInteger cClassSeminarId;
+    private long cClassSeminarId;
     /**
      * 问题所针对的发言id
      */
-    private BigInteger attendanceId;
+    private long attendanceId;
     /**
      * 属于哪个队伍
      */
-    private BigInteger teamId;
+    private long teamId;
     /**
      * 学生id
      */
-    private BigInteger studentId;
+    private long studentId;
     /**
      * 提问分数
      */
@@ -57,43 +57,43 @@ public class Question {
 
     //==================================================getter AND setter==================================================//
 
-    public BigInteger getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(BigInteger id) {
+    public void setId(long id) {
         this.id = id;
     }
 
-    public BigInteger getcClassSeminarId() {
+    public long getcClassSeminarId() {
         return cClassSeminarId;
     }
 
-    public void setcClassSeminarId(BigInteger cClassSeminarId) {
+    public void setcClassSeminarId(long cClassSeminarId) {
         this.cClassSeminarId = cClassSeminarId;
     }
 
-    public BigInteger getAttendanceId() {
+    public long getAttendanceId() {
         return attendanceId;
     }
 
-    public void setAttendanceId(BigInteger attendanceId) {
+    public void setAttendanceId(long attendanceId) {
         this.attendanceId = attendanceId;
     }
 
-    public BigInteger getTeamId() {
+    public long getTeamId() {
         return teamId;
     }
 
-    public void setTeamId(BigInteger teamId) {
+    public void setTeamId(long teamId) {
         this.teamId = teamId;
     }
 
-    public BigInteger getStudentId() {
+    public long getStudentId() {
         return studentId;
     }
 
-    public void setStudentId(BigInteger studentId) {
+    public void setStudentId(long studentId) {
         this.studentId = studentId;
     }
 
