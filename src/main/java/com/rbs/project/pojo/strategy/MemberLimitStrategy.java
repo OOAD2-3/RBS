@@ -1,7 +1,5 @@
 package com.rbs.project.pojo.strategy;
 
-import java.math.BigInteger;
-
 /**
  * @Author: WinstonDeng
  * @Description: member_limit_strategy 表记录的是对一个team中总人数的限制
@@ -9,7 +7,7 @@ import java.math.BigInteger;
  * @Modified by:
  */
 public class MemberLimitStrategy {
-    private BigInteger id;
+    private long id;
     /**
      * 最少人数
      */
@@ -21,11 +19,11 @@ public class MemberLimitStrategy {
 
     //==================================================getter AND setter==================================================//
 
-    public BigInteger getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(BigInteger id) {
+    public void setId(long id) {
         this.id = id;
     }
 

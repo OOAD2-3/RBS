@@ -1,6 +1,5 @@
 package com.rbs.project.pojo.entity;
 
-import java.math.BigInteger;
 import java.sql.Timestamp;
 import java.util.List;
 
@@ -12,11 +11,11 @@ import java.util.List;
 public class Course {
     //基本信息
 
-    private BigInteger id;
+    private long id;
     /**
      * 属于哪个老师
      */
-    private BigInteger teacherId;
+    private long teacherId;
     /**
      * 课程名
      */
@@ -48,11 +47,11 @@ public class Course {
     /**
      * 队伍共享主课程
      */
-    private BigInteger teamMainCourseId;
+    private long teamMainCourseId;
     /**
      * 讨论课共享主课程
      */
-    private BigInteger seminarMainCourseId;
+    private long seminarMainCourseId;
 
     //关系
     /**
@@ -90,21 +89,28 @@ public class Course {
 
     //==================================================getter AND setter==================================================//
 
-
-    public BigInteger getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(BigInteger id) {
+    public void setId(long id) {
         this.id = id;
     }
 
-    public BigInteger getTeacherId() {
+    public long getTeacherId() {
         return teacherId;
     }
 
-    public void setTeacherId(BigInteger teacherId) {
+    public void setTeacherId(long teacherId) {
         this.teacherId = teacherId;
+    }
+
+    public void setTeamMainCourseId(long teamMainCourseId) {
+        this.teamMainCourseId = teamMainCourseId;
+    }
+
+    public void setSeminarMainCourseId(long seminarMainCourseId) {
+        this.seminarMainCourseId = seminarMainCourseId;
     }
 
     public String getName() {
@@ -163,20 +169,12 @@ public class Course {
         this.teamEndTime = teamEndTime;
     }
 
-    public BigInteger getTeamMainCourseId() {
+    public long getTeamMainCourseId() {
         return teamMainCourseId;
     }
 
-    public void setTeamMainCourseId(BigInteger teamMainCourseId) {
-        this.teamMainCourseId = teamMainCourseId;
-    }
-
-    public BigInteger getSeminarMainCourseId() {
+    public long getSeminarMainCourseId() {
         return seminarMainCourseId;
-    }
-
-    public void setSeminarMainCourseId(BigInteger seminarMainCourseId) {
-        this.seminarMainCourseId = seminarMainCourseId;
     }
 
     public Teacher getTeacher() {

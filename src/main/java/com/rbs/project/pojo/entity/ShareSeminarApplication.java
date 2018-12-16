@@ -1,7 +1,5 @@
 package com.rbs.project.pojo.entity;
 
-import java.math.BigInteger;
-
 /**
  * @Author: WinstonDeng
  * @Description: OOAD_Course_ManageSystem
@@ -9,19 +7,19 @@ import java.math.BigInteger;
  * @Modified by:
  */
 public class ShareSeminarApplication {
-    private BigInteger id;
+    private long id;
     /**
      * 主课程id
      */
-    private BigInteger mainCourseId;
+    private long mainCourseId;
     /**
      * 从课程id
      */
-    private BigInteger subCourseId;
+    private long subCourseId;
     /**
      * 从课程老师id
      */
-    private BigInteger subCourseTeacherId;
+    private long subCourseTeacherId;
     /**
      * 请求状态，同意1、不同意0、未处理null
      */
@@ -43,35 +41,35 @@ public class ShareSeminarApplication {
 
     //==================================================getter AND setter==================================================//
 
-    public BigInteger getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(BigInteger id) {
+    public void setId(long id) {
         this.id = id;
     }
 
-    public BigInteger getMainCourseId() {
+    public long getMainCourseId() {
         return mainCourseId;
     }
 
-    public void setMainCourseId(BigInteger mainCourseId) {
+    public void setMainCourseId(long mainCourseId) {
         this.mainCourseId = mainCourseId;
     }
 
-    public BigInteger getSubCourseId() {
+    public long getSubCourseId() {
         return subCourseId;
     }
 
-    public void setSubCourseId(BigInteger subCourseId) {
+    public void setSubCourseId(long subCourseId) {
         this.subCourseId = subCourseId;
     }
 
-    public BigInteger getSubCourseTeacherId() {
+    public long getSubCourseTeacherId() {
         return subCourseTeacherId;
     }
 
-    public void setSubCourseTeacherId(BigInteger subCourseTeacherId) {
+    public void setSubCourseTeacherId(long subCourseTeacherId) {
         this.subCourseTeacherId = subCourseTeacherId;
     }
 

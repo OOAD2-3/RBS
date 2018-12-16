@@ -1,7 +1,5 @@
 package com.rbs.project.pojo.strategy;
 
-import java.math.BigInteger;
-
 /**
  * @Author: WinstonDeng
  * @Description: OOAD_Course_ManageSystem
@@ -12,11 +10,11 @@ public class TeamStragety {
     /**
      * 课程id
      */
-    private BigInteger courseId;
+    private long courseId;
     /**
      * 策略id
      */
-    private BigInteger strategyId;
+    private long strategyId;
     /**
      * 组队策略实现类名称
      */
@@ -24,19 +22,19 @@ public class TeamStragety {
 
     //==================================================getter AND setter==================================================//
 
-    public BigInteger getCourseId() {
+    public long getCourseId() {
         return courseId;
     }
 
-    public void setCourseId(BigInteger courseId) {
+    public void setCourseId(long courseId) {
         this.courseId = courseId;
     }
 
-    public BigInteger getStrategyId() {
+    public long getStrategyId() {
         return strategyId;
     }
 
-    public void setStrategyId(BigInteger strategyId) {
+    public void setStrategyId(long strategyId) {
         this.strategyId = strategyId;
     }
 

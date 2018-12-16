@@ -68,4 +68,11 @@ public interface StudentMapper {
      */
     boolean updateActiveById(Student student);
 
+    /**
+     * 新增学生
+     * @param student
+     * @return
+     */
+    long insertStudent(Student student);
+
 }

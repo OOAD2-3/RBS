@@ -1,7 +1,6 @@
 package com.rbs.project.pojo.entity;
 
 import java.math.BigDecimal;
-import java.math.BigInteger;
 
 /**
  * @Author: WinstonDeng
@@ -13,11 +12,11 @@ public class RoundScore {
     /**
      * 轮次id
      */
-    private BigInteger roundId;
+    private long roundId;
     /**
      * 队伍id
      */
-    private BigInteger teamId;
+    private long teamId;
     /**
      * 轮次总分
      */
@@ -47,19 +46,19 @@ public class RoundScore {
 
     //==================================================getter AND setter==================================================//
 
-    public BigInteger getRoundId() {
+    public long getRoundId() {
         return roundId;
     }
 
-    public void setRoundId(BigInteger roundId) {
+    public void setRoundId(long roundId) {
         this.roundId = roundId;
     }
 
-    public BigInteger getTeamId() {
+    public long getTeamId() {
         return teamId;
     }
 
-    public void setTeamId(BigInteger teamId) {
+    public void setTeamId(long teamId) {
         this.teamId = teamId;
     }
 

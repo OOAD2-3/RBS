@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rbs.project.mapper.TeamMapper">
+    <resultMap id="tab_team" type="com.rbs.project.pojo.entity.Team">
+        <result property="id" column="id"/>
+        <result property="cClassId" column="klass_id"/>
+        <result property="courseId" column="course_id"/>
+        <result property="leaderId" column="leader_id"/>
+        <result property="name" column="team_name"/>
+        <result property="serial" column="team_serial"/>
+        <result property="status" column="status"/>
+
+    </resultMap>
+
+    <select id="findById" parameterType="BigInteger" resultMap="tab_team" resultType="com.rbs.project.pojo.entity.Team">
+        SELECT id,klass_id,course_id,leader_id,team_name,team_serial,status
+        FROM team
+        WHERE id=#{id}
+    </select>
+    <select id="findByCClassId" parameterType="BigInteger" resultMap="tab_team" resultType="com.rbs.project.pojo.entity.Team">
+        SELECT id,klass_id,course_id,leader_id,team_name,team_serial,status
+        FROM team
+        WHERE cclass_id=#{cClassId}
+    </select>
+
+</mapper>

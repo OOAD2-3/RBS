@@ -1,7 +1,5 @@
 package com.rbs.project.pojo.strategy;
 
-import java.math.BigInteger;
-
 /**
  * @Author: WinstonDeng
  * @Description: course_member_limit_strategy 表记录的是
@@ -11,11 +9,11 @@ import java.math.BigInteger;
  */
 public class CourseMemberLimitStrategy {
 
-    private BigInteger id;
+    private long id;
     /**
      * 课程id
      */
-    private BigInteger courseId;
+    private long courseId;
     /**
      * 最少人数
      */
@@ -27,19 +25,19 @@ public class CourseMemberLimitStrategy {
 
     //==================================================getter AND setter==================================================//
 
-    public BigInteger getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(BigInteger id) {
+    public void setId(long id) {
         this.id = id;
     }
 
-    public BigInteger getCourseId() {
+    public long getCourseId() {
         return courseId;
     }
 
-    public void setCourseId(BigInteger courseId) {
+    public void setCourseId(long courseId) {
         this.courseId = courseId;
     }
 

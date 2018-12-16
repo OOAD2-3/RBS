@@ -1,47 +1,45 @@
 package com.rbs.project.pojo.strategy;
 
-import java.math.BigInteger;
-
-/**
+/**Bi
  * @Author: WinstonDeng
  * @Description: OOAD_Course_ManageSystem
  * @Date: Created in 15:25 2018/12/15
  * @Modified by:
  */
 public class ConflictCourseStrategy {
-    private BigInteger id;
+    private long id;
     /**
      * 冲突课程1
      */
-    private BigInteger courseAId;
+    private long courseAId;
     /**
      * 冲突课程2
      */
-    private BigInteger courseBId;
+    private long courseBId;
 
     //==================================================getter AND setter==================================================//
 
-    public BigInteger getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(BigInteger id) {
+    public void setId(long id) {
         this.id = id;
     }
 
-    public BigInteger getCourseAId() {
+    public long getCourseAId() {
         return courseAId;
     }
 
-    public void setCourseAId(BigInteger courseAId) {
+    public void setCourseAId(long courseAId) {
         this.courseAId = courseAId;
     }
 
-    public BigInteger getCourseBId() {
+    public long getCourseBId() {
         return courseBId;
     }
 
-    public void setCourseBId(BigInteger courseBId) {
+    public void setCourseBId(long courseBId) {
         this.courseBId = courseBId;
     }
 }

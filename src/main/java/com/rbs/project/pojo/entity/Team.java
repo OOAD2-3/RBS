@@ -1,6 +1,5 @@
 package com.rbs.project.pojo.entity;
 
-import java.math.BigInteger;
 import java.util.List;
 
 /**
@@ -11,19 +10,19 @@ import java.util.List;
 public class Team {
     //基本信息
 
-    private BigInteger id;
+    private long id;
     /**
      * 属于哪个班
      */
-    private BigInteger cClassId;
+    private long cClassId;
     /**
      * 属于哪个课程(目前只存主课程)
      */
-    private BigInteger courseId;
+    private long courseId;
     /**
      * 组长id
      */
-    private BigInteger leaderId;
+    private long leaderId;
     /**
      * 组号
      */
@@ -73,36 +72,35 @@ public class Team {
 
     //==================================================getter AND setter==================================================//
 
-
-    public BigInteger getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(BigInteger id) {
+    public void setId(long id) {
         this.id = id;
     }
 
-    public BigInteger getcClassId() {
+    public long getcClassId() {
         return cClassId;
     }
 
-    public void setcClassId(BigInteger cClassId) {
+    public void setcClassId(long cClassId) {
         this.cClassId = cClassId;
     }
 
-    public BigInteger getCourseId() {
+    public long getCourseId() {
         return courseId;
     }
 
-    public void setCourseId(BigInteger courseId) {
+    public void setCourseId(long courseId) {
         this.courseId = courseId;
     }
 
-    public BigInteger getLeaderId() {
+    public long getLeaderId() {
         return leaderId;
     }
 
-    public void setLeaderId(BigInteger leaderId) {
+    public void setLeaderId(long leaderId) {
         this.leaderId = leaderId;
     }
 

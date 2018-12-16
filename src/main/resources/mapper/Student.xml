@@ -36,4 +36,9 @@
         UPDATE student SET email=#{email}
         WHERE id=#{id}
     </update>
+
+    <insert id="insertStudent" parameterType="com.rbs.project.pojo.entity.Student" useGeneratedKeys="true" keyProperty="id">
+        insert into student(id,account,password,is_active,student_name,email)
+        values (#{id},#{account},#{password},#{active},#{studentName},#{email})
+    </insert>
 </mapper>
