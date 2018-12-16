@@ -17,7 +17,7 @@ public interface StudentMapper {
      * @param id
      * @return
      */
-    Student findById(int id);
+    Student findById(long id);
 
     /**
      * 通过用户名锁定一个学生
@@ -58,5 +58,12 @@ public interface StudentMapper {
      * @return
      */
     boolean updateActiveById(Student student);
+
+    /**
+     * 新增学生
+     * @param student
+     * @return
+     */
+    long insertStudent(Student student);
 
 }

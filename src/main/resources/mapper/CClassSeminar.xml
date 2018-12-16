@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rbs.project.mapper.CClassSeminarMapper">
+    <resultMap id="tab_klass_seminar" type="com.rbs.project.pojo.entity.CClassSeminar">
+        <result property="id" column="id"/>
+        <result property="cClassId" column="klass_id"/>
+        <result property="seminarId" column="seminar_id"/>
+        <result property="reportDDL" column="report_ddl"/>
+        <result property="status" column="status"/>
+    </resultMap>
+
+    <select id="findById" parameterType="BigInteger" resultMap="tab_klass_seminar" resultType="com.rbs.project.pojo.entity.CClassSeminar">
+        SELECT id,klass_id,seminar_id,report_ddl,status
+        FROM klass_seminar
+        WHERE id=#{id}
+    </select>
+
+    <select id="findByCClassId" parameterType="BigInteger" resultMap="tab_klass_seminar" resultType="com.rbs.project.pojo.entity.CClassSeminar">
+        SELECT id,klass_id,seminar_id,report_ddl,status
+        FROM klass_seminar
+        WHERE klass_id=#{cClassId}
+    </select>
+
+    <select id="findByCClassIdAndSeminarId" parameterType="BigInteger" resultMap="tab_klass_seminar" resultType="com.rbs.project.pojo.entity.CClassSeminar">
+        SELECT id,klass_id,seminar_id,report_ddl,status
+        FROM klass_seminar
+        WHERE klass_id=#{cClassId}
+          AND seminar_id=#{seminarId}
+    </select>
+
+
+</mapper>

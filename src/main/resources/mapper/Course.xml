@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rbs.project.mapper.CourseMapper">
+    <resultMap id="tab_course" type="com.rbs.project.pojo.entity.Course">
+        <result property="id" column="id"/>
+        <result property="teacherId" column="teacher_id"/>
+        <result property="name" column="course_name"/>
+        <result property="intro" column="introduction"/>
+        <result property="presentationPercentage" column="presentation_percentage"/>
+        <result property="questionPercentage" column="question_percentage"/>
+        <result property="reportPercentage" column="report_percentage"/>
+        <result property="teamStartTime" column="team_start_time"/>
+        <result property="teamEndTime" column="team_end_time"/>
+        <result property="teamMainCourseId" column="team_main_course_id"/>
+        <result property="seminarMainCourseId" column="seminar_main_course_id"/>
+    </resultMap>
+    <select id="findById" parameterType="BigInteger" resultMap="tab_course" resultType="com.rbs.project.pojo.entity.Course">
+        SELECT id,teacher_id,course_name,introduction,presentation_percentage,question_percentage,report_percentage,
+        team_start_time,team_end_time,team_main_course_id,seminar_main_course_id
+        FROM course
+        WHERE id = #{id}
+    </select>
+
+    <select id="findByTeacherId" parameterType="BigInteger" resultMap="tab_course" resultType="com.rbs.project.pojo.entity.Course">
+        SELECT id,teacher_id,course_name,introduction,presentation_percentage,question_percentage,report_percentage,
+        team_start_time,team_end_time,team_main_course_id,seminar_main_course_id
+        FROM course
+        WHERE teacher_id = #{teacherId}
+    </select>
+
+    <delete id="deleteById" parameterType="BigInteger">
+        DELETE
+        FROM course
+        WHERE id=#{id}
+    </delete>
+
+    <insert id="insertCourse" parameterType="com.rbs.project.pojo.entity.Course" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO
+        course(teacher_id,course_name,introduction,presentation_percentage,question_percentage,report_percentage,
+        team_start_time,team_end_time,team_main_course_id,seminar_main_course_id)
+        VALUE
+        (#{teacherId},#{name},#{intro},#{presentationPercentage},#{questionPercentage},
+        #{reportnPercentage},#{teamStartTime},#{teamEndTime},#{teamMainCourseId},#{seminarMainCourseId})
+    </insert>
+</mapper>
