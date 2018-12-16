@@ -84,7 +84,7 @@ public class MySecurityConfig extends WebSecurityConfigurerAdapter {
                 .formLogin()
 
                 //自定义登录url，可删除，默认为login
-                .loginProcessingUrl("/loginabc").usernameParameter("username").passwordParameter("password")
+                .loginProcessingUrl("/user/login").usernameParameter("account").passwordParameter("password")
                 // 登录成功
                 .successHandler(myAuthenticationSuccessHandler)
                 // 登录失败

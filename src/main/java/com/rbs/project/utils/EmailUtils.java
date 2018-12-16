@@ -117,6 +117,11 @@ public class EmailUtils {
         return flag;
     }
 
+    /**
+     * 正则表达式检查
+     * @param email
+     * @return
+     */
     public static boolean checkEmailFormat(String email){
         String check = "^([a-z0-9A-Z]+[-|\\.]?)+[a-z0-9A-Z]@([a-z0-9A-Z]+(-[a-z0-9A-Z]+)?\\.)+[a-zA-Z]{2,}$";
         Pattern regex = Pattern.compile(check);
