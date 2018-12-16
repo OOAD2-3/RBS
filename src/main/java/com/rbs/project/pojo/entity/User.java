@@ -14,17 +14,17 @@ import java.util.Collection;
  * @Date: 15:14 2018/12/15
  */
 public abstract class User implements UserDetails {
-    private int id;
+    private long id;
     private String account;
     private String password;
     private boolean active;
     private String email;
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 

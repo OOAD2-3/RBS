@@ -29,7 +29,7 @@ public class UserDao {
      * @Author: 17Wang
      * @Time: 12:51 2018/12/16
      */
-    public Student getStudentById(int id) throws MyException {
+    public Student getStudentById(long id) throws MyException {
         Student student = studentMapper.findById(id);
         if (student == null) {
             throw new MyException("激活失败！不存在该用户", MyException.NOT_FOUND_ERROR);
@@ -43,7 +43,7 @@ public class UserDao {
      * @Author: 17Wang
      * @Time: 12:53 2018/12/16
      */
-    public Teacher getTeacherById(int id) throws MyException {
+    public Teacher getTeacherById(long id) throws MyException {
         Teacher teacher = teacherMapper.findById(id);
         if (teacher == null) {
             throw new MyException("查询失败！不存在该用户", MyException.NOT_FOUND_ERROR);
