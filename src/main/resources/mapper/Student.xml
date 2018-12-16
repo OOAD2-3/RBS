@@ -10,7 +10,7 @@
         <result property="email" column="email"/>
     </resultMap>
 
-    <select id="findById" parameterType="Integer" resultMap="tab_student">
+    <select id="findById" parameterType="Long" resultMap="tab_student">
         SELECT id,account,password,is_active,student_name,email FROM student WHERE id = #{id}
     </select>
 

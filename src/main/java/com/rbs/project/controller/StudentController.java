@@ -28,6 +28,7 @@ public class StudentController {
     @Autowired
     private StudentService studentService;
 
+    @GetMapping
     @ResponseBody
     public List<UserVO> listAllStudents(){
         List<Student> students=studentService.listAllStudents();
