@@ -17,7 +17,12 @@ public class EmailDemo {
     private static final Logger logger = LoggerFactory.getLogger(EmailDemo.class);
 
     public String sendEmail() throws JsonProcessingException {
-        boolean isSend = EmailUtils.sendEmail("ooadEmail邮件测试", new String[]{"842237857@qq.com"}, null, "<h3><a>6不6，舒服了</a></h3>", null);
+        //内容以html格式发送,防止被当成垃圾邮件
+        StringBuffer messageText=new StringBuffer();
+        messageText.append("<h2>OOAD课程通知</h2></br>");
+        messageText.append("<a>这下应该是不在垃圾箱里，也不会被拒绝了</a>");
+        //发送邮件抄送一份给自己，防止被认为是垃圾邮件
+        boolean isSend = EmailUtils.sendEmail("ooadEmail邮件", new String[]{"1520166121@qq.com"},  new String[]{"ooadmail2_3@126.com"}, messageText.toString(), null);
         return "发送邮件:" + isSend;
     }
 }

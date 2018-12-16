@@ -10,6 +10,7 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import java.io.File;
 import java.security.GeneralSecurityException;
@@ -89,13 +90,18 @@ public class EmailUtils {
             }
             javaMailSender.setJavaMailProperties(properties);
 
+
             MimeMessage mailMessage = javaMailSender.createMimeMessage();
+            //防止成为垃圾邮件，披上outlook的马甲
+            mailMessage.addHeader("X-Mailer","Microsoft Outlook Express 6.00.2900.2869");
             MimeMessageHelper messageHelper = new MimeMessageHelper(mailMessage, true);
             messageHelper.setTo(toUsers);
             if (ccUsers != null && ccUsers.length > 0) {
                 messageHelper.setCc(ccUsers);
             }
-            messageHelper.setFrom(authName);
+            InternetAddress from = new InternetAddress(authName,"OOAD课程管理系统");
+
+            messageHelper.setFrom(from);
             messageHelper.setSubject(subject);
             messageHelper.setText(content, true);
 
