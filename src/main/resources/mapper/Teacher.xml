@@ -18,6 +18,10 @@
         SELECT id,account,password,is_active,teacher_name,email FROM teacher WHERE account = #{account}
     </select>
 
+    <select id="listAll" resultMap="tab_teacher">
+        SELECT id,account,password,is_active,student_name,email FROM teacher
+    </select>
+
     <update id="updatePasswordAndEmailAndActiveById" parameterType="com.rbs.project.pojo.entity.Teacher">
         UPDATE teacher SET password=#{password},email=#{email},is_active=#{active}
         WHERE id=#{id}

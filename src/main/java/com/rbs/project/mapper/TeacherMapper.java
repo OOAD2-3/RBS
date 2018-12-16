@@ -4,6 +4,8 @@ import com.rbs.project.pojo.entity.Student;
 import com.rbs.project.pojo.entity.Teacher;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 /**
  * Description:
  *
@@ -18,7 +20,7 @@ public interface TeacherMapper {
      * @param id
      * @return
      */
-    Teacher findById(int id);
+    Teacher findById(long id);
 
     /**
      * 通过用户名锁定一个老师
@@ -27,6 +29,13 @@ public interface TeacherMapper {
      * @return
      */
     Teacher findByAccount(String account);
+
+    /**
+     * 返回所有教师信息
+     *
+     * @return 教师名单
+     */
+    List<Teacher> listAll();
 
     /**
      * 通过id，同时修改密码和邮箱

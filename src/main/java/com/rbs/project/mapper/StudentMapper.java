@@ -3,6 +3,8 @@ package com.rbs.project.mapper;
 import com.rbs.project.pojo.entity.Student;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 /**
  * Description:
  *
@@ -17,7 +19,7 @@ public interface StudentMapper {
      * @param id
      * @return
      */
-    Student findById(int id);
+    Student findById(long id);
 
     /**
      * 通过用户名锁定一个学生
@@ -26,6 +28,13 @@ public interface StudentMapper {
      * @return
      */
     Student findByAccount(String account);
+
+    /**
+     * 返回所有学生信息
+     *
+     * @return 学生名单
+     */
+    List<Student> listAll();
 
     /**
      * 通过id，同时修改密码和邮箱

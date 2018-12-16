@@ -2,10 +2,16 @@ package com.rbs.project.controller;
 
 import com.rbs.project.exception.MyException;
 import com.rbs.project.pojo.entity.Student;
+import com.rbs.project.pojo.entity.User;
+import com.rbs.project.pojo.vo.UserVO;
+import com.rbs.project.service.StudentService;
 import com.rbs.project.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Description:student资源接口
@@ -18,6 +24,19 @@ import org.springframework.web.bind.annotation.*;
 public class StudentController {
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private StudentService studentService;
+
+    @ResponseBody
+    public List<UserVO> listAllStudents(){
+        List<Student> students=studentService.listAllStudents();
+        List<UserVO> userVOS=new ArrayList<>();
+        for (Student student:students){
+            userVOS.add(new UserVO(student));
+        }
+        return userVOS;
+    }
 
     @PutMapping("/active")
     @ResponseBody
