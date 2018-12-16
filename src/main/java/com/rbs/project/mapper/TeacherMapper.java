@@ -1,62 +1,62 @@
 package com.rbs.project.mapper;
 
 import com.rbs.project.pojo.entity.Student;
+import com.rbs.project.pojo.entity.Teacher;
 import org.springframework.stereotype.Repository;
 
 /**
  * Description:
  *
  * @Author: 17Wang
- * @Date: 15:28 2018/12/15
+ * @Date: 16:37 2018/12/15
  */
 @Repository
-public interface StudentMapper {
+public interface TeacherMapper {
     /**
-     * 通过id锁定一个学生
+     * 通过id锁定一个老师
      *
      * @param id
      * @return
      */
-    Student findById(int id);
+    Teacher findById(int id);
 
     /**
-     * 通过用户名锁定一个学生
+     * 通过用户名锁定一个老师
      *
      * @param account
      * @return
      */
-    Student findByAccount(String account);
+    Teacher findByAccount(String account);
 
     /**
      * 通过id，同时修改密码和邮箱
      *
-     * @param student
+     * @param teacher
      * @return
      */
-    boolean updatePasswordAndEmailAndActiveById(Student student);
+    boolean updatePasswordAndEmailAndActiveById(Teacher teacher);
 
     /**
      * 通过id修改密码
      *
-     * @param student
+     * @param teacher
      * @return
      */
-    boolean updatePasswordById(Student student);
+    boolean updatePasswordById(Teacher teacher);
 
     /**
      * 通过id修改邮箱
      *
-     * @param student
+     * @param teacher
      * @return
      */
-    boolean updateEmailById(Student student);
+    boolean updateEmailById(Teacher teacher);
 
     /**
      * 通过id修改激活状态
      *
-     * @param student
+     * @param teacher
      * @return
      */
-    boolean updateActiveById(Student student);
-
+    boolean updateActiveById(Teacher teacher);
 }

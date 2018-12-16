@@ -5,6 +5,7 @@ import com.rbs.project.pojo.entity.Student;
 import com.rbs.project.pojo.entity.Teacher;
 import com.rbs.project.pojo.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -25,4 +26,15 @@ public class TestController {
     @Autowired
     private StudentMapper studentMapper;
 
+    @GetMapping("/common/get")
+    @ResponseBody
+    public String get(){
+        return "123";
+    }
+
+    @GetMapping("/g")
+    @ResponseBody
+    public String get2(){
+        return "1234556789";
+    }
 }

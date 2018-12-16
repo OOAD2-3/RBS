@@ -9,35 +9,7 @@ public class RespInfo {
     private Integer status;
     private String msg;
     private Object obj;
-
-    private RespInfo(){
-    }
-
-    private RespInfo(Integer status,String msg,Object obj) {
-        this.status = status;
-        this.msg = msg;
-        this.obj = obj;
-    }
-
-    public static RespInfo build(){
-        return new RespInfo();
-    }
-
-    public static RespInfo ok(String msg,Object obj) {
-        return new RespInfo(200, msg, obj);
-    }
-
-    public static RespInfo ok(String msg) {
-        return new RespInfo(200, msg, null);
-    }
-
-    public static RespInfo error(String msg,Object obj) {
-        return new RespInfo(500, msg, obj);
-    }
-
-    public static RespInfo error(String msg) {
-        return new RespInfo(500, msg, null);
-    }
+    private String jwtToken;
 
     public Integer getStatus() {
         return status;
@@ -61,5 +33,13 @@ public class RespInfo {
 
     public void setObj(Object obj) {
         this.obj = obj;
+    }
+
+    public String getJwtToken() {
+        return jwtToken;
+    }
+
+    public void setJwtToken(String jwtToken) {
+        this.jwtToken = jwtToken;
     }
 }
