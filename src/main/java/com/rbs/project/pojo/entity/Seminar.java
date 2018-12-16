@@ -145,24 +145,29 @@ public class Seminar {
         this.enrollEndTime = enrollEndTime;
     }
 
-    //================ toString ========================
-
-    @Override
-    public String toString() {
-        return "Seminar{" +
-                "id=" + id +
-                ", roundId=" + roundId +
-                ", courseId=" + courseId +
-                ", name='" + name + '\'' +
-                ", intro='" + intro + '\'' +
-                ", maxTeam=" + maxTeam +
-                ", visible=" + visible +
-                ", serial=" + serial +
-                ", enrollStartTime=" + enrollStartTime +
-                ", enrollEndTime=" + enrollEndTime +
-                ", round=" + round +
-                ", course=" + course +
-                ", cClassSeminars=" + cClassSeminars +
-                '}';
+    public Round getRound() {
+        return round;
     }
+
+    public void setRound(Round round) {
+        this.round = round;
+    }
+
+    public Course getCourse() {
+        return course;
+    }
+
+    public void setCourse(Course course) {
+        this.course = course;
+    }
+
+    public List<CClassSeminar> getcClassSeminars() {
+        return cClassSeminars;
+    }
+
+    public void setcClassSeminars(List<CClassSeminar> cClassSeminars) {
+        this.cClassSeminars = cClassSeminars;
+    }
+//================ toString ========================
+
 }

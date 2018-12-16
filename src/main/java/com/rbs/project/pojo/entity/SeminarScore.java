@@ -95,19 +95,21 @@ public class SeminarScore {
         this.questionScore = questionScore;
     }
 
-    //====================== toString ====================
-
-    @Override
-    public String toString() {
-        return "SeminarScore{" +
-                "cClassSeminarId=" + cClassSeminarId +
-                ", teamId=" + teamId +
-                ", totalScore=" + totalScore +
-                ", presentationScore=" + presentationScore +
-                ", reportScore=" + reportScore +
-                ", questionScore=" + questionScore +
-                ", cClassSeminar=" + cClassSeminar +
-                ", team=" + team +
-                '}';
+    public CClassSeminar getcClassSeminar() {
+        return cClassSeminar;
     }
+
+    public void setcClassSeminar(CClassSeminar cClassSeminar) {
+        this.cClassSeminar = cClassSeminar;
+    }
+
+    public Team getTeam() {
+        return team;
+    }
+
+    public void setTeam(Team team) {
+        this.team = team;
+    }
+//====================== toString ====================
+
 }

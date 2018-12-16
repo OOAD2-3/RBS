@@ -61,7 +61,7 @@ public class Team {
     /**
      * 多个班级下的小组成员（包括组长）
      */
-    private List<CClassStudent> cClassStudents;
+    private List<Student> students;
     /**
      * 多个讨论课成绩
      */
@@ -130,26 +130,70 @@ public class Team {
         this.status = status;
     }
 
+    public CClass getcClass() {
+        return cClass;
+    }
+
+    public void setcClass(CClass cClass) {
+        this.cClass = cClass;
+    }
+
+    public Course getCourse() {
+        return course;
+    }
+
+    public void setCourse(Course course) {
+        this.course = course;
+    }
+
+    public Student getLeader() {
+        return leader;
+    }
+
+    public void setLeader(Student leader) {
+        this.leader = leader;
+    }
+
+    public List<Question> getQuestions() {
+        return questions;
+    }
+
+    public void setQuestions(List<Question> questions) {
+        this.questions = questions;
+    }
+
+    public List<Attendance> getAttendances() {
+        return attendances;
+    }
+
+    public void setAttendances(List<Attendance> attendances) {
+        this.attendances = attendances;
+    }
+
+    public List<Student> getStudents() {
+        return students;
+    }
+
+    public void setStudents(List<Student> students) {
+        this.students = students;
+    }
+
+    public List<SeminarScore> getSeminarScores() {
+        return seminarScores;
+    }
+
+    public void setSeminarScores(List<SeminarScore> seminarScores) {
+        this.seminarScores = seminarScores;
+    }
+
+    public List<TeamValidApplication> getTeamValidApplications() {
+        return teamValidApplications;
+    }
+
+    public void setTeamValidApplications(List<TeamValidApplication> teamValidApplications) {
+        this.teamValidApplications = teamValidApplications;
+    }
+
     //================= toString =================
 
-    @Override
-    public String toString() {
-        return "Team{" +
-                "id=" + id +
-                ", cClassId=" + cClassId +
-                ", courseId=" + courseId +
-                ", leaderId=" + leaderId +
-                ", serial=" + serial +
-                ", name='" + name + '\'' +
-                ", status=" + status +
-                ", cClass=" + cClass +
-                ", course=" + course +
-                ", leader=" + leader +
-                ", questions=" + questions +
-                ", attendances=" + attendances +
-                ", cClassStudents=" + cClassStudents +
-                ", seminarScores=" + seminarScores +
-                ", teamValidApplications=" + teamValidApplications +
-                '}';
-    }
 }

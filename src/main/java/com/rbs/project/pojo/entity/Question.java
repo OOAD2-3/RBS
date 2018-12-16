@@ -113,22 +113,37 @@ public class Question {
         this.selected = selected;
     }
 
-    //====================== toString =========================
-
-    @Override
-    public String toString() {
-        return "Question{" +
-                "id=" + id +
-                ", cClassSeminarId=" + cClassSeminarId +
-                ", attendanceId=" + attendanceId +
-                ", teamId=" + teamId +
-                ", studentId=" + studentId +
-                ", score=" + score +
-                ", selected=" + selected +
-                ", cClassSeminar=" + cClassSeminar +
-                ", attendance=" + attendance +
-                ", team=" + team +
-                ", student=" + student +
-                '}';
+    public CClassSeminar getcClassSeminar() {
+        return cClassSeminar;
     }
+
+    public void setcClassSeminar(CClassSeminar cClassSeminar) {
+        this.cClassSeminar = cClassSeminar;
+    }
+
+    public Attendance getAttendance() {
+        return attendance;
+    }
+
+    public void setAttendance(Attendance attendance) {
+        this.attendance = attendance;
+    }
+
+    public Team getTeam() {
+        return team;
+    }
+
+    public void setTeam(Team team) {
+        this.team = team;
+    }
+
+    public Student getStudent() {
+        return student;
+    }
+
+    public void setStudent(Student student) {
+        this.student = student;
+    }
+//====================== toString =========================
+
 }

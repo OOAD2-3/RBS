@@ -86,7 +86,7 @@ public class Course {
     /**
      * 多个班级学生
      */
-    private List<CClassStudent> cClassStudents;
+    private List<Student> students;
 
     //==================================================getter AND setter==================================================//
 
@@ -179,31 +179,71 @@ public class Course {
         this.seminarMainCourseId = seminarMainCourseId;
     }
 
+    public Teacher getTeacher() {
+        return teacher;
+    }
+
+    public void setTeacher(Teacher teacher) {
+        this.teacher = teacher;
+    }
+
+    public Course getTeamMainCourse() {
+        return teamMainCourse;
+    }
+
+    public void setTeamMainCourse(Course teamMainCourse) {
+        this.teamMainCourse = teamMainCourse;
+    }
+
+    public Course getSeminarMainCourse() {
+        return seminarMainCourse;
+    }
+
+    public void setSeminarMainCourse(Course seminarMainCourse) {
+        this.seminarMainCourse = seminarMainCourse;
+    }
+
+    public List<Seminar> getSeminars() {
+        return seminars;
+    }
+
+    public void setSeminars(List<Seminar> seminars) {
+        this.seminars = seminars;
+    }
+
+    public List<Round> getRounds() {
+        return rounds;
+    }
+
+    public void setRounds(List<Round> rounds) {
+        this.rounds = rounds;
+    }
+
+    public List<CClass> getcClasses() {
+        return cClasses;
+    }
+
+    public void setcClasses(List<CClass> cClasses) {
+        this.cClasses = cClasses;
+    }
+
+    public List<Team> getTeams() {
+        return teams;
+    }
+
+    public void setTeams(List<Team> teams) {
+        this.teams = teams;
+    }
+
+    public List<Student> getStudents() {
+        return students;
+    }
+
+    public void setStudents(List<Student> students) {
+        this.students = students;
+    }
+
     //======================= toString=============================
 
 
-    @Override
-    public String toString() {
-        return "Course{" +
-                "id=" + id +
-                ", teacherId=" + teacherId +
-                ", name='" + name + '\'' +
-                ", intro='" + intro + '\'' +
-                ", presentationPercentage=" + presentationPercentage +
-                ", questionPercentage=" + questionPercentage +
-                ", reportPercentage=" + reportPercentage +
-                ", teamStartTime=" + teamStartTime +
-                ", teamEndTime=" + teamEndTime +
-                ", teamMainCourseId=" + teamMainCourseId +
-                ", seminarMainCourseId=" + seminarMainCourseId +
-                ", teacher=" + teacher +
-                ", teamMainCourse=" + teamMainCourse +
-                ", seminarMainCourse=" + seminarMainCourse +
-                ", seminars=" + seminars +
-                ", rounds=" + rounds +
-                ", cClasses=" + cClasses +
-                ", teams=" + teams +
-                ", cClassStudents=" + cClassStudents +
-                '}';
-    }
 }

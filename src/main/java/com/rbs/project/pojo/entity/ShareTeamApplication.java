@@ -83,19 +83,29 @@ public class ShareTeamApplication {
         this.status = status;
     }
 
-    //===================== toString =========================
-
-    @Override
-    public String toString() {
-        return "ShareTeamApplication{" +
-                "id=" + id +
-                ", mainCourseId=" + mainCourseId +
-                ", subCourseId=" + subCourseId +
-                ", subCourseTeacherId=" + subCourseTeacherId +
-                ", status=" + status +
-                ", mainCourse=" + mainCourse +
-                ", subCourse=" + subCourse +
-                ", subCourseTeacher=" + subCourseTeacher +
-                '}';
+    public Course getMainCourse() {
+        return mainCourse;
     }
+
+    public void setMainCourse(Course mainCourse) {
+        this.mainCourse = mainCourse;
+    }
+
+    public Course getSubCourse() {
+        return subCourse;
+    }
+
+    public void setSubCourse(Course subCourse) {
+        this.subCourse = subCourse;
+    }
+
+    public Teacher getSubCourseTeacher() {
+        return subCourseTeacher;
+    }
+
+    public void setSubCourseTeacher(Teacher subCourseTeacher) {
+        this.subCourseTeacher = subCourseTeacher;
+    }
+//===================== toString =========================
+
 }

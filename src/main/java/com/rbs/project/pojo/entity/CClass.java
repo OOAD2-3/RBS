@@ -49,11 +49,11 @@ public class CClass {
     /**
      * 多个班级学生
      */
-    private List<CClassStudent> cClassStudents;
+    private List<Student> students;
     /**
-     * 多个班级轮次
+     * 多个轮次
      */
-    private List<CClassRound> cClassRounds;
+    private List<Round> rounds;
 
     //==================================================getter AND setter==================================================//
 
@@ -105,22 +105,46 @@ public class CClass {
         this.time = time;
     }
 
+    public Course getCourse() {
+        return course;
+    }
+
+    public void setCourse(Course course) {
+        this.course = course;
+    }
+
+    public List<CClassSeminar> getcClassSeminars() {
+        return cClassSeminars;
+    }
+
+    public void setcClassSeminars(List<CClassSeminar> cClassSeminars) {
+        this.cClassSeminars = cClassSeminars;
+    }
+
+    public List<Team> getTeams() {
+        return teams;
+    }
+
+    public void setTeams(List<Team> teams) {
+        this.teams = teams;
+    }
+
+    public List<Student> getStudents() {
+        return students;
+    }
+
+    public void setStudents(List<Student> students) {
+        this.students = students;
+    }
+
+    public List<Round> getRounds() {
+        return rounds;
+    }
+
+    public void setRounds(List<Round> rounds) {
+        this.rounds = rounds;
+    }
+
     //================ toString ============================
 
-    @Override
-    public String toString() {
-        return "CClass{" +
-                "id=" + id +
-                ", courseId=" + courseId +
-                ", grade=" + grade +
-                ", serial=" + serial +
-                ", place='" + place + '\'' +
-                ", time='" + time + '\'' +
-                ", course=" + course +
-                ", cClassSeminars=" + cClassSeminars +
-                ", teams=" + teams +
-                ", cClassStudents=" + cClassStudents +
-                ", cClassRounds=" + cClassRounds +
-                '}';
-    }
 }

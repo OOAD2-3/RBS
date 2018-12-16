@@ -6,7 +6,7 @@ import java.util.List;
 /**
  * @Author:17Wang
  * @Date:22:20 2018/12/4
- * @Description:
+ * @Description: 一个课程和一个班级共同决定一个轮次
  */
 public class Round {
 
@@ -31,12 +31,19 @@ public class Round {
      * 提问成绩计算办法
      */
     private Integer questionScoreMethod;
-
+    /**
+     * 某班级，某轮次队伍报名次数限制
+     */
+    private Integer enrollNumber;
     //关系
     /**
      * 一个课程
      */
     private Course course;
+    /**
+     * 一个班级
+     */
+    private CClass cClass;
     /**
      * 多个讨论课
      */
@@ -45,10 +52,7 @@ public class Round {
      * 多个小组的轮次成绩
      */
     private List<RoundScore> roundScores;
-    /**
-     * 多个班级轮次
-     */
-    private List<CClassRound> cClassRounds;
+
     //==================================================getter AND setter==================================================//
 
 
@@ -100,21 +104,47 @@ public class Round {
         this.questionScoreMethod = questionScoreMethod;
     }
 
+    public Integer getEnrollNumber() {
+        return enrollNumber;
+    }
+
+    public void setEnrollNumber(Integer enrollNumber) {
+        this.enrollNumber = enrollNumber;
+    }
+
+    public Course getCourse() {
+        return course;
+    }
+
+    public void setCourse(Course course) {
+        this.course = course;
+    }
+
+    public CClass getcClass() {
+        return cClass;
+    }
+
+    public void setcClass(CClass cClass) {
+        this.cClass = cClass;
+    }
+
+    public List<Seminar> getSeminars() {
+        return seminars;
+    }
+
+    public void setSeminars(List<Seminar> seminars) {
+        this.seminars = seminars;
+    }
+
+    public List<RoundScore> getRoundScores() {
+        return roundScores;
+    }
+
+    public void setRoundScores(List<RoundScore> roundScores) {
+        this.roundScores = roundScores;
+    }
+
     //============= toString =========================================
 
-    @Override
-    public String toString() {
-        return "Round{" +
-                "id=" + id +
-                ", courseId=" + courseId +
-                ", serial=" + serial +
-                ", presentationScoreMethod=" + presentationScoreMethod +
-                ", reportScoreMethod=" + reportScoreMethod +
-                ", questionScoreMethod=" + questionScoreMethod +
-                ", course=" + course +
-                ", seminars=" + seminars +
-                ", roundScores=" + roundScores +
-                ", cClassRounds=" + cClassRounds +
-                '}';
-    }
+
 }

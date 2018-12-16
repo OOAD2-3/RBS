@@ -93,21 +93,45 @@ public class CClassSeminar {
         this.status = status;
     }
 
-    //=================== toString ========================
-
-    @Override
-    public String toString() {
-        return "CClassSeminar{" +
-                "id=" + id +
-                ", cClassId=" + cClassId +
-                ", seminarId=" + seminarId +
-                ", reportDDL=" + reportDDL +
-                ", status=" + status +
-                ", cClass=" + cClass +
-                ", seminar=" + seminar +
-                ", attendances=" + attendances +
-                ", questions=" + questions +
-                ", seminarScores=" + seminarScores +
-                '}';
+    public CClass getcClass() {
+        return cClass;
     }
+
+    public void setcClass(CClass cClass) {
+        this.cClass = cClass;
+    }
+
+    public Seminar getSeminar() {
+        return seminar;
+    }
+
+    public void setSeminar(Seminar seminar) {
+        this.seminar = seminar;
+    }
+
+    public List<Attendance> getAttendances() {
+        return attendances;
+    }
+
+    public void setAttendances(List<Attendance> attendances) {
+        this.attendances = attendances;
+    }
+
+    public List<Question> getQuestions() {
+        return questions;
+    }
+
+    public void setQuestions(List<Question> questions) {
+        this.questions = questions;
+    }
+
+    public List<SeminarScore> getSeminarScores() {
+        return seminarScores;
+    }
+
+    public void setSeminarScores(List<SeminarScore> seminarScores) {
+        this.seminarScores = seminarScores;
+    }
+//=================== toString ========================
+
 }

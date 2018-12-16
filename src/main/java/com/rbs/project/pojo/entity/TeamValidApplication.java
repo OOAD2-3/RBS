@@ -81,18 +81,21 @@ public class TeamValidApplication {
         this.status = status;
     }
 
-    //======================== toString =====================
-
-    @Override
-    public String toString() {
-        return "TeamValidApplication{" +
-                "id=" + id +
-                ", teamId=" + teamId +
-                ", teacherId=" + teacherId +
-                ", reason='" + reason + '\'' +
-                ", status=" + status +
-                ", team=" + team +
-                ", teacher=" + teacher +
-                '}';
+    public Team getTeam() {
+        return team;
     }
+
+    public void setTeam(Team team) {
+        this.team = team;
+    }
+
+    public Teacher getTeacher() {
+        return teacher;
+    }
+
+    public void setTeacher(Teacher teacher) {
+        this.teacher = teacher;
+    }
+//======================== toString =====================
+
 }

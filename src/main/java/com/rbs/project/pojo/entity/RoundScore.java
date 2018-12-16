@@ -95,19 +95,21 @@ public class RoundScore {
         this.questionScore = questionScore;
     }
 
-    //================ toString ===========================
-
-    @Override
-    public String toString() {
-        return "RoundScore{" +
-                "roundId=" + roundId +
-                ", teamId=" + teamId +
-                ", totalScore=" + totalScore +
-                ", presentationScore=" + presentationScore +
-                ", reportScore=" + reportScore +
-                ", questionScore=" + questionScore +
-                ", round=" + round +
-                ", team=" + team +
-                '}';
+    public Round getRound() {
+        return round;
     }
+
+    public void setRound(Round round) {
+        this.round = round;
+    }
+
+    public Team getTeam() {
+        return team;
+    }
+
+    public void setTeam(Team team) {
+        this.team = team;
+    }
+//================ toString ===========================
+
 }

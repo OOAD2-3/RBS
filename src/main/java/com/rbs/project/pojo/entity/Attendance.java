@@ -132,23 +132,29 @@ public class Attendance {
         this.reportUrl = reportUrl;
     }
 
-    //================= toString =======================
-
-    @Override
-    public String toString() {
-        return "Attendance{" +
-                "id=" + id +
-                ", cClassSeminarId=" + cClassSeminarId +
-                ", teamId=" + teamId +
-                ", teamOrder=" + teamOrder +
-                ", present=" + present +
-                ", pptName='" + pptName + '\'' +
-                ", pptUrl='" + pptUrl + '\'' +
-                ", reportName='" + reportName + '\'' +
-                ", reportUrl='" + reportUrl + '\'' +
-                ", cClassSeminar=" + cClassSeminar +
-                ", team=" + team +
-                ", questions=" + questions +
-                '}';
+    public CClassSeminar getcClassSeminar() {
+        return cClassSeminar;
     }
+
+    public void setcClassSeminar(CClassSeminar cClassSeminar) {
+        this.cClassSeminar = cClassSeminar;
+    }
+
+    public Team getTeam() {
+        return team;
+    }
+
+    public void setTeam(Team team) {
+        this.team = team;
+    }
+
+    public List<Question> getQuestions() {
+        return questions;
+    }
+
+    public void setQuestions(List<Question> questions) {
+        this.questions = questions;
+    }
+//================= toString =======================
+
 }
