@@ -2,7 +2,7 @@ package com.rbs.project.secruity;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rbs.project.pojo.RespInfo;
-import com.rbs.project.utils.JwtTokenUtil;
+import com.rbs.project.utils.JwtTokenUtils;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
@@ -32,7 +32,7 @@ public class MyAuthenticationSuccessHandler implements AuthenticationSuccessHand
         respInfo.setMsg("Login Success!");
 
         //生成token
-        String jwtToken = JwtTokenUtil.generateToken(username, 7*24*60*60);
+        String jwtToken = JwtTokenUtils.generateToken(username, 7*24*60*60);
         respInfo.setJwtToken(jwtToken);
 
         httpServletResponse.setHeader("wangshiqi", "success");

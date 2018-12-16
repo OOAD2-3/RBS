@@ -55,7 +55,7 @@ public class MySecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        //auth.authenticationProvider(myAuthenticationProvider);
+        auth.authenticationProvider(myAuthenticationProvider);
     }
 
     @Override
@@ -66,7 +66,7 @@ public class MySecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
-        /*http.cors().and().csrf().disable()
+        http.cors().and().csrf().disable()
                 //禁用session
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
@@ -84,7 +84,7 @@ public class MySecurityConfig extends WebSecurityConfigurerAdapter {
                 .formLogin()
 
                 //自定义登录url，可删除，默认为login
-                .loginProcessingUrl("/loginabc").usernameParameter("username").passwordParameter("password")
+                .loginProcessingUrl("/user/login").usernameParameter("account").passwordParameter("password")
                 // 登录成功
                 .successHandler(myAuthenticationSuccessHandler)
                 // 登录失败
@@ -105,9 +105,10 @@ public class MySecurityConfig extends WebSecurityConfigurerAdapter {
         // JWT Filter
         http.addFilterBefore(jwtAuthenticationTokenFilter, UsernamePasswordAuthenticationFilter.class);
         //禁用缓存
-        http.headers().cacheControl();*/
-        http.authorizeRequests().antMatchers("/**/**").permitAll()
-                .anyRequest().permitAll()
-                .and().csrf().disable();
+        http.headers().cacheControl();
+
+//        http.authorizeRequests().antMatchers("/**/**").permitAll()
+//                .anyRequest().permitAll()
+//                .and().csrf().disable();
     }
 }

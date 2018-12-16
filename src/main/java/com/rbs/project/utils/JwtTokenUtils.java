@@ -12,7 +12,7 @@ import java.util.Date;
  * @Author: 17Wang
  * @Date: 12:34 2018/12/10
  */
-public class JwtTokenUtil {
+public class JwtTokenUtils {
     // 加盐
     private static String salt="wangshiqi";
 
