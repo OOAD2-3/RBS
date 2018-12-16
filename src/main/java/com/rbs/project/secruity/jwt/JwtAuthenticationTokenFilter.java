@@ -1,7 +1,7 @@
 package com.rbs.project.secruity.jwt;
 
 import com.rbs.project.pojo.entity.User;
-import com.rbs.project.utils.JwtTokenUtil;
+import com.rbs.project.utils.JwtTokenUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -35,7 +35,7 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
         if (authHeader != null && authHeader.startsWith(authTokenPrefix)) {
             final String authToken = authHeader.substring(authTokenPrefix.length());
 
-            String username = JwtTokenUtil.parseToken(authToken);
+            String username = JwtTokenUtils.parseToken(authToken);
 
             if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
                 User userDetails = jwtUserDetailsService.loadUserByUsername(username);

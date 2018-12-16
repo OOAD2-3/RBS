@@ -22,4 +22,14 @@
         UPDATE teacher SET password=#{password},email=#{email},is_active=#{active}
         WHERE id=#{id}
     </update>
+
+    <update id="updatePasswordById" parameterType="com.rbs.project.pojo.entity.Teacher">
+        UPDATE teacher SET password=#{password}
+        WHERE id=#{id}
+    </update>
+
+    <update id="updateEmailById" parameterType="com.rbs.project.pojo.entity.Teacher">
+        UPDATE teacher SET email=#{email}
+        WHERE id=#{id}
+    </update>
 </mapper>
