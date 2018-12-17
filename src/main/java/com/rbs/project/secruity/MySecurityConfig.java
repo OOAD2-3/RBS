@@ -55,7 +55,7 @@ public class MySecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.authenticationProvider(myAuthenticationProvider);
+//        auth.authenticationProvider(myAuthenticationProvider);
     }
 
     @Override
@@ -65,7 +65,7 @@ public class MySecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-
+/*
         http.cors().and().csrf().disable()
                 //禁用session
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
@@ -105,10 +105,10 @@ public class MySecurityConfig extends WebSecurityConfigurerAdapter {
         // JWT Filter
         http.addFilterBefore(jwtAuthenticationTokenFilter, UsernamePasswordAuthenticationFilter.class);
         //禁用缓存
-        http.headers().cacheControl();
+        http.headers().cacheControl();*/
 
-//        http.authorizeRequests().antMatchers("/**/**").permitAll()
-//                .anyRequest().permitAll()
-//                .and().csrf().disable();
+        http.authorizeRequests().antMatchers("/**/**").permitAll()
+                .anyRequest().permitAll()
+                .and().csrf().disable();
     }
 }
