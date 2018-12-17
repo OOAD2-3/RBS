@@ -10,12 +10,16 @@
         <result property="email" column="email"/>
     </resultMap>
 
-    <select id="findById" parameterType="Integer" resultMap="tab_student">
+    <select id="findById" parameterType="Long" resultMap="tab_student">
         SELECT id,account,password,is_active,student_name,email FROM student WHERE id = #{id}
     </select>
 
     <select id="findByAccount" parameterType="String" resultMap="tab_student">
         SELECT id,account,password,is_active,student_name,email FROM student WHERE account = #{account}
+    </select>
+
+    <select id="listAll" resultMap="tab_student">
+        SELECT id,account,password,is_active,student_name,email FROM student
     </select>
 
     <update id="updatePasswordAndEmailAndActiveById" parameterType="com.rbs.project.pojo.entity.Student">
@@ -37,4 +41,19 @@
         insert into student(id,account,password,is_active,student_name,email)
         values (#{id},#{account},#{password},#{active},#{studentName},#{email})
     </insert>
+
+    <update id="updateStudentNameById" parameterType="com.rbs.project.pojo.entity.Student">
+        UPDATE student SET student_name=#{studentName}
+        WHERE id=#{id}
+    </update>
+
+    <update id="updateAccountById" parameterType="com.rbs.project.pojo.entity.Student">
+        UPDATE student SET account=#{account}
+        WHERE id=#{id}
+    </update>
+
+    <delete id="deleteStudentById" parameterType="Long">
+        DELETE FROM student WHERE id=#{id}
+    </delete>
+
 </mapper>
