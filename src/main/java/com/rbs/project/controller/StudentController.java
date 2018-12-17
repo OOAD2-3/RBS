@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Description:student资源接口
@@ -37,6 +38,39 @@ public class StudentController {
             userVOS.add(new UserVO(student));
         }
         return userVOS;
+    }
+
+    @GetMapping("/searchstudent")
+    @ResponseBody
+    public ResponseEntity<UserVO> findOneStudent(@RequestParam("identity") String identity) throws MyException {
+        Student student=studentService.findOneStudent(identity);
+        return ResponseEntity.ok(new UserVO(student));
+    }
+
+    @PutMapping("/{studentId}/information")
+    @ResponseBody
+    public ResponseEntity<UserVO> updateStudentInfo(@PathVariable("studentId") long studentId,@RequestBody UserVO userVO) throws MyException {
+        Student student=new Student();
+        student.setId(studentId);
+        student.setAccount(userVO.getAccount());
+        student.setStudentName(userVO.getName());
+        student.setEmail(userVO.getEmail());
+        return ResponseEntity.ok(new UserVO(studentService.resetStudentInfo(student)));
+    }
+
+    @PutMapping("/{studentId}/password")
+    @ResponseBody
+    public ResponseEntity<UserVO> updateStudentPassword(@PathVariable("studentId") long studentId) throws MyException {
+        Student student=new Student();
+        student.setId(studentId);
+        student.setPassword("123456");
+        return ResponseEntity.ok(new UserVO(studentService.resetStudentPassword(student)));
+    }
+
+    @DeleteMapping("/{studentId}")
+    @ResponseBody
+    public ResponseEntity<Boolean> deleteStudent(@PathVariable("studentId") long studentId) throws MyException {
+        return ResponseEntity.ok(studentService.deleteStudent(studentId));
     }
 
     @PutMapping("/active")

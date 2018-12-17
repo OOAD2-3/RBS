@@ -36,4 +36,18 @@
         UPDATE student SET email=#{email}
         WHERE id=#{id}
     </update>
+
+    <update id="updateStudentNameById" parameterType="com.rbs.project.pojo.entity.Student">
+        UPDATE student SET student_name=#{studentName}
+        WHERE id=#{id}
+    </update>
+
+    <update id="updateAccountById" parameterType="com.rbs.project.pojo.entity.Student">
+        UPDATE student SET account=#{account}
+        WHERE id=#{id}
+    </update>
+
+    <delete id="deleteStudentById" parameterType="Long">
+        DELETE FROM student WHERE id=#{id}
+    </delete>
 </mapper>

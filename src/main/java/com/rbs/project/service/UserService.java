@@ -1,5 +1,7 @@
 package com.rbs.project.service;
 
+import com.rbs.project.dao.StudentDao;
+import com.rbs.project.dao.TeacherDao;
 import com.rbs.project.dao.UserDao;
 import com.rbs.project.exception.MyException;
 import com.rbs.project.pojo.entity.Student;
@@ -20,6 +22,10 @@ import org.springframework.stereotype.Service;
 public class UserService {
     @Autowired
     private UserDao userDao;
+    @Autowired
+    private StudentDao studentDao;
+    @Autowired
+    private TeacherDao teacherDao;
 
     /**
      * Description: 激活用户，包括学生和老师
@@ -37,9 +43,9 @@ public class UserService {
             throw new MyException("激活失败！邮箱不能为空", MyException.ERROR);
         }
         if (user instanceof Student) {
-            userDao.updatePasswordAndEmailAndActiveByStudent((Student) user);
+            studentDao.updatePasswordAndEmailAndActiveByStudent((Student) user);
         } else if (user instanceof Teacher) {
-            userDao.updatePasswordAndEmailAndActiveByTeacher((Teacher) user);
+            teacherDao.updatePasswordAndEmailAndActiveByTeacher((Teacher) user);
         }
 
         return true;
@@ -85,9 +91,9 @@ public class UserService {
         //放入需要设置的密码
         user.setPassword(password);
         if (user instanceof Student) {
-            userDao.updatePasswordByStudent((Student) user);
+            studentDao.updatePasswordByStudent((Student) user);
         } else if (user instanceof Teacher) {
-            userDao.updatePasswordByTeacher((Teacher) user);
+            teacherDao.updatePasswordByTeacher((Teacher) user);
         } else {
             throw new MyException("修改密码失败！未知错误", MyException.ERROR);
         }
@@ -111,9 +117,9 @@ public class UserService {
         //放入需要设置的邮箱
         user.setEmail(email);
         if (user instanceof Student) {
-            userDao.updateEmailByStudent((Student) user);
+            studentDao.updateEmailByStudent((Student) user);
         } else if (user instanceof Teacher) {
-            userDao.updateEmailByTeacher((Teacher) user);
+            teacherDao.updateEmailByTeacher((Teacher) user);
         } else {
             throw new MyException("修改邮箱失败！未知错误", MyException.ERROR);
         }
