@@ -22,12 +22,20 @@ public interface StudentMapper {
     Student findById(long id);
 
     /**
-     * 通过用户名锁定一个学生
+     * 通过在学号锁定一个学生
      *
      * @param account
      * @return
      */
     Student findByAccount(String account);
+
+    /**
+     * 通过学生名查找一个学生
+     *
+     * @param studentName
+     * @return
+     */
+    Student findByStudentName(String studentName);
 
     /**
      * 返回所有学生信息
@@ -61,18 +69,35 @@ public interface StudentMapper {
     boolean updateEmailById(Student student);
 
     /**
-     * 通过id修改激活状态
+     * 通过id修改学生名
      *
      * @param student
      * @return
      */
-    boolean updateActiveById(Student student);
+    boolean updateStudentNameById(Student student);
 
     /**
      * 新增学生
+     *
      * @param student
      * @return
      */
     long insertStudent(Student student);
 
+
+    /**
+     * 通过id修改学号
+     *
+     * @param student
+     * @return
+     */
+    boolean updateAccountById(Student student);
+
+    /**
+     * 删除学生
+     *
+     * @param id
+     * @return
+     */
+    boolean deleteStudentById(long id);
 }
