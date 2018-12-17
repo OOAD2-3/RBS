@@ -178,4 +178,21 @@ public class UserDao {
         }
         return true;
     }
+    /**
+     * Description: 新增学生
+     * @Author: WinstonDeng
+     * @Date: 0:04 2018/12/17
+     */
+    public long addStudent(Student student) throws MyException{
+        long studentId= -1;
+        if(studentMapper.findByAccount(student.getUsername())==null){
+            try{
+                studentMapper.insertStudent(student);
+                studentId=student.getId();
+            }catch (Exception e){
+                throw new MyException("新增学生错误！数据库处理错误",MyException.ERROR);
+            }
+        }
+        return studentId;
+    }
 }

@@ -12,12 +12,12 @@
 
     </resultMap>
 
-    <select id="findById" parameterType="BigInteger" resultMap="tab_team" resultType="com.rbs.project.pojo.entity.Team">
+    <select id="findById" parameterType="Long" resultMap="tab_team" resultType="com.rbs.project.pojo.entity.Team">
         SELECT id,klass_id,course_id,leader_id,team_name,team_serial,status
         FROM team
         WHERE id=#{id}
     </select>
-    <select id="findByCClassId" parameterType="BigInteger" resultMap="tab_team" resultType="com.rbs.project.pojo.entity.Team">
+    <select id="findByCClassId" parameterType="Long" resultMap="tab_team" resultType="com.rbs.project.pojo.entity.Team">
         SELECT id,klass_id,course_id,leader_id,team_name,team_serial,status
         FROM team
         WHERE cclass_id=#{cClassId}

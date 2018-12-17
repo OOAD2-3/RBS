@@ -9,13 +9,13 @@
         <result property="status" column="status"/>
     </resultMap>
 
-    <select id="findById" parameterType="BigInteger" resultMap="tab_klass_seminar" resultType="com.rbs.project.pojo.entity.CClassSeminar">
+    <select id="findById" parameterType="Long" resultMap="tab_klass_seminar" resultType="com.rbs.project.pojo.entity.CClassSeminar">
         SELECT id,klass_id,seminar_id,report_ddl,status
         FROM klass_seminar
         WHERE id=#{id}
     </select>
 
-    <select id="findByCClassId" parameterType="BigInteger" resultMap="tab_klass_seminar" resultType="com.rbs.project.pojo.entity.CClassSeminar">
+    <select id="findByCClassId" parameterType="Long" resultMap="tab_klass_seminar" resultType="com.rbs.project.pojo.entity.CClassSeminar">
         SELECT id,klass_id,seminar_id,report_ddl,status
         FROM klass_seminar
         WHERE klass_id=#{cClassId}

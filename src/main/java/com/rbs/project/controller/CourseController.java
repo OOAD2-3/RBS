@@ -1,11 +1,19 @@
 package com.rbs.project.controller;
 
+import com.rbs.project.exception.MyException;
 import com.rbs.project.pojo.dto.CreateCClassDTO;
 import com.rbs.project.pojo.entity.CClass;
+import com.rbs.project.pojo.vo.CClassInfoVO;
 import com.rbs.project.service.CClassService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @Author: WinstonDeng
@@ -52,6 +60,26 @@ public class CourseController {
             return ResponseEntity.status(401).body(cclassId);
         }
         return ResponseEntity.ok().body(cclassId);
+    }
+    /**
+     * Description: 通过课程查找班级列表
+     * @Author: WinstonDeng
+     * @Date: 10:50 2018/12/17
+     */
+    @GetMapping("/{courseId}/class")
+    @ResponseBody
+    public ResponseEntity<List<CClassInfoVO>> listAllCClassesInCoursePage(@PathVariable("courseId") long courseId){
+        List<CClassInfoVO> cClassInfoVOS=new ArrayList<>();
+        try {
+            List<CClass> cClasses=cClassService.listCClassesByCourseId(courseId);
+            for(CClass cClass
+                    :cClasses){
+                cClassInfoVOS.add(new CClassInfoVO(cClass));
+            }
+        } catch (MyException e) {
+            return ResponseEntity.status(e.getStateCode()).body(cClassInfoVOS);
+        }
+        return ResponseEntity.ok().body(cClassInfoVOS);
     }
 
 }
