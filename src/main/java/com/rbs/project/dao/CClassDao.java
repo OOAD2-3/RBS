@@ -47,7 +47,10 @@ public class CClassDao {
      * @Author: WinstonDeng
      * @Date: 12:58 2018/12/16
      */
-    public List<CClass> listByCourseId(long courseId, int... hasSomething) {
+    public List<CClass> listByCourseId(long courseId, int... hasSomething) throws MyException{
+        if(courseMapper.findById(courseId)==null){
+            throw new MyException("通过课程查找班级列表错误！该课程不存在",MyException.NOT_FOUND_ERROR);
+        }
         List<CClass> cClasses = cClassMapper.findByCourseId(courseId);
 
         for (CClass cClass : cClasses) {

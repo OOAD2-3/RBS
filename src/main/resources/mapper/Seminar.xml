@@ -14,19 +14,19 @@
         <result property="enrollEndTime" column="enroll_end_time"/>
     </resultMap>
 
-    <select id="findById" parameterType="BigInteger" resultMap="tab_seminar" resultType="com.rbs.project.pojo.entity.Seminar">
+    <select id="findById" parameterType="Long" resultMap="tab_seminar" resultType="com.rbs.project.pojo.entity.Seminar">
         SELECT id,course_id,round_id,seminar_name,introduction,max_team,is_visible,seminar_serial,enroll_start_time,enroll_end_time
         FROM seminar
         WHERE id=#{id}
     </select>
 
-    <select id="findByCourseId" parameterType="BigInteger" resultMap="tab_seminar" resultType="com.rbs.project.pojo.entity.Seminar">
+    <select id="findByCourseId" parameterType="Long" resultMap="tab_seminar" resultType="com.rbs.project.pojo.entity.Seminar">
         SELECT id,course_id,round_id,seminar_name,introduction,max_team,is_visible,seminar_serial,enroll_start_time,enroll_end_time
         FROM seminar
         WHERE course_id=#{courseId}
     </select>
 
-    <select id="findByRoundId" parameterType="BigInteger" resultMap="tab_seminar" resultType="com.rbs.project.pojo.entity.Seminar">
+    <select id="findByRoundId" parameterType="Long" resultMap="tab_seminar" resultType="com.rbs.project.pojo.entity.Seminar">
         SELECT id,course_id,round_id,seminar_name,introduction,max_team,is_visible,seminar_serial,enroll_start_time,enroll_end_time
         FROM seminar
         WHERE round_id=#{roundId}
