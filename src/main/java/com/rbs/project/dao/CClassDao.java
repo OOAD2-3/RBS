@@ -90,4 +90,22 @@ public class CClassDao {
         }
         return true;
     }
+
+    /**
+     * Description: 按id删除课程
+     * @Author: WinstonDeng
+     * @Date: 11:30 2018/12/18
+     */
+    public boolean removeCClass(long cClassId)throws MyException{
+        boolean flag=false;
+        try{
+            if(cClassMapper.findById(cClassId)==null){
+                throw new MyException("删除课程错误！未找到课程",MyException.NOT_FOUND_ERROR);
+            }
+            flag=cClassMapper.deleteCClassById(cClassId);
+        }catch (Exception e){
+            throw new MyException("删除课程错误！数据库处理错误",MyException.ERROR);
+        }
+        return flag;
+    }
 }

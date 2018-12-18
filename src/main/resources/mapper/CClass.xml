@@ -25,4 +25,9 @@
         insert into klass(course_id, grade,klass_serial,klass_time,klass_location)
         values (#{courseId},#{grade},#{serial},#{time},#{place})
     </insert>
+    <delete id="deleteCClassById" parameterType="Long">
+        delete
+        from klass
+        where id=#{id}
+    </delete>
 </mapper>

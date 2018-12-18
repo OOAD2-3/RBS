@@ -46,26 +46,22 @@ public class CourseController {
      */
     @PostMapping("/{courseId}/class")
     @ResponseBody
-    public ResponseEntity<Long> createcClassInCoursePage(@PathVariable("courseId") long courseId, @RequestBody CreateCClassDTO createCClassDTO){
+    public ResponseEntity<Long> createcClassInCoursePage(@PathVariable("courseId") long courseId, @RequestBody CreateCClassDTO createCClassDTO) throws MyException{
         //初始化为-1 表示新建失败
         long cclassId= -1;
-        try {
-            //设置班级基本信息
-            CClass cClass=new CClass();
-            cClass.setCourseId(cclassId);
-            cClass.setGrade(createCClassDTO.getGrade());
-            cClass.setSerial(createCClassDTO.getSerial());
-            cClass.setTime(createCClassDTO.getTime());
-            cClass.setPlace(createCClassDTO.getClassroom());
-            //获得新建的课程主键
-            cclassId=cClassService.createCClass(courseId,cClass);
-            //解析学生名单
-            if(cclassId!=-1){
-                //调用解析学生名单的函数
-                cClassService.transStudentListFileToDataBase(cclassId,createCClassDTO.getFileName());
-            }
-        }catch (Exception e){
-            return ResponseEntity.status(401).body(cclassId);
+        //设置班级基本信息
+        CClass cClass=new CClass();
+        cClass.setCourseId(cclassId);
+        cClass.setGrade(createCClassDTO.getGrade());
+        cClass.setSerial(createCClassDTO.getSerial());
+        cClass.setTime(createCClassDTO.getTime());
+        cClass.setPlace(createCClassDTO.getClassroom());
+        //获得新建的课程主键
+        cclassId=cClassService.createCClass(courseId,cClass);
+        //解析学生名单
+        if(cclassId!=-1){
+            //调用解析学生名单的函数
+            cClassService.transStudentListFileToDataBase(cclassId,createCClassDTO.getFileName());
         }
         return ResponseEntity.ok().body(cclassId);
     }
@@ -76,16 +72,12 @@ public class CourseController {
      */
     @GetMapping("/{courseId}/class")
     @ResponseBody
-    public ResponseEntity<List<CClassInfoVO>> listAllCClassesInCoursePage(@PathVariable("courseId") long courseId){
+    public ResponseEntity<List<CClassInfoVO>> listAllCClassesInCoursePage(@PathVariable("courseId") long courseId)throws MyException{
         List<CClassInfoVO> cClassInfoVOS=new ArrayList<>();
-        try {
-            List<CClass> cClasses=cClassService.listCClassesByCourseId(courseId);
-            for(CClass cClass
-                    :cClasses){
-                cClassInfoVOS.add(new CClassInfoVO(cClass));
-            }
-        } catch (MyException e) {
-            return ResponseEntity.status(e.getStateCode()).body(cClassInfoVOS);
+        List<CClass> cClasses=cClassService.listCClassesByCourseId(courseId);
+        for(CClass cClass
+                :cClasses){
+            cClassInfoVOS.add(new CClassInfoVO(cClass));
         }
         return ResponseEntity.ok().body(cClassInfoVOS);
     }

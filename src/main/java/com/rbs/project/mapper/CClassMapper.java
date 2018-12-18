@@ -37,6 +37,15 @@ public interface CClassMapper {
      * @param cClass
      * @return
      */
-    long insertCClass(CClass cClass);
+    boolean insertCClass(CClass cClass);
+
+    //=================删除====================
+
+    /**
+     * 通过id删除班级
+     * @param id
+     * @return
+     */
+    boolean deleteCClassById(long id);
 
 }

@@ -1,6 +1,7 @@
 package com.rbs.project.service;
 
 import com.rbs.project.dao.CClassDao;
+import com.rbs.project.dao.StudentDao;
 import com.rbs.project.dao.UserDao;
 import com.rbs.project.exception.MyException;
 import com.rbs.project.mapper.CClassMapper;
@@ -8,8 +9,10 @@ import com.rbs.project.mapper.StudentMapper;
 import com.rbs.project.pojo.entity.CClass;
 import com.rbs.project.pojo.entity.Student;
 import com.rbs.project.utils.ExcelUtils;
+import com.rbs.project.utils.FileLoadUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Set;
@@ -27,7 +30,7 @@ public class CClassService {
     private CClassDao cClassDao;
 
     @Autowired
-    private UserDao userDao;
+    private StudentDao studentDao;
 
     /**
      * Description: 创建班级
@@ -58,7 +61,7 @@ public class CClassService {
                 student.setPassword("123456");
                 //初始状态
                 student.setActive(false);
-                userDao.addStudent(student);
+                studentDao.addStudent(student);
         }
         return true;
     }
@@ -69,5 +72,24 @@ public class CClassService {
      */
     public List<CClass> listCClassesByCourseId(long courseId) throws MyException{
         return cClassDao.listByCourseId(courseId);
+    }
+
+    /**
+     * Description: 上传学生名单
+     * @Author: WinstonDeng
+     * @Date: 10:37 2018/12/18
+     */
+    public String uploadStudentFile(long cClassId, MultipartFile file){
+        String filePath="D://fileloadtest//";
+        return FileLoadUtils.upload(file,filePath);
+    }
+
+    /**
+     * Description: 按id删除课程
+     * @Author: WinstonDeng
+     * @Date: 11:10 2018/12/18
+     */
+    public boolean removeCClassById(long cClassId) throws MyException{
+        return cClassDao.removeCClass(cClassId);
     }
 }

@@ -29,7 +29,7 @@ public class FileLoadUtils {
      * @Author: WinstonDeng
      * @Date: 13:11 2018/12/12
      */
-    public String upload(MultipartFile file, String filePath){
+    public static String upload(MultipartFile file, String filePath){
         try {
             if (file.isEmpty()) {
                 return "文件为空";
@@ -65,7 +65,7 @@ public class FileLoadUtils {
      * @Author: WinstonDeng
      * @Date: 13:13 2018/12/12
      */
-    public String handleFileUpload(List<MultipartFile> files, String filePath){
+    public static String handleFileUpload(List<MultipartFile> files, String filePath){
 
         MultipartFile file = null;
         BufferedOutputStream stream = null;
@@ -98,7 +98,7 @@ public class FileLoadUtils {
      * @Author: WinstonDeng
      * @Date: 13:16 2018/12/12
      */
-    public String downloadFile(HttpServletRequest request, HttpServletResponse response, String realPath, String fileName) {
+    public static String downloadFile(HttpServletRequest request, HttpServletResponse response, String realPath, String fileName) {
         //String fileName = "upload.txt";// 设置文件名，根据业务需要替换成要下载的文件名
         if (fileName != null) {
 
