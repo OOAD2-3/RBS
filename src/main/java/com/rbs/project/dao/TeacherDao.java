@@ -44,6 +44,34 @@ public class TeacherDao {
     }
 
     /**
+     * Description: 通过教工号查找一个老师
+     *
+     * @Author: 17Wang
+     * @Time: 23:58 2018/12/17
+     */
+    public Teacher getTeacherByAccount(String account) throws MyException {
+        Teacher teacher = teacherMapper.findByAccount(account);
+        if (teacher == null) {
+            throw new MyException("通过学号查找老师出错！", MyException.NOT_FOUND_ERROR);
+        }
+        return teacher;
+    }
+
+    /**
+     * Description:通过老师名查找一个老师
+     *
+     * @Author: 17Wang
+     * @Time: 23:58 2018/12/17
+     */
+    public Teacher getTeacherByTeacherName(String teacherName) throws MyException {
+        Teacher teacher = teacherMapper.findByTeacherName(teacherName);
+        if (teacher == null) {
+            throw new MyException("通过老师名查找老师出错", MyException.NOT_FOUND_ERROR);
+        }
+        return teacher;
+    }
+
+    /**
      * Description:激活教师号时的更新
      *
      * @Author: 17Wang
@@ -84,6 +112,7 @@ public class TeacherDao {
 
     /**
      * Description: 老师修改邮箱
+     *
      * @Author: 17Wang
      * @Time: 16:05 2018/12/16
      */
@@ -95,6 +124,74 @@ public class TeacherDao {
         }
         if (!teacherMapper.updateEmailById(teacher)) {
             throw new MyException("老师修改邮箱错误！数据库处理错误", MyException.ERROR);
+        }
+        return true;
+    }
+
+    /**
+     * Description: 老师修改名字
+     *
+     * @Author: 17Wang
+     * @Time: 23:34 2018/12/16
+     */
+    public boolean updateTeacherNameByTeacher(Teacher teacher) throws MyException {
+        try {
+            getTeacherById(teacher.getId());
+        } catch (MyException e) {
+            throw new MyException("老师修改名字错误！不存在该用户", MyException.NOT_FOUND_ERROR);
+        }
+
+        if (!teacherMapper.updateTeacherNameById(teacher)) {
+            throw new MyException("老师修改名字错误！数据库处理错误", MyException.ERROR);
+        }
+        return true;
+    }
+
+    /**
+     * Description: 老师修改学号
+     *
+     * @Author: 17Wang
+     * @Time: 23:47 2018/12/16
+     */
+    public boolean updateAccountByTeacher(Teacher teacher) throws MyException {
+        try {
+            getTeacherById(teacher.getId());
+        } catch (MyException e) {
+            throw new MyException("老师修改学号错误！不存在该用户", MyException.NOT_FOUND_ERROR);
+        }
+
+        if (!teacherMapper.updateAccountById(teacher)) {
+            throw new MyException("老师修改学号错误！数据库处理错误", MyException.ERROR);
+        }
+        return true;
+    }
+
+    /**
+     * Description: 通过id删除老师
+     * @Author: 17Wang
+     * @Time: 15:43 2018/12/18
+    */
+    public boolean deleteTeacherByTeacherId(long teacherId) throws MyException {
+        try {
+            getTeacherById(teacherId);
+        } catch (MyException e) {
+            throw new MyException("删除老师错误！不存在该用户", MyException.NOT_FOUND_ERROR);
+        }
+
+        if (!teacherMapper.deleteTeacherById(teacherId)) {
+            throw new MyException("删除老师错误！数据库处理错误", MyException.ERROR);
+        }
+        return true;
+    }
+
+    /**
+     * Description: 新增老师
+     * @Author: 17Wang
+     * @Time: 15:43 2018/12/18
+    */
+    public boolean insertTeacher(Teacher teacher) throws MyException {
+        if(!teacherMapper.insertTeacher(teacher)){
+            throw new MyException("新增老师错误！数据库处理错误", MyException.ERROR);
         }
         return true;
     }

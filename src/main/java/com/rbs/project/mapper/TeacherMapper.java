@@ -1,6 +1,5 @@
 package com.rbs.project.mapper;
 
-import com.rbs.project.pojo.entity.Student;
 import com.rbs.project.pojo.entity.Teacher;
 import org.springframework.stereotype.Repository;
 
@@ -29,6 +28,14 @@ public interface TeacherMapper {
      * @return
      */
     Teacher findByAccount(String account);
+
+    /**
+     * 通过老师名查找一个老师
+     *
+     * @param teacherName
+     * @return
+     */
+    Teacher findByTeacherName(String teacherName);
 
     /**
      * 返回所有教师信息
@@ -62,10 +69,35 @@ public interface TeacherMapper {
     boolean updateEmailById(Teacher teacher);
 
     /**
-     * 通过id修改激活状态
+     * 通过id修改老师名
      *
      * @param teacher
      * @return
      */
-    boolean updateActiveById(Teacher teacher);
+    boolean updateTeacherNameById(Teacher teacher);
+
+    /**
+     * 新增老师
+     *
+     * @param teacher
+     * @return
+     */
+    boolean insertTeacher(Teacher teacher);
+
+
+    /**
+     * 通过id修改学号
+     *
+     * @param teacher
+     * @return
+     */
+    boolean updateAccountById(Teacher teacher);
+
+    /**
+     * 删除老师
+     *
+     * @param id
+     * @return
+     */
+    boolean deleteTeacherById(long id);
 }
