@@ -2,7 +2,7 @@ package com.rbs.project.pojo.dto;
 
 /**
  * @Author: WinstonDeng
- * @Description: OOAD_Course_ManageSystem
+ * @Description: 新建班级DTO
  * @Date: Created in 14:35 2018/12/16
  * @Modified by:
  */
