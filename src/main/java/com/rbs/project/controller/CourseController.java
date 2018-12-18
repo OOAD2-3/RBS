@@ -5,6 +5,7 @@ import com.rbs.project.pojo.dto.CreateCClassDTO;
 import com.rbs.project.pojo.entity.CClass;
 import com.rbs.project.pojo.vo.CClassInfoVO;
 import com.rbs.project.service.CClassService;
+import com.rbs.project.service.CourseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,7 +26,14 @@ import java.util.Map;
 @RequestMapping("/course")
 public class CourseController {
     @Autowired
+    private CourseService courseService;
+
+    @Autowired
     CClassService cClassService;
+
+
+
+
     /**
      * Description: 课程下新建班级
      *
