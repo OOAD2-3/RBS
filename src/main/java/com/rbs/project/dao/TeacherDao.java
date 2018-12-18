@@ -189,7 +189,7 @@ public class TeacherDao {
      * @Author: 17Wang
      * @Time: 15:43 2018/12/18
     */
-    public boolean insertTeacher(Teacher teacher) throws MyException {
+    public boolean addTeacher(Teacher teacher) throws MyException {
         if(!teacherMapper.insertTeacher(teacher)){
             throw new MyException("新增老师错误！数据库处理错误", MyException.ERROR);
         }

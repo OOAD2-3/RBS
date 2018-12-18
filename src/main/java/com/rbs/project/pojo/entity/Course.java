@@ -1,5 +1,7 @@
 package com.rbs.project.pojo.entity;
 
+import com.rbs.project.pojo.strategy.CourseMemberLimitStrategy;
+
 import java.sql.Timestamp;
 import java.util.List;
 
@@ -9,8 +11,9 @@ import java.util.List;
  * @Description:
  */
 public class Course {
-    //基本信息
-
+    /**
+     * 基本信息
+     */
     private long id;
     /**
      * 属于哪个老师
@@ -54,6 +57,10 @@ public class Course {
     private long seminarMainCourseId;
 
     //关系
+    /**
+     * 课程组队限制
+     */
+    private CourseMemberLimitStrategy courseMemberLimitStrategy;
     /**
      * 一个老师
      */
@@ -177,6 +184,14 @@ public class Course {
         return seminarMainCourseId;
     }
 
+    public CourseMemberLimitStrategy getCourseMemberLimitStrategy() {
+        return courseMemberLimitStrategy;
+    }
+
+    public void setCourseMemberLimitStrategy(CourseMemberLimitStrategy courseMemberLimitStrategy) {
+        this.courseMemberLimitStrategy = courseMemberLimitStrategy;
+    }
+
     public Teacher getTeacher() {
         return teacher;
     }
@@ -244,4 +259,29 @@ public class Course {
     //======================= toString=============================
 
 
+    @Override
+    public String toString() {
+        return "Course{" +
+                "id=" + id +
+                ", teacherId=" + teacherId +
+                ", name='" + name + '\'' +
+                ", intro='" + intro + '\'' +
+                ", presentationPercentage=" + presentationPercentage +
+                ", questionPercentage=" + questionPercentage +
+                ", reportPercentage=" + reportPercentage +
+                ", teamStartTime=" + teamStartTime +
+                ", teamEndTime=" + teamEndTime +
+                ", teamMainCourseId=" + teamMainCourseId +
+                ", seminarMainCourseId=" + seminarMainCourseId +
+                ", courseMemberLimitStrategy=" + courseMemberLimitStrategy +
+                ", teacher=" + teacher +
+                ", teamMainCourse=" + teamMainCourse +
+                ", seminarMainCourse=" + seminarMainCourse +
+                ", seminars=" + seminars +
+                ", rounds=" + rounds +
+                ", cClasses=" + cClasses +
+                ", teams=" + teams +
+                ", students=" + students +
+                '}';
+    }
 }

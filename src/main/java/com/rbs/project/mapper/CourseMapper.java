@@ -19,6 +19,7 @@ public interface CourseMapper {
 
     /**
      * 通过id找课程
+     *
      * @param id
      * @return
      */
@@ -26,22 +27,33 @@ public interface CourseMapper {
 
     /**
      * 通过老师查找课程列表
+     *
      * @param teacherId
      * @return
      */
     List<Course> findByTeacherId(long teacherId);
+
+    /**
+     * 通过学生id查找班级，再通过班级查找课程
+     *
+     * @param studentId
+     * @return
+     */
+    List<Course> findByStudentId(long studentId);
     //=========================新增=======================
 
     /**
      * 新增课程
+     *
      * @param course
      * @return
      */
-    long insertCourse(Course course);
+    boolean insertCourse(Course course) throws Exception;
     //=========================删除=======================
 
     /**
      * 通过id删除课程
+     *
      * @param id
      * @return
      */

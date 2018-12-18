@@ -18,11 +18,23 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(value = MyException.class)
     @ResponseBody
-    public ErrorInfo<String> jsonErrorHandler(HttpServletRequest req, HttpServletResponse response, MyException e) throws Exception {
+    public ErrorInfo<String> jsonErrorHandler(HttpServletRequest req, HttpServletResponse response, MyException e){
         ErrorInfo<String> r = new ErrorInfo<>();
         r.setMessage(e.getMessage());
         r.setCode(e.getStateCode());
         r.setData("None Data");
+        r.setUrl(req.getRequestURL().toString());
+        response.setStatus(r.getCode());
+        return r;
+    }
+
+    @ExceptionHandler(value = Exception.class)
+    @ResponseBody
+    public ErrorInfo<String> unKnownErrorHandler(HttpServletRequest req, HttpServletResponse response, Exception e) {
+        ErrorInfo<String> r = new ErrorInfo<>();
+        r.setMessage(e.getMessage());
+        r.setCode(500);
+        r.setData("不为人知的内部错误");
         r.setUrl(req.getRequestURL().toString());
         response.setStatus(r.getCode());
         return r;

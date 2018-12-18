@@ -1,5 +1,7 @@
 package com.rbs.project.secruity.jwt;
 
+import com.rbs.project.pojo.entity.Student;
+import com.rbs.project.pojo.entity.Teacher;
 import com.rbs.project.pojo.entity.User;
 import com.rbs.project.utils.JwtTokenUtils;
 import org.springframework.beans.factory.annotation.Autowired;

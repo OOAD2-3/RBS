@@ -121,6 +121,6 @@ public class TeacherService {
      * @Time: 15:42 2018/12/18
     */
     public boolean createTeacher(Teacher teacher) throws MyException {
-        return teacherDao.insertTeacher(teacher);
+        return teacherDao.addTeacher(teacher);
     }
 }

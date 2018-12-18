@@ -5,6 +5,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
+import java.util.List;
 
 
 /**
@@ -19,6 +20,11 @@ public abstract class User implements UserDetails {
     private String password;
     private boolean active;
     private String email;
+
+    /**
+     * 拥有的课程
+     */
+    private List<Course> courses;
 
     public long getId() {
         return id;
@@ -93,5 +99,24 @@ public abstract class User implements UserDetails {
     @JsonIgnore
     public boolean isEnabled() {
         return false;
+    }
+
+    public List<Course> getCourses() {
+        return courses;
+    }
+
+    public void setCourses(List<Course> courses) {
+        this.courses = courses;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", account='" + account + '\'' +
+                ", password='" + password + '\'' +
+                ", active=" + active +
+                ", email='" + email + '\'' +
+                '}';
     }
 }

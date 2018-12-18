@@ -27,6 +27,8 @@ public class MyException extends Exception {
 
     private int stateCode;
 
+    private Object object;
+
     public MyException(String info, int stateCode) {
         super(info);
         this.stateCode = stateCode;
@@ -38,5 +40,13 @@ public class MyException extends Exception {
 
     public void setStateCode(int stateCode) {
         this.stateCode = stateCode;
+    }
+
+    public Object getObject() {
+        return object;
+    }
+
+    public void setObject(Object object) {
+        this.object = object;
     }
 }
