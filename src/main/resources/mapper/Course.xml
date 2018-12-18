@@ -14,21 +14,21 @@
         <result property="teamMainCourseId" column="team_main_course_id"/>
         <result property="seminarMainCourseId" column="seminar_main_course_id"/>
     </resultMap>
-    <select id="findById" parameterType="BigInteger" resultMap="tab_course" resultType="com.rbs.project.pojo.entity.Course">
+    <select id="findById" parameterType="Long" resultMap="tab_course" resultType="com.rbs.project.pojo.entity.Course">
         SELECT id,teacher_id,course_name,introduction,presentation_percentage,question_percentage,report_percentage,
         team_start_time,team_end_time,team_main_course_id,seminar_main_course_id
         FROM course
         WHERE id = #{id}
     </select>
 
-    <select id="findByTeacherId" parameterType="BigInteger" resultMap="tab_course" resultType="com.rbs.project.pojo.entity.Course">
+    <select id="findByTeacherId" parameterType="Long" resultMap="tab_course" resultType="com.rbs.project.pojo.entity.Course">
         SELECT id,teacher_id,course_name,introduction,presentation_percentage,question_percentage,report_percentage,
         team_start_time,team_end_time,team_main_course_id,seminar_main_course_id
         FROM course
         WHERE teacher_id = #{teacherId}
     </select>
 
-    <delete id="deleteById" parameterType="BigInteger">
+    <delete id="deleteById" parameterType="Long">
         DELETE
         FROM course
         WHERE id=#{id}
