@@ -38,7 +38,8 @@ public class ExcelUtils {
                 sheet = wb.getSheetAt(0);
                 //获取最大行数
                 int rowNum = sheet.getPhysicalNumberOfRows();
-                for(int i=1;i<rowNum;i++){
+                //对应学生名单excel奇怪的格式
+                for(int i=2;i<rowNum;i++){
                     row=sheet.getRow(i);
                     if(row!=null){
                         student=new Student();

@@ -2,6 +2,7 @@ package com.rbs.project.dao;
 
 import com.rbs.project.exception.MyException;
 import com.rbs.project.mapper.*;
+import com.rbs.project.pojo.dto.CClassStudentDTO;
 import com.rbs.project.pojo.entity.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -29,6 +30,11 @@ public class CClassDao {
     @Autowired
     private CClassSeminarMapper cClassSeminarMapper;
 
+    @Autowired
+    private CClassStudentMapper cClassStudentMapper;
+
+    @Autowired
+    private StudentMapper studentMapper;
 
     /**
      * 是否添加队伍信息
@@ -42,6 +48,24 @@ public class CClassDao {
      * 是否添加课程信息
      */
     public static final int HAS_COURSE = 2;
+
+    /**
+     * Description: 通过班级id查看班级
+     * @Author: WinstonDeng
+     * @Date: 16:30 2018/12/19
+     */
+    public CClass getById(long cClassId) throws MyException{
+        CClass cClass=null;
+        if(cClassMapper.findById(cClassId)==null){
+            throw new MyException("通过id查找班级错误！未找到班级",MyException.NOT_FOUND_ERROR);
+        }
+        try {
+            cClass=cClassMapper.findById(cClassId);
+        }catch (Exception e){
+            throw new MyException("通过id查找班级错误！数据库处理错误",MyException.ERROR);
+        }
+        return cClass;
+    }
     /**
      * Description: 通过课程id查班级
      * @Author: WinstonDeng
@@ -96,6 +120,7 @@ public class CClassDao {
      * @Author: WinstonDeng
      * @Date: 11:30 2018/12/18
      */
+    //！！！！！！！！！！！！！缺失级联删除！！！！！！！！！！！！
     public boolean removeCClass(long cClassId)throws MyException{
         boolean flag=false;
         try{
@@ -107,5 +132,30 @@ public class CClassDao {
             throw new MyException("删除课程错误！数据库处理错误",MyException.ERROR);
         }
         return flag;
+    }
+
+    /**
+     * Description: 新增班级学生
+     * @Author: WinstonDeng
+     * @Date: 16:18 2018/12/19
+     */
+    public boolean addCClassStudent(CClassStudentDTO cClassStudentDTO) throws MyException{
+        boolean flag=false;
+        if(cClassMapper.findById(cClassStudentDTO.getcClassId())==null){
+            throw new MyException("新增班级学生错误！未找到班级",MyException.NOT_FOUND_ERROR);
+        }
+        if(courseMapper.findById(cClassStudentDTO.getCourseId())==null){
+            throw new MyException("新增班级学生错误！未找到课程",MyException.NOT_FOUND_ERROR);
+        }
+        if(studentMapper.findById(cClassStudentDTO.getStudentId())==null){
+            throw new MyException("新增班级学生错误！未找到学生",MyException.NOT_FOUND_ERROR);
+        }
+        try {
+            flag=cClassStudentMapper.insertCClassStudent(cClassStudentDTO);
+        }catch (Exception e){
+            throw new MyException("新增班级学生错误！数据库处理错误",MyException.ERROR);
+        }
+        return flag;
+
     }
 }

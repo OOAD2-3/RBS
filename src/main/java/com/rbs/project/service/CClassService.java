@@ -2,18 +2,13 @@ package com.rbs.project.service;
 
 import com.rbs.project.dao.CClassDao;
 import com.rbs.project.dao.StudentDao;
-import com.rbs.project.dao.UserDao;
 import com.rbs.project.exception.MyException;
-import com.rbs.project.mapper.CClassMapper;
-import com.rbs.project.mapper.StudentMapper;
+import com.rbs.project.pojo.dto.CClassStudentDTO;
 import com.rbs.project.pojo.entity.CClass;
 import com.rbs.project.pojo.entity.Student;
 import com.rbs.project.utils.ExcelUtils;
-import com.rbs.project.utils.FileLoadUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
-
 import java.util.List;
 import java.util.Set;
 
@@ -40,10 +35,27 @@ public class CClassService {
     public long createCClass(long courseId, CClass cClass) throws MyException {
         //新建记录的主键值 初始化为-1
         long createCClassId = -1;
-        //获得主键
-        createCClassId=cClass.getId();
+        //判空
+        if((Long)courseId==null){
+            throw new MyException("courseId不能为空",MyException.ERROR);
+        }
+        if(cClass.getGrade()==null){
+            throw new MyException("grade不能为空",MyException.ERROR);
+        }
+        if(cClass.getSerial()==null){
+            throw new MyException("serial不能为空",MyException.ERROR);
+        }
+        if(cClass.getTime()==null){
+            throw new MyException("time不能为空",MyException.ERROR);
+        }
+        if(cClass.getPlace()==null){
+            throw new MyException("location不能为空",MyException.ERROR);
+        }
+
         cClass.setCourseId(courseId);
         cClassDao.addCClass(courseId,cClass);
+        //获得主键
+        createCClassId=cClass.getId();
         return createCClassId;
     }
     /**
@@ -52,16 +64,29 @@ public class CClassService {
      * @Date: 14:44 2018/12/12
      */
     public boolean transStudentListFileToDataBase(long cclassId,String fileName) throws MyException {
-        String realPath="D://fileloadtest//";
-        Set<Student> students= ExcelUtils.transExcelToSet(realPath+fileName);
+        //读取路径
+        String filePath="D:/projectTemp/studentfile/";
+        Set<Student> students= ExcelUtils.transExcelToSet(filePath+fileName);
         for(Student student
                 :students){
-                //cclassStudent.setCClassId(cclassId);//设置学生所属班级，暂时无
+            //通过学号判断是否存在
+            try {
+                studentDao.getStudentByAccount(student.getUsername());
+            }catch (MyException e){
                 //默认密码
                 student.setPassword("123456");
                 //初始状态
                 student.setActive(false);
-                studentDao.addStudent(student);
+                //增加到student
+                long studentId=studentDao.addStudent(student);
+                student.setId(studentId);
+                //增加到klass_student
+                CClassStudentDTO cClassStudentDTO=new CClassStudentDTO();
+                cClassStudentDTO.setcClassId(cclassId);
+                cClassStudentDTO.setCourseId(cClassDao.getById(cclassId).getCourseId());
+                cClassStudentDTO.setStudentId(student.getId());
+                cClassDao.addCClassStudent(cClassStudentDTO);
+            }
         }
         return true;
     }
@@ -74,15 +99,6 @@ public class CClassService {
         return cClassDao.listByCourseId(courseId);
     }
 
-    /**
-     * Description: 上传学生名单
-     * @Author: WinstonDeng
-     * @Date: 10:37 2018/12/18
-     */
-    public String uploadStudentFile(long cClassId, MultipartFile file){
-        String filePath="D://fileloadtest//";
-        return FileLoadUtils.upload(file,filePath);
-    }
 
     /**
      * Description: 按id删除课程

@@ -37,4 +37,31 @@ public interface SeminarMapper {
      * @return
      */
     List<Seminar> findByRoundId(long roundId);
+
+    //=======================新增=====================
+
+    /**
+     * 新增讨论课
+     * @param seminar
+     * @return
+     */
+    boolean insertSeminar(Seminar seminar);
+
+    //=======================删除=====================
+
+    /**
+     * 按id删除讨论课
+     * @param seminarId
+     * @return
+     */
+    boolean removeSeminarById(long seminarId);
+
+    //=======================修改=====================
+
+    /**
+     * 修改讨论课信息
+     * @param seminar
+     * @return
+     */
+    boolean updateSeminar(Seminar seminar);
 }

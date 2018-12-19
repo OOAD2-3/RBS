@@ -27,9 +27,9 @@ public class StudentDao {
      */
     public Student getStudentById(long id) throws MyException {
         Student student = studentMapper.findById(id);
-        if (student == null) {
-            throw new MyException("激活失败！不存在该用户", MyException.NOT_FOUND_ERROR);
-        }
+//        if (student == null) {
+//            throw new MyException("激活失败！不存在该用户", MyException.NOT_FOUND_ERROR);
+//        }
         return student;
     }
 

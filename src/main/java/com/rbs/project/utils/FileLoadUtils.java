@@ -17,9 +17,9 @@ import java.util.List;
 public class FileLoadUtils {
 
     /**
-     *  设置文件存储路径
+     *  设置文件存储路径 上传路径
      */
-    private static String filePath ;
+    private static String filePath="/studentfile/" ;
     /**
      *  设置文件下载路径
      */
@@ -29,13 +29,15 @@ public class FileLoadUtils {
      * @Author: WinstonDeng
      * @Date: 13:11 2018/12/12
      */
-    public static String upload(MultipartFile file, String filePath){
+    public static String upload(MultipartFile file){
+
         try {
             if (file.isEmpty()) {
                 return "文件为空";
             }
             // 获取文件名
             String fileName = file.getOriginalFilename();
+
             System.out.println("上传的文件名为：" + fileName);
             //logger.info("上传的文件名为：" + fileName); //日志记录
             // 获取文件的后缀名
@@ -50,18 +52,21 @@ public class FileLoadUtils {
             if (!dest.getParentFile().exists()) {
                 dest.getParentFile().mkdirs();// 新建文件夹
             }
+            System.out.println(dest.getName());
             // 文件写入
-            file.transferTo(dest);
+            if(!dest.exists()){
+                file.transferTo(dest);
+            }
             return fileName;
         } catch (IllegalStateException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return "上传失败";
+        return null;
     }
     /**
-     * Description: 多文件上传
+     * Description: 多文件上传    ！！！暂时不用
      * @Author: WinstonDeng
      * @Date: 13:13 2018/12/12
      */

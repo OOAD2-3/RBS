@@ -2,10 +2,14 @@ package com.rbs.project.controller;
 
 import com.rbs.project.exception.MyException;
 import com.rbs.project.service.CClassService;
+import com.rbs.project.utils.FileLoadUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.Map;
+
 
 /**
  * @Author: WinstonDeng
@@ -20,14 +24,30 @@ public class CClassController {
     CClassService cClassService;
 
     /**
-     * Description: 上传学生名单
+     * Description: 班级界面，上传学生名单
+     * @Author: WinstonDeng
+     * @Date: 17:24 2018/12/19
+     */
+    @PostMapping("/{classId}/studentfile")
+    @ResponseBody
+    public ResponseEntity<String> uploadStudentFileAfterCreateCClass(@RequestParam("file") MultipartFile file){
+        return ResponseEntity.ok().body(FileLoadUtils.upload(file));
+    }
+    /**
+     * Description: 班级界面，上传学生名单后，解析
      * @Author: WinstonDeng
      * @Date: 11:09 2018/12/18
      */
     @PostMapping("/{classId}")
     @ResponseBody
-    public ResponseEntity<String> uploadStudentFile(@PathVariable("classId") long cClassId, @RequestParam("file")MultipartFile file){
-        return ResponseEntity.ok().body(cClassService.uploadStudentFile(cClassId,file));
+    public ResponseEntity<Boolean> handleStudentFile(@PathVariable("classId") long cClassId, @RequestBody Map<String,String> file) throws MyException{
+        boolean flag=false;
+        String text="fileName";
+        if(file.get(text)!=null){
+            //直接解析，补充原来没有的学生
+            flag=cClassService.transStudentListFileToDataBase(cClassId,file.get(text));
+        }
+        return ResponseEntity.ok().body(flag);
     }
 
     /**
