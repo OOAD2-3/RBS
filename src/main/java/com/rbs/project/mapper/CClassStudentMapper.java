@@ -1,17 +1,37 @@
 package com.rbs.project.mapper;
 
+
 import com.rbs.project.pojo.dto.CClassStudentDTO;
+import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 /**
- * @Author: WinstonDeng
- * @Description: OOAD_Course_ManageSystem
- * @Date: Created in 16:11 2018/12/19
- * @Modified by:
+ * Description:
+ *
+ * @Author: 17Wang
+ * @Date: 13:09 2018/12/19
  */
+@Mapper
 @Repository
 public interface CClassStudentMapper {
-    //===============================新增=======================
+    /**
+     * 通过主键获取teamId
+     *
+     * @param cClassId
+     * @param studentId
+     * @return
+     */
+    Long getTeamIdByPrimaryKeys(@Param("cClassId") long cClassId, @Param("studentId") long studentId);
+
+    /**
+     * 通过主键获取一行
+     *
+     * @param cClassId
+     * @param studentId
+     * @return
+     */
+    Object getByPrimaryKeys(@Param("cClassId") long cClassId, @Param("studentId") long studentId);
 
     /**
      * 新增班级学生
@@ -19,4 +39,14 @@ public interface CClassStudentMapper {
      * @return
      */
     boolean insertCClassStudent(CClassStudentDTO cClassStudentDTO);
+
+    /**
+     * 修改学生在这个班级下的所属team
+     *
+     * @param teamId
+     * @param cClassId
+     * @param studentId
+     * @return
+     */
+    boolean updateTeamIdByPrimaryKeys(@Param("teamId") long teamId, @Param("cClassId") long cClassId, @Param("studentId") long studentId) throws Exception;
 }

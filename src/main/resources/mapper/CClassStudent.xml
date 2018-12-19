@@ -13,4 +13,17 @@
         values (#{cClassId},#{studentId},#{courseId},#{teamId})
     </insert>
 
+    <select id="getTeamIdByPrimaryKeys" resultType="Long">
+        SELECT team_id FROM klass_student WHERE klass_id=#{cClassId} AND student_id=#{studentId}
+    </select>
+
+    <select id="getByPrimaryKeys" resultType="Object">
+        SELECT * FROM klass_student WHERE klass_id=#{cClassId} AND student_id=#{studentId}
+    </select>
+
+
+    <update id="updateTeamIdByPrimaryKeys">
+        UPDATE klass_student SET team_id=#{teamId}
+        WHERE klass_id=#{cClassId} AND student_id=#{studentId}
+    </update>
 </mapper>

@@ -12,32 +12,27 @@ public class CClassInfoVO {
     /**
      * id
      */
-    long id;
+    private long id;
     /**
-     * 年级
+     * 班级名
      */
-    Integer grade;
-    /**
-     * 班级序号
-     */
-    Integer serial;
+    private String name;
     /**
      * 上课时间
      */
-    String time;
+    private String time;
     /**
      * 上课教室
      */
-    String classroom;
+    private String classroom;
     /**
      * 学生名单
      */
-    String fileName;
+    private String fileName;
 
     public CClassInfoVO(CClass cClass){
         id=cClass.getId();
-        grade=cClass.getGrade();
-        serial=cClass.getSerial();
+        name= String.valueOf(cClass.getGrade())+'-'+String.valueOf(cClass.getSerial());
         time=cClass.getTime();
         classroom=cClass.getPlace();
     }
@@ -50,20 +45,12 @@ public class CClassInfoVO {
         this.id = id;
     }
 
-    public Integer getGrade() {
-        return grade;
+    public String getName() {
+        return name;
     }
 
-    public void setGrade(Integer grade) {
-        this.grade = grade;
-    }
-
-    public Integer getSerial() {
-        return serial;
-    }
-
-    public void setSerial(Integer serial) {
-        this.serial = serial;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getTime() {

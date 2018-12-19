@@ -45,6 +45,14 @@ public interface StudentMapper {
     List<Student> listAll();
 
     /**
+     * 获取team下面的所有学生
+     *
+     * @param teamId
+     * @return
+     */
+    List<Student> listByTeamId(long teamId);
+
+    /**
      * 通过id，同时修改密码和邮箱
      *
      * @param student
