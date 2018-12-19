@@ -38,16 +38,19 @@ public class ExcelUtils {
                 sheet = wb.getSheetAt(0);
                 //获取最大行数
                 int rowNum = sheet.getPhysicalNumberOfRows();
-                for(int i=1;i<rowNum;i++){
+                //对应学生名单excel奇怪的格式
+                for(int i=2;i<rowNum;i++){
                     row=sheet.getRow(i);
                     if(row!=null){
+                        //学生名单表格中很奇怪的字符，看不到，但存在，要除去
+                        String outChar=" ";
                         student=new Student();
                         //学号
                         String account=(String)getCellFormatValue(row.getCell(0));
                         //姓名
                         String name=(String)getCellFormatValue(row.getCell(1));
-                        student.setUsername(account);
-                        student.setStudentName(name);
+                        student.setUsername(account.replace(outChar,""));
+                        student.setStudentName(name.replace(outChar,""));
                         students.add(student);
                     }
                 }

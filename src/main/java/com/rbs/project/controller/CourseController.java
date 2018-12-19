@@ -10,17 +10,17 @@ import com.rbs.project.pojo.vo.CClassInfoVO;
 import com.rbs.project.pojo.vo.CourseAndStrategyVO;
 import com.rbs.project.pojo.vo.CourseInfoVO;
 import com.rbs.project.service.CClassService;
+import com.rbs.project.utils.FileLoadUtils;
 import com.rbs.project.service.CourseService;
 import com.rbs.project.utils.JsonUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
-
+import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletResponse;
 import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -87,25 +87,30 @@ public class CourseController {
         return ResponseEntity.ok(courseService.deleteCourseById(courseId));
     }
 
-
     /**
-     * Description: 课程下新建班级
-     *
+     * Description: 创建班级时，上传学生名单
+     * @Author: WinstonDeng
+     * @Date: 17:18 2018/12/19
+     */
+    @PostMapping("/{courseId}/class/studentfile")
+    @ResponseBody
+    public ResponseEntity<String> uploadStudentFile(@RequestParam("file") MultipartFile file){
+        return ResponseEntity.ok().body(FileLoadUtils.upload(file));
+    }
+    /**
+
+     * Description: 创建班级，如果有学生名单（DTO里fileName非空），则解析存库
      * @Author: WinstonDeng
      * @Date: 11:11 2018/12/12
      */
-    /**
-     * 初步想法先传文件，成功的话给前端一个文件名，然后创建班级时通过这个文件名去寻找文件并解析
-     * 解析数据，存库建立关系
-     */
     @PostMapping("/{courseId}/class")
     @ResponseBody
-    public ResponseEntity<Long> createcClassInCoursePage(@PathVariable("courseId") long courseId, @RequestBody CreateCClassDTO createCClassDTO) throws MyException {
+    public ResponseEntity<Long> createcClassInCoursePage(@PathVariable("courseId") long courseId,@RequestBody CreateCClassDTO createCClassDTO) throws MyException{
         //初始化为-1 表示新建失败
         long cclassId = -1;
         //设置班级基本信息
-        CClass cClass = new CClass();
-        cClass.setCourseId(cclassId);
+        CClass cClass=new CClass();
+        cClass.setCourseId(courseId);
         cClass.setGrade(createCClassDTO.getGrade());
         cClass.setSerial(createCClassDTO.getSerial());
         cClass.setTime(createCClassDTO.getTime());
@@ -115,7 +120,10 @@ public class CourseController {
         //解析学生名单
         if (cclassId != -1) {
             //调用解析学生名单的函数
-            cClassService.transStudentListFileToDataBase(cclassId, createCClassDTO.getFileName());
+
+            if(createCClassDTO.getFileName()!=null){
+                cClassService.transStudentListFileToDataBase(cclassId,createCClassDTO.getFileName());
+            }
         }
         return ResponseEntity.ok().body(cclassId);
     }

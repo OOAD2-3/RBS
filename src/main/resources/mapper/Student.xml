@@ -42,8 +42,8 @@
     </update>
 
     <insert id="insertStudent" parameterType="com.rbs.project.pojo.entity.Student" useGeneratedKeys="true" keyProperty="id">
-        insert into student(id,account,password,is_active,student_name,email)
-        values (#{id},#{account},#{password},#{active},#{studentName},#{email})
+        insert into student(account,password,is_active,student_name,email)
+        values (#{account},#{password},#{active},#{studentName},#{email})
     </insert>
 
     <update id="updateStudentNameById" parameterType="com.rbs.project.pojo.entity.Student">

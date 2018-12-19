@@ -31,4 +31,28 @@
         FROM seminar
         WHERE round_id=#{roundId}
     </select>
+
+    <insert id="insertSeminar" parameterType="com.rbs.project.pojo.entity.Seminar" useGeneratedKeys="true" keyProperty="id">
+        insert into seminar(course_id, round_id, seminar_name, introduction, max_team, is_visible,
+        seminar_serial, enroll_start_time, enroll_end_time)
+        values (#{courseId},#{roundId},#{name},#{intro},#{maxTeam},#{visible},#{serial},#{enrollStartTime},#{enrollEndTime})
+    </insert>
+
+    <delete id="removeSeminarById" parameterType="Long" >
+        delete
+        from seminar
+        where id=#{id}
+    </delete>
+
+    <update id="updateSeminar" parameterType="com.rbs.project.pojo.entity.Seminar">
+        update seminar
+        set seminar_name=#{name},
+            introduction=#{intro},
+            max_team=#{maxTeam},
+            is_visible=#{visible},
+            seminar_serial=#{serial},
+            enroll_start_time=#{enrollStartTime},
+            enroll_end_time=#{enrollEndTime}
+        where id=#{id}
+    </update>
 </mapper>

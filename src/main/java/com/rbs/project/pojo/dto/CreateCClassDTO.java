@@ -10,23 +10,23 @@ public class CreateCClassDTO {
     /**
      * 年级
      */
-    Integer grade;
+    private Integer grade;
     /**
      * 班级序号
      */
-    Integer serial;
+    private Integer serial;
     /**
      * 上课时间
      */
-    String time;
+    private String time;
     /**
      * 上课教室
      */
-    String classroom;
+    private String classroom;
     /**
-     * 学生名单
+     * 学生名单文件名
      */
-    String fileName;
+    private String fileName;
 
     public Integer getGrade() {
         return grade;
