@@ -28,6 +28,16 @@
         WHERE teacher_id = #{teacherId}
     </select>
 
+    <select id="findByStudentId" parameterType="Long" resultMap="tab_course" resultType="com.rbs.project.pojo.entity.Course">
+        SELECT id,teacher_id,course_name,introduction,presentation_percentage,question_percentage,report_percentage,
+        team_start_time,team_end_time,team_main_course_id,seminar_main_course_id
+        FROM course LEFT JOIN klass_student
+          ON course.id=klass_student.course_id
+        LEFT JOIN student
+          ON klass_student.student_id=student.id
+        WHERE student.id=#{studentId}
+    </select>
+
     <delete id="deleteById" parameterType="Long">
         DELETE
         FROM course
@@ -40,6 +50,6 @@
         team_start_time,team_end_time,team_main_course_id,seminar_main_course_id)
         VALUE
         (#{teacherId},#{name},#{intro},#{presentationPercentage},#{questionPercentage},
-        #{reportnPercentage},#{teamStartTime},#{teamEndTime},#{teamMainCourseId},#{seminarMainCourseId})
+        #{reportPercentage},#{teamStartTime},#{teamEndTime},#{teamMainCourseId},#{seminarMainCourseId})
     </insert>
 </mapper>

@@ -44,8 +44,10 @@ public class RbacAuthorityDecision {
 
             // 这些 url 都是要登录后才能访问，且其他的 url 都不能访问！
             // 老师的接口权限
-            urls.add("/teacher/**");
-
+            //urls.add("/teacher/**");
+            //urls.add("/student/**");
+            urls.add("/course/**");
+            urls.add("/class/**");
         } else {
             return false;
         }

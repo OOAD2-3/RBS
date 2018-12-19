@@ -56,4 +56,14 @@ public class CourseMemberLimitStrategy {
     public void setMaxMember(Integer maxMember) {
         this.maxMember = maxMember;
     }
+
+    @Override
+    public String toString() {
+        return "CourseMemberLimitStrategy{" +
+                "id=" + id +
+                ", courseId=" + courseId +
+                ", minMember=" + minMember +
+                ", maxMember=" + maxMember +
+                '}';
+    }
 }

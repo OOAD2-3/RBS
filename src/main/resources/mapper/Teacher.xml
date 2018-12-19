@@ -19,7 +19,11 @@
     </select>
 
     <select id="listAll" resultMap="tab_teacher">
-        SELECT id,account,password,is_active,student_name,email FROM teacher
+        SELECT id,account,password,is_active,teacher_name,email FROM teacher
+    </select>
+
+    <select id="findByTeacherName" resultMap="tab_teacher">
+        SELECT id,account,password,is_active,teacher_name,email FROM teacher WHERE teacher_name=#{teacherName}
     </select>
 
     <update id="updatePasswordAndEmailAndActiveById" parameterType="com.rbs.project.pojo.entity.Teacher">
@@ -36,4 +40,23 @@
         UPDATE teacher SET email=#{email}
         WHERE id=#{id}
     </update>
+
+    <insert id="insertTeacher" parameterType="com.rbs.project.pojo.entity.Teacher" useGeneratedKeys="true" keyProperty="id">
+        insert into teacher(id,account,password,is_active,teacher_name,email)
+        values (#{id},#{account},#{password},#{active},#{teacherName},#{email})
+    </insert>
+
+    <update id="updateTeacherNameById" parameterType="com.rbs.project.pojo.entity.Teacher">
+        UPDATE teacher SET teacher_name=#{teacherName}
+        WHERE id=#{id}
+    </update>
+
+    <update id="updateAccountById" parameterType="com.rbs.project.pojo.entity.Teacher">
+        UPDATE teacher SET account=#{account}
+        WHERE id=#{id}
+    </update>
+
+    <delete id="deleteTeacherById" parameterType="Long">
+        DELETE FROM teacher WHERE id=#{id}
+    </delete>
 </mapper>

@@ -97,7 +97,7 @@ public class MySecurityConfig extends WebSecurityConfigurerAdapter {
 
         // 记住我
         http.rememberMe().rememberMeParameter("remember-me")
-                .userDetailsService(jwtUserDetailsService).tokenValiditySeconds(7*24*60*60);
+                .userDetailsService(jwtUserDetailsService).tokenValiditySeconds(7 * 24 * 60 * 60);
 
         // 无权访问 JSON 格式的数据
         http.exceptionHandling().accessDeniedHandler(myAccessDeniedHandler);

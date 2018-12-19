@@ -6,11 +6,13 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.MultipartConfigFactory;
 import org.springframework.context.annotation.Bean;
-
 import javax.servlet.MultipartConfigElement;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
+
 
 @SpringBootApplication
 @MapperScan(basePackages = "com.rbs.project.mapper")
+@EnableTransactionManagement
 @EnableAutoConfiguration
 public class ProjectApplication {
 
