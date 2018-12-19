@@ -24,6 +24,9 @@ public class CourseAndStrategyVO {
 
     private CourseMemberLimitStrategy courseMemberLimitStrategy;
 
+    private boolean ShareTeam;
+    private boolean ShareSeminar;
+
     public CourseAndStrategyVO() {
 
     }
@@ -39,6 +42,12 @@ public class CourseAndStrategyVO {
         teamEndTime = JsonUtils.TimestampToString(course.getTeamEndTime());
 
         courseMemberLimitStrategy = course.getCourseMemberLimitStrategy();
+        if (course.getTeamMainCourseId() == 0) {
+            ShareTeam = false;
+        }
+        if (course.getSeminarMainCourseId() == 0) {
+            ShareSeminar = false;
+        }
     }
 
     public long getId() {
@@ -111,5 +120,21 @@ public class CourseAndStrategyVO {
 
     public void setCourseMemberLimitStrategy(CourseMemberLimitStrategy courseMemberLimitStrategy) {
         this.courseMemberLimitStrategy = courseMemberLimitStrategy;
+    }
+
+    public boolean isShareTeam() {
+        return ShareTeam;
+    }
+
+    public void setShareTeam(boolean shareTeam) {
+        ShareTeam = shareTeam;
+    }
+
+    public boolean isShareSeminar() {
+        return ShareSeminar;
+    }
+
+    public void setShareSeminar(boolean shareSeminar) {
+        ShareSeminar = shareSeminar;
     }
 }

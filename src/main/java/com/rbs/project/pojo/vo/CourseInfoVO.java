@@ -10,20 +10,20 @@ import com.rbs.project.pojo.entity.Course;
  */
 public class CourseInfoVO {
     private long id;
-    private boolean isShareTeam;
-    private boolean isShareSeminar;
+    private boolean ShareTeam;
+    private boolean ShareSeminar;
     private String name;
 
     public CourseInfoVO(Course course) {
         id = course.getId();
-        isShareTeam = true;
-        isShareSeminar = true;
+        ShareTeam = true;
+        ShareSeminar = true;
         name = course.getName();
         if (course.getTeamMainCourseId() == 0) {
-            isShareTeam = false;
+            ShareTeam = false;
         }
         if (course.getSeminarMainCourseId() == 0) {
-            isShareSeminar = false;
+            ShareSeminar = false;
         }
     }
 
@@ -36,19 +36,19 @@ public class CourseInfoVO {
     }
 
     public boolean isShareTeam() {
-        return isShareTeam;
+        return ShareTeam;
     }
 
     public void setShareTeam(boolean shareTeam) {
-        isShareTeam = shareTeam;
+        ShareTeam = shareTeam;
     }
 
     public boolean isShareSeminar() {
-        return isShareSeminar;
+        return ShareSeminar;
     }
 
     public void setShareSeminar(boolean shareSeminar) {
-        isShareSeminar = shareSeminar;
+        ShareSeminar = shareSeminar;
     }
 
     public String getName() {
