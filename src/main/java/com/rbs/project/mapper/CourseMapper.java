@@ -57,6 +57,6 @@ public interface CourseMapper {
      * @param id
      * @return
      */
-    long deleteById(long id);
+    boolean deleteById(long id);
     //=========================修改=======================
 }

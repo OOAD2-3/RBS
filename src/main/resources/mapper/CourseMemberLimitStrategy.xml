@@ -8,11 +8,20 @@
         <result property="maxMember" column="max_member"/>
     </resultMap>
 
-    <insert id="insertStrategy" parameterType="com.rbs.project.pojo.strategy.CourseMemberLimitStrategy" useGeneratedKeys="true" keyProperty="id">
+    <select id="getByCourseId" parameterType="Long" resultMap="tab_course_member_limit_strategy">
+        SELECT id,course_id,min_member,max_member FROM course_member_limit_strategy WHERE course_id=#{courseId}
+    </select>
+
+    <insert id="insertStrategy" parameterType="com.rbs.project.pojo.strategy.CourseMemberLimitStrategy"
+            useGeneratedKeys="true" keyProperty="id">
         INSERT INTO
         course_member_limit_strategy(course_id, min_member, max_member)
         VALUES
         (#{courseId},#{minMember},#{maxMember})
     </insert>
+
+    <delete id="deleteByCourseId" parameterType="Long">
+        DELETE FROM course_member_limit_strategy WHERE course_id=#{courseId}
+    </delete>
 
 </mapper>

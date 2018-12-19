@@ -6,10 +6,10 @@ import com.rbs.project.exception.MyException;
 import com.rbs.project.pojo.entity.Course;
 import com.rbs.project.pojo.entity.Teacher;
 import com.rbs.project.pojo.entity.User;
-import com.rbs.project.pojo.vo.CourseInfoVO;
 import com.rbs.project.utils.UserUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -68,8 +68,8 @@ public class CourseService {
      * @Author: 17Wang
      * @Time: 22:58 2018/12/18
     */
-    public Course getCourseById(int courseId) throws MyException {
-        return courseDao.getCourseById(courseId);
+    public Course getCourseById(long courseId) throws MyException {
+        return courseDao.getCourseById(courseId,CourseDao.HAS_COURSE_MEMBER_LIMIT_STRATEGY);
     }
 
     /**
@@ -85,8 +85,11 @@ public class CourseService {
     }
     
     /**
-     * Description:
+     * Description: 删除课程
      * @Author: 17Wang
-     * @Time: 22:51 2018/12/18
+     * @Time: 10:34 2018/12/19
     */
+    public boolean deleteCourseById(long courseId) throws MyException {
+        return courseDao.deleteCourseById(courseId);
+    }
 }

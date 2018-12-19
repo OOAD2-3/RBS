@@ -2,6 +2,7 @@ package com.rbs.project.pojo.vo;
 
 import com.rbs.project.pojo.entity.Course;
 import com.rbs.project.pojo.strategy.CourseMemberLimitStrategy;
+import com.rbs.project.utils.JsonUtils;
 
 import java.sql.Timestamp;
 
@@ -15,25 +16,29 @@ public class CourseAndStrategyVO {
     private long id;
     private String name;
     private String intro;
-    private int presentationPercentage;
-    private int questionPercentage;
-    private int reportPercentage;
-    private Timestamp teamStartTime;
-    private Timestamp teamEndTime;
+    private Integer presentationPercentage;
+    private Integer questionPercentage;
+    private Integer reportPercentage;
+    private String teamStartTime;
+    private String teamEndTime;
 
     private CourseMemberLimitStrategy courseMemberLimitStrategy;
 
-    public CourseAndStrategyVO(Course course){
-        id=course.getId();
-        name=course.getName();
-        intro=course.getIntro();
-        presentationPercentage=course.getPresentationPercentage();
-        questionPercentage=course.getQuestionPercentage();
-        reportPercentage=course.getReportPercentage();
-        teamStartTime=course.getTeamStartTime();
-        teamEndTime=course.getTeamEndTime();
+    public CourseAndStrategyVO() {
 
-        courseMemberLimitStrategy=course.getCourseMemberLimitStrategy();
+    }
+
+    public CourseAndStrategyVO(Course course) {
+        id = course.getId();
+        name = course.getName();
+        intro = course.getIntro();
+        presentationPercentage = course.getPresentationPercentage();
+        questionPercentage = course.getQuestionPercentage();
+        reportPercentage = course.getReportPercentage();
+        teamStartTime = JsonUtils.TimestampToString(course.getTeamStartTime());
+        teamEndTime = JsonUtils.TimestampToString(course.getTeamEndTime());
+
+        courseMemberLimitStrategy = course.getCourseMemberLimitStrategy();
     }
 
     public long getId() {
@@ -60,43 +65,43 @@ public class CourseAndStrategyVO {
         this.intro = intro;
     }
 
-    public int getPresentationPercentage() {
+    public Integer getPresentationPercentage() {
         return presentationPercentage;
     }
 
-    public void setPresentationPercentage(int presentationPercentage) {
+    public void setPresentationPercentage(Integer presentationPercentage) {
         this.presentationPercentage = presentationPercentage;
     }
 
-    public int getQuestionPercentage() {
+    public Integer getQuestionPercentage() {
         return questionPercentage;
     }
 
-    public void setQuestionPercentage(int questionPercentage) {
+    public void setQuestionPercentage(Integer questionPercentage) {
         this.questionPercentage = questionPercentage;
     }
 
-    public int getReportPercentage() {
+    public Integer getReportPercentage() {
         return reportPercentage;
     }
 
-    public void setReportPercentage(int reportPercentage) {
+    public void setReportPercentage(Integer reportPercentage) {
         this.reportPercentage = reportPercentage;
     }
 
-    public Timestamp getTeamStartTime() {
+    public String getTeamStartTime() {
         return teamStartTime;
     }
 
-    public void setTeamStartTime(Timestamp teamStartTime) {
+    public void setTeamStartTime(String teamStartTime) {
         this.teamStartTime = teamStartTime;
     }
 
-    public Timestamp getTeamEndTime() {
+    public String getTeamEndTime() {
         return teamEndTime;
     }
 
-    public void setTeamEndTime(Timestamp teamEndTime) {
+    public void setTeamEndTime(String teamEndTime) {
         this.teamEndTime = teamEndTime;
     }
 

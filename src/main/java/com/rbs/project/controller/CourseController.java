@@ -1,5 +1,6 @@
 package com.rbs.project.controller;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.rbs.project.exception.MyException;
 import com.rbs.project.pojo.dto.CreateCClassDTO;
 import com.rbs.project.pojo.entity.CClass;
@@ -10,6 +11,7 @@ import com.rbs.project.pojo.vo.CourseAndStrategyVO;
 import com.rbs.project.pojo.vo.CourseInfoVO;
 import com.rbs.project.service.CClassService;
 import com.rbs.project.service.CourseService;
+import com.rbs.project.utils.JsonUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.parameters.P;
@@ -49,19 +51,15 @@ public class CourseController {
     public ResponseEntity<Boolean> createCourse(@RequestBody CourseAndStrategyVO courseAndStrategyVO) throws Exception {
         //课程基本信息
         Course temp = new Course();
-        try {
-            temp.setName(courseAndStrategyVO.getName());
-            temp.setIntro(courseAndStrategyVO.getIntro());
-            temp.setPresentationPercentage(courseAndStrategyVO.getPresentationPercentage());
-            temp.setQuestionPercentage(courseAndStrategyVO.getQuestionPercentage());
-            temp.setReportPercentage(courseAndStrategyVO.getReportPercentage());
-            temp.setTeamStartTime(courseAndStrategyVO.getTeamStartTime());
-            temp.setTeamEndTime(courseAndStrategyVO.getTeamEndTime());
+        temp.setName(courseAndStrategyVO.getName());
+        temp.setIntro(courseAndStrategyVO.getIntro());
+        temp.setPresentationPercentage(courseAndStrategyVO.getPresentationPercentage());
+        temp.setQuestionPercentage(courseAndStrategyVO.getQuestionPercentage());
+        temp.setReportPercentage(courseAndStrategyVO.getReportPercentage());
+        temp.setTeamStartTime(JsonUtils.StringToTimestamp(courseAndStrategyVO.getTeamStartTime()));
+        temp.setTeamEndTime(JsonUtils.StringToTimestamp(courseAndStrategyVO.getTeamEndTime()));
 
-            temp.setCourseMemberLimitStrategy(courseAndStrategyVO.getCourseMemberLimitStrategy());
-        } catch (Exception e) {
-            throw new MyException("可能错误\n1、格式转换错误\n2、参数名错误\n3、日期格式问题yyyy-MM-dd hh:mm:ss", MyException.ERROR);
-        }
+        temp.setCourseMemberLimitStrategy(courseAndStrategyVO.getCourseMemberLimitStrategy());
 
         return ResponseEntity.ok(courseService.createCourse(temp));
     }
@@ -78,8 +76,15 @@ public class CourseController {
 
     @GetMapping("/{courseId}")
     @ResponseBody
-    public CourseAndStrategyVO getCourseById(@PathVariable("courseId") int courseId) throws MyException {
-        return new CourseAndStrategyVO(new Course());
+    public ResponseEntity<CourseAndStrategyVO> getCourseById(@PathVariable("courseId") long courseId) throws MyException {
+        Course course = courseService.getCourseById(courseId);
+        return ResponseEntity.ok(new CourseAndStrategyVO(course));
+    }
+
+    @DeleteMapping("/{courseId}")
+    @ResponseBody
+    public ResponseEntity<Boolean> deleteCourse(@PathVariable("courseId") long courseId) throws MyException {
+        return ResponseEntity.ok(courseService.deleteCourseById(courseId));
     }
 
 

@@ -20,4 +20,20 @@ public interface CourseMemberLimitStrategyMapper {
      * @return
      */
     boolean insertStrategy(CourseMemberLimitStrategy courseMemberLimitStrategy) throws Exception;
+
+    /**
+     * 通过课程id锁定一个策略
+     *
+     * @param courseId
+     * @return
+     */
+    CourseMemberLimitStrategy getByCourseId(long courseId);
+
+    /**
+     * 通过课程id删除一个策略
+     *
+     * @param courseId
+     * @return
+     */
+    boolean deleteByCourseId(long courseId);
 }
