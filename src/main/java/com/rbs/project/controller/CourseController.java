@@ -1,11 +1,9 @@
 package com.rbs.project.controller;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.rbs.project.exception.MyException;
 import com.rbs.project.pojo.dto.CreateCClassDTO;
 import com.rbs.project.pojo.entity.CClass;
 import com.rbs.project.pojo.entity.Course;
-import com.rbs.project.pojo.strategy.CourseMemberLimitStrategy;
 import com.rbs.project.pojo.vo.CClassInfoVO;
 import com.rbs.project.pojo.vo.CourseAndStrategyVO;
 import com.rbs.project.pojo.vo.CourseInfoVO;
@@ -14,16 +12,10 @@ import com.rbs.project.service.CourseService;
 import com.rbs.project.utils.JsonUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletResponse;
-import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * @Author: WinstonDeng

@@ -26,6 +26,13 @@
         SELECT id,account,password,is_active,student_name,email FROM student WHERE student_name=#{studentName}
     </select>
 
+    <select id="listByTeamId" resultMap="tab_student">
+        SELECT id,account,password,is_active,student_name,email
+        FROM student LEFT JOIN klass_student
+          ON student.id=klass_student.student_id
+        WHERE klass_student.team_id=#{teamId}
+    </select>
+
     <update id="updatePasswordAndEmailAndActiveById" parameterType="com.rbs.project.pojo.entity.Student">
         UPDATE student SET password=#{password},email=#{email},is_active=#{active}
         WHERE id=#{id}
@@ -41,7 +48,8 @@
         WHERE id=#{id}
     </update>
 
-    <insert id="insertStudent" parameterType="com.rbs.project.pojo.entity.Student" useGeneratedKeys="true" keyProperty="id">
+    <insert id="insertStudent" parameterType="com.rbs.project.pojo.entity.Student" useGeneratedKeys="true"
+            keyProperty="id">
         insert into student(id,account,password,is_active,student_name,email)
         values (#{id},#{account},#{password},#{active},#{studentName},#{email})
     </insert>

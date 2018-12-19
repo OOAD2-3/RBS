@@ -29,6 +29,9 @@ public class CClassDao {
     @Autowired
     private CClassSeminarMapper cClassSeminarMapper;
 
+    @Autowired
+    private CClassStudentMapper cClassStudentMapper;
+
 
     /**
      * 是否添加队伍信息
@@ -42,14 +45,16 @@ public class CClassDao {
      * 是否添加课程信息
      */
     public static final int HAS_COURSE = 2;
+
     /**
      * Description: 通过课程id查班级
+     *
      * @Author: WinstonDeng
      * @Date: 12:58 2018/12/16
      */
-    public List<CClass> listByCourseId(long courseId, int... hasSomething) throws MyException{
-        if(courseMapper.findById(courseId)==null){
-            throw new MyException("通过课程查找班级列表错误！该课程不存在",MyException.NOT_FOUND_ERROR);
+    public List<CClass> listByCourseId(long courseId, int... hasSomething) throws MyException {
+        if (courseMapper.findById(courseId) == null) {
+            throw new MyException("通过课程查找班级列表错误！该课程不存在", MyException.NOT_FOUND_ERROR);
         }
         List<CClass> cClasses = cClassMapper.findByCourseId(courseId);
 
@@ -61,7 +66,7 @@ public class CClassDao {
                     cClass.setTeams(teams);
                 }
                 if (i == HAS_CCLASS_SEMINARS) {
-                    List<CClassSeminar> cClassSeminars=cClassSeminarMapper.findByCClassId(cClass.getCourseId());
+                    List<CClassSeminar> cClassSeminars = cClassSeminarMapper.findByCClassId(cClass.getCourseId());
                     cClass.setcClassSeminars(cClassSeminars);
                 }
                 if (i == HAS_COURSE) {
@@ -73,39 +78,75 @@ public class CClassDao {
 
         return cClasses;
     }
+
     /**
      * Description: 新增课程
+     *
      * @Author: WinstonDeng
      * @Date: 13:01 2018/12/16
      */
     public boolean addCClass(long courseId, CClass cClass) throws MyException {
         try {
-            if(courseMapper.findById(courseId)==null){
-                throw new MyException("新建课程错误！未找到课程",MyException.NOT_FOUND_ERROR);
+            if (courseMapper.findById(courseId) == null) {
+                throw new MyException("新建课程错误！未找到课程", MyException.NOT_FOUND_ERROR);
             }
             cClass.setCourseId(courseId);
             cClassMapper.insertCClass(cClass);
         } catch (Exception e) {
-            throw new MyException("新建课程错误！数据库处理错误",MyException.ERROR);
+            throw new MyException("新建课程错误！数据库处理错误", MyException.ERROR);
         }
         return true;
     }
 
     /**
      * Description: 按id删除课程
+     *
      * @Author: WinstonDeng
      * @Date: 11:30 2018/12/18
      */
-    public boolean removeCClass(long cClassId)throws MyException{
-        boolean flag=false;
-        try{
-            if(cClassMapper.findById(cClassId)==null){
-                throw new MyException("删除课程错误！未找到课程",MyException.NOT_FOUND_ERROR);
+    public boolean removeCClass(long cClassId) throws MyException {
+        boolean flag = false;
+        try {
+            if (cClassMapper.findById(cClassId) == null) {
+                throw new MyException("删除课程错误！未找到课程", MyException.NOT_FOUND_ERROR);
             }
-            flag=cClassMapper.deleteCClassById(cClassId);
-        }catch (Exception e){
-            throw new MyException("删除课程错误！数据库处理错误",MyException.ERROR);
+            flag = cClassMapper.deleteCClassById(cClassId);
+        } catch (Exception e) {
+            throw new MyException("删除课程错误！数据库处理错误", MyException.ERROR);
         }
         return flag;
+    }
+
+    /**
+     * Description: 修改klass_student表的teamid字段
+     *
+     * @Author: 17Wang
+     * @Time: 13:01 2018/12/19
+     */
+    public boolean updateTeamIdInKlassStudent(long teamId, long cClassId, long studentId) throws Exception {
+        if (cClassStudentMapper.getByPrimaryKeys(cClassId, studentId) == null) {
+            throw new MyException("修改klass_student的teamid字段错误！找不到该行", MyException.NOT_FOUND_ERROR);
+        }
+        if (!cClassStudentMapper.updateTeamIdByPrimaryKeys(teamId, cClassId, studentId)) {
+            throw new MyException("修改klass_student的teamid字段错误！更新失败", MyException.ERROR);
+        }
+        return true;
+    }
+
+    /**
+     * Description: 检查TeamId
+     *
+     * @Author: 17Wang
+     * @Time: 23:23 2018/12/19
+     */
+    public long getTeamIdByPrimaryKeys(long cClassId, long studentId) throws MyException {
+        if (cClassStudentMapper.getByPrimaryKeys(cClassId, studentId) == null) {
+            throw new MyException("修改klass_student的teamid字段错误！找不到该行", MyException.NOT_FOUND_ERROR);
+        }
+        Long l = cClassStudentMapper.getTeamIdByPrimaryKeys(cClassId, studentId);
+        if (l == null) {
+            return 0;
+        }
+        return cClassStudentMapper.getTeamIdByPrimaryKeys(cClassId, studentId);
     }
 }

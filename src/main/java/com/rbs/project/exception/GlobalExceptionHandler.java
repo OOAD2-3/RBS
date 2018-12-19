@@ -34,6 +34,7 @@ public class GlobalExceptionHandler {
         ErrorInfo<String> r = new ErrorInfo<>();
         r.setMessage(e.getMessage());
         r.setCode(500);
+        e.printStackTrace();
         r.setData("不为人知的内部错误");
         r.setUrl(req.getRequestURL().toString());
         response.setStatus(r.getCode());
