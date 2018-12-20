@@ -36,6 +36,10 @@ public class Team {
      */
     private Integer status;
 
+    public static final int STATUS_ERROR = 0;
+    public static final int STATUS_OK = 1;
+    public static final int STATUS_IN_REVIEW = 2;
+
     //关系
     /**
      * 一个班级
@@ -194,4 +198,24 @@ public class Team {
 
     //================= toString =================
 
+    @Override
+    public String toString() {
+        return "Team{" +
+                "id=" + id +
+                ", cClassId=" + cClassId +
+                ", courseId=" + courseId +
+                ", leaderId=" + leaderId +
+                ", serial=" + serial +
+                ", name='" + name + '\'' +
+                ", status=" + status +
+                ", cClass=" + cClass +
+                ", course=" + course +
+                ", leader=" + leader +
+                ", questions=" + questions +
+                ", attendances=" + attendances +
+                ", students=" + students +
+                ", seminarScores=" + seminarScores +
+                ", teamValidApplications=" + teamValidApplications +
+                '}';
+    }
 }
