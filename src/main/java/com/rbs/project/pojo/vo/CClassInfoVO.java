@@ -1,6 +1,7 @@
 package com.rbs.project.pojo.vo;
 
 import com.rbs.project.pojo.entity.CClass;
+import com.sun.tools.internal.xjc.model.CClassInfo;
 
 /**
  * @Author: WinstonDeng
@@ -29,6 +30,10 @@ public class CClassInfoVO {
      * 学生名单
      */
     private String fileName;
+
+    public CClassInfoVO(){
+
+    }
 
     public CClassInfoVO(CClass cClass){
         id=cClass.getId();

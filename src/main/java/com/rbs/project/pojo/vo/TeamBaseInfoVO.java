@@ -13,6 +13,10 @@ public class TeamBaseInfoVO {
     private String TeamSerials;
     private String TeamName;
 
+    public TeamBaseInfoVO(){
+
+    }
+
     public TeamBaseInfoVO(Team team) {
         id = team.getId();
         TeamSerials = team.getcClass().getSerial() + "-" + String.valueOf(team.getSerial());

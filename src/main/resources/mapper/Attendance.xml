@@ -11,14 +11,38 @@
         <result property="pptUrl" column="ppt_url"/>
         <result property="reportName" column="report_name"/>
         <result property="reportUrl" column="report_url"/>
-        <result property="reportDDL" column="report_ddl"/>
     </resultMap>
+
+    <select id="findById" resultMap="tab_attendance">
+        SELECT id,klass_seminar_id,team_id,team_order,is_present,ppt_name,ppt_url,report_name,report_url
+        FROM attendance
+        WHERE id=#{attendanceId}
+    </select>
+
     <select id="findByCClassIdAndSeminarId" resultMap="tab_attendance">
-        SELECT attendance.id,attendance.klass_seminar_id,attendance.team_id,
-        attendance.team_order,attendance.is_present,attendance.ppt_name,ppt_url,
-        attendance.report_name,attendance.report_url,klass_seminar.report_ddl
+        SELECT attendance.id,klass_seminar_id,team_id,team_order,is_present,ppt_name,ppt_url,report_name,report_url
         FROM attendance LEFT JOIN klass_seminar
         ON attendance.klass_seminar_id = klass_seminar.id
         WHERE klass_seminar.klass_id = #{cClassId} AND klass_seminar.seminar_id=#{seminarId}
     </select>
+
+    <insert id="insertAttendance" parameterType="com.rbs.project.pojo.entity.Attendance">
+        INSERT INTO attendance(klass_seminar_id, team_id, team_order, is_present)
+        VALUES (#{cClassSeminarId},#{teamId},#{teamOrder},#{present})
+    </insert>
+
+    <insert id="insertSeminarScore">
+        INSERT INTO seminar_score(klass_seminar_id, team_id)
+        VALUES (#{cClassSeminarId},#{teamId})
+    </insert>
+
+    <delete id="deleteSeminarScoreByPrimaryKey">
+        DELETE FROM seminar_score
+        WHERE klass_seminar_id=#{cClassSeminarId} AND team_id=#{teamId}
+    </delete>
+
+    <delete id="deleteAttendanceById">
+        DELETE FROM attendance
+        WHERE id=#{id}
+    </delete>
 </mapper>

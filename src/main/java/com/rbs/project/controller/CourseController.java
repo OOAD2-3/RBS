@@ -4,6 +4,7 @@ import com.rbs.project.exception.MyException;
 import com.rbs.project.pojo.dto.CreateCClassDTO;
 import com.rbs.project.pojo.entity.CClass;
 import com.rbs.project.pojo.entity.Course;
+import com.rbs.project.pojo.strategy.CourseMemberLimitStrategy;
 import com.rbs.project.pojo.vo.CClassInfoVO;
 import com.rbs.project.pojo.vo.CourseAndStrategyVO;
 import com.rbs.project.pojo.vo.CourseInfoVO;
@@ -45,18 +46,52 @@ public class CourseController {
     @ResponseBody
     public ResponseEntity<Boolean> createCourse(@RequestBody CourseAndStrategyVO courseAndStrategyVO) throws Exception {
         //课程基本信息
-        Course temp = new Course();
-        temp.setName(courseAndStrategyVO.getName());
-        temp.setIntro(courseAndStrategyVO.getIntro());
-        temp.setPresentationPercentage(courseAndStrategyVO.getPresentationPercentage());
-        temp.setQuestionPercentage(courseAndStrategyVO.getQuestionPercentage());
-        temp.setReportPercentage(courseAndStrategyVO.getReportPercentage());
-        temp.setTeamStartTime(JsonUtils.StringToTimestamp(courseAndStrategyVO.getTeamStartTime()));
-        temp.setTeamEndTime(JsonUtils.StringToTimestamp(courseAndStrategyVO.getTeamEndTime()));
+        Course course = new Course();
+        course.setName(courseAndStrategyVO.getName());
+        course.setIntro(courseAndStrategyVO.getIntro());
+        course.setPresentationPercentage(courseAndStrategyVO.getPresentationPercentage());
+        course.setQuestionPercentage(courseAndStrategyVO.getQuestionPercentage());
+        course.setReportPercentage(courseAndStrategyVO.getReportPercentage());
+        course.setTeamStartTime(JsonUtils.StringToTimestamp(courseAndStrategyVO.getTeamStartTime()));
+        course.setTeamEndTime(JsonUtils.StringToTimestamp(courseAndStrategyVO.getTeamEndTime()));
 
-        temp.setCourseMemberLimitStrategy(courseAndStrategyVO.getCourseMemberLimitStrategy());
+        course.setCourseMemberLimitStrategy(courseAndStrategyVO.getCourseMemberLimitStrategy());
+        course.setConflictCourses(courseAndStrategyVO.getConflictCourses());
+        //如果人数策略
+        if (course.getCourseMemberLimitStrategy() == null) {
+            CourseMemberLimitStrategy courseMemberLimitStrategy = new CourseMemberLimitStrategy();
+            courseMemberLimitStrategy.setMaxMember(99);
+            courseMemberLimitStrategy.setMinMember(0);
+            course.setCourseMemberLimitStrategy(courseMemberLimitStrategy);
+        }
+        //冲突策略为空时
+        if (course.getConflictCourses() == null) {
+            course.setConflictCourses(new ArrayList<>());
+        }
+        //设置最大人数
+        if (course.getCourseMemberLimitStrategy().getMaxMember() == null) {
+            course.getCourseMemberLimitStrategy().setMaxMember(99);
+        }
+        //设置最小人数
+        if (course.getCourseMemberLimitStrategy().getMinMember() == null) {
+            course.getCourseMemberLimitStrategy().setMinMember(0);
+        }
 
-        return ResponseEntity.ok(courseService.createCourse(temp));
+        if (course.getName() == null) {
+            throw new MyException("课程名不能为空", MyException.ERROR);
+        }
+        if (course.getTeamStartTime() == null) {
+            throw new MyException("组队开始时间不能为空", MyException.ERROR);
+        }
+        if (course.getTeamEndTime() == null) {
+            throw new MyException("组队结束时间不能为空", MyException.ERROR);
+        }
+        if (course.getPresentationPercentage() == null ||
+                course.getQuestionPercentage() == null ||
+                course.getReportPercentage() == null) {
+            throw new MyException("计算分数规则不能为空", MyException.ERROR);
+        }
+        return ResponseEntity.ok(courseService.createCourse(course));
     }
 
     @GetMapping
@@ -78,33 +113,35 @@ public class CourseController {
 
     @DeleteMapping("/{courseId}")
     @ResponseBody
-    public ResponseEntity<Boolean> deleteCourse(@PathVariable("courseId") long courseId) throws MyException {
+    public ResponseEntity<Boolean> deleteCourse(@PathVariable("courseId") long courseId) throws Exception {
         return ResponseEntity.ok(courseService.deleteCourseById(courseId));
     }
 
     /**
      * Description: 创建班级时，上传学生名单
+     *
      * @Author: WinstonDeng
      * @Date: 17:18 2018/12/19
      */
     @PostMapping("/{courseId}/class/studentfile")
     @ResponseBody
-    public ResponseEntity<String> uploadStudentFile(@RequestParam("file") MultipartFile file){
+    public ResponseEntity<String> uploadStudentFile(@RequestParam("file") MultipartFile file) {
         return ResponseEntity.ok().body(FileLoadUtils.upload(file));
     }
-    /**
 
+    /**
      * Description: 创建班级，如果有学生名单（DTO里fileName非空），则解析存库
+     *
      * @Author: WinstonDeng
      * @Date: 11:11 2018/12/12
      */
     @PostMapping("/{courseId}/class")
     @ResponseBody
-    public ResponseEntity<Long> createcClassInCoursePage(@PathVariable("courseId") long courseId,@RequestBody CreateCClassDTO createCClassDTO) throws MyException{
+    public ResponseEntity<Long> createcClassInCoursePage(@PathVariable("courseId") long courseId, @RequestBody CreateCClassDTO createCClassDTO) throws MyException {
         //初始化为-1 表示新建失败
         long cclassId = -1;
         //设置班级基本信息
-        CClass cClass=new CClass();
+        CClass cClass = new CClass();
         cClass.setCourseId(courseId);
         cClass.setGrade(createCClassDTO.getGrade());
         cClass.setSerial(createCClassDTO.getSerial());
@@ -116,8 +153,8 @@ public class CourseController {
         if (cclassId != -1) {
             //调用解析学生名单的函数
 
-            if(createCClassDTO.getFileName()!=null){
-                cClassService.transStudentListFileToDataBase(cclassId,createCClassDTO.getFileName());
+            if (createCClassDTO.getFileName() != null) {
+                cClassService.transStudentListFileToDataBase(cclassId, createCClassDTO.getFileName());
             }
         }
         return ResponseEntity.ok().body(cclassId);

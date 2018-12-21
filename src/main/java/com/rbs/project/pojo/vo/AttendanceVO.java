@@ -19,15 +19,19 @@ public class AttendanceVO {
     private String reportDDL;
     private TeamBaseInfoVO teamBaseInfoVO;
 
-    public AttendanceVO(Attendance attendance){
-        id=attendance.getTeamId();
-        present=attendance.getPresent();
-        pptName=attendance.getPptName();
-        pptUrl=attendance.getPptUrl();
-        reportName=attendance.getReportName();
-        reportUrl=attendance.getReportUrl();
-        reportDDL=JsonUtils.TimestampToString(attendance.getReportDDL());
-        teamBaseInfoVO=new TeamBaseInfoVO(attendance.getTeam());
+    public AttendanceVO(){
+
+    }
+
+    public AttendanceVO(Attendance attendance) {
+        id = attendance.getTeamId();
+        present = attendance.getPresent();
+        pptName = attendance.getPptName();
+        pptUrl = attendance.getPptUrl();
+        reportName = attendance.getReportName();
+        reportUrl = attendance.getReportUrl();
+        reportDDL = JsonUtils.TimestampToString(attendance.getcClassSeminar().getReportDDL());
+        teamBaseInfoVO = new TeamBaseInfoVO(attendance.getTeam());
     }
 
     public long getId() {

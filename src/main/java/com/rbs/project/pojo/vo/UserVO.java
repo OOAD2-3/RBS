@@ -16,14 +16,18 @@ public class UserVO {
     private String name;
     private String email;
 
-    public UserVO(User user){
-        id=user.getId();
-        account=user.getUsername();
-        email=user.getEmail();
-        if(user instanceof Student){
-            name=((Student) user).getStudentName();
-        }else if(user instanceof Teacher){
-            name=((Teacher) user).getTeacherName();
+    public UserVO(){
+
+    }
+
+    public UserVO(User user) {
+        id = user.getId();
+        account = user.getUsername();
+        email = user.getEmail();
+        if (user instanceof Student) {
+            name = ((Student) user).getStudentName();
+        } else if (user instanceof Teacher) {
+            name = ((Teacher) user).getTeacherName();
         }
     }
 
