@@ -1,10 +1,13 @@
 package com.rbs.project.controller;
 
+import com.rbs.project.exception.MyException;
 import com.rbs.project.pojo.entity.Attendance;
+import com.rbs.project.pojo.vo.AttendanceVO;
 import com.rbs.project.service.AttendanceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -21,7 +24,12 @@ public class AttendanceController {
 
     @GetMapping
     @ResponseBody
-    public List<Attendance> listAttendanceByCClassIdAndSeminarId(@RequestParam("cClassId") long cClassId, @RequestParam("seminarId") long seminarId) {
-        return attendanceService.listAttendanceByCClassIdAndSeminarId(cClassId, seminarId);
+    public List<AttendanceVO> listAttendanceByCClassIdAndSeminarId(@RequestParam("cClassId") long cClassId, @RequestParam("seminarId") long seminarId) throws MyException {
+        List<Attendance> attendances = attendanceService.listAttendanceByCClassIdAndSeminarId(cClassId, seminarId);
+        List<AttendanceVO> attendanceVOS=new ArrayList<>();
+        for (Attendance attendance:attendances){
+            attendanceVOS.add(new AttendanceVO(attendance));
+        }
+        return attendanceVOS;
     }
 }
