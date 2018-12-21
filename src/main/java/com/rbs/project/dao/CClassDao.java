@@ -2,7 +2,8 @@ package com.rbs.project.dao;
 
 import com.rbs.project.exception.MyException;
 import com.rbs.project.mapper.*;
-import com.rbs.project.pojo.dto.CClassStudentDTO;
+import com.rbs.project.pojo.relationship.CClassRound;
+import com.rbs.project.pojo.relationship.CClassStudent;
 import com.rbs.project.pojo.entity.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -35,6 +36,12 @@ public class CClassDao {
 
     @Autowired
     private StudentMapper studentMapper;
+
+    @Autowired
+    private CClassRoundMapper cClassRoundMapper;
+
+    @Autowired
+    private RoundMapper roundMapper;
 
     /**
      * 是否添加队伍信息
@@ -146,26 +153,26 @@ public class CClassDao {
      * @Author: WinstonDeng
      * @Date: 16:18 2018/12/19
      */
-    public boolean addCClassStudent(CClassStudentDTO cClassStudentDTO) throws MyException {
+    public boolean addCClassStudent(CClassStudent cClassStudent) throws MyException {
         boolean flag = false;
-        if (cClassMapper.findById(cClassStudentDTO.getcClassId()) == null) {
+        if (cClassMapper.findById(cClassStudent.getcClassId()) == null) {
             throw new MyException("新增班级学生错误！未找到班级", MyException.NOT_FOUND_ERROR);
         }
-        if (courseMapper.findById(cClassStudentDTO.getCourseId()) == null) {
+        if (courseMapper.findById(cClassStudent.getCourseId()) == null) {
             throw new MyException("新增班级学生错误！未找到课程", MyException.NOT_FOUND_ERROR);
         }
-        if (studentMapper.findById(cClassStudentDTO.getStudentId()) == null) {
+        if (studentMapper.findById(cClassStudent.getStudentId()) == null) {
             throw new MyException("新增班级学生错误！未找到学生", MyException.NOT_FOUND_ERROR);
         }
         try {
-            flag = cClassStudentMapper.insertCClassStudent(cClassStudentDTO);
+            flag = cClassStudentMapper.insertCClassStudent(cClassStudent);
         } catch (Exception e) {
             throw new MyException("新增班级学生错误！数据库处理错误", MyException.ERROR);
         }
         return flag;
     }
 
-    /*
+    /**
      * Description: 修改klass_student表的teamid字段
      *
      * @Author: 17Wang
@@ -196,5 +203,28 @@ public class CClassDao {
             return 0;
         }
         return cClassStudentMapper.getTeamIdByPrimaryKeys(cClassId, studentId);
+    }
+
+    /**
+     * Description: 新增班级轮次 对应klass_round表
+     * @Author: WinstonDeng
+     * @Date: 15:34 2018/12/20
+     */
+    public boolean addCClassRound(CClassRound cClassRound) throws MyException{
+        if(cClassMapper.findById(cClassRound.getcClassId())==null){
+            throw new MyException("新增班级轮次错误！未找到班级",MyException.NOT_FOUND_ERROR);
+        }
+        if(roundMapper.findById(cClassRound.getRoundId())==null){
+            throw new MyException("新增班级轮次错误！未找到轮次",MyException.NOT_FOUND_ERROR);
+        }
+        if(cClassRoundMapper.findByPrimaryKeys(cClassRound.getcClassId(),cClassRound.getRoundId())!=null){
+            throw new MyException("新增班级轮次错误！该班级轮次已存在",MyException.ERROR);
+        }
+        try {
+            cClassRoundMapper.insertCClassRound(cClassRound);
+        }catch (Exception e){
+            throw new MyException("新增班级轮次错误！数据库处理出错",MyException.ERROR);
+        }
+        return true;
     }
 }

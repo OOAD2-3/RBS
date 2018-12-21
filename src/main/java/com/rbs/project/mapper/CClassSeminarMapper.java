@@ -33,10 +33,44 @@ public interface CClassSeminarMapper {
     List<CClassSeminar> findByCClassId(long cClassId);
 
     /**
+     * 通过讨论课id查找班级讨论课
+     * @param seminarId
+     * @return
+     */
+    List<CClassSeminar> findBySeminarId(long seminarId);
+
+    /**
      * 通过班级和讨论课查找班级讨论课
      * @param cClassId
      * @param seminarId
      * @return
      */
-    CClassSeminar findByCClassIdAndSeminarId(@Param("cClassId") long cClassId,@Param("seminarId") long seminarId);
+    CClassSeminar findByCClassIdAndSeminarId(@Param("cClassId") long cClassId, @Param("seminarId") long seminarId);
+
+    //==============================修改=========================
+
+    /**
+     * 通过班级和讨论课修改班级讨论课信息
+     * @param cClassSeminar
+     * @return
+     */
+    boolean updateCClassSeminar(CClassSeminar cClassSeminar);
+
+
+    //==============================删除=========================
+    /**
+     * 通过讨论课id删除班级讨论课
+     * @param seminarId
+     * @return
+     */
+    boolean removeCClassSeminarBySeminarId(long seminarId);
+
+    //==============================新增=========================
+
+    /**
+     * 新增班级讨论课
+     * @param cClassSeminar
+     * @return
+     */
+    boolean insertCClassSeminar(CClassSeminar cClassSeminar);
 }
