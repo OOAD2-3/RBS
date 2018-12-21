@@ -20,19 +20,19 @@ public class SeminarScore {
     /**
      * 本次讨论课总分
      */
-    private BigDecimal totalScore;
+    private double totalScore;
     /**
      * 本次讨论课展示分
      */
-    private BigDecimal presentationScore;
+    private double presentationScore;
     /**
      * 本次讨论课报告分
      */
-    private BigDecimal reportScore;
+    private double reportScore;
     /**
      * 本次讨论课提问分
      */
-    private BigDecimal questionScore;
+    private double questionScore;
 
     //关系
     /**
@@ -62,35 +62,35 @@ public class SeminarScore {
         this.teamId = teamId;
     }
 
-    public BigDecimal getTotalScore() {
+    public double getTotalScore() {
         return totalScore;
     }
 
-    public void setTotalScore(BigDecimal totalScore) {
+    public void setTotalScore(double totalScore) {
         this.totalScore = totalScore;
     }
 
-    public BigDecimal getPresentationScore() {
+    public double getPresentationScore() {
         return presentationScore;
     }
 
-    public void setPresentationScore(BigDecimal presentationScore) {
+    public void setPresentationScore(double presentationScore) {
         this.presentationScore = presentationScore;
     }
 
-    public BigDecimal getReportScore() {
+    public double getReportScore() {
         return reportScore;
     }
 
-    public void setReportScore(BigDecimal reportScore) {
+    public void setReportScore(double reportScore) {
         this.reportScore = reportScore;
     }
 
-    public BigDecimal getQuestionScore() {
+    public double getQuestionScore() {
         return questionScore;
     }
 
-    public void setQuestionScore(BigDecimal questionScore) {
+    public void setQuestionScore(double questionScore) {
         this.questionScore = questionScore;
     }
 

@@ -1,5 +1,6 @@
 package com.rbs.project.pojo.entity;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 /**
@@ -43,6 +44,10 @@ public class Attendance {
      * 报告文件路径
      */
     private String reportUrl;
+    /**
+     * 报告截止日期
+     */
+    private Timestamp reportDDL;
 
     //关系
     /**
@@ -154,6 +159,15 @@ public class Attendance {
     public void setQuestions(List<Question> questions) {
         this.questions = questions;
     }
-//================= toString =======================
+
+    public Timestamp getReportDDL() {
+        return reportDDL;
+    }
+
+    public void setReportDDL(Timestamp reportDDL) {
+        this.reportDDL = reportDDL;
+    }
+
+    //================= toString =======================
 
 }

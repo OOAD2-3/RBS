@@ -69,6 +69,11 @@ public class TeamDao {
         return team;
     }
 
+    /**
+     * Description: 新建队伍
+     * @Author: 17Wang
+     * @Time: 9:06 2018/12/20
+    */
     public boolean addTeam(Team team) throws Exception {
         if (!teamMapper.insertTeam(team)) {
             throw new MyException("新建队伍出错！数据库处理错误", MyException.ERROR);
@@ -77,6 +82,11 @@ public class TeamDao {
         return true;
     }
 
+    /**
+     * Description: 获取一个班级下的所有队伍
+     * @Author: 17Wang
+     * @Time: 9:39 2018/12/20
+    */
     public List<Team> listByCClassId(long cClassId, int... hasSomething) {
         List<Team> teams = teamMapper.findByCClassId(cClassId);
         for (Team team : teams) {

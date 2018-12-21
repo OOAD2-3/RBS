@@ -82,16 +82,25 @@ public class TeamController {
         return ResponseEntity.status(404).body(teamService.updateTeam(team));
     }
 
-    @PutMapping("/{teamId}/add")
+    @PutMapping("/{teamId}/members")
     @ResponseBody
-    public ResponseEntity<Boolean> addMemberToTeam(@PathVariable("teamId") long teamId, @RequestBody List<Map<String, Integer>> members) throws Exception {
-        List<Integer> membersIds = new ArrayList<>();
-        int index = 0;
-        for (Map<String, Integer> map : members) {
+    public ResponseEntity<Boolean> addMemberToTeam(@PathVariable("teamId") long teamId, @RequestBody List<Map<String, Long>> members) throws Exception {
+        List<Long> membersIds = new ArrayList<>();
+        for (Map<String, Long> map : members) {
             if (map.get("studentId") != null) {
                 membersIds.add(map.get("studentId"));
             }
         }
         return ResponseEntity.ok(teamService.addMemberToTeam(teamId, membersIds));
+    }
+
+    @DeleteMapping("/{teamId}/member")
+    @ResponseBody
+    public ResponseEntity<Boolean> removeMemberFromTeam(@PathVariable("teamId") long teamId, @RequestBody Map<String, Long> member) throws Exception {
+        Long memberId = member.get("studentId");
+        if (memberId == null) {
+            throw new MyException("参数传递错误，是studentId", MyException.ID_FORMAT_ERROR);
+        }
+        return ResponseEntity.ok(teamService.removeMemberFromTeam(teamId,memberId));
     }
 }
