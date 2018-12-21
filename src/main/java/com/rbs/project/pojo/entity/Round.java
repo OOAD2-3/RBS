@@ -31,6 +31,10 @@ public class Round {
      */
     private Integer questionScoreMethod;
     /**
+     * 班级
+     */
+    private long cClassId;
+    /**
      * 某班级，某轮次队伍报名次数限制
      */
     private Integer enrollNumber;
@@ -100,6 +104,14 @@ public class Round {
 
     public void setQuestionScoreMethod(Integer questionScoreMethod) {
         this.questionScoreMethod = questionScoreMethod;
+    }
+
+    public long getcClassId() {
+        return cClassId;
+    }
+
+    public void setcClassId(long cClassId) {
+        this.cClassId = cClassId;
     }
 
     public Integer getEnrollNumber() {

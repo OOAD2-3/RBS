@@ -1,7 +1,7 @@
 package com.rbs.project.mapper;
 
 
-import com.rbs.project.pojo.dto.CClassStudentDTO;
+import com.rbs.project.pojo.relationship.CClassStudent;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
@@ -35,10 +35,10 @@ public interface CClassStudentMapper {
 
     /**
      * 新增班级学生
-     * @param cClassStudentDTO
+     * @param cClassStudent
      * @return
      */
-    boolean insertCClassStudent(CClassStudentDTO cClassStudentDTO);
+    boolean insertCClassStudent(CClassStudent cClassStudent);
 
     /**
      * 修改学生在这个班级下的所属team

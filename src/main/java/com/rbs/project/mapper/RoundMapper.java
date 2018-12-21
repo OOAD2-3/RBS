@@ -1,0 +1,36 @@
+package com.rbs.project.mapper;
+
+import com.rbs.project.pojo.entity.Round;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
+
+/**
+ * @Author: WinstonDeng
+ * @Description: OOAD_Course_ManageSystem
+ * @Date: Created in 10:59 2018/12/20
+ * @Modified by:
+ */
+@Repository
+public interface RoundMapper {
+    /**
+     *  通过id查找轮次
+     * @param id
+     * @return
+     */
+    Round findById(long id);
+
+    /**
+     * 通过courseId查找轮次列表
+     * @param courseId
+     * @return
+     */
+    List<Round> findByCourseId(long courseId);
+
+    /**
+     * 新增轮次
+     * @param round
+     * @return
+     */
+    boolean insertRound(Round round);
+}

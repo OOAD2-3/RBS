@@ -3,12 +3,14 @@ package com.rbs.project.service;
 import com.rbs.project.dao.CClassDao;
 import com.rbs.project.dao.StudentDao;
 import com.rbs.project.exception.MyException;
-import com.rbs.project.pojo.dto.CClassStudentDTO;
+import com.rbs.project.pojo.relationship.CClassStudent;
 import com.rbs.project.pojo.entity.CClass;
 import com.rbs.project.pojo.entity.Student;
 import com.rbs.project.utils.ExcelUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.util.List;
 import java.util.Set;
 
@@ -63,6 +65,7 @@ public class CClassService {
      * @Author: WinstonDeng
      * @Date: 14:44 2018/12/12
      */
+    @Transactional(rollbackFor = Exception.class)
     public boolean transStudentListFileToDataBase(long cclassId,String fileName) throws MyException {
         //读取路径
         String filePath="D:/projectTemp/studentfile/";
@@ -81,31 +84,40 @@ public class CClassService {
                 long studentId=studentDao.addStudent(student);
                 student.setId(studentId);
                 //增加到klass_student
-                CClassStudentDTO cClassStudentDTO=new CClassStudentDTO();
-                cClassStudentDTO.setcClassId(cclassId);
-                cClassStudentDTO.setCourseId(cClassDao.getById(cclassId).getCourseId());
-                cClassStudentDTO.setStudentId(student.getId());
-                cClassDao.addCClassStudent(cClassStudentDTO);
+                CClassStudent cClassStudent =new CClassStudent();
+                cClassStudent.setcClassId(cclassId);
+                cClassStudent.setCourseId(cClassDao.getById(cclassId).getCourseId());
+                cClassStudent.setStudentId(student.getId());
+                cClassDao.addCClassStudent(cClassStudent);
             }
         }
         return true;
     }
+
     /**
      * Description: 通过课程查看班级列表
      * @Author: WinstonDeng
      * @Date: 10:42 2018/12/17
      */
     public List<CClass> listCClassesByCourseId(long courseId) throws MyException{
+        if((Long)courseId==null){
+            throw new MyException("courseId不能为空",MyException.ERROR);
+        }
         return cClassDao.listByCourseId(courseId);
     }
 
 
     /**
-     * Description: 按id删除课程
+     * Description: 按id删除班级
      * @Author: WinstonDeng
      * @Date: 11:10 2018/12/18
      */
     public boolean removeCClassById(long cClassId) throws MyException{
+        if((Long)cClassId==null){
+            throw new MyException("cClassId不能为空",MyException.ERROR);
+        }
         return cClassDao.removeCClass(cClassId);
     }
+
+
 }

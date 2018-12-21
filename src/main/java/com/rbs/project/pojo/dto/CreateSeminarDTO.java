@@ -1,0 +1,121 @@
+package com.rbs.project.pojo.dto;
+
+import java.sql.Timestamp;
+
+/**
+ * @Author: WinstonDeng
+ * @Description: 新建讨论课DTO
+ * @Date: Created in 13:26 2018/12/18
+ * @Modified by:
+ */
+public class CreateSeminarDTO {
+    /**
+     * 讨论课名
+     */
+    private String name;
+    /**
+     * 讨论课介绍
+     */
+    private String intro;
+    /**
+     * 讨论课序号
+     */
+    private Integer serial;
+    /**
+     * 是否可见
+     */
+    private Integer visible;
+    /**
+     * 讨论课开始报名时间
+     */
+    private Timestamp enrollStartTime;
+    /**
+     * 讨论课结束报名时间
+     */
+    private Timestamp enrollEndTime;
+    /**
+     * 报名最大组数
+     */
+    private Integer maxTeam;
+    /**
+     * 轮次id
+     */
+    private Long roundId;
+    /**
+     * 课程id
+     */
+    private Long courseId;
+
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getIntro() {
+        return intro;
+    }
+
+    public void setIntro(String intro) {
+        this.intro = intro;
+    }
+
+    public Integer getSerial() {
+        return serial;
+    }
+
+    public void setSerial(Integer serial) {
+        this.serial = serial;
+    }
+
+    public Timestamp getEnrollStartTime() {
+        return enrollStartTime;
+    }
+
+    public void setEnrollStartTime(Timestamp enrollStartTime) {
+        this.enrollStartTime = enrollStartTime;
+    }
+
+    public Timestamp getEnrollEndTime() {
+        return enrollEndTime;
+    }
+
+    public void setEnrollEndTime(Timestamp enrollEndTime) {
+        this.enrollEndTime = enrollEndTime;
+    }
+
+    public Integer getVisible() {
+        return visible;
+    }
+
+    public void setVisible(Integer visible) {
+        this.visible = visible;
+    }
+
+    public Integer getMaxTeam() {
+        return maxTeam;
+    }
+
+    public void setMaxTeam(Integer maxTeam) {
+        this.maxTeam = maxTeam;
+    }
+
+    public Long getRoundId() {
+        return roundId;
+    }
+
+    public void setRoundId(Long roundId) {
+        this.roundId = roundId;
+    }
+
+    public Long getCourseId() {
+        return courseId;
+    }
+
+    public void setCourseId(Long courseId) {
+        this.courseId = courseId;
+    }
+}

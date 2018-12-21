@@ -21,12 +21,35 @@
         WHERE klass_id=#{cClassId}
     </select>
 
-    <select id="findByCClassIdAndSeminarId" parameterType="BigInteger" resultMap="tab_klass_seminar" resultType="com.rbs.project.pojo.entity.CClassSeminar">
+    <select id="findBySeminarId" parameterType="Long" resultMap="tab_klass_seminar" resultType="com.rbs.project.pojo.entity.CClassSeminar">
+        select id,klass_id,seminar_id,report_ddl,status
+        from klass_seminar
+        where seminar_id=#{seminarId}
+    </select>
+
+    <select id="findByCClassIdAndSeminarId" parameterType="Long" resultMap="tab_klass_seminar" resultType="com.rbs.project.pojo.entity.CClassSeminar">
         SELECT id,klass_id,seminar_id,report_ddl,status
         FROM klass_seminar
         WHERE klass_id=#{cClassId}
           AND seminar_id=#{seminarId}
     </select>
 
+    <update id="updateCClassSeminarByCClassIdAndSeminarId" parameterType="Long">
+        update klass_seminar
+        set report_ddl=#{reportDDL},
+            status=#{status}
+        where klass_id=#{cClassId}
+          and seminar_id=#{seminarId}
+    </update>
 
+    <delete id="removeCClassSeminarBySeminarId" parameterType="Long">
+        delete
+        from klass_seminar
+        where seminar_id=#{seminarId}
+    </delete>
+
+    <insert id="insertCClassSeminar" parameterType="com.rbs.project.pojo.entity.CClassSeminar" useGeneratedKeys="true" keyProperty="id">
+        insert into klass_seminar(klass_id,seminar_id,report_ddl,status)
+        values (#{cClassId},#{seminarId},#{reportDDL},#{status})
+    </insert>
 </mapper>

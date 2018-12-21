@@ -1,7 +1,10 @@
 package com.rbs.project.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.rbs.project.dao.RoundDao;
+import com.rbs.project.exception.MyException;
 import com.rbs.project.mapper.StudentMapper;
+import com.rbs.project.pojo.entity.Round;
 import com.rbs.project.pojo.entity.Student;
 import com.rbs.project.pojo.entity.Teacher;
 import com.rbs.project.pojo.entity.User;
@@ -52,5 +55,18 @@ public class TestController {
             e.printStackTrace();
         }
         return  s;
+    }
+
+    @Autowired
+    RoundDao roundDao;
+    @RequestMapping("/r")
+    public long round() throws MyException {
+        Round round=new Round();
+        round.setCourseId(1);
+        round.setSerial(1);
+        round.setQuestionScoreMethod(0);
+        round.setReportScoreMethod(0);
+        round.setPresentationScoreMethod(0);
+        return  roundDao.addRound(round);
     }
 }

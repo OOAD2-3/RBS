@@ -1,4 +1,4 @@
-package com.rbs.project.pojo.dto;
+package com.rbs.project.pojo.relationship;
 
 /**
  * @Author: WinstonDeng
@@ -6,7 +6,7 @@ package com.rbs.project.pojo.dto;
  * @Date: Created in 16:08 2018/12/19
  * @Modified by:
  */
-public class CClassStudentDTO {
+public class CClassStudent {
     /**
      * 班级id
      */
