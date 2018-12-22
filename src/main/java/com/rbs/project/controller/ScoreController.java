@@ -49,6 +49,6 @@ public class ScoreController {
     @ResponseBody
     public Map<String,Object> listAllRoundScore(@RequestParam("roundId") long roundId) throws MyException {
         List<RoundScore> roundScores=scoreService.listAllRoundScoreByRoundId(roundId);
-        String roundSerial=
+        return null;
     }
 }
