@@ -5,6 +5,7 @@ import com.rbs.project.pojo.strategy.CourseMemberLimitStrategy;
 import com.rbs.project.utils.JsonUtils;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 /**
  * Description:
@@ -23,13 +24,9 @@ public class CourseAndStrategyVO {
     private String teamEndTime;
 
     private CourseMemberLimitStrategy courseMemberLimitStrategy;
-
+    private List<Long> conflictCourses;
     private Boolean ShareTeam;
     private Boolean ShareSeminar;
-
-    public CourseAndStrategyVO() {
-
-    }
 
     public CourseAndStrategyVO(Course course) {
         id = course.getId();
@@ -42,6 +39,7 @@ public class CourseAndStrategyVO {
         teamEndTime = JsonUtils.TimestampToString(course.getTeamEndTime());
 
         courseMemberLimitStrategy = course.getCourseMemberLimitStrategy();
+        conflictCourses = course.getConflictCourses();
         if (course.getTeamMainCourseId() == 0) {
             ShareTeam = false;
         }
@@ -136,5 +134,25 @@ public class CourseAndStrategyVO {
 
     public void setShareSeminar(Boolean shareSeminar) {
         ShareSeminar = shareSeminar;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public List<Long> getConflictCourses() {
+        return conflictCourses;
+    }
+
+    public void setConflictCourses(List<Long> conflictCourses) {
+        this.conflictCourses = conflictCourses;
+    }
+
+    public Boolean getShareTeam() {
+        return ShareTeam;
+    }
+
+    public Boolean getShareSeminar() {
+        return ShareSeminar;
     }
 }

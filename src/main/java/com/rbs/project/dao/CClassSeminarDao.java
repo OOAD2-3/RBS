@@ -46,6 +46,21 @@ public class CClassSeminarDao {
             }
         }
     }
+
+    /**
+     * Description: 按id查找班级讨论课信息
+     *
+     * @Author: 17Wang
+     * @Time: 22:59 2018/12/21
+     */
+    public CClassSeminar getCClassSeminarById(long cClassSeminarId) throws MyException {
+        CClassSeminar cClassSeminar = cClassSeminarMapper.findById(cClassSeminarId);
+        if (cClassSeminar == null) {
+            throw new MyException("查找班级讨论课信息错误！未找到该班级讨论课", MyException.NOT_FOUND_ERROR);
+        }
+        return cClassSeminar;
+    }
+
     /**
      * Description: 按班级id和讨论课id查找班级讨论课
      * @Author: WinstonDeng

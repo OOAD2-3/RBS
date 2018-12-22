@@ -37,29 +37,7 @@ public class CourseService {
         //设置当前教师
         Teacher teacher = (Teacher) UserUtils.getNowUser();
         course.setTeacherId(teacher.getId());
-        //设置最大人数
-        if (course.getCourseMemberLimitStrategy().getMaxMember() == null) {
-            course.getCourseMemberLimitStrategy().setMaxMember(999);
-        }
-        //设置最小人数
-        if (course.getCourseMemberLimitStrategy().getMinMember() == null) {
-            course.getCourseMemberLimitStrategy().setMinMember(0);
-        }
 
-        if (course.getName() == null) {
-            throw new MyException("课程名不能为空", MyException.ERROR);
-        }
-        if (course.getTeamStartTime() == null) {
-            throw new MyException("组队开始时间不能为空", MyException.ERROR);
-        }
-        if (course.getTeamEndTime() == null) {
-            throw new MyException("组队结束时间不能为空", MyException.ERROR);
-        }
-        if (course.getPresentationPercentage() == null ||
-                course.getQuestionPercentage() == null ||
-                course.getReportPercentage() == null) {
-            throw new MyException("计算分数规则不能为空", MyException.ERROR);
-        }
         return courseDao.addCourse(course);
     }
 
@@ -89,7 +67,7 @@ public class CourseService {
      * @Author: 17Wang
      * @Time: 10:34 2018/12/19
     */
-    public boolean deleteCourseById(long courseId) throws MyException {
+    public boolean deleteCourseById(long courseId) throws Exception {
         return courseDao.deleteCourseById(courseId);
     }
 }
