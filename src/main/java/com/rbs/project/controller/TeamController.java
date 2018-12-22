@@ -101,6 +101,6 @@ public class TeamController {
         if (memberId == null) {
             throw new MyException("参数传递错误，是studentId", MyException.ID_FORMAT_ERROR);
         }
-        return ResponseEntity.ok(teamService.removeMemberFromTeam(teamId,memberId));
+        return ResponseEntity.ok(teamService.removeMemberFromTeam(teamId, memberId));
     }
 }

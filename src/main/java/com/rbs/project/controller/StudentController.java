@@ -31,10 +31,10 @@ public class StudentController {
 
     @GetMapping
     @ResponseBody
-    public List<UserVO> listAllStudents(){
-        List<Student> students=studentService.listAllStudents();
-        List<UserVO> userVOS=new ArrayList<>();
-        for (Student student:students){
+    public List<UserVO> listAllStudents() {
+        List<Student> students = studentService.listAllStudents();
+        List<UserVO> userVOS = new ArrayList<>();
+        for (Student student : students) {
             userVOS.add(new UserVO(student));
         }
         return userVOS;
@@ -43,14 +43,14 @@ public class StudentController {
     @GetMapping("/searchstudent")
     @ResponseBody
     public ResponseEntity<UserVO> findOneStudent(@RequestParam("identity") String identity) throws MyException {
-        Student student=studentService.findOneStudent(identity);
+        Student student = studentService.findOneStudent(identity);
         return ResponseEntity.ok(new UserVO(student));
     }
 
     @PutMapping("/{studentId}/information")
     @ResponseBody
-    public ResponseEntity<UserVO> updateStudentInfo(@PathVariable("studentId") long studentId,@RequestBody UserVO userVO) throws MyException {
-        Student student=new Student();
+    public ResponseEntity<UserVO> updateStudentInfo(@PathVariable("studentId") long studentId, @RequestBody UserVO userVO) throws MyException {
+        Student student = new Student();
         student.setId(studentId);
         student.setAccount(userVO.getAccount());
         student.setStudentName(userVO.getName());
@@ -61,7 +61,7 @@ public class StudentController {
     @PutMapping("/{studentId}/password")
     @ResponseBody
     public ResponseEntity<UserVO> updateStudentPassword(@PathVariable("studentId") long studentId) throws MyException {
-        Student student=new Student();
+        Student student = new Student();
         student.setId(studentId);
         student.setPassword("123456");
         return ResponseEntity.ok(new UserVO(studentService.resetStudentPassword(student)));

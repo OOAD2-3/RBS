@@ -30,7 +30,7 @@ public class TeacherController {
     @PostMapping
     @ResponseBody
     public ResponseEntity<Boolean> createTeacher(@RequestBody UserVO userVO) throws MyException {
-        Teacher teacher=new Teacher();
+        Teacher teacher = new Teacher();
         teacher.setAccount(userVO.getAccount());
         teacher.setTeacherName(userVO.getName());
         teacher.setEmail(userVO.getEmail());
@@ -40,10 +40,10 @@ public class TeacherController {
 
     @GetMapping
     @ResponseBody
-    public List<UserVO> listAllTeachers(){
-        List<Teacher> teachers=teacherService.listAllTeachers();
-        List<UserVO> userVOS=new ArrayList<>();
-        for (Teacher teacher:teachers){
+    public List<UserVO> listAllTeachers() {
+        List<Teacher> teachers = teacherService.listAllTeachers();
+        List<UserVO> userVOS = new ArrayList<>();
+        for (Teacher teacher : teachers) {
             userVOS.add(new UserVO(teacher));
         }
         return userVOS;
@@ -52,14 +52,14 @@ public class TeacherController {
     @GetMapping("/searchteacher")
     @ResponseBody
     public ResponseEntity<UserVO> findOneTeacher(@RequestParam("identity") String identity) throws MyException {
-        Teacher teacher=teacherService.findOneTeacher(identity);
+        Teacher teacher = teacherService.findOneTeacher(identity);
         return ResponseEntity.ok(new UserVO(teacher));
     }
 
     @PutMapping("/{teacherId}/information")
     @ResponseBody
-    public ResponseEntity<UserVO> updateTeacherInfo(@PathVariable("teacherId") long teacherId,@RequestBody UserVO userVO) throws MyException {
-        Teacher teacher=new Teacher();
+    public ResponseEntity<UserVO> updateTeacherInfo(@PathVariable("teacherId") long teacherId, @RequestBody UserVO userVO) throws MyException {
+        Teacher teacher = new Teacher();
         teacher.setId(teacherId);
         teacher.setAccount(userVO.getAccount());
         teacher.setTeacherName(userVO.getName());
@@ -70,7 +70,7 @@ public class TeacherController {
     @PutMapping("/{teacherId}/password")
     @ResponseBody
     public ResponseEntity<UserVO> updateStudentPassword(@PathVariable("teacherId") long teacherId) throws MyException {
-        Teacher teacher=new Teacher();
+        Teacher teacher = new Teacher();
         teacher.setId(teacherId);
         teacher.setPassword("123456");
         return ResponseEntity.ok(new UserVO(teacherService.resetTeacherPassword(teacher)));
