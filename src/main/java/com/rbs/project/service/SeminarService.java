@@ -141,7 +141,7 @@ public class SeminarService {
         if((Long)seminarId==null){
             throw new MyException("seminarId不能为空",MyException.ERROR);
         }
-        return seminarDao.findSeminarById(seminarId);
+        return seminarDao.findSeminarById(seminarId,SeminarDao.HAS_ROUND);
     }
     /**
      * Description: 【私有】 新建轮次的业务逻辑方法
@@ -152,7 +152,7 @@ public class SeminarService {
         //新建一个轮次
         Round round=new Round();
         //查找当前课程下的所有轮次，确认轮次次序
-        int roundNum=roundDao.findByCourseId(seminar.getCourseId()).size();
+        int roundNum=roundDao.listByCourseId(seminar.getCourseId()).size();
         //新增的轮次次序+1
         round.setSerial(roundNum+1);
         round.setCourseId(seminar.getCourseId());
@@ -176,5 +176,14 @@ public class SeminarService {
             cClassDao.addCClassRound(cClassRound);
         }
         return seminar;
+    }
+
+    /**
+     * Description: 按courseId获得讨论课列表
+     * @Author: WinstonDeng
+     * @Date: 18:55 2018/12/21
+     */
+    public List<Seminar> getSeminarsByCourse(long courseId) throws MyException {
+        return seminarDao.findSeminarByCourseId(courseId,SeminarDao.HAS_CClASS_SEMINAR,SeminarDao.HAS_ROUND);
     }
 }

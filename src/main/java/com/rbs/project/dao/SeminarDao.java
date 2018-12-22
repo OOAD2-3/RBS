@@ -3,6 +3,7 @@ package com.rbs.project.dao;
 import com.rbs.project.exception.MyException;
 import com.rbs.project.mapper.CClassSeminarMapper;
 import com.rbs.project.mapper.CourseMapper;
+import com.rbs.project.mapper.RoundMapper;
 import com.rbs.project.mapper.SeminarMapper;
 import com.rbs.project.pojo.entity.CClassSeminar;
 import com.rbs.project.pojo.entity.Seminar;
@@ -28,6 +29,23 @@ public class SeminarDao {
 
     @Autowired
     private CClassSeminarMapper cClassSeminarMapper;
+
+    @Autowired
+    private RoundMapper roundMapper;
+
+    public final static int HAS_CClASS_SEMINAR=0;
+    public final static int HAS_ROUND=1;
+
+    private void hasSomethingFun(Seminar seminar,int ...hasSomething){
+        for(int i:hasSomething){
+            if(i==HAS_CClASS_SEMINAR){
+                seminar.setcClassSeminars(cClassSeminarMapper.findBySeminarId(seminar.getId()));
+            }
+            if(i==HAS_ROUND){
+                seminar.setRound(roundMapper.findById(seminar.getRoundId()));
+            }
+        }
+    }
 
     /**
      * Description: 新增讨论课
@@ -115,35 +133,20 @@ public class SeminarDao {
      * @Author: WinstonDeng
      * @Date: 20:53 2018/12/20
      */
-    public Seminar findSeminarById(long seminarId) throws MyException{
+    public Seminar findSeminarById(long seminarId,int ...hasSomething) throws MyException{
         if(seminarMapper.findById(seminarId)==null){
             throw new MyException("查看讨论课错误！未找到讨论课",MyException.NOT_FOUND_ERROR);
         }
         Seminar seminar=null;
         try {
             seminar=seminarMapper.findById(seminarId);
+            seminar.setCourse(courseMapper.findById(seminar.getCourseId()));
+            seminar.setRound(roundMapper.findById(seminar.getRoundId()));
         }catch (Exception e){
             throw new MyException("查看讨论课错误！数据库处理错误",MyException.ERROR);
         }
+        hasSomethingFun(seminar,hasSomething);
         return seminar;
-    }
-
-    /**
-     * Description: 按seminarId查找班级讨论课
-     * @Author: WinstonDeng
-     * @Date: 21:31 2018/12/20
-     */
-    public List<CClassSeminar> findCClassSeminarBySeminarId(Long seminarId) throws MyException{
-        if(seminarMapper.findById(seminarId)==null){
-            throw new MyException("查看班级讨论课错误！未找到讨论课",MyException.NOT_FOUND_ERROR);
-        }
-        List<CClassSeminar> cClassSeminars=null;
-        try {
-            cClassSeminars=cClassSeminarMapper.findBySeminarId(seminarId);
-        }catch (Exception e){
-            throw new MyException("查看班级讨论课错误！数据库处理出错",MyException.NOT_FOUND_ERROR);
-        }
-        return cClassSeminars;
     }
 
     /**
@@ -151,15 +154,16 @@ public class SeminarDao {
      * @Author: WinstonDeng
      * @Date: 10:11 2018/12/21
      */
-    public List<Seminar> findSeminarByCourseId(long courseId) throws MyException{
+    public List<Seminar> findSeminarByCourseId(long courseId,int ...hasSomething) throws MyException{
         if(courseMapper.findById(courseId)==null){
             throw new MyException("查看讨论课错误！未找到课程",MyException.NOT_FOUND_ERROR);
         }
-        List<Seminar> seminars=null;
-        try {
-            seminars=seminarMapper.findByCourseId(courseId);
-        }catch (Exception e){
-            throw new MyException("查看讨论课错误！数据库处理错误",MyException.ERROR);
+        List<Seminar> seminars=seminarMapper.findByCourseId(courseId);
+        if(seminars==null){
+            throw new MyException("查看讨论课错误！未找到讨论课",MyException.NOT_FOUND_ERROR);
+        }
+        for(Seminar seminar:seminars){
+            hasSomethingFun(seminar,hasSomething);
         }
         return seminars;
     }

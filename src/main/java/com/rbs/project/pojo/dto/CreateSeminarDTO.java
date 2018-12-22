@@ -28,11 +28,11 @@ public class CreateSeminarDTO {
     /**
      * 讨论课开始报名时间
      */
-    private Timestamp enrollStartTime;
+    private String enrollStartTime;
     /**
      * 讨论课结束报名时间
      */
-    private Timestamp enrollEndTime;
+    private String enrollEndTime;
     /**
      * 报名最大组数
      */
@@ -71,19 +71,19 @@ public class CreateSeminarDTO {
         this.serial = serial;
     }
 
-    public Timestamp getEnrollStartTime() {
+    public String getEnrollStartTime() {
         return enrollStartTime;
     }
 
-    public void setEnrollStartTime(Timestamp enrollStartTime) {
+    public void setEnrollStartTime(String enrollStartTime) {
         this.enrollStartTime = enrollStartTime;
     }
 
-    public Timestamp getEnrollEndTime() {
+    public String getEnrollEndTime() {
         return enrollEndTime;
     }
 
-    public void setEnrollEndTime(Timestamp enrollEndTime) {
+    public void setEnrollEndTime(String enrollEndTime) {
         this.enrollEndTime = enrollEndTime;
     }
 

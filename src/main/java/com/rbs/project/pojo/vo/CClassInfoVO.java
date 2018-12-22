@@ -12,7 +12,7 @@ public class CClassInfoVO {
     /**
      * id
      */
-    private long id;
+    private Long id;
     /**
      * 班级名
      */
@@ -30,10 +30,6 @@ public class CClassInfoVO {
      */
     private String fileName;
 
-    public CClassInfoVO(){
-
-    }
-
     public CClassInfoVO(CClass cClass){
         id=cClass.getId();
         name= String.valueOf(cClass.getGrade())+'-'+String.valueOf(cClass.getSerial());
@@ -41,11 +37,11 @@ public class CClassInfoVO {
         classroom=cClass.getPlace();
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

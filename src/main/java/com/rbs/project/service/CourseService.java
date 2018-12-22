@@ -43,12 +43,11 @@ public class CourseService {
 
     /**
      * Description: 通过id获取当前课程
-     *
      * @Author: 17Wang
      * @Time: 22:58 2018/12/18
-     */
+    */
     public Course getCourseById(long courseId) throws MyException {
-        return courseDao.getCourseById(courseId, CourseDao.HAS_COURSE_MEMBER_LIMIT_STRATEGY, CourseDao.HAS_CONFLICT_COURSES);
+        return courseDao.getCourseById(courseId,CourseDao.HAS_COURSE_MEMBER_LIMIT_STRATEGY,CourseDao.HAS_SEMINAR,CourseDao.HAS_CCLASS);
     }
 
     /**
@@ -59,16 +58,15 @@ public class CourseService {
      */
     public List<Course> listMyCourses() throws MyException {
         //获取当前登录用户的courses
-        User user = userDao.getUserByUsername(UserUtils.getNowUser().getUsername(), UserDao.HAS_COURSES);
+        User user=userDao.getUserByUsername(UserUtils.getNowUser().getUsername(),UserDao.HAS_COURSES);
         return user.getCourses();
     }
-
+    
     /**
      * Description: 删除课程
-     *
      * @Author: 17Wang
      * @Time: 10:34 2018/12/19
-     */
+    */
     public boolean deleteCourseById(long courseId) throws Exception {
         return courseDao.deleteCourseById(courseId);
     }
