@@ -109,7 +109,7 @@ public class CClassDao {
     }
 
     /**
-     * Description: 新增课程
+     * Description: 新增班级
      *
      * @Author: WinstonDeng
      * @Date: 13:01 2018/12/16

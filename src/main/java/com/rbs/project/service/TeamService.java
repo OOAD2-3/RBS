@@ -122,12 +122,12 @@ public class TeamService {
      * @Time: 23:08 2018/12/19
      */
     @Transactional(rollbackFor = Exception.class)
-    public boolean addMemberToTeam(long teamId, List<Integer> membersIds) throws Exception {
-        if(membersIds.isEmpty()){
+    public boolean addMemberToTeam(long teamId, List<Long> membersIds) throws Exception {
+        if (membersIds.isEmpty()) {
             throw new MyException("没有需要添加的成员或者参数名写错了，是studentId哦", MyException.ID_FORMAT_ERROR);
         }
         long cClassId = teamDao.getTeamById(teamId).getcClassId();
-        for (Integer i : membersIds) {
+        for (Long i : membersIds) {
             ///如果没有该学生
             studentDao.getStudentById(i);
             //如果该学生已有队伍
@@ -137,5 +137,25 @@ public class TeamService {
             cClassDao.updateTeamIdInKlassStudent(teamId, cClassId, i);
         }
         return true;
+    }
+
+    /**
+     * Description: 删除成员
+     *
+     * @Author: 17Wang
+     * @Time: 9:12 2018/12/20
+     */
+    public boolean removeMemberFromTeam(long teamId, long memberId) throws Exception {
+        //确认组长所在的班级
+        long cClassId = teamDao.getTeamById(teamId).getcClassId();
+        //确认被踢的成员当前是否还在队伍
+        long memberAtTeamId = cClassDao.getTeamIdByPrimaryKeys(cClassId, memberId);
+        if (memberAtTeamId == 0) {
+            throw new MyException("删除成员出错！该成员已被踢出队伍", MyException.ERROR);
+        } else if (memberAtTeamId != teamId) {
+            throw new MyException("删除成员出错！该成员不属于您的小组", MyException.ERROR);
+        }
+        //上述判断通过，将该成员踢出
+        return cClassDao.updateTeamIdInKlassStudent(0, cClassId, memberId);
     }
 }

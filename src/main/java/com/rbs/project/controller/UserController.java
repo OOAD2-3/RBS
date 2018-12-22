@@ -37,6 +37,9 @@ public class UserController {
     @PutMapping("/password")
     @ResponseBody
     public ResponseEntity<Boolean> resetPassword(@RequestBody Map<String, String> password) throws MyException {
+        if (password.get("password") == null || password.get("password").equals("")) {
+            throw new MyException("密码不能为空", MyException.ERROR);
+        }
         return ResponseEntity.ok(userService.resetPassword(password.get("password")));
     }
 
@@ -44,20 +47,20 @@ public class UserController {
     @ResponseBody
     public Map<String, Object> getInfomation() throws MyException {
         User user;
-        try{
-            user =UserUtils.getNowUser();
-        }catch (MyException e){
-            throw new MyException("获取当前用户信息出错！当前无用户 "+e.getMessage(), MyException.NOT_FOUND_ERROR);
+        try {
+            user = UserUtils.getNowUser();
+        } catch (MyException e) {
+            throw new MyException("获取当前用户信息出错！当前无用户 " + e.getMessage(), MyException.NOT_FOUND_ERROR);
         }
 
-        Map<String,Object> map=new HashMap<>();
+        Map<String, Object> map = new HashMap<>();
         map.put("id", user.getId());
         map.put("account", user.getUsername());
         map.put("email", user.getEmail());
-        if(user instanceof Student){
+        if (user instanceof Student) {
             map.put("name", ((Student) user).getStudentName());
             map.put("role", "student");
-        }else if(user instanceof Teacher){
+        } else if (user instanceof Teacher) {
             map.put("name", ((Teacher) user).getTeacherName());
             map.put("role", "teacher");
         }

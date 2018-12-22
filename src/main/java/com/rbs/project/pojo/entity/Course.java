@@ -62,6 +62,10 @@ public class Course {
      */
     private CourseMemberLimitStrategy courseMemberLimitStrategy;
     /**
+     * 冲突的课程们的id
+     */
+    private List<Long> conflictCourses;
+    /**
      * 一个老师
      */
     private Teacher teacher;
@@ -190,6 +194,14 @@ public class Course {
 
     public void setCourseMemberLimitStrategy(CourseMemberLimitStrategy courseMemberLimitStrategy) {
         this.courseMemberLimitStrategy = courseMemberLimitStrategy;
+    }
+
+    public List<Long> getConflictCourses() {
+        return conflictCourses;
+    }
+
+    public void setConflictCourses(List<Long> conflictCourses) {
+        this.conflictCourses = conflictCourses;
     }
 
     public Teacher getTeacher() {

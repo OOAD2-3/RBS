@@ -20,6 +20,7 @@ public class GlobalExceptionHandler {
     @ResponseBody
     public ErrorInfo<String> jsonErrorHandler(HttpServletRequest req, HttpServletResponse response, MyException e){
         ErrorInfo<String> r = new ErrorInfo<>();
+        e.printStackTrace();
         r.setMessage(e.getMessage());
         r.setCode(e.getStateCode());
         r.setData("None Data");

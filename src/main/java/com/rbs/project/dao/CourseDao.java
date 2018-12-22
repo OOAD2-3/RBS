@@ -1,15 +1,17 @@
 package com.rbs.project.dao;
 
 import com.rbs.project.exception.MyException;
+import com.rbs.project.mapper.ConflictCourseStrategyMapper;
 import com.rbs.project.mapper.CourseMapper;
 import com.rbs.project.mapper.CourseMemberLimitStrategyMapper;
 import com.rbs.project.pojo.entity.Course;
+import com.rbs.project.pojo.strategy.ConflictCourseStrategy;
 import com.rbs.project.pojo.strategy.CourseMemberLimitStrategy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
+import java.util.*;
 
 /**
  * Description:
@@ -25,16 +27,35 @@ public class CourseDao {
     @Autowired
     private CourseMemberLimitStrategyMapper courseMemberLimitStrategyMapper;
 
+    @Autowired
+    private ConflictCourseStrategyMapper conflictCourseStrategyMapper;
+
     /**
      * 组队人数限制策略
      */
     public static final int HAS_COURSE_MEMBER_LIMIT_STRATEGY = 0;
+    /**
+     * 冲突课程策略
+     */
+    public static final int HAS_CONFLICT_COURSES = 1;
 
     private void hasSomethingFun(Course course, int... hasSomething) {
         for (int i : hasSomething) {
             if (i == HAS_COURSE_MEMBER_LIMIT_STRATEGY) {
                 CourseMemberLimitStrategy courseMemberLimitStrategy = courseMemberLimitStrategyMapper.getByCourseId(course.getId());
                 course.setCourseMemberLimitStrategy(courseMemberLimitStrategy);
+            }
+            if (i == HAS_CONFLICT_COURSES) {
+                List<Long> conflictCourse1 = conflictCourseStrategyMapper.getById1(course.getId());
+                List<Long> conflictCourse2 = conflictCourseStrategyMapper.getById2(course.getId());
+                Set<Long> conflictCourse = new HashSet<>();
+                for (Long l : conflictCourse1) {
+                    conflictCourse.add(l);
+                }
+                for (Long l : conflictCourse2) {
+                    conflictCourse.add(l);
+                }
+                course.setConflictCourses(new ArrayList<>(conflictCourse));
             }
         }
     }
@@ -72,6 +93,12 @@ public class CourseDao {
         if (!courseMemberLimitStrategyMapper.insertStrategy(course.getCourseMemberLimitStrategy())) {
             throw new MyException("创建课程策略表失败！数据库处理错误", MyException.ERROR);
         }
+        //冲突课程策略
+        for (long conflictCourseId : course.getConflictCourses()) {
+            if (!conflictCourseStrategyMapper.insertConflictCourseStrategy(course.getId(), conflictCourseId)) {
+                throw new MyException("创建冲突课程策略失败！数据库处理错误", MyException.ERROR);
+            }
+        }
         //其他策略
 
         return true;
@@ -85,16 +112,27 @@ public class CourseDao {
      * @Time: 10:37 2018/12/19
      */
     @Transactional(rollbackFor = MyException.class)
-    public boolean deleteCourseById(long courseId) throws MyException {
+    public boolean deleteCourseById(long courseId) throws Exception {
         //查询是否存在
         getCourseById(courseId);
+        //删除冲突课程策略
+        List<Long> conflictCourseStratageIds=conflictCourseStrategyMapper.getIdByCourseId(courseId);
+        for(Long conflictCourseStratageId:conflictCourseStratageIds){
+            if(!conflictCourseStrategyMapper.deleteById(conflictCourseStratageId)){
+                throw new MyException("删除课程冲突策略失败！数据库处理错误", MyException.ERROR);
+            }
+        }
+        //删除策略表
+        if (!courseMemberLimitStrategyMapper.deleteByCourseId(courseId)) {
+            throw new MyException("删除课程组队策略失败！数据库处理错误", MyException.ERROR);
+        }
+        //删除课程
         if (!courseMapper.deleteById(courseId)) {
             throw new MyException("删除课程失败！数据库处理错误", MyException.ERROR);
         }
-        //删除策略表
-        if(!courseMemberLimitStrategyMapper.deleteByCourseId(courseId)){
-            throw new MyException("删除课程组队策略失败！数据库处理错误", MyException.ERROR);
-        }
+
+        //删除冲突课程策略
+
         //删除班级
 
         //删除讨论课

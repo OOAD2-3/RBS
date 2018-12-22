@@ -14,6 +14,10 @@ public class CourseInfoVO {
     private boolean ShareSeminar;
     private String name;
 
+    public CourseInfoVO(){
+
+    }
+
     public CourseInfoVO(Course course) {
         id = course.getId();
         ShareTeam = true;
