@@ -1,7 +1,6 @@
 package com.rbs.project.pojo.vo;
 
 import com.rbs.project.pojo.entity.CClass;
-import com.sun.tools.internal.xjc.model.CClassInfo;
 
 /**
  * @Author: WinstonDeng

@@ -43,23 +43,6 @@ public interface AttendanceMapper {
     boolean insertAttendance(Attendance attendance);
 
     /**
-     * 新增一个队伍的一个讨论课分数信息
-     *
-     * @param cClassSeminarId
-     * @param teamId
-     * @return
-     */
-    boolean insertSeminarScore(@Param("cClassSeminarId") long cClassSeminarId, @Param("teamId") long teamId);
-
-    /**
-     * 删除一个队伍的一个讨论课分数信息
-     * @param cClassSeminarId
-     * @param teamId
-     * @return
-     */
-    boolean deleteSeminarScoreByPrimaryKey(@Param("cClassSeminarId") long cClassSeminarId, @Param("teamId") long teamId);
-
-    /**
      * 删除一个队伍的一个讨论课展示信息
      * @param id
      * @return

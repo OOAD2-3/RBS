@@ -34,6 +34,9 @@ public class AttendanceService {
     @Autowired
     private RoundScoreDao roundScoreDao;
 
+    @Autowired
+    private SeminarScoreDao seminarScoreDao;
+
     /**
      * Description: 获取一个班级下的有一个讨论课下的所有报名信息
      *
@@ -86,7 +89,7 @@ public class AttendanceService {
         roundScoreDao.addRoundScore(roundScore);
 
         //新增seminarScore
-        attendanceDao.addSeminarScore(cClassSeminarId, teamId);
+        seminarScoreDao.addSeminarScore(cClassSeminarId, teamId);
 
         return true;
     }
@@ -108,7 +111,7 @@ public class AttendanceService {
         long roundId = seminarDao.findSeminarById(seminarId).getRoundId();
 
         //删除讨论课成绩
-        attendanceDao.deleteSeminarScoreByPrimaryKey(cClassSeminarId, teamId);
+        seminarScoreDao.deleteSeminarScoreByPrimaryKey(cClassSeminarId, teamId);
 
         //删除轮次成绩
         roundScoreDao.deleteRoundScoreByPrimaryKey(roundId,teamId);

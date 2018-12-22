@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rbs.project.mapper.SeminarScoreMapper">
+    <resultMap id="tab_seminar_score" type="com.rbs.project.pojo.entity.SeminarScore">
+        <result column="klass_seminar_id" property="cClassSeminarId"/>
+        <result column="team_id" property="teamId"/>
+        <result column="total_score" property="totalScore"/>
+        <result column="presentaton_score" property="presentationScore"/>
+        <result column="question_score" property="questionScore"/>
+        <result column="report_score" property="reportScore"/>
+    </resultMap>
+
+    <select id="listAllBySeminarIdAndCClassId" resultMap="tab_seminar_score">
+        SELECT klass_seminar_id,team_id,total_score,presentaton_score,question_score,report_score
+        FROM seminar_score LEFT JOIN klass_seminar
+        ON seminar_score.klass_seminar_id = klass_seminar.id
+        WHERE klass_seminar.seminar_id=#{seminarId} AND klass_seminar.klass_id=#{classId}
+    </select>
+
+    <insert id="insertSeminarScore">
+        INSERT INTO seminar_score(klass_seminar_id, team_id)
+        VALUES (#{cClassSeminarId},#{teamId})
+    </insert>
+
+    <delete id="deleteSeminarScoreByPrimaryKey">
+        DELETE FROM seminar_score
+        WHERE klass_seminar_id=#{cClassSeminarId} AND team_id=#{teamId}
+    </delete>
+</mapper>
