@@ -10,6 +10,13 @@
         <result column="report_score" property="reportScore"/>
     </resultMap>
 
+    <select id="getBySeminarIdAndCClassIdAndTeamId" resultMap="tab_seminar_score">
+        SELECT klass_seminar_id,team_id,total_score,presentaton_score,question_score,report_score
+        FROM seminar_score LEFT JOIN klass_seminar
+        ON seminar_score.klass_seminar_id = klass_seminar.id
+        WHERE klass_seminar.seminar_id=#{seminarId} AND klass_seminar.klass_id=#{classId} AND seminar_score.team_id=#{teamId}
+    </select>
+
     <select id="listAllBySeminarIdAndCClassId" resultMap="tab_seminar_score">
         SELECT klass_seminar_id,team_id,total_score,presentaton_score,question_score,report_score
         FROM seminar_score LEFT JOIN klass_seminar
@@ -26,4 +33,25 @@
         DELETE FROM seminar_score
         WHERE klass_seminar_id=#{cClassSeminarId} AND team_id=#{teamId}
     </delete>
+
+    <update id="updatePresentationScore">
+        UPDATE seminar_score SET presentaton_score=#{presentationScore}
+        WHERE team_id=#{teamId}
+        AND
+        klass_seminar_id=(SELECT klass_seminar_id FROM klass_seminar WHERE klass_id=#{classId} AND seminar_id=#{seminarId})
+    </update>
+
+    <update id="updateReportScore">
+        UPDATE seminar_score SET report_score=#{reportScore}
+        WHERE team_id=#{teamId}
+        AND
+        klass_seminar_id=(SELECT klass_seminar_id FROM klass_seminar WHERE klass_id=#{classId} AND seminar_id=#{seminarId})
+    </update>
+
+    <update id="updateTotalScore">
+        UPDATE seminar_score SET total_score=#{totalScore}
+        WHERE team_id=#{teamId}
+        AND
+        klass_seminar_id=(SELECT klass_seminar_id FROM klass_seminar WHERE klass_id=#{classId} AND seminar_id=#{seminarId})
+    </update>
 </mapper>

@@ -56,22 +56,35 @@ public class CClassDao {
      */
     public static final int HAS_COURSE = 2;
 
+    private void hasSomethingFun(CClass cClass, int... hasSomething) {
+        for (int i : hasSomething) {
+            if (i == HAS_TEAMS) {
+                List<Team> teams = teamMapper.findByCClassId(cClass.getId());
+                cClass.setTeams(teams);
+            }
+            if (i == HAS_CCLASS_SEMINARS) {
+                List<CClassSeminar> cClassSeminars = cClassSeminarMapper.findByCClassId(cClass.getCourseId());
+                cClass.setcClassSeminars(cClassSeminars);
+            }
+            if (i == HAS_COURSE) {
+                Course course = courseMapper.findById(cClass.getCourseId());
+                cClass.setCourse(course);
+            }
+        }
+    }
+
     /**
      * Description: 通过班级id查看班级
      *
      * @Author: WinstonDeng
      * @Date: 16:30 2018/12/19
      */
-    public CClass getById(long cClassId) throws MyException {
-        CClass cClass = null;
-        if (cClassMapper.findById(cClassId) == null) {
+    public CClass getById(long cClassId, int... hasSomething) throws MyException {
+        CClass cClass = cClassMapper.findById(cClassId);
+        if (cClass == null) {
             throw new MyException("通过id查找班级错误！未找到班级", MyException.NOT_FOUND_ERROR);
         }
-        try {
-            cClass = cClassMapper.findById(cClassId);
-        } catch (Exception e) {
-            throw new MyException("通过id查找班级错误！数据库处理错误", MyException.ERROR);
-        }
+        hasSomethingFun(cClass,hasSomething);
         return cClass;
     }
 
@@ -88,21 +101,7 @@ public class CClassDao {
         List<CClass> cClasses = cClassMapper.findByCourseId(courseId);
 
         for (CClass cClass : cClasses) {
-
-            for (int i : hasSomething) {
-                if (i == HAS_TEAMS) {
-                    List<Team> teams = teamMapper.findByCClassId(cClass.getId());
-                    cClass.setTeams(teams);
-                }
-                if (i == HAS_CCLASS_SEMINARS) {
-                    List<CClassSeminar> cClassSeminars = cClassSeminarMapper.findByCClassId(cClass.getCourseId());
-                    cClass.setcClassSeminars(cClassSeminars);
-                }
-                if (i == HAS_COURSE) {
-                    Course course = courseMapper.findById(cClass.getCourseId());
-                    cClass.setCourse(course);
-                }
-            }
+            hasSomethingFun(cClass, hasSomething);
         }
 
         return cClasses;
@@ -207,23 +206,24 @@ public class CClassDao {
 
     /**
      * Description: 新增班级轮次 对应klass_round表
+     *
      * @Author: WinstonDeng
      * @Date: 15:34 2018/12/20
      */
-    public boolean addCClassRound(CClassRound cClassRound) throws MyException{
-        if(cClassMapper.findById(cClassRound.getcClassId())==null){
-            throw new MyException("新增班级轮次错误！未找到班级",MyException.NOT_FOUND_ERROR);
+    public boolean addCClassRound(CClassRound cClassRound) throws MyException {
+        if (cClassMapper.findById(cClassRound.getcClassId()) == null) {
+            throw new MyException("新增班级轮次错误！未找到班级", MyException.NOT_FOUND_ERROR);
         }
-        if(roundMapper.findById(cClassRound.getRoundId())==null){
-            throw new MyException("新增班级轮次错误！未找到轮次",MyException.NOT_FOUND_ERROR);
+        if (roundMapper.findById(cClassRound.getRoundId()) == null) {
+            throw new MyException("新增班级轮次错误！未找到轮次", MyException.NOT_FOUND_ERROR);
         }
-        if(cClassRoundMapper.findByPrimaryKeys(cClassRound.getcClassId(),cClassRound.getRoundId())!=null){
-            throw new MyException("新增班级轮次错误！该班级轮次已存在",MyException.ERROR);
+        if (cClassRoundMapper.findByPrimaryKeys(cClassRound.getcClassId(), cClassRound.getRoundId()) != null) {
+            throw new MyException("新增班级轮次错误！该班级轮次已存在", MyException.ERROR);
         }
         try {
             cClassRoundMapper.insertCClassRound(cClassRound);
-        }catch (Exception e){
-            throw new MyException("新增班级轮次错误！数据库处理出错",MyException.ERROR);
+        } catch (Exception e) {
+            throw new MyException("新增班级轮次错误！数据库处理出错", MyException.ERROR);
         }
         return true;
     }
