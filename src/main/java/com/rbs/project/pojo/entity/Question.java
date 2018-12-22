@@ -31,7 +31,7 @@ public class Question {
     /**
      * 提问分数
      */
-    private BigDecimal score;
+    private double score;
     /**
      * 是否被提问
      */
@@ -97,11 +97,11 @@ public class Question {
         this.studentId = studentId;
     }
 
-    public BigDecimal getScore() {
+    public double getScore() {
         return score;
     }
 
-    public void setScore(BigDecimal score) {
+    public void setScore(double score) {
         this.score = score;
     }
 
