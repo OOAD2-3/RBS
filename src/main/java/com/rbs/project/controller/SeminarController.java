@@ -36,7 +36,7 @@ public class SeminarController {
      * @Author: WinstonDeng
      * @Date: 13:04 2018/12/18
      */
-    @PostMapping("")
+    @PostMapping
     @ResponseBody
     public ResponseEntity<Long> createSeminar(@RequestBody CreateSeminarDTO createSeminarDTO) throws Exception {
         //初始化新增讨论课id
