@@ -24,6 +24,12 @@ public class AttendanceController {
     @Autowired
     private AttendanceService attendanceService;
 
+    /**
+     * Description: 获取一个班级下的一节讨论课的所有的报名
+     *
+     * @Author: 17Wang
+     * @Time: 17:57 2018/12/22
+     */
     @GetMapping
     @ResponseBody
     public List<AttendanceVO> listAttendanceByCClassIdAndSeminarId(@RequestParam("cClassId") long cClassId, @RequestParam("seminarId") long seminarId) throws MyException {
@@ -35,6 +41,12 @@ public class AttendanceController {
         return attendanceVOS;
     }
 
+    /**
+     * Description:报名一节讨论课
+     *
+     * @Author: 17Wang
+     * @Time: 17:57 2018/12/22
+     */
     @PostMapping
     @ResponseBody
     public ResponseEntity<Boolean> addAttendance(@RequestBody Map<String, Long> map) throws Exception {
@@ -48,6 +60,12 @@ public class AttendanceController {
         return ResponseEntity.ok(attendanceService.addAttendance(teamId, teamOrder, cClassId, seminarId));
     }
 
+    /**
+     * Description: 取消讨论课的报名
+     *
+     * @Author: 17Wang
+     * @Time: 17:57 2018/12/22
+     */
     @DeleteMapping
     @ResponseBody
     public ResponseEntity<Boolean> cancelAttendance(@RequestBody Map<String, Long> map) throws Exception {

@@ -50,6 +50,7 @@ public class RbacAuthorityDecision {
             urls.add("/class/**");
             urls.add("/team/**");
             urls.add("/attendance/**");
+            urls.add("/seminarscore/**");
         } else {
             return false;
         }

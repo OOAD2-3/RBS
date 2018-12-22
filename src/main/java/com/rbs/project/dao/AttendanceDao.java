@@ -82,34 +82,6 @@ public class AttendanceDao {
     }
 
     /**
-     * Description: 新增一次展示分数
-     *
-     * @Author: 17Wang
-     * @Time: 21:53 2018/12/21
-     */
-    public boolean addSeminarScore(long cClassSeminarId, long teamId) throws MyException {
-        if (cClassSeminarMapper.findById(cClassSeminarId) == null) {
-            throw new MyException("新增一次展示分数错误！该班级的该讨论课不存在", MyException.NOT_FOUND_ERROR);
-        }
-        if (teamMapper.findById(teamId) == null) {
-            throw new MyException("新增一次展示分数！该小组不存在", MyException.NOT_FOUND_ERROR);
-        }
-        return attendanceMapper.insertSeminarScore(cClassSeminarId, teamId);
-    }
-
-    /**
-     * Description: 通过主键删除展示分数
-     * @Author: 17Wang
-     * @Time: 22:49 2018/12/21
-    */
-    public boolean deleteSeminarScoreByPrimaryKey(long cClassSeminarId, long teamId) throws MyException {
-        if(! attendanceMapper.deleteSeminarScoreByPrimaryKey(cClassSeminarId,teamId)){
-            throw new MyException("通过主键删除展示分数！数据库处理错误", MyException.ERROR);
-        }
-        return true;
-    }
-
-    /**
      * Description: 通过主键删除展示信息
      * @Author: 17Wang
      * @Time: 23:14 2018/12/21

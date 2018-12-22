@@ -6,6 +6,8 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 /**
  * Description:
  *
@@ -15,8 +17,18 @@ import org.springframework.stereotype.Repository;
 @Mapper
 @Repository
 public interface RoundScoreMapper {
+
+    /**
+     * 获取一个轮次下所有小组的轮次成绩
+     *
+     * @param roundId
+     * @return
+     */
+    List<RoundScore> findByRoundId(long roundId);
+
     /**
      * 新建一个队伍在一个轮次的RoundScore
+     *
      * @param roundScore
      * @return
      * @throws Exception
@@ -25,6 +37,7 @@ public interface RoundScoreMapper {
 
     /**
      * 删除一个队伍在一个轮次里的RoundScore
+     *
      * @param roundId
      * @param teamId
      * @return
