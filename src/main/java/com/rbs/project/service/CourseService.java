@@ -69,7 +69,7 @@ public class CourseService {
      * @Time: 22:58 2018/12/18
     */
     public Course getCourseById(long courseId) throws MyException {
-        return courseDao.getCourseById(courseId,CourseDao.HAS_COURSE_MEMBER_LIMIT_STRATEGY);
+        return courseDao.getCourseById(courseId,CourseDao.HAS_COURSE_MEMBER_LIMIT_STRATEGY,CourseDao.HAS_SEMINAR,CourseDao.HAS_CCLASS);
     }
 
     /**

@@ -33,12 +33,25 @@ public class CClassSeminarDao {
     @Autowired
     private CourseMapper courseMapper;
 
+    public final static int HAS_CLASS=0;
+    public final static int HAS_SEMINAR=1;
+
+    private void hasSomethingFun(CClassSeminar cClassSeminar,int ...hasSomething){
+        for(int i:hasSomething){
+            if(i==HAS_CLASS){
+                cClassSeminar.setcClass(cClassMapper.findById(cClassSeminar.getcClassId()));
+            }
+            if(i==HAS_SEMINAR){
+                cClassSeminar.setSeminar(seminarMapper.findById(cClassSeminar.getSeminarId()));
+            }
+        }
+    }
     /**
      * Description: 按班级id和讨论课id查找班级讨论课
      * @Author: WinstonDeng
      * @Date: 10:58 2018/12/19
      */
-    public CClassSeminar findCClassSeminarByCClassIdAndSeminarId(long cClassId, long seminarId)throws MyException{
+    public CClassSeminar findCClassSeminarByCClassIdAndSeminarId(long cClassId, long seminarId,int ...hasSomething)throws MyException{
         if(cClassMapper.findById(cClassId)==null){
             throw new MyException("查找班级讨论课信息错误！未找到班级",MyException.NOT_FOUND_ERROR);
         }
@@ -51,6 +64,7 @@ public class CClassSeminarDao {
         }catch (Exception e){
             throw new MyException("查找班级讨论课错误！数据库处理错误",MyException.ERROR);
         }
+        hasSomethingFun(cClassSeminar,hasSomething);
         return cClassSeminar;
     }
     /**
@@ -108,6 +122,30 @@ public class CClassSeminarDao {
             throw new MyException("新增班级讨论课错误！数据库处理错误",MyException.ERROR);
         }
         return true;
+    }
+
+    /**
+     * Description: 通过讨论课id查找班级讨论课
+     * @Author: WinstonDeng
+     * @Date: 19:38 2018/12/21
+     */
+    public List<CClassSeminar> findBySeminarId(long seminarId,int ...hasSomething) throws MyException{
+        if(seminarMapper.findById(seminarId)==null){
+            throw new MyException("查看班级讨论课错误！未找到讨论课", MyException.NOT_FOUND_ERROR);
+        }
+        List<CClassSeminar> cClassSeminars=null;
+        try {
+            cClassSeminars=cClassSeminarMapper.findBySeminarId(seminarId);
+        }catch (Exception e){
+            throw new MyException("查看班级讨论课错误！数据库处理错误",MyException.ERROR);
+        }
+        if(cClassSeminars==null){
+            throw new MyException("查看班级讨论课错误！该记录不存在",MyException.NOT_FOUND_ERROR);
+        }
+        for(CClassSeminar cClassSeminar:cClassSeminars){
+            hasSomethingFun(cClassSeminar,hasSomething);
+        }
+        return cClassSeminars;
     }
 
 }

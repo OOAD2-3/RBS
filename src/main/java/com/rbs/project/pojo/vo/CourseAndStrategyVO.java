@@ -13,7 +13,7 @@ import java.sql.Timestamp;
  * @Date: 23:15 2018/12/18
  */
 public class CourseAndStrategyVO {
-    private long id;
+    private Long id;
     private String name;
     private String intro;
     private Integer presentationPercentage;
@@ -24,8 +24,8 @@ public class CourseAndStrategyVO {
 
     private CourseMemberLimitStrategy courseMemberLimitStrategy;
 
-    private boolean ShareTeam;
-    private boolean ShareSeminar;
+    private Boolean ShareTeam;
+    private Boolean ShareSeminar;
 
     public CourseAndStrategyVO() {
 
@@ -122,19 +122,19 @@ public class CourseAndStrategyVO {
         this.courseMemberLimitStrategy = courseMemberLimitStrategy;
     }
 
-    public boolean isShareTeam() {
+    public Boolean isShareTeam() {
         return ShareTeam;
     }
 
-    public void setShareTeam(boolean shareTeam) {
+    public void setShareTeam(Boolean shareTeam) {
         ShareTeam = shareTeam;
     }
 
-    public boolean isShareSeminar() {
+    public Boolean isShareSeminar() {
         return ShareSeminar;
     }
 
-    public void setShareSeminar(boolean shareSeminar) {
+    public void setShareSeminar(Boolean shareSeminar) {
         ShareSeminar = shareSeminar;
     }
 }

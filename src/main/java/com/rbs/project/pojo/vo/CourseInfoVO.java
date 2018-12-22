@@ -9,9 +9,9 @@ import com.rbs.project.pojo.entity.Course;
  * @Date: 21:59 2018/12/18
  */
 public class CourseInfoVO {
-    private long id;
-    private boolean ShareTeam;
-    private boolean ShareSeminar;
+    private Long id;
+    private Boolean ShareTeam;
+    private Boolean ShareSeminar;
     private String name;
 
     public CourseInfoVO(Course course) {
@@ -27,27 +27,27 @@ public class CourseInfoVO {
         }
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public boolean isShareTeam() {
+    public Boolean isShareTeam() {
         return ShareTeam;
     }
 
-    public void setShareTeam(boolean shareTeam) {
+    public void setShareTeam(Boolean shareTeam) {
         ShareTeam = shareTeam;
     }
 
-    public boolean isShareSeminar() {
+    public Boolean isShareSeminar() {
         return ShareSeminar;
     }
 
-    public void setShareSeminar(boolean shareSeminar) {
+    public void setShareSeminar(Boolean shareSeminar) {
         ShareSeminar = shareSeminar;
     }
 

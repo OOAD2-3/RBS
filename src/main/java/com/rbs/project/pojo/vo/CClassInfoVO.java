@@ -12,7 +12,7 @@ public class CClassInfoVO {
     /**
      * id
      */
-    private long id;
+    private Long id;
     /**
      * 班级名
      */
@@ -37,11 +37,11 @@ public class CClassInfoVO {
         classroom=cClass.getPlace();
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

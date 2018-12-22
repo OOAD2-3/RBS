@@ -128,7 +128,7 @@ public class CClassDao {
     }
 
     /**
-     * Description: 按id删除课程
+     * Description: 按id删除班级
      * ！！！！！！！！！！！！！缺失级联删除！！！！！！！！！！！！
      *
      * @Author: WinstonDeng
