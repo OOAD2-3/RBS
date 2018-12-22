@@ -13,6 +13,10 @@ public class SeminarInfoVO {
     private String seminarName;
     private Integer visible;
 
+    public SeminarInfoVO(){
+
+    }
+
     public SeminarInfoVO(Seminar seminar){
         seminarId=seminar.getId();
         seminarName=seminar.getName();

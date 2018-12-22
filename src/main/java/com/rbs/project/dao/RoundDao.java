@@ -4,6 +4,7 @@ import com.rbs.project.exception.MyException;
 import com.rbs.project.mapper.CourseMapper;
 import com.rbs.project.mapper.RoundMapper;
 import com.rbs.project.mapper.SeminarMapper;
+import com.rbs.project.mapper.TeamMapper;
 import com.rbs.project.pojo.entity.Round;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -27,6 +28,7 @@ public class RoundDao {
 
     @Autowired
     private SeminarMapper seminarMapper;
+
 
     public final static int HAS_SEMINAR=1;
 

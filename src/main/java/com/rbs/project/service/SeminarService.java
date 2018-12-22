@@ -1,13 +1,8 @@
 package com.rbs.project.service;
 
-import com.rbs.project.dao.CClassDao;
-import com.rbs.project.dao.CClassSeminarDao;
-import com.rbs.project.dao.RoundDao;
-import com.rbs.project.dao.SeminarDao;
+import com.rbs.project.dao.*;
 import com.rbs.project.exception.MyException;
-import com.rbs.project.pojo.entity.CClass;
-import com.rbs.project.pojo.entity.Round;
-import com.rbs.project.pojo.entity.Seminar;
+import com.rbs.project.pojo.entity.*;
 import com.rbs.project.pojo.relationship.CClassRound;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -38,13 +33,19 @@ public class SeminarService {
     @Autowired
     private CClassSeminarDao cClassSeminarDao;
 
+    @Autowired
+    private TeamDao teamDao;
+
+    @Autowired
+    private RoundScoreDao roundScoreDao;
+
     /**
      * Description: 新建讨论课
      * @Author: WinstonDeng
      * @Date: 16:25 2018/12/18
      */
     @Transactional(rollbackFor = Exception.class)
-    public long addSemianr(Seminar seminar) throws MyException{
+    public long addSemianr(Seminar seminar) throws Exception {
         //初始化新增讨论课id
         long createSeminarId=-1;
         //如果轮次为空，则新建一个轮次，级联修改
@@ -92,7 +93,7 @@ public class SeminarService {
      * @Date: 16:29 2018/12/18
      */
     @Transactional(rollbackFor = Exception.class)
-    public boolean updateSeminar(Seminar seminar)throws MyException{
+    public boolean updateSeminar(Seminar seminar) throws Exception {
         //如果轮次为空，则新建一个轮次，级联修改
         if((Long)seminar.getRoundId()==null){
             seminar=addRoundBussiness(seminar);
@@ -145,10 +146,14 @@ public class SeminarService {
     }
     /**
      * Description: 【私有】 新建轮次的业务逻辑方法
+     * 1.新建round表记录
+     * 2.新建klass_round表记录
+     * 3.新建round_score记录
      * @Author: WinstonDeng
      * @Date: 16:10 2018/12/20
      */
-    private Seminar addRoundBussiness(Seminar seminar)throws MyException{
+    private Seminar addRoundBussiness(Seminar seminar) throws Exception {
+        //      1.新增round记录
         //新建一个轮次
         Round round=new Round();
         //查找当前课程下的所有轮次，确认轮次次序
@@ -162,6 +167,7 @@ public class SeminarService {
         round.setQuestionScoreMethod(0);
         long roundId=roundDao.addRound(round);
         round.setId(roundId);
+        //      2.新增klass_round记录
         //与新建的seminar建立关系
         seminar.setRoundId(round.getId());
         //对该课程下的所有班级，新建klass_round记录，并设置其中enrollNumber字段
@@ -175,6 +181,17 @@ public class SeminarService {
             cClassRound.setEnrollNumber(defaultEnrollNumber);
             cClassDao.addCClassRound(cClassRound);
         }
+        //      3.新增round_score记录
+        //查找班级下的所有队伍
+        List<Team> teams=teamDao.listByCourseId(seminar.getCourseId());
+        //插入记录
+        for(Team team
+                :teams){
+            RoundScore roundScore=new RoundScore();
+            roundScore.setRoundId(round.getId());
+            roundScore.setTeamId(team.getId());
+            roundScoreDao.addRoundScore(roundScore);
+        }
         return seminar;
     }
 
@@ -183,7 +200,7 @@ public class SeminarService {
      * @Author: WinstonDeng
      * @Date: 18:55 2018/12/21
      */
-    public List<Seminar> getSeminarsByCourse(long courseId) throws MyException {
+    public List<Seminar> getSeminarsByCourseId(long courseId) throws MyException {
         return seminarDao.findSeminarByCourseId(courseId,SeminarDao.HAS_CClASS_SEMINAR,SeminarDao.HAS_ROUND);
     }
 }

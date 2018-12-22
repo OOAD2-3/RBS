@@ -16,6 +16,11 @@ public class RoundInfoVO {
     private Long roundId;
     private String roundName;
     private List<SeminarInfoVO> seminarInfoVOS;
+
+    public RoundInfoVO(){
+
+    }
+
     public RoundInfoVO(Round round){
         roundId=round.getId();
         roundName="第"+round.getSerial()+"轮";

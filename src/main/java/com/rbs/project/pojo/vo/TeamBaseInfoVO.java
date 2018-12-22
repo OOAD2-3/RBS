@@ -9,25 +9,21 @@ import com.rbs.project.pojo.entity.Team;
  * @Date: 17:07 2018/12/21
  */
 public class TeamBaseInfoVO {
-    private long id;
+    private Long id;
     private String TeamSerials;
     private String TeamName;
-
-    public TeamBaseInfoVO(){
-
-    }
-
+    
     public TeamBaseInfoVO(Team team) {
         id = team.getId();
         TeamSerials = team.getcClass().getSerial() + "-" + String.valueOf(team.getSerial());
         TeamName = team.getName();
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

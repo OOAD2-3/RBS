@@ -40,4 +40,11 @@ public interface TeamMapper {
      * @return
      */
     boolean insertTeam(Team team) throws Exception;
+
+    /**
+     * 通过课程id查找队伍列表
+     * @param courseId
+     * @return
+     */
+    List<Team> findByCourseId(long courseId);
 }
