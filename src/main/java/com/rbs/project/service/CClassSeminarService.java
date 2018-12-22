@@ -6,6 +6,8 @@ import com.rbs.project.pojo.entity.CClassSeminar;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * @Author: WinstonDeng
  * @Description: service层专门处理业务，增删改查前对输入判空
@@ -18,7 +20,7 @@ public class CClassSeminarService {
     private CClassSeminarDao cClassSeminarDao;
 
     /**
-     * Description: 修改班级讨论课reportDDL
+     * Description: 修改班级讨论课
      * @Author: WinstonDeng
      * @Date: 0:06 2018/12/19
      */
@@ -38,7 +40,30 @@ public class CClassSeminarService {
         }else {
             cClassSeminarDao.updateCClassSeminar(cClassSeminar);
         }
-
         return true;
+    }
+
+    /**
+     * Description: 查看班级讨论课
+     * @Author: WinstonDeng
+     * @Date: 17:47 2018/12/21
+     */
+    public CClassSeminar getCClassSeminar(long cClassId,long seminarId) throws MyException{
+        if((Long)cClassId==null){
+            throw new MyException("cClassId不能为空",MyException.ERROR);
+        }
+        if((Long)seminarId==null){
+            throw new MyException("seminarId不能为空",MyException.ERROR);
+        }
+        return cClassSeminarDao.findCClassSeminarByCClassIdAndSeminarId(cClassId,seminarId);
+    }
+
+    /**
+     * Description: 通过讨论课id查看班级讨论课列表
+     * @Author: WinstonDeng
+     * @Date: 19:44 2018/12/21
+     */
+    public List<CClassSeminar> listAllCClassSeminarsBySeminarId(long seminarId) throws MyException{
+        return cClassSeminarDao.findBySeminarId(seminarId);
     }
 }

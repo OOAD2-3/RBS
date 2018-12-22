@@ -3,6 +3,7 @@ package com.rbs.project.dao;
 import com.rbs.project.exception.MyException;
 import com.rbs.project.mapper.CourseMapper;
 import com.rbs.project.mapper.RoundMapper;
+import com.rbs.project.mapper.SeminarMapper;
 import com.rbs.project.pojo.entity.Round;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -24,6 +25,18 @@ public class RoundDao {
     @Autowired
     private CourseMapper courseMapper;
 
+    @Autowired
+    private SeminarMapper seminarMapper;
+
+    public final static int HAS_SEMINAR=1;
+
+    private void hasSomethingFun(Round round,int ...hasSomething){
+        for(int i:hasSomething){
+            if(i== HAS_SEMINAR){
+                round.setSeminars(seminarMapper.findByRoundId(round.getId()));
+            }
+        }
+    }
     /**
      * Description: 讨论课下设置 新增轮次
      * @Author: WinstonDeng
@@ -49,7 +62,7 @@ public class RoundDao {
      * @Author: WinstonDeng
      * @Date: 16:01 2018/12/20
      */
-    public List<Round> findByCourseId(long courseId) throws MyException{
+    public List<Round> listByCourseId(long courseId,int ...hasSomething) throws MyException{
         if((Long)courseId==null){
             throw new MyException("courseId不能为空",MyException.ERROR);
         }
@@ -62,6 +75,28 @@ public class RoundDao {
         }catch (Exception e){
             throw new MyException("查看轮次错误！数据库处理错误",MyException.ERROR);
         }
+        for(Round round
+                :rounds){
+            hasSomethingFun(round,hasSomething);
+        }
         return rounds;
+    }
+
+    /**
+     * Description: 通过id查找轮次
+     * @Author: WinstonDeng
+     * @Date: 19:21 2018/12/21
+     */
+    public Round findById(long roundId) throws MyException {
+        Round round=null;
+        try {
+            round=roundMapper.findById(roundId);
+        }catch (Exception e){
+            throw new MyException("查找轮次错误！数据库处理错误",MyException.ERROR);
+        }
+        if(round==null){
+            throw new MyException("查找轮次错误！轮次不存在",MyException.NOT_FOUND_ERROR);
+        }
+        return round;
     }
 }

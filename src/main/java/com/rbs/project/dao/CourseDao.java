@@ -1,11 +1,8 @@
 package com.rbs.project.dao;
 
 import com.rbs.project.exception.MyException;
-import com.rbs.project.mapper.ConflictCourseStrategyMapper;
-import com.rbs.project.mapper.CourseMapper;
-import com.rbs.project.mapper.CourseMemberLimitStrategyMapper;
+import com.rbs.project.mapper.*;
 import com.rbs.project.pojo.entity.Course;
-import com.rbs.project.pojo.strategy.ConflictCourseStrategy;
 import com.rbs.project.pojo.strategy.CourseMemberLimitStrategy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -25,6 +22,12 @@ public class CourseDao {
     private CourseMapper courseMapper;
 
     @Autowired
+    private CClassMapper cClassMapper;
+
+    @Autowired
+    private SeminarMapper seminarMapper;
+
+    @Autowired
     private CourseMemberLimitStrategyMapper courseMemberLimitStrategyMapper;
 
     @Autowired
@@ -38,12 +41,20 @@ public class CourseDao {
      * 冲突课程策略
      */
     public static final int HAS_CONFLICT_COURSES = 1;
+    public static final int HAS_CCLASS=2;
+    public static final int HAS_SEMINAR=3;
 
     private void hasSomethingFun(Course course, int... hasSomething) {
         for (int i : hasSomething) {
             if (i == HAS_COURSE_MEMBER_LIMIT_STRATEGY) {
                 CourseMemberLimitStrategy courseMemberLimitStrategy = courseMemberLimitStrategyMapper.getByCourseId(course.getId());
                 course.setCourseMemberLimitStrategy(courseMemberLimitStrategy);
+            }
+            if(i==HAS_CCLASS){
+                course.setcClasses(cClassMapper.findByCourseId(course.getId()));
+            }
+            if(i==HAS_SEMINAR){
+                course.setSeminars(seminarMapper.findByCourseId(course.getId()));
             }
             if (i == HAS_CONFLICT_COURSES) {
                 List<Long> conflictCourse1 = conflictCourseStrategyMapper.getById1(course.getId());

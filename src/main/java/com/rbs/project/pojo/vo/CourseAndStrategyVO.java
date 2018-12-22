@@ -14,7 +14,7 @@ import java.util.List;
  * @Date: 23:15 2018/12/18
  */
 public class CourseAndStrategyVO {
-    private long id;
+    private Long id;
     private String name;
     private String intro;
     private Integer presentationPercentage;
@@ -24,15 +24,9 @@ public class CourseAndStrategyVO {
     private String teamEndTime;
 
     private CourseMemberLimitStrategy courseMemberLimitStrategy;
-
     private List<Long> conflictCourses;
-
-    private boolean ShareTeam;
-    private boolean ShareSeminar;
-
-    public CourseAndStrategyVO() {
-
-    }
+    private Boolean ShareTeam;
+    private Boolean ShareSeminar;
 
     public CourseAndStrategyVO(Course course) {
         id = course.getId();
@@ -126,6 +120,26 @@ public class CourseAndStrategyVO {
         this.courseMemberLimitStrategy = courseMemberLimitStrategy;
     }
 
+    public Boolean isShareTeam() {
+        return ShareTeam;
+    }
+
+    public void setShareTeam(Boolean shareTeam) {
+        ShareTeam = shareTeam;
+    }
+
+    public Boolean isShareSeminar() {
+        return ShareSeminar;
+    }
+
+    public void setShareSeminar(Boolean shareSeminar) {
+        ShareSeminar = shareSeminar;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public List<Long> getConflictCourses() {
         return conflictCourses;
     }
@@ -134,19 +148,11 @@ public class CourseAndStrategyVO {
         this.conflictCourses = conflictCourses;
     }
 
-    public boolean isShareTeam() {
+    public Boolean getShareTeam() {
         return ShareTeam;
     }
 
-    public void setShareTeam(boolean shareTeam) {
-        ShareTeam = shareTeam;
-    }
-
-    public boolean isShareSeminar() {
+    public Boolean getShareSeminar() {
         return ShareSeminar;
-    }
-
-    public void setShareSeminar(boolean shareSeminar) {
-        ShareSeminar = shareSeminar;
     }
 }

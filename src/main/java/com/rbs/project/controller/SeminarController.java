@@ -3,13 +3,14 @@ package com.rbs.project.controller;
 import com.rbs.project.exception.MyException;
 import com.rbs.project.pojo.dto.CreateSeminarDTO;
 import com.rbs.project.pojo.dto.UpdateSeminarDTO;
-import com.rbs.project.pojo.entity.CClassSeminar;
-import com.rbs.project.pojo.entity.Seminar;
-import com.rbs.project.service.CClassSeminarService;
-import com.rbs.project.service.SeminarService;
+import com.rbs.project.pojo.entity.*;
+import com.rbs.project.service.*;
+import com.rbs.project.utils.JsonUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @Author: WinstonDeng
@@ -52,8 +53,8 @@ public class SeminarController {
         seminar.setMaxTeam(createSeminarDTO.getMaxTeam());
         seminar.setVisible(createSeminarDTO.getVisible());
         seminar.setSerial(createSeminarDTO.getSerial());
-        seminar.setEnrollStartTime(createSeminarDTO.getEnrollStartTime());
-        seminar.setEnrollEndTime(createSeminarDTO.getEnrollEndTime());
+        seminar.setEnrollStartTime(JsonUtils.StringToTimestamp(createSeminarDTO.getEnrollStartTime()));
+        seminar.setEnrollEndTime(JsonUtils.StringToTimestamp(createSeminarDTO.getEnrollEndTime()));
         //获得主键
         createSeminarId=seminarService.addSemianr(seminar);
         return ResponseEntity.ok().body(createSeminarId);
@@ -64,10 +65,22 @@ public class SeminarController {
      * @Author: WinstonDeng
      * @Date: 23:25 2018/12/19
      */
-    @GetMapping("/{seminarId}")
+    @GetMapping("/{seminarId}/")
     @ResponseBody
-    public ResponseEntity<Seminar> getSeminarById(@PathVariable("seminarId")long seminarId) throws MyException{
-        return ResponseEntity.ok().body(seminarService.getSeminarById(seminarId));
+    public ResponseEntity<Map<String,Object>> getSeminarById(@PathVariable("seminarId")long seminarId,@RequestParam("cClassId") long cClassId) throws MyException{
+        Seminar seminar=seminarService.getSeminarById(seminarId);
+        //转换格式
+        Map<String,Object> seminarView=new HashMap<>();
+        seminarView.put("courseId",seminar.getCourseId());
+        seminarView.put("courseName",seminar.getCourse().getName());
+        seminarView.put("roundSerial",seminar.getRound().getSerial());
+        seminarView.put("seminarTopic",seminar.getName());
+        seminarView.put("seminarSerial",seminar.getSerial());
+        seminarView.put("seminarIntro",seminar.getIntro());
+        seminarView.put("visible",seminar.getVisible());
+        //状态
+        seminarView.put("status",cClassSeminarService.getCClassSeminar(cClassId,seminarId).getStatus());
+        return ResponseEntity.ok().body(seminarView);
     }
 
     /**
@@ -116,4 +129,5 @@ public class SeminarController {
         cClassSeminar.setSeminarId(seminarId);
         return ResponseEntity.ok().body(cClassSeminarService.updateCClassSeminar(cClassSeminar));
     }
+
 }

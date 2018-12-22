@@ -51,7 +51,7 @@ public class CClassController {
     }
 
     /**
-     * Description: 按id删除课程
+     * Description: 按id删除班级
      * @Author: WinstonDeng
      * @Date: 11:10 2018/12/18
      */

@@ -4,11 +4,14 @@ import com.rbs.project.exception.MyException;
 import com.rbs.project.pojo.dto.CreateCClassDTO;
 import com.rbs.project.pojo.entity.CClass;
 import com.rbs.project.pojo.entity.Course;
+import com.rbs.project.pojo.entity.Round;
 import com.rbs.project.pojo.strategy.CourseMemberLimitStrategy;
 import com.rbs.project.pojo.vo.CClassInfoVO;
 import com.rbs.project.pojo.vo.CourseAndStrategyVO;
 import com.rbs.project.pojo.vo.CourseInfoVO;
+import com.rbs.project.pojo.vo.RoundInfoVO;
 import com.rbs.project.service.CClassService;
+import com.rbs.project.service.RoundService;
 import com.rbs.project.utils.FileLoadUtils;
 import com.rbs.project.service.CourseService;
 import com.rbs.project.utils.JsonUtils;
@@ -19,7 +22,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Author: WinstonDeng
@@ -34,7 +39,10 @@ public class CourseController {
     private CourseService courseService;
 
     @Autowired
-    CClassService cClassService;
+    private CClassService cClassService;
+
+    @Autowired
+    private RoundService roundService;
 
     /**
      * Description: 新建课程
@@ -178,4 +186,34 @@ public class CourseController {
         return ResponseEntity.ok().body(cClassInfoVOS);
     }
 
+    /**
+     * Description: 在课程下查看讨论课
+     * @Author: WinstonDeng
+     * @Date: 17:08 2018/12/21
+     */
+    @GetMapping("/{courseId}/seminars")
+    @ResponseBody
+    public ResponseEntity<Map<String,Object>> listAllSeminarsUnderRoundInCoursePage(@PathVariable("courseId") long courseId) throws MyException{
+        if((Long)courseId==null){
+            throw new MyException("课程id不能为空",MyException.ERROR);
+        }
+        Map<String,Object> map=new HashMap<>();
+        map.put("courseId",courseId);
+        map.put("courseName",courseService.getCourseById(courseId).getName());
+        List<CClass> cClasses=cClassService.listCClassesByCourseId(courseId);
+        List<CClassInfoVO> cClassInfoVOS=new ArrayList<>();
+        for(CClass cClass
+                :cClasses){
+            cClassInfoVOS.add(new CClassInfoVO(cClass));
+        }
+        map.put("cClasses",cClassInfoVOS);
+        List<Round> rounds=roundService.listRoundsByCourseId(courseId);
+        List<RoundInfoVO> roundInfoVOS=new ArrayList<>();
+        for(Round round
+                :rounds){
+            roundInfoVOS.add(new RoundInfoVO(round));
+        }
+        map.put("rounds",roundInfoVOS);
+        return ResponseEntity.ok().body(map);
+    }
 }
