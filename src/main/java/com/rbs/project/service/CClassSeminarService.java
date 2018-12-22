@@ -1,8 +1,10 @@
 package com.rbs.project.service;
 
 import com.rbs.project.dao.CClassSeminarDao;
+import com.rbs.project.dao.QuestionDao;
 import com.rbs.project.exception.MyException;
 import com.rbs.project.pojo.entity.CClassSeminar;
+import com.rbs.project.pojo.entity.Question;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +20,11 @@ import java.util.List;
 public class CClassSeminarService {
     @Autowired
     private CClassSeminarDao cClassSeminarDao;
+
+    @Autowired
+    private QuestionDao questionDao;
+
+
 
     /**
      * Description: 修改班级讨论课
@@ -65,5 +72,28 @@ public class CClassSeminarService {
      */
     public List<CClassSeminar> listAllCClassSeminarsBySeminarId(long seminarId) throws MyException{
         return cClassSeminarDao.findBySeminarId(seminarId);
+    }
+
+    /**
+     * Description: 查看班级讨论课下所有提问
+     * @Author: WinstonDeng
+     * @Date: 15:54 2018/12/22
+     */
+    public List<Question> listAllQuestionsByCClassIdAndSeminarId(long cClassId,long seminarId) throws MyException{
+        CClassSeminar cClassSeminar=cClassSeminarDao.findCClassSeminarByCClassIdAndSeminarId(cClassId,seminarId);
+        return questionDao.listAllQuestionsByCClassSemianr(cClassSeminar,QuestionDao.HAS_CCLASS_SEMINAR,QuestionDao.HAS_STUDENT,QuestionDao.HAS_TEAM);
+    }
+
+    /**
+     * Description: 修改班级讨论课下的提问
+     * @Author: WinstonDeng
+     * @Date: 16:02 2018/12/22
+     * @param question
+     */
+    public boolean updateQuestion(Question question)throws MyException{
+        Question temp=questionDao.getById(question.getId());
+        temp.setSelected(question.getSelected());
+        temp.setScore(question.getScore());
+        return questionDao.updateQuestion(temp);
     }
 }

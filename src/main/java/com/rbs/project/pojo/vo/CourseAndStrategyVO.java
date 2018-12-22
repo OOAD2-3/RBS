@@ -28,6 +28,10 @@ public class CourseAndStrategyVO {
     private Boolean ShareTeam;
     private Boolean ShareSeminar;
 
+    public CourseAndStrategyVO(){
+
+    }
+
     public CourseAndStrategyVO(Course course) {
         id = course.getId();
         name = course.getName();

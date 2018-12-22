@@ -5,11 +5,13 @@ import com.rbs.project.mapper.CClassMapper;
 import com.rbs.project.mapper.CourseMapper;
 import com.rbs.project.mapper.StudentMapper;
 import com.rbs.project.mapper.TeamMapper;
+import com.rbs.project.pojo.entity.CClass;
 import com.rbs.project.pojo.entity.Student;
 import com.rbs.project.pojo.entity.Team;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -91,6 +93,22 @@ public class TeamDao {
         List<Team> teams = teamMapper.findByCClassId(cClassId);
         for (Team team : teams) {
             hasSomethingFun(team, hasSomething);
+        }
+        return teams;
+    }
+
+    /**
+     * Description: 通过课程id查看队伍列表
+     * @Author: WinstonDeng
+     * @Date: 21:24 2018/12/22
+     */
+    public List<Team> listByCourseId(long courseId) throws MyException{
+        if(courseMapper.findById(courseId)==null){
+            throw new MyException("查看队伍错误！课程不存在",MyException.NOT_FOUND_ERROR);
+        }
+        List<Team> teams=teamMapper.findByCourseId(courseId);
+        if(teams==null){
+            throw new MyException("查看队伍错误！该记录不存在",MyException.NOT_FOUND_ERROR);
         }
         return teams;
     }
