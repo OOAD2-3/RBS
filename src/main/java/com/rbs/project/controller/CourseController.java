@@ -102,6 +102,12 @@ public class CourseController {
         return ResponseEntity.ok(courseService.createCourse(course));
     }
 
+    /**
+     * Description: 获取我的所有课程
+     *
+     * @Author: 17Wang
+     * @Time: 21:29 2018/12/22
+     */
     @GetMapping
     @ResponseBody
     public List<CourseInfoVO> listMyCourses() throws MyException {
@@ -112,6 +118,11 @@ public class CourseController {
         return courseInfoVOS;
     }
 
+    /**
+     * Description: 通过courseId获取一个课程
+     * @Author: 17Wang
+     * @Time: 21:30 2018/12/22
+    */
     @GetMapping("/{courseId}")
     @ResponseBody
     public ResponseEntity<CourseAndStrategyVO> getCourseById(@PathVariable("courseId") long courseId) throws MyException {
@@ -119,6 +130,11 @@ public class CourseController {
         return ResponseEntity.ok(new CourseAndStrategyVO(course));
     }
 
+    /**
+     * Description: 删除一个课程
+     * @Author: 17Wang
+     * @Time: 21:40 2018/12/22
+    */
     @DeleteMapping("/{courseId}")
     @ResponseBody
     public ResponseEntity<Boolean> deleteCourse(@PathVariable("courseId") long courseId) throws Exception {
@@ -188,32 +204,33 @@ public class CourseController {
 
     /**
      * Description: 在课程下查看讨论课
+     *
      * @Author: WinstonDeng
      * @Date: 17:08 2018/12/21
      */
     @GetMapping("/{courseId}/seminars")
     @ResponseBody
-    public ResponseEntity<Map<String,Object>> listAllSeminarsUnderRoundInCoursePage(@PathVariable("courseId") long courseId) throws MyException{
-        if((Long)courseId==null){
-            throw new MyException("课程id不能为空",MyException.ERROR);
+    public ResponseEntity<Map<String, Object>> listAllSeminarsUnderRoundInCoursePage(@PathVariable("courseId") long courseId) throws MyException {
+        if ((Long) courseId == null) {
+            throw new MyException("课程id不能为空", MyException.ERROR);
         }
-        Map<String,Object> map=new HashMap<>();
-        map.put("courseId",courseId);
-        map.put("courseName",courseService.getCourseById(courseId).getName());
-        List<CClass> cClasses=cClassService.listCClassesByCourseId(courseId);
-        List<CClassInfoVO> cClassInfoVOS=new ArrayList<>();
-        for(CClass cClass
-                :cClasses){
+        Map<String, Object> map = new HashMap<>();
+        map.put("courseId", courseId);
+        map.put("courseName", courseService.getCourseById(courseId).getName());
+        List<CClass> cClasses = cClassService.listCClassesByCourseId(courseId);
+        List<CClassInfoVO> cClassInfoVOS = new ArrayList<>();
+        for (CClass cClass
+                : cClasses) {
             cClassInfoVOS.add(new CClassInfoVO(cClass));
         }
-        map.put("cClasses",cClassInfoVOS);
-        List<Round> rounds=roundService.listRoundsByCourseId(courseId);
-        List<RoundInfoVO> roundInfoVOS=new ArrayList<>();
-        for(Round round
-                :rounds){
+        map.put("cClasses", cClassInfoVOS);
+        List<Round> rounds = roundService.listRoundsByCourseId(courseId);
+        List<RoundInfoVO> roundInfoVOS = new ArrayList<>();
+        for (Round round
+                : rounds) {
             roundInfoVOS.add(new RoundInfoVO(round));
         }
-        map.put("rounds",roundInfoVOS);
+        map.put("rounds", roundInfoVOS);
         return ResponseEntity.ok().body(map);
     }
 }

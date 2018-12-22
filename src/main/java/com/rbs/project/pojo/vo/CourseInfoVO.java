@@ -13,8 +13,9 @@ public class CourseInfoVO {
     private Boolean ShareTeam;
     private Boolean ShareSeminar;
     private String name;
+    private CClassInfoVO cClassInfoVO;
 
-    public CourseInfoVO(){
+    public CourseInfoVO() {
 
     }
 
@@ -28,6 +29,9 @@ public class CourseInfoVO {
         }
         if (course.getSeminarMainCourseId() == 0) {
             ShareSeminar = false;
+        }
+        if (course.getcClasses() != null) {
+            cClassInfoVO = new CClassInfoVO(course.getcClasses().get(0));
         }
     }
 

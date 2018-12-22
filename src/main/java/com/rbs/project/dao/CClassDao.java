@@ -108,6 +108,20 @@ public class CClassDao {
     }
 
     /**
+     * Description: 通过seminarId获取班级
+     * @Author: 17Wang
+     * @Time: 21:48 2018/12/22
+    */
+    public CClass getCClassBySeminarId(long seminarId,int ...hasSomething) throws MyException {
+        CClass cClass=cClassMapper.findBySeminarId(seminarId);
+        if (cClass == null) {
+            throw new MyException("通过id查找班级错误！未找到班级", MyException.NOT_FOUND_ERROR);
+        }
+        hasSomethingFun(cClass,hasSomething);
+        return cClass;
+    }
+
+    /**
      * Description: 新增班级
      *
      * @Author: WinstonDeng

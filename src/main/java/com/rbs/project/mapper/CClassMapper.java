@@ -30,6 +30,13 @@ public interface CClassMapper {
      */
     List<CClass> findByCourseId(long courseId);
 
+    /**
+     * 通过讨论课Id获取班级信息
+     * @param seminarId
+     * @return
+     */
+    CClass findBySeminarId(long seminarId);
+
     //=================新增====================
 
     /**

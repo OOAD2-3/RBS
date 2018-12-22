@@ -1,16 +1,17 @@
 package com.rbs.project.service;
 
+import com.rbs.project.dao.CClassDao;
+import com.rbs.project.dao.CClassSeminarDao;
 import com.rbs.project.dao.CourseDao;
 import com.rbs.project.dao.UserDao;
 import com.rbs.project.exception.MyException;
-import com.rbs.project.pojo.entity.Course;
-import com.rbs.project.pojo.entity.Teacher;
-import com.rbs.project.pojo.entity.User;
+import com.rbs.project.pojo.entity.*;
 import com.rbs.project.utils.UserUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -26,6 +27,9 @@ public class CourseService {
 
     @Autowired
     private UserDao userDao;
+
+    @Autowired
+    private CClassDao cClassDao;
 
     /**
      * Description: 创建课程同时创建课程策略内容
@@ -59,6 +63,12 @@ public class CourseService {
     public List<Course> listMyCourses() throws MyException {
         //获取当前登录用户的courses
         User user=userDao.getUserByUsername(UserUtils.getNowUser().getUsername(),UserDao.HAS_COURSES);
+        if(user instanceof Student){
+            for(Course course:user.getCourses()){
+                List<CClass> classes=new ArrayList<>();
+                classes.add(cClassDao.getCClassBySeminarId(course.getId()));
+            }
+        }
         return user.getCourses();
     }
     

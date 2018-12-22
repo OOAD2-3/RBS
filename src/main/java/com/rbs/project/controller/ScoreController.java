@@ -89,6 +89,12 @@ public class ScoreController {
         return ResponseEntity.ok(scoreService.updateReportScore(seminarId, classId, teamId, reportScore));
     }
 
+    /**
+     * Description: 获取一个轮次的所有小组的成绩
+     *
+     * @Author: 17Wang
+     * @Time: 21:31 2018/12/22
+     */
     @GetMapping("/roundscore")
     @ResponseBody
     public Map<String, Object> listAllRoundScore(@RequestParam("roundId") long roundId) throws MyException {
