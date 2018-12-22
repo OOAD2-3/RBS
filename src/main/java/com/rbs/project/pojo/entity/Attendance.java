@@ -1,5 +1,6 @@
 package com.rbs.project.pojo.entity;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 /**
@@ -27,6 +28,8 @@ public class Attendance {
      * 是否在展示
      */
     private Integer present;
+    public final static int PRESENT_NO_START = 0;
+    public final static int PRESENT_START = 1;
     /**
      * ppt文件名
      */
@@ -43,6 +46,8 @@ public class Attendance {
      * 报告文件路径
      */
     private String reportUrl;
+
+
 
     //关系
     /**
@@ -154,6 +159,24 @@ public class Attendance {
     public void setQuestions(List<Question> questions) {
         this.questions = questions;
     }
-//================= toString =======================
 
+    //================= toString =======================
+
+    @Override
+    public String toString() {
+        return "Attendance{" +
+                "id=" + id +
+                ", cClassSeminarId=" + cClassSeminarId +
+                ", teamId=" + teamId +
+                ", teamOrder=" + teamOrder +
+                ", present=" + present +
+                ", pptName='" + pptName + '\'' +
+                ", pptUrl='" + pptUrl + '\'' +
+                ", reportName='" + reportName + '\'' +
+                ", reportUrl='" + reportUrl + '\'' +
+                ", cClassSeminar=" + cClassSeminar +
+                ", team=" + team +
+                ", questions=" + questions +
+                '}';
+    }
 }

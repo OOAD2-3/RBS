@@ -27,6 +27,7 @@ public class MyLogoutSuccessHandler implements LogoutSuccessHandler {
         respInfo.setStatus(100);
         respInfo.setMsg("Logout Success!");
 
+        httpServletResponse.setStatus(100);
         httpServletResponse.getWriter().write(JSON.toJSONString(respInfo));
     }
 }

@@ -35,8 +35,7 @@ public class MyAuthenticationSuccessHandler implements AuthenticationSuccessHand
         String jwtToken = JwtTokenUtils.generateToken(username, 7*24*60*60);
         respInfo.setJwtToken(jwtToken);
 
-        httpServletResponse.setHeader("wangshiqi", "success");
-
+        httpServletResponse.setStatus(respInfo.getStatus());
         httpServletResponse.setContentType("application/json;charset=utf-8");
         ObjectMapper om = new ObjectMapper();
         PrintWriter out = httpServletResponse.getWriter();
