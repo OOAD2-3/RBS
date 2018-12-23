@@ -88,22 +88,6 @@ public class TeamController {
     }
 
     /**
-     * Description: 修改小组状态，暂时不用
-     *
-     * @Author: 17Wang
-     * @Time: 22:59 2018/12/19
-     */
-    @PutMapping("/{teamId}")
-    @ResponseBody
-    public ResponseEntity<Boolean> updateTeam(@PathVariable("teamId") long teamId, @RequestBody Team team) {
-        if (team.getStudents() == null) {
-            team.setStudents(new ArrayList<>());
-        }
-
-        return ResponseEntity.status(404).body(teamService.updateTeam(team));
-    }
-
-    /**
      * Description: 添加小组成员
      *
      * @Author: 17Wang

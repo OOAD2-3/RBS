@@ -86,6 +86,14 @@ public class CourseDao {
         return course;
     }
 
+    public List<Course> listAllCourses(int ...hasSomething){
+        List<Course> courses=courseMapper.listAllCourse();
+        for(Course course:courses){
+            hasSomethingFun(course,hasSomething);
+        }
+        return courses;
+    }
+
     /**
      * Description: 创建课程＋创建课程策略
      * 1、添加回滚
