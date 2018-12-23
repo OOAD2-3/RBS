@@ -25,30 +25,26 @@ public class CClassSeminarService {
     private QuestionDao questionDao;
 
 
-
     /**
      * Description: 修改班级讨论课
      * @Author: WinstonDeng
      * @Date: 0:06 2018/12/19
      */
     public boolean updateCClassSeminar(CClassSeminar cClassSeminar) throws MyException {
-        //判空
-        if((Long)cClassSeminar.getcClassId()==null){
-            throw new MyException("cClassId不能为空",MyException.ERROR);
+        CClassSeminar temp=cClassSeminarDao.findCClassSeminarByCClassIdAndSeminarId(cClassSeminar.getcClassId(),cClassSeminar.getSeminarId());
+        if(!cClassSeminar.getReportDDL().equals(temp.getReportDDL())){
+            temp.setReportDDL(cClassSeminar.getReportDDL());
         }
-        if((Long)cClassSeminar.getSeminarId()==null){
-            throw new MyException("seminarId不能为空",MyException.ERROR);
-        }
-        int oldStatus=cClassSeminarDao.findCClassSeminarByCClassIdAndSeminarId(cClassSeminar.getcClassId(),cClassSeminar.getSeminarId()).getStatus();
-
         //如果修改的是status
-        if(!cClassSeminar.getStatus().equals(oldStatus)){
+        if(!cClassSeminar.getStatus().equals(temp.getStatus())){
             //此处应有websocket通知状态改变
+            temp.setStatus(cClassSeminar.getStatus());
         }
         cClassSeminarDao.updateCClassSeminar(cClassSeminar);
-
         return true;
     }
+
+
 
     /**
      * Description: 查看班级讨论课

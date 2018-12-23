@@ -39,7 +39,7 @@ public class ShareService {
     public List<ShareSeminarApplication> listAllShareSeminarsInMainCourseByCourseId(long courseId) throws Exception{
         //主课程方 发起的所有共享记录
         List<ShareSeminarApplication> seminarSharesInMainCourse=new ArrayList<>();
-        List<ShareSeminarApplication> shareSeminarApplications=shareDao.listAllShareSeminarApplicationsByMainCourseId(courseId);
+        List<ShareSeminarApplication> shareSeminarApplications=shareDao.listAllShareSeminarApplicationsByMainCourseId(courseId,ShareDao.HAS_SUB_COURSE,ShareDao.HAS_SUB_COURSE_TEACHER);
         for(ShareSeminarApplication shareSeminarApplication:shareSeminarApplications){
             //如果是同意的记录
             if(shareSeminarApplication.getStatus()==ShareSeminarApplication.STATUS_ACCEPT){
@@ -57,7 +57,7 @@ public class ShareService {
     public List<ShareSeminarApplication> listAllShareSeminarsInSubCourseByCourseId(long courseId) throws Exception{
         //从课程方 接受的所有共享记录
         List<ShareSeminarApplication> seminarSharesInSubCourse=new ArrayList<>();
-        List<ShareSeminarApplication> shareSeminarApplications=shareDao.listAllShareSeminarApplicationsBySubCourseId(courseId);
+        List<ShareSeminarApplication> shareSeminarApplications=shareDao.listAllShareSeminarApplicationsBySubCourseId(courseId,ShareDao.HAS_MAIN_COURSE,ShareDao.HAS_MAIN_COURSE_TEACHER);
         for(ShareSeminarApplication shareSeminarApplication:shareSeminarApplications){
             //如果是同意的记录
             if(shareSeminarApplication.getStatus()==ShareSeminarApplication.STATUS_ACCEPT){

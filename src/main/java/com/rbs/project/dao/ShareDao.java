@@ -60,11 +60,12 @@ public class ShareDao {
      * @Author: WinstonDeng
      * @Date: 16:29 2018/12/23
      */
-    public ShareSeminarApplication getShareSeminarApplicationById(long id) throws MyException{
+    public ShareSeminarApplication getShareSeminarApplicationById(long id,int ...hasSomething) throws MyException{
         ShareSeminarApplication shareSeminarApplication=shareSeminarApplicationMapper.findById(id);
         if(shareSeminarApplication==null){
             throw new MyException("获取共享讨论课请求错误！该记录不存在",MyException.NOT_FOUND_ERROR);
         }
+        hasSomethingFun(shareSeminarApplication,hasSomething);
         return shareSeminarApplication;
     }
 
@@ -73,8 +74,11 @@ public class ShareDao {
      * @Author: WinstonDeng
      * @Date: 16:42 2018/12/23
      */
-    public List<ShareSeminarApplication> listAllShareSeminarApplicationsByMainCourseId(long mainCourseId)throws Exception{
+    public List<ShareSeminarApplication> listAllShareSeminarApplicationsByMainCourseId(long mainCourseId,int ...hasSomething)throws Exception{
         List<ShareSeminarApplication> shareSeminarApplications=shareSeminarApplicationMapper.findByMainCourseId(mainCourseId);
+        for(ShareSeminarApplication shareSeminarApplication:shareSeminarApplications){
+            hasSomethingFun(shareSeminarApplication,hasSomething);
+        }
         return shareSeminarApplications;
     }
 
@@ -83,8 +87,11 @@ public class ShareDao {
      * @Author: WinstonDeng
      * @Date: 16:55 2018/12/23
      */
-    public List<ShareSeminarApplication> listAllShareSeminarApplicationsBySubCourseId(long subCourseId) throws Exception{
+    public List<ShareSeminarApplication> listAllShareSeminarApplicationsBySubCourseId(long subCourseId,int ...hasSomething) throws Exception{
         List<ShareSeminarApplication> shareSeminarApplications=shareSeminarApplicationMapper.findBySubCourseId(subCourseId);
+        for(ShareSeminarApplication shareSeminarApplication:shareSeminarApplications){
+            hasSomethingFun(shareSeminarApplication,hasSomething);
+        }
         return shareSeminarApplications;
     }
 }
