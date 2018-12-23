@@ -14,7 +14,7 @@ import java.util.List;
  */
 public class RoundInfoVO {
     private Long roundId;
-    private String roundName;
+    private Integer roundSerial;
     private List<SeminarInfoVO> seminarInfoVOS;
 
     public RoundInfoVO(){
@@ -23,7 +23,7 @@ public class RoundInfoVO {
 
     public RoundInfoVO(Round round){
         roundId=round.getId();
-        roundName="第"+round.getSerial()+"轮";
+        roundSerial=round.getSerial();
         seminarInfoVOS=new ArrayList<>();
         for(Seminar seminar:round.getSeminars()){
             seminarInfoVOS.add(new SeminarInfoVO(seminar));
@@ -38,12 +38,12 @@ public class RoundInfoVO {
         this.roundId = roundId;
     }
 
-    public String getRoundName() {
-        return roundName;
+    public Integer getRoundSerial() {
+        return roundSerial;
     }
 
-    public void setRoundName(String roundName) {
-        this.roundName = roundName;
+    public void setRoundSerial(Integer roundSerial) {
+        this.roundSerial = roundSerial;
     }
 
     public List<SeminarInfoVO> getSeminarInfoVOS() {

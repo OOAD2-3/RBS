@@ -67,7 +67,7 @@ public class SeminarService {
             throw new MyException("visible不能为空", MyException.ERROR);
         }
         if (seminar.getSerial() == null) {
-            throw new MyException("seria;不能为空", MyException.ERROR);
+            throw new MyException("serial不能为空", MyException.ERROR);
         }
         //判断序号是否存在
         List<Seminar> seminars = seminarDao.findSeminarByCourseId(seminar.getCourseId());
@@ -129,8 +129,10 @@ public class SeminarService {
         if ((Long) seminarId == null) {
             throw new MyException("seminarId不能为空", MyException.ERROR);
         }
-        //级联删除 班级讨论课
+        //级联删除
+        // 1. 删除班级讨论课
         seminarDao.removeCClassSeminarBySeminarId(seminarId);
+        // 2. 删除讨论课
         seminarDao.removeSeminarById(seminarId);
         return true;
     }
