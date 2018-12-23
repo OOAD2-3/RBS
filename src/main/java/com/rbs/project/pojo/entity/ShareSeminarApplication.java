@@ -31,6 +31,10 @@ public class ShareSeminarApplication {
      */
     private Course mainCourse;
     /**
+     * 主课程老师
+     */
+    private Teacher mainCourseTeacher;
+    /**
      * 一个从课程
      */
     private Course subCourse;
@@ -38,6 +42,11 @@ public class ShareSeminarApplication {
      * 一个从课程老师
      */
     private Teacher subCourseTeacher;
+
+    public final static int STATUS_UNHANDLE=0;
+    public final static int STATUS_ACCEPT = 1;
+    public final static int STATUS_REJECT=2;
+
 
     //==================================================getter AND setter==================================================//
 
@@ -104,7 +113,15 @@ public class ShareSeminarApplication {
     public void setSubCourseTeacher(Teacher subCourseTeacher) {
         this.subCourseTeacher = subCourseTeacher;
     }
-//================= toString ========================
+
+    public Teacher getMainCourseTeacher() {
+        return mainCourseTeacher;
+    }
+
+    public void setMainCourseTeacher(Teacher mainCourseTeacher) {
+        this.mainCourseTeacher = mainCourseTeacher;
+    }
+    //================= toString ========================
 
 
 }
