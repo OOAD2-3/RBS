@@ -46,4 +46,9 @@
         DELETE FROM team WHERE id=#{teamId}
     </delete>
 
+    <update id="updateStatusById">
+        UPDATE team SET status=#{status}
+        WHERE id=#{id}
+    </update>
+
 </mapper>

@@ -59,7 +59,7 @@ public class TeamService {
         team.setSerial(teamSerial);
 
         //判断队伍是否合法
-        if (LogicUtils.TeamIsValid(team)) {
+        if (LogicUtils.teamIsValid(team)) {
             team.setStatus(Team.STATUS_OK);
         } else {
             team.setStatus(Team.STATUS_ERROR);
@@ -82,25 +82,28 @@ public class TeamService {
      * @Author: 17Wang
      * @Time: 22:00 2018/12/19
      */
-    public Team getTeamById(long teamId) throws MyException {
-        Team team = teamDao.getTeamById(teamId,
-                TeamDao.HAS_COURSE,
-                TeamDao.HAS_CCLASS,
-                TeamDao.HAS_LEADER,
-                TeamDao.HAS_MEMBERS);
-        if (team.getCourse() == null) {
-            team.setCourse(new Course());
+    public Team getTeamById(long teamId, int... hasSomething) throws MyException {
+        if (hasSomething.length == 0) {
+            Team team = teamDao.getTeamById(teamId,
+                    TeamDao.HAS_COURSE,
+                    TeamDao.HAS_CCLASS,
+                    TeamDao.HAS_LEADER,
+                    TeamDao.HAS_MEMBERS);
+            if (team.getCourse() == null) {
+                team.setCourse(new Course());
+            }
+            if (team.getcClass() == null) {
+                team.setcClass(new CClass());
+            }
+            if (team.getLeader() == null) {
+                team.setLeader(new Student());
+            }
+            if (team.getStudents() == null) {
+                team.setStudents(new ArrayList<>());
+            }
+            return team;
         }
-        if (team.getcClass() == null) {
-            team.setcClass(new CClass());
-        }
-        if (team.getLeader() == null) {
-            team.setLeader(new Student());
-        }
-        if (team.getStudents() == null) {
-            team.setStudents(new ArrayList<>());
-        }
-        return team;
+        return teamDao.getTeamById(teamId, hasSomething);
     }
 
     /**

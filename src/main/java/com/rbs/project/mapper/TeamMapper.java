@@ -67,4 +67,14 @@ public interface TeamMapper {
      * @return
      */
     boolean deleteById(long teamId);
+
+    /**
+     * 修改小组状态
+     *
+     * @param status
+     * @param id
+     * @return
+     * @throws Exception
+     */
+    boolean updateStatusById(@Param("status") int status, @Param("id") long id) throws Exception;
 }

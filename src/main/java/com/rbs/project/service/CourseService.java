@@ -51,8 +51,15 @@ public class CourseService {
      * @Author: 17Wang
      * @Time: 22:58 2018/12/18
      */
-    public Course getCourseById(long courseId) throws MyException {
-        return courseDao.getCourseById(courseId, CourseDao.HAS_COURSE_MEMBER_LIMIT_STRATEGY, CourseDao.HAS_SEMINAR, CourseDao.HAS_CCLASS,CourseDao.HAS_CONFLICT_COURSES);
+    public Course getCourseById(long courseId, int... hasSomething) throws MyException {
+        if (hasSomething.length == 0) {
+            return courseDao.getCourseById(courseId,
+                    CourseDao.HAS_COURSE_MEMBER_LIMIT_STRATEGY,
+                    CourseDao.HAS_SEMINAR,
+                    CourseDao.HAS_CCLASS,
+                    CourseDao.HAS_CONFLICT_COURSES);
+        }
+        return courseDao.getCourseById(courseId, hasSomething);
     }
 
     /**

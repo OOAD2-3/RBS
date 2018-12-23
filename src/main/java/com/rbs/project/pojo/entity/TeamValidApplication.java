@@ -27,6 +27,18 @@ public class TeamValidApplication {
      * 请求状态，同意1、不同意0、未处理null
      */
     private Integer status;
+    /**
+     * 同意
+     */
+    public static final Integer STATUS_AGREE = 1;
+    /**
+     * 不同意
+     */
+    public static final Integer STATUS_DISAGREE = 0;
+    /**
+     * 未处理
+     */
+    public static final Integer STATUS_UNDO = null;
 
     //关系
     /**

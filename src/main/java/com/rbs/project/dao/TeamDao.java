@@ -72,9 +72,9 @@ public class TeamDao {
         return team;
     }
 
-    public Team getTeamByCourseIdAndStudentId(long courseId,long studentId,int ...hasSomething){
-        Team team=teamMapper.getTeamByCourseIdAndStudentId(courseId,studentId);
-        hasSomethingFun(team,hasSomething);
+    public Team getTeamByCourseIdAndStudentId(long courseId, long studentId, int... hasSomething) {
+        Team team = teamMapper.getTeamByCourseIdAndStudentId(courseId, studentId);
+        hasSomethingFun(team, hasSomething);
         return team;
     }
 
@@ -98,13 +98,13 @@ public class TeamDao {
      * @Author: WinstonDeng
      * @Date: 21:24 2018/12/22
      */
-    public List<Team> listByCourseId(long courseId,int ...hasSomething) throws MyException {
+    public List<Team> listByCourseId(long courseId, int... hasSomething) throws MyException {
         List<Team> teams = teamMapper.findByCourseId(courseId);
         if (teams == null) {
             throw new MyException("查看队伍错误！该记录不存在", MyException.NOT_FOUND_ERROR);
         }
-        for(Team team:teams){
-            hasSomethingFun(team,hasSomething);
+        for (Team team : teams) {
+            hasSomethingFun(team, hasSomething);
         }
         return teams;
     }
@@ -134,6 +134,20 @@ public class TeamDao {
         getTeamById(teamId);
         if (!teamMapper.deleteById(teamId)) {
             throw new MyException("删除小组错误！数据库处理错误", MyException.ERROR);
+        }
+        return true;
+    }
+
+    /**
+     * Description: 修改小组状态
+     *
+     * @Author: 17Wang
+     * @Time: 15:20 2018/12/23
+     */
+    public boolean updateStatusByTeamId(int status, long teamId) throws Exception {
+        getTeamById(teamId);
+        if (!teamMapper.updateStatusById(status, teamId)) {
+            throw new MyException("修改小组状态错误！数据库处理错误", MyException.ERROR);
         }
         return true;
     }
