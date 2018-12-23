@@ -47,11 +47,12 @@ public class CourseService {
 
     /**
      * Description: 通过id获取当前课程
+     *
      * @Author: 17Wang
      * @Time: 22:58 2018/12/18
-    */
+     */
     public Course getCourseById(long courseId) throws MyException {
-        return courseDao.getCourseById(courseId,CourseDao.HAS_COURSE_MEMBER_LIMIT_STRATEGY,CourseDao.HAS_SEMINAR,CourseDao.HAS_CCLASS);
+        return courseDao.getCourseById(courseId, CourseDao.HAS_COURSE_MEMBER_LIMIT_STRATEGY, CourseDao.HAS_SEMINAR, CourseDao.HAS_CCLASS,CourseDao.HAS_CONFLICT_COURSES);
     }
 
     /**
@@ -62,21 +63,23 @@ public class CourseService {
      */
     public List<Course> listMyCourses() throws MyException {
         //获取当前登录用户的courses
-        User user=userDao.getUserByUsername(UserUtils.getNowUser().getUsername(),UserDao.HAS_COURSES);
-        if(user instanceof Student){
-            for(Course course:user.getCourses()){
-                List<CClass> classes=new ArrayList<>();
-                classes.add(cClassDao.getCClassBySeminarId(course.getId()));
+        User user = userDao.getUserByUsername(UserUtils.getNowUser().getUsername(), UserDao.HAS_COURSES);
+        if (user instanceof Student) {
+            for (Course course : user.getCourses()) {
+                List<CClass> classes = new ArrayList<>();
+                classes.add(cClassDao.getCClassByStudentIdAndCourseId(user.getId(), course.getId()));
+                course.setcClasses(classes);
             }
         }
         return user.getCourses();
     }
-    
+
     /**
      * Description: 删除课程
+     *
      * @Author: 17Wang
      * @Time: 10:34 2018/12/19
-    */
+     */
     public boolean deleteCourseById(long courseId) throws Exception {
         return courseDao.deleteCourseById(courseId);
     }

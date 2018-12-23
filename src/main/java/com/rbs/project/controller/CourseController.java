@@ -2,19 +2,13 @@ package com.rbs.project.controller;
 
 import com.rbs.project.exception.MyException;
 import com.rbs.project.pojo.dto.CreateCClassDTO;
-import com.rbs.project.pojo.entity.CClass;
-import com.rbs.project.pojo.entity.Course;
-import com.rbs.project.pojo.entity.Round;
+import com.rbs.project.pojo.entity.*;
 import com.rbs.project.pojo.strategy.CourseMemberLimitStrategy;
-import com.rbs.project.pojo.vo.CClassInfoVO;
-import com.rbs.project.pojo.vo.CourseAndStrategyVO;
-import com.rbs.project.pojo.vo.CourseInfoVO;
-import com.rbs.project.pojo.vo.RoundInfoVO;
-import com.rbs.project.service.CClassService;
-import com.rbs.project.service.RoundService;
+import com.rbs.project.pojo.vo.*;
+import com.rbs.project.service.*;
 import com.rbs.project.utils.FileLoadUtils;
-import com.rbs.project.service.CourseService;
 import com.rbs.project.utils.JsonUtils;
+import com.rbs.project.utils.UserUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -43,6 +37,12 @@ public class CourseController {
 
     @Autowired
     private RoundService roundService;
+
+    @Autowired
+    private TeamService teamService;
+
+    @Autowired
+    private StudentService studentService;
 
     /**
      * Description: 新建课程
@@ -120,9 +120,10 @@ public class CourseController {
 
     /**
      * Description: 通过courseId获取一个课程
+     *
      * @Author: 17Wang
      * @Time: 21:30 2018/12/22
-    */
+     */
     @GetMapping("/{courseId}")
     @ResponseBody
     public ResponseEntity<CourseAndStrategyVO> getCourseById(@PathVariable("courseId") long courseId) throws MyException {
@@ -132,13 +133,76 @@ public class CourseController {
 
     /**
      * Description: 删除一个课程
+     *
      * @Author: 17Wang
      * @Time: 21:40 2018/12/22
-    */
+     */
     @DeleteMapping("/{courseId}")
     @ResponseBody
     public ResponseEntity<Boolean> deleteCourse(@PathVariable("courseId") long courseId) throws Exception {
         return ResponseEntity.ok(courseService.deleteCourseById(courseId));
+    }
+
+    /**
+     * Description: 获取课程下的所有小组
+     *
+     * @Author: 17Wang
+     * @Time: 11:20 2018/12/23
+     */
+    @GetMapping("/{courseId}/team")
+    @ResponseBody
+    public List<TeamBaseInfoVO> listTeamAtCourse(@PathVariable("courseId") long courseId) throws MyException {
+        List<Team> teams = teamService.listTeamByCourseId(courseId);
+        List<TeamBaseInfoVO> teamBaseInfoVOS = new ArrayList<>();
+        for (Team team : teams) {
+            teamBaseInfoVOS.add(new TeamBaseInfoVO(team));
+        }
+        return teamBaseInfoVOS;
+    }
+
+    /**
+     * Description:
+     *
+     * @Author: 17Wang
+     * @Time: 11:44 2018/12/23
+     */
+    @GetMapping("/{courseId}/team/mine")
+    @ResponseBody
+    public Map<String, Object> getMyTeam(@PathVariable("courseId") long courseId) throws MyException {
+        Student nowStudent = (Student) UserUtils.getNowUser();
+        Team team = teamService.getTeamByCourseIdAndStudentId(courseId, nowStudent.getId());
+        Map<String, Object> map = new HashMap<>();
+        map.put("id", team.getId());
+        map.put("name", team.getName());
+        map.put("course", new CourseInfoVO(team.getCourse()));
+        map.put("class", new CClassInfoVO(team.getcClass()));
+        map.put("leader", new UserVO(team.getLeader()));
+
+        List<UserVO> userVOS = new ArrayList<>();
+        for (Student student : team.getStudents()) {
+            if (student.getId() != team.getLeader().getId()) {
+                userVOS.add(new UserVO(student));
+            }
+        }
+
+        map.put("members", userVOS);
+        return map;
+    }
+
+    /**
+     * Description: 查找一个课程下未组队的学生
+     * @Author: 17Wang
+     * @Time: 12:04 2018/12/23
+    */
+    @GetMapping("/{courseId}/team/free")
+    @ResponseBody
+    public List<UserVO> listFreeStudentAtCourse(@PathVariable("courseId") long courseId){
+        List<Student> students=studentService.listByCourseIdAndTeamId(courseId);
+        List<UserVO> userVOS=new ArrayList<>();
+        for(Student student:students){
+            userVOS.add(new UserVO(student));
+        }
+        return userVOS;
     }
 
     /**

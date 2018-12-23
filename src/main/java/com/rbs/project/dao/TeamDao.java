@@ -8,6 +8,7 @@ import com.rbs.project.mapper.TeamMapper;
 import com.rbs.project.pojo.entity.CClass;
 import com.rbs.project.pojo.entity.Student;
 import com.rbs.project.pojo.entity.Team;
+import org.apache.poi.ss.formula.functions.T;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -71,24 +72,18 @@ public class TeamDao {
         return team;
     }
 
-    /**
-     * Description: 新建队伍
-     * @Author: 17Wang
-     * @Time: 9:06 2018/12/20
-    */
-    public boolean addTeam(Team team) throws Exception {
-        if (!teamMapper.insertTeam(team)) {
-            throw new MyException("新建队伍出错！数据库处理错误", MyException.ERROR);
-        }
-
-        return true;
+    public Team getTeamByCourseIdAndStudentId(long courseId,long studentId,int ...hasSomething){
+        Team team=teamMapper.getTeamByCourseIdAndStudentId(courseId,studentId);
+        hasSomethingFun(team,hasSomething);
+        return team;
     }
 
     /**
      * Description: 获取一个班级下的所有队伍
+     *
      * @Author: 17Wang
      * @Time: 9:39 2018/12/20
-    */
+     */
     public List<Team> listByCClassId(long cClassId, int... hasSomething) {
         List<Team> teams = teamMapper.findByCClassId(cClassId);
         for (Team team : teams) {
@@ -99,17 +94,47 @@ public class TeamDao {
 
     /**
      * Description: 通过课程id查看队伍列表
+     *
      * @Author: WinstonDeng
      * @Date: 21:24 2018/12/22
      */
-    public List<Team> listByCourseId(long courseId) throws MyException{
-        if(courseMapper.findById(courseId)==null){
-            throw new MyException("查看队伍错误！课程不存在",MyException.NOT_FOUND_ERROR);
+    public List<Team> listByCourseId(long courseId,int ...hasSomething) throws MyException {
+        List<Team> teams = teamMapper.findByCourseId(courseId);
+        if (teams == null) {
+            throw new MyException("查看队伍错误！该记录不存在", MyException.NOT_FOUND_ERROR);
         }
-        List<Team> teams=teamMapper.findByCourseId(courseId);
-        if(teams==null){
-            throw new MyException("查看队伍错误！该记录不存在",MyException.NOT_FOUND_ERROR);
+        for(Team team:teams){
+            hasSomethingFun(team,hasSomething);
         }
         return teams;
+    }
+
+    /**
+     * Description: 新建队伍
+     *
+     * @Author: 17Wang
+     * @Time: 9:06 2018/12/20
+     */
+    public boolean addTeam(Team team) throws Exception {
+        if (!teamMapper.insertTeam(team)) {
+            throw new MyException("新建队伍出错！数据库处理错误", MyException.ERROR);
+        }
+
+        return true;
+    }
+
+    /**
+     * Description: 删除小组
+     *
+     * @Author: 17Wang
+     * @Time: 10:59 2018/12/23
+     */
+    public boolean deleteTeamById(long teamId) throws MyException {
+        //检查是否有该行
+        getTeamById(teamId);
+        if (!teamMapper.deleteById(teamId)) {
+            throw new MyException("删除小组错误！数据库处理错误", MyException.ERROR);
+        }
+        return true;
     }
 }

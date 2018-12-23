@@ -21,11 +21,11 @@
         WHERE  course_id= #{courseId}
     </select>
 
-    <select id="findBySeminarId" parameterType="Long" resultMap="tab_class" resultType="com.rbs.project.pojo.entity.CClass">
-        SELECT klass.id,course_id,grade,klass_serial,klass_time,klass_location
-        FROM klass LEFT JOIN klass_seminar
-        ON klass.id=klass_seminar.klass_id
-        WHERE klass_seminar.seminar_id= #{seminarId}
+    <select id="findByStudentIdAndCourseId" resultMap="tab_class">
+        SELECT id,klass.course_id,grade,klass_serial,klass_time,klass_location
+        FROM klass LEFT JOIN klass_student
+        ON klass.id=klass_student.klass_id
+        WHERE klass_student.student_id=#{studentId} AND klass_student.course_id=#{courseId}
     </select>
 
     <insert id="insertCClass" parameterType="com.rbs.project.pojo.entity.CClass" useGeneratedKeys="true" keyProperty="id">

@@ -59,7 +59,9 @@ public class TeamController {
 
         List<UserVO> userVOS = new ArrayList<>();
         for (Student student : team.getStudents()) {
-            userVOS.add(new UserVO(student));
+            if(student.getId()!=team.getLeader().getId()) {
+                userVOS.add(new UserVO(student));
+            }
         }
 
         map.put("members", userVOS);
@@ -102,5 +104,11 @@ public class TeamController {
             throw new MyException("参数传递错误，是studentId", MyException.ID_FORMAT_ERROR);
         }
         return ResponseEntity.ok(teamService.removeMemberFromTeam(teamId, memberId));
+    }
+
+    @DeleteMapping("/{teamId}/allmember")
+    @ResponseBody
+    public ResponseEntity<Boolean> dissolveTeam(@PathVariable("teamId") long teamId) throws Exception {
+        return ResponseEntity.ok(teamService.dissolveTeam(teamId));
     }
 }

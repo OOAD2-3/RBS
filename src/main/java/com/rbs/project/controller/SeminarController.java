@@ -70,7 +70,7 @@ public class SeminarController {
      * @Author: WinstonDeng
      * @Date: 23:25 2018/12/19
      */
-    @GetMapping("/{seminarId}/")
+    @GetMapping("/{seminarId}")
     @ResponseBody
     public ResponseEntity<Map<String,Object>> getSeminarById(@PathVariable("seminarId")long seminarId,@RequestParam("cClassId") long cClassId) throws MyException{
         if((Long)seminarId==null){

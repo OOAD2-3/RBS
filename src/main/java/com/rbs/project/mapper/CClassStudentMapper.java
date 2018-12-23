@@ -6,6 +6,8 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 /**
  * Description:
  *
@@ -23,6 +25,13 @@ public interface CClassStudentMapper {
      * @return
      */
     Long getTeamIdByPrimaryKeys(@Param("cClassId") long cClassId, @Param("studentId") long studentId);
+
+    /**
+     * 获取一个team下面的所有成员
+     * @param teamId
+     * @return
+     */
+    List<Long> getStudentIdByTeamId(long teamId);
 
     /**
      * 通过主键获取一行

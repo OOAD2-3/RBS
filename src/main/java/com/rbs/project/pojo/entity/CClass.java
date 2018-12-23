@@ -146,4 +146,20 @@ public class CClass {
 
     //================ toString ============================
 
+    @Override
+    public String toString() {
+        return "CClass{" +
+                "id=" + id +
+                ", courseId=" + courseId +
+                ", grade=" + grade +
+                ", serial=" + serial +
+                ", place='" + place + '\'' +
+                ", time='" + time + '\'' +
+                ", course=" + course +
+                ", cClassSeminars=" + cClassSeminars +
+                ", teams=" + teams +
+                ", students=" + students +
+                ", rounds=" + rounds +
+                '}';
+    }
 }
