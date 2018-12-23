@@ -1,6 +1,7 @@
 package com.rbs.project.mapper;
 
 import com.rbs.project.pojo.entity.Student;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -51,6 +52,13 @@ public interface StudentMapper {
      * @return
      */
     List<Student> listByTeamId(long teamId);
+
+    /**
+     * 获取一个课程下TeamId为空或者为0的所有学生
+     * @param courseId
+     * @return
+     */
+    List<Student> findByCourseIdAndTeamId(@Param("courseId") long courseId);
 
     /**
      * 通过id，同时修改密码和邮箱

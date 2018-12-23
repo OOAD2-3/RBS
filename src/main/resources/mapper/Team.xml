@@ -30,9 +30,20 @@
         WHERE klass_id=#{cClassId}
     </select>
 
+    <select id="getTeamByCourseIdAndStudentId" resultMap="tab_team" resultType="com.rbs.project.pojo.entity.Team">
+        SELECT id,team.klass_id,team.course_id,leader_id,team_name,team_serial,status
+        FROM team LEFT JOIN klass_student
+        ON team.id=klass_student.team_id
+        WHERE klass_student.course_id=#{courseId} AND klass_student.student_id=#{studentId}
+    </select>
+
     <insert id="insertTeam" parameterType="com.rbs.project.pojo.entity.Team" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO team(klass_id, course_id, leader_id, team_name, team_serial, status)
         VALUES (#{cClassId},#{courseId},#{leaderId},#{name},#{serial},#{status})
     </insert>
+
+    <delete id="deleteById" parameterType="Long">
+        DELETE FROM team WHERE id=#{teamId}
+    </delete>
 
 </mapper>

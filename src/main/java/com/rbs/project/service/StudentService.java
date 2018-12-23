@@ -51,6 +51,15 @@ public class StudentService {
     }
 
     /**
+     * Description:获取一个课程下TeamId为空或者为0的所有学生
+     * @Author: 17Wang
+     * @Time: 13:19 2018/12/23
+    */
+    public List<Student> listByCourseIdAndTeamId(long courseId){
+        return studentDao.listByCourseIdAndTeamId(courseId);
+    }
+
+    /**
      * Description:管理员修改某一学生的信息
      *
      * @Author: 17Wang

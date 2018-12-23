@@ -10,7 +10,6 @@ import com.rbs.project.utils.JsonUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -33,23 +32,24 @@ public class SeminarController {
 
     /**
      * Description: 新增讨论课
+     *
      * @Author: WinstonDeng
      * @Date: 13:04 2018/12/18
      */
-    @PostMapping("")
+    @PostMapping
     @ResponseBody
     public ResponseEntity<Long> createSeminar(@RequestBody CreateSeminarDTO createSeminarDTO) throws Exception {
         //初始化新增讨论课id
         long createSeminarId = -1;
-        Seminar seminar=new Seminar();
-        if(createSeminarDTO.getCourseId()==null){
+        Seminar seminar = new Seminar();
+        if (createSeminarDTO.getCourseId() == null) {
             seminar.setCourseId(-1);
-        }else {
+        } else {
             seminar.setCourseId(createSeminarDTO.getCourseId());
         }
-        if(createSeminarDTO.getRoundId()==null){
+        if (createSeminarDTO.getRoundId() == null) {
             seminar.setRoundId(-1);
-        }else{
+        } else {
             seminar.setRoundId(createSeminarDTO.getRoundId());
         }
         seminar.setName(createSeminarDTO.getName());
@@ -60,12 +60,13 @@ public class SeminarController {
         seminar.setEnrollStartTime(JsonUtils.StringToTimestamp(createSeminarDTO.getEnrollStartTime()));
         seminar.setEnrollEndTime(JsonUtils.StringToTimestamp(createSeminarDTO.getEnrollEndTime()));
         //获得主键
-        createSeminarId=seminarService.addSemianr(seminar);
+        createSeminarId = seminarService.addSemianr(seminar);
         return ResponseEntity.ok().body(createSeminarId);
     }
-    
+
     /**
      * Description: 按id获取讨论课
+     *
      * @Author: WinstonDeng
      * @Date: 23:25 2018/12/19
      */
@@ -90,12 +91,13 @@ public class SeminarController {
         seminarView.put("seminarIntro",seminar.getIntro());
         seminarView.put("visible",seminar.getVisible());
         //状态
-        seminarView.put("status",cClassSeminarService.getCClassSeminar(cClassId,seminarId).getStatus());
+        seminarView.put("status", cClassSeminarService.getCClassSeminar(cClassId, seminarId).getStatus());
         return ResponseEntity.ok().body(seminarView);
     }
 
     /**
      * Description: 删除讨论课
+     *
      * @Author: WinstonDeng
      * @Date: 13:04 2018/12/18
      */
@@ -110,6 +112,7 @@ public class SeminarController {
 
     /**
      * Description: 修改讨论课信息
+     *
      * @Author: WinstonDeng
      * @Date: 13:06 2018/12/18
      */
@@ -120,7 +123,7 @@ public class SeminarController {
             throw new MyException("seminarId不能为空",MyException.ID_FORMAT_ERROR);
         }
         //DTO转Entity
-        Seminar seminar=new Seminar();
+        Seminar seminar = new Seminar();
         seminar.setId(seminarId);
         seminar.setName(updateSeminarDTO.getIntro());
         seminar.setIntro(updateSeminarDTO.getIntro());
@@ -134,12 +137,13 @@ public class SeminarController {
 
     /**
      * Description: 修改班级讨论课 前端就算只修改一个字段，剩余字段都要把查到的原封不动送过来
+     *
      * @Author: WinstonDeng
      * @Date: 11:27 2018/12/19
      */
     @PutMapping("/{seminarId}/class/{classId}")
     @ResponseBody
-    public ResponseEntity<Boolean> updateCClassSeminar(@PathVariable("seminarId") long  seminarId,
+    public ResponseEntity<Boolean> updateCClassSeminar(@PathVariable("seminarId") long seminarId,
                                                        @PathVariable("classId") long cClassId,
                                                        @RequestBody CClassSeminar cClassSeminar) throws MyException{
         if((Long)seminarId==null){

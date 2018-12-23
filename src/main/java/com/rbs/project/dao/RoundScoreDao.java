@@ -6,6 +6,8 @@ import com.rbs.project.pojo.entity.RoundScore;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 /**
  * Description:
  *
@@ -16,6 +18,15 @@ import org.springframework.stereotype.Repository;
 public class RoundScoreDao {
     @Autowired
     private RoundScoreMapper roundScoreMapper;
+
+    /**
+     * Description:
+     * @Author: 17Wang
+     * @Time: 17:04 2018/12/22
+    */
+    public List<RoundScore> listAllRoundScoreByRoundId(long roundId){
+        return roundScoreMapper.findByRoundId(roundId);
+    }
 
     /**
      * Description: 新增轮次分数

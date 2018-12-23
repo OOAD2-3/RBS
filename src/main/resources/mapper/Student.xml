@@ -33,6 +33,13 @@
         WHERE klass_student.team_id=#{teamId}
     </select>
 
+    <select id="findByCourseIdAndTeamId" resultMap="tab_student">
+        SELECT id,account,password,is_active,student_name,email
+        FROM student LEFT JOIN klass_student
+          ON student.id=klass_student.student_id
+        WHERE klass_student.course_id=#{courseId} AND klass_student.team_id IS NULL OR klass_student.team_id=0
+    </select>
+
     <update id="updatePasswordAndEmailAndActiveById" parameterType="com.rbs.project.pojo.entity.Student">
         UPDATE student SET password=#{password},email=#{email},is_active=#{active}
         WHERE id=#{id}

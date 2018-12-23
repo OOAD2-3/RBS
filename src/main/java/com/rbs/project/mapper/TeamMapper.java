@@ -2,6 +2,7 @@ package com.rbs.project.mapper;
 
 import com.rbs.project.pojo.entity.Team;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -38,13 +39,32 @@ public interface TeamMapper {
      *
      * @param team
      * @return
+     * @throws Exception
      */
     boolean insertTeam(Team team) throws Exception;
 
     /**
+     * 学生查询自己在一个课程下属于的小组
+     *
+     * @param courseId
+     * @param studentId
+     * @return
+     */
+    Team getTeamByCourseIdAndStudentId(@Param("courseId") long courseId, @Param("studentId") long studentId);
+
+    /**
      * 通过课程id查找队伍列表
+     *
      * @param courseId
      * @return
      */
     List<Team> findByCourseId(long courseId);
+
+    /**
+     * 删除小组
+     *
+     * @param teamId
+     * @return
+     */
+    boolean deleteById(long teamId);
 }
