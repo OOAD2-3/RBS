@@ -18,6 +18,12 @@
         WHERE id=#{id}
     </select>
 
+    <select id="findByLeaderId" parameterType="Long" resultMap="tab_team">
+        SELECT id,klass_id,course_id,leader_id,team_name,team_serial,status
+        FROM team
+        WHERE leader_id=#{leaderId}
+    </select>
+
     <select id="findByCourseId" parameterType="Long" resultMap="tab_team" resultType="com.rbs.project.pojo.entity.Team">
         select id,klass_id,course_id,leader_id,team_name,team_serial,status
         from team

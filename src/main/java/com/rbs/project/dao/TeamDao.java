@@ -73,6 +73,20 @@ public class TeamDao {
     }
 
     /**
+     * Description: 通过leaderId返回一个team
+     * @Author: 17Wang
+     * @Time: 21:02 2018/12/23
+    */
+    public Team getTeamByLeaderId(long leaderId, int... hasSomething) throws MyException {
+        Team team = teamMapper.findByLeaderId(leaderId);
+        if (team == null) {
+            throw new MyException("获取队伍错误！找不到该队伍", MyException.NOT_FOUND_ERROR);
+        }
+        hasSomethingFun(team, hasSomething);
+        return team;
+    }
+
+    /**
      * Description: 新建队伍
      * @Author: 17Wang
      * @Time: 9:06 2018/12/20

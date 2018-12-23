@@ -43,6 +43,9 @@ public class TeamService {
      */
     @Transactional(rollbackFor = Exception.class)
     public boolean createTeam(Team team) throws Exception {
+        if(teamDao.getTeamByLeaderId(team.getLeaderId())!=null){
+            throw new MyException("创建小组出错！这个人已经在这个课程下创建了一个小组", MyException.ERROR);
+        }
         //team Serial
         List<Team> teams = teamDao.listByCClassId(team.getcClassId());
 
