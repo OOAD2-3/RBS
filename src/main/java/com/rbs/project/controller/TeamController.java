@@ -88,22 +88,6 @@ public class TeamController {
     }
 
     /**
-     * Description: 修改小组状态，暂时不用
-     *
-     * @Author: 17Wang
-     * @Time: 22:59 2018/12/19
-     */
-    @PutMapping("/{teamId}")
-    @ResponseBody
-    public ResponseEntity<Boolean> updateTeam(@PathVariable("teamId") long teamId, @RequestBody Team team) {
-        if (team.getStudents() == null) {
-            team.setStudents(new ArrayList<>());
-        }
-
-        return ResponseEntity.status(404).body(teamService.updateTeam(team));
-    }
-
-    /**
      * Description: 添加小组成员
      *
      * @Author: 17Wang
@@ -111,12 +95,10 @@ public class TeamController {
      */
     @PutMapping("/{teamId}/members")
     @ResponseBody
-    public ResponseEntity<Boolean> addMemberToTeam(@PathVariable("teamId") long teamId, @RequestBody List<Map<String, Long>> members) throws Exception {
+    public ResponseEntity<Boolean> addMemberToTeam(@PathVariable("teamId") long teamId, @RequestBody List<Long> members) throws Exception {
         List<Long> membersIds = new ArrayList<>();
-        for (Map<String, Long> map : members) {
-            if (map.get("studentId") != null) {
-                membersIds.add(map.get("studentId"));
-            }
+        for (Long map : members) {
+                membersIds.add(map);
         }
         return ResponseEntity.ok(teamService.addMemberToTeam(teamId, membersIds));
     }

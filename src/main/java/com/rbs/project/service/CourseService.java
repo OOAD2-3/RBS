@@ -63,6 +63,15 @@ public class CourseService {
     }
 
     /**
+     * Description: 获取所有课程
+     * @Author: 17Wang
+     * @Time: 17:41 2018/12/23
+    */
+    public List<Course> listAllCourses(){
+        return courseDao.listAllCourses();
+    }
+
+    /**
      * Description: 获取当前用户的所有课程
      *
      * @Author: 17Wang

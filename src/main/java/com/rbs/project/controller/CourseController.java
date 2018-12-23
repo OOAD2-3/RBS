@@ -106,6 +106,21 @@ public class CourseController {
     }
 
     /**
+     * Description: 获取所有课程
+     * @Author: 17Wang
+     * @Time: 17:38 2018/12/23
+    */
+    @GetMapping("/all")
+    @ResponseBody
+    public List<CourseInfoVO> listAllCourses(){
+        List<CourseInfoVO> courseInfoVOS=new ArrayList<>();
+        for(Course course:courseService.listAllCourses()){
+            courseInfoVOS.add(new CourseInfoVO(course));
+        }
+        return courseInfoVOS;
+    }
+
+    /**
      * Description: 获取我的所有课程
      *
      * @Author: 17Wang
