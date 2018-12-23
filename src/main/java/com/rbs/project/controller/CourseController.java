@@ -191,15 +191,16 @@ public class CourseController {
 
     /**
      * Description: 查找一个课程下未组队的学生
+     *
      * @Author: 17Wang
      * @Time: 12:04 2018/12/23
-    */
+     */
     @GetMapping("/{courseId}/team/free")
     @ResponseBody
-    public List<UserVO> listFreeStudentAtCourse(@PathVariable("courseId") long courseId){
-        List<Student> students=studentService.listByCourseIdAndTeamId(courseId);
-        List<UserVO> userVOS=new ArrayList<>();
-        for(Student student:students){
+    public List<UserVO> listFreeStudentAtCourse(@PathVariable("courseId") long courseId) {
+        List<Student> students = studentService.listByCourseIdAndTeamId(courseId);
+        List<UserVO> userVOS = new ArrayList<>();
+        for (Student student : students) {
             userVOS.add(new UserVO(student));
         }
         return userVOS;

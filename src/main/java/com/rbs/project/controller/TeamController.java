@@ -28,6 +28,12 @@ public class TeamController {
     @Autowired
     private TeamService teamService;
 
+    /**
+     * Description: 创建小组
+     *
+     * @Author: 17Wang
+     * @Time: 13:34 2018/12/23
+     */
     @PostMapping
     @ResponseBody
     public ResponseEntity<Boolean> createTeam(@RequestBody Team team) throws Exception {
@@ -46,6 +52,12 @@ public class TeamController {
         return ResponseEntity.ok(teamService.createTeam(trueTeam));
     }
 
+    /**
+     * Description: 通过teamId获取一个小组
+     *
+     * @Author: 17Wang
+     * @Time: 13:34 2018/12/23
+     */
     @GetMapping("/{teamId}")
     @ResponseBody
     public Map<String, Object> getTeamById(@PathVariable("teamId") long teamId) throws MyException {
@@ -59,7 +71,7 @@ public class TeamController {
 
         List<UserVO> userVOS = new ArrayList<>();
         for (Student student : team.getStudents()) {
-            if(student.getId()!=team.getLeader().getId()) {
+            if (student.getId() != team.getLeader().getId()) {
                 userVOS.add(new UserVO(student));
             }
         }
@@ -84,6 +96,12 @@ public class TeamController {
         return ResponseEntity.status(404).body(teamService.updateTeam(team));
     }
 
+    /**
+     * Description: 添加小组成员
+     *
+     * @Author: 17Wang
+     * @Time: 13:34 2018/12/23
+     */
     @PutMapping("/{teamId}/members")
     @ResponseBody
     public ResponseEntity<Boolean> addMemberToTeam(@PathVariable("teamId") long teamId, @RequestBody List<Map<String, Long>> members) throws Exception {
@@ -96,6 +114,12 @@ public class TeamController {
         return ResponseEntity.ok(teamService.addMemberToTeam(teamId, membersIds));
     }
 
+    /**
+     * Description: 删除小组成员
+     *
+     * @Author: 17Wang
+     * @Time: 13:34 2018/12/23
+     */
     @DeleteMapping("/{teamId}/member")
     @ResponseBody
     public ResponseEntity<Boolean> removeMemberFromTeam(@PathVariable("teamId") long teamId, @RequestBody Map<String, Long> member) throws Exception {
@@ -106,6 +130,12 @@ public class TeamController {
         return ResponseEntity.ok(teamService.removeMemberFromTeam(teamId, memberId));
     }
 
+    /**
+     * Description:解散小组
+     *
+     * @Author: 17Wang
+     * @Time: 13:35 2018/12/23
+     */
     @DeleteMapping("/{teamId}/allmember")
     @ResponseBody
     public ResponseEntity<Boolean> dissolveTeam(@PathVariable("teamId") long teamId) throws Exception {
