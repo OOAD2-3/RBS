@@ -33,11 +33,11 @@ public class UpdateSeminarDTO {
     /**
      * 报名开始时间
      */
-    private Timestamp enrollStartTime;
+    private String enrollStartTime;
     /**
      * 报名结束时间
      */
-    private Timestamp enrollEndTime;
+    private String enrollEndTime;
     /**
      * 报名组数
      */
@@ -84,19 +84,19 @@ public class UpdateSeminarDTO {
         this.roundId = roundId;
     }
 
-    public Timestamp getEnrollStartTime() {
+    public String getEnrollStartTime() {
         return enrollStartTime;
     }
 
-    public void setEnrollStartTime(Timestamp enrollStartTime) {
+    public void setEnrollStartTime(String enrollStartTime) {
         this.enrollStartTime = enrollStartTime;
     }
 
-    public Timestamp getEnrollEndTime() {
+    public String getEnrollEndTime() {
         return enrollEndTime;
     }
 
-    public void setEnrollEndTime(Timestamp enrollEndTime) {
+    public void setEnrollEndTime(String enrollEndTime) {
         this.enrollEndTime = enrollEndTime;
     }
 

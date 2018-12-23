@@ -40,13 +40,13 @@ public class CClassSeminarService {
             throw new MyException("seminarId不能为空",MyException.ERROR);
         }
         int oldStatus=cClassSeminarDao.findCClassSeminarByCClassIdAndSeminarId(cClassSeminar.getcClassId(),cClassSeminar.getSeminarId()).getStatus();
+
         //如果修改的是status
         if(!cClassSeminar.getStatus().equals(oldStatus)){
-            cClassSeminarDao.updateCClassSeminar(cClassSeminar);
             //此处应有websocket通知状态改变
-        }else {
-            cClassSeminarDao.updateCClassSeminar(cClassSeminar);
         }
+        cClassSeminarDao.updateCClassSeminar(cClassSeminar);
+
         return true;
     }
 

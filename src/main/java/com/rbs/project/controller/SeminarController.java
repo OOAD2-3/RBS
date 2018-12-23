@@ -125,13 +125,13 @@ public class SeminarController {
         //DTO转Entity
         Seminar seminar = new Seminar();
         seminar.setId(seminarId);
-        seminar.setName(updateSeminarDTO.getIntro());
+        seminar.setName(updateSeminarDTO.getTopic());
         seminar.setIntro(updateSeminarDTO.getIntro());
         seminar.setMaxTeam(updateSeminarDTO.getMaxTeam());
         seminar.setVisible(updateSeminarDTO.getVisible());
         seminar.setSerial(updateSeminarDTO.getSerial());
-        seminar.setEnrollStartTime(updateSeminarDTO.getEnrollStartTime());
-        seminar.setEnrollEndTime(updateSeminarDTO.getEnrollEndTime());
+        seminar.setEnrollStartTime(JsonUtils.StringToTimestamp(updateSeminarDTO.getEnrollStartTime()));
+        seminar.setEnrollEndTime(JsonUtils.StringToTimestamp(updateSeminarDTO.getEnrollEndTime()));
         return ResponseEntity.ok().body(seminarService.updateSeminar(seminar));
     }
 
@@ -145,15 +145,18 @@ public class SeminarController {
     @ResponseBody
     public ResponseEntity<Boolean> updateCClassSeminar(@PathVariable("seminarId") long seminarId,
                                                        @PathVariable("classId") long cClassId,
-                                                       @RequestBody CClassSeminar cClassSeminar) throws MyException{
+                                                       @RequestBody Map<String,String> updateMap) throws MyException{
         if((Long)seminarId==null){
             throw new MyException("seminarId不能为空",MyException.ID_FORMAT_ERROR);
         }
         if((Long)cClassId==null){
             throw new MyException("classId不能为空",MyException.ID_FORMAT_ERROR);
         }
-        cClassSeminar.setcClassId(cClassId);
-        cClassSeminar.setSeminarId(seminarId);
+        final String reportDDL="reportDDL";
+        final String status="status";
+        CClassSeminar cClassSeminar=cClassSeminarService.getCClassSeminar(cClassId,seminarId);
+        cClassSeminar.setReportDDL(JsonUtils.StringToTimestamp(updateMap.get(reportDDL)));
+        cClassSeminar.setStatus(Integer.parseInt(updateMap.get(status)));
         return ResponseEntity.ok().body(cClassSeminarService.updateCClassSeminar(cClassSeminar));
     }
 
@@ -238,10 +241,10 @@ public class SeminarController {
             throw new MyException("attendanceId不能为空",MyException.ID_FORMAT_ERROR);
         }
         question.setAttendanceId(questionInfoVO.getAttendanceId());
-        if(questionInfoVO.getTemId()==null){
+        if(questionInfoVO.getTeamId()==null){
             throw new MyException("teamId不能为空",MyException.ID_FORMAT_ERROR);
         }
-        question.setTeamId(questionInfoVO.getTemId());
+        question.setTeamId(questionInfoVO.getTeamId());
         if(questionInfoVO.getStudentId()==null){
             throw new MyException("studentId不能为空",MyException.ID_FORMAT_ERROR);
         }

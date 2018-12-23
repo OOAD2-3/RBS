@@ -53,7 +53,7 @@ public class QuestionDao {
                 question.setTeam(teamMapper.findById(question.getTeamId()));
             }
             if(i==HAS_STUDENT){
-                question.setStudent(studentMapper.findById(question.getId()));
+                question.setStudent(studentMapper.findById(question.getStudentId()));
             }
             if(i==HAS_ATTENDANCE){
                 question.setAttendance(attendanceMapper.findById(question.getAttendanceId()));

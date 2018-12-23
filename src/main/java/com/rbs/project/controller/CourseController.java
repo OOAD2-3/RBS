@@ -44,6 +44,9 @@ public class CourseController {
     @Autowired
     private StudentService studentService;
 
+    @Autowired
+    private ShareService shareService;
+
     /**
      * Description: 新建课程
      *
@@ -312,5 +315,32 @@ public class CourseController {
         }
         map.put("rounds", roundInfoVOS);
         return ResponseEntity.ok().body(map);
+    }
+
+    /**
+     * Description: 按课程id获取所有共享信息
+     * @Author: WinstonDeng
+     * @Date: 17:28 2018/12/23
+     */
+    @GetMapping("/{courseId}/share")
+    @ResponseBody
+    public ResponseEntity<List<ShareInfoVO>> listAllSeminarSharesByCourseId(@PathVariable("courseId") long courseId) throws Exception {
+        List<ShareInfoVO> shareInfoVOS=new ArrayList<>();
+        if((Long) courseId==null){
+            throw new MyException("courseId不能为空",MyException.ID_FORMAT_ERROR);
+        }
+        List<ShareSeminarApplication> seminarSharesInMainCourse=shareService.listAllShareSeminarsInMainCourseByCourseId(courseId);
+//        for(ShareSeminarApplication shareSeminarApplication:seminarSharesInMainCourse){
+//            ShareInfoVO shareInfoVO=new ShareInfoVO();
+//            shareInfoVO.setInfo("主课程");
+//            shareInfoVO.setShareType("共享讨论课");
+//            shareInfoVO.setMainCourseId(courseId);
+//            shareInfoVO.setMainCourseName();
+//            shareInfoVO.setSubCourseId(shareSeminarApplication.getSubCourseId());
+//            shareInfoVO.setSubCourseName();
+//            shareInfoVO.setSubTeacherName();
+//        }
+        List<ShareSeminarApplication> seminarSharesInSubCourse=shareService.listAllShareSeminarsInSubCourseByCourseId(courseId);
+        return ResponseEntity.ok().body(shareInfoVOS);
     }
 }

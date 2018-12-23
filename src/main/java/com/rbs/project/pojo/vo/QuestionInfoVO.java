@@ -10,7 +10,7 @@ import com.rbs.project.pojo.entity.Question;
  */
 public class QuestionInfoVO {
     private Long questionId;
-    private Long temId;
+    private Long teamId;
     private String teamSerial;
     private Long attendanceId;
     private Boolean selected;
@@ -23,7 +23,7 @@ public class QuestionInfoVO {
     }
     public QuestionInfoVO(Question question){
         questionId=question.getId();
-        temId=question.getTeamId();
+        teamId=question.getTeamId();
         teamSerial=question.getcClassSeminar().getcClassId()+"-"+question.getTeam().getSerial();
         attendanceId=question.getAttendanceId();
         if(question.getSelected()==0){
@@ -46,12 +46,12 @@ public class QuestionInfoVO {
         this.questionId = questionId;
     }
 
-    public Long getTemId() {
-        return temId;
+    public Long getTeamId() {
+        return teamId;
     }
 
-    public void setTemId(Long temId) {
-        this.temId = temId;
+    public void setTeamId(Long teamId) {
+        this.teamId = teamId;
     }
 
     public String getTeamSerial() {
