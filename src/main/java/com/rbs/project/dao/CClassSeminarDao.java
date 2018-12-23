@@ -83,7 +83,7 @@ public class CClassSeminarDao {
         //先查后改
         CClassSeminar temp=cClassSeminarMapper.findByCClassIdAndSeminarId(cClassSeminar.getcClassId(),cClassSeminar.getSeminarId());
         if(temp==null){
-            throw new MyException("修改本届讨论课信息错误！未找到次记录",MyException.NOT_FOUND_ERROR);
+            throw new MyException("修改班级讨论课信息错误！未找到次记录",MyException.NOT_FOUND_ERROR);
         }
         try {
             temp.setReportDDL(cClassSeminar.getReportDDL());

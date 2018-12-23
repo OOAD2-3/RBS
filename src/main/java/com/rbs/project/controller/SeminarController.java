@@ -136,14 +136,14 @@ public class SeminarController {
     }
 
     /**
-     * Description: 修改班级讨论课 前端就算只修改一个字段，剩余字段都要把查到的原封不动送过来
+     * Description: 修改班级讨论课 reportDDL
      *
      * @Author: WinstonDeng
      * @Date: 11:27 2018/12/19
      */
-    @PutMapping("/{seminarId}/class/{classId}")
+    @PutMapping("/{seminarId}/class/{classId}/reportDDL")
     @ResponseBody
-    public ResponseEntity<Boolean> updateCClassSeminar(@PathVariable("seminarId") long seminarId,
+    public ResponseEntity<Boolean> updateCClassSeminarReportDDL(@PathVariable("seminarId") long seminarId,
                                                        @PathVariable("classId") long cClassId,
                                                        @RequestBody Map<String,String> updateMap) throws MyException{
         if((Long)seminarId==null){
@@ -153,9 +153,36 @@ public class SeminarController {
             throw new MyException("classId不能为空",MyException.ID_FORMAT_ERROR);
         }
         final String reportDDL="reportDDL";
+        CClassSeminar cClassSeminar=cClassSeminarService.getCClassSeminar(cClassId,seminarId);
+        if(updateMap.get(reportDDL).isEmpty()){
+           throw new MyException("reportDDL不能为空",MyException.ERROR);
+        }
+        cClassSeminar.setReportDDL(JsonUtils.StringToTimestamp(updateMap.get(reportDDL)));
+        return ResponseEntity.ok().body(cClassSeminarService.updateCClassSeminar(cClassSeminar));
+    }
+
+    /**
+     * Description: 修改班级讨论课 status
+     *
+     * @Author: WinstonDeng
+     * @Date: 11:27 2018/12/19
+     */
+    @PutMapping("/{seminarId}/class/{classId}/status")
+    @ResponseBody
+    public ResponseEntity<Boolean> updateCClassSeminarStatus(@PathVariable("seminarId") long seminarId,
+                                                                @PathVariable("classId") long cClassId,
+                                                                @RequestBody Map<String,String> updateMap) throws MyException{
+        if((Long)seminarId==null){
+            throw new MyException("seminarId不能为空",MyException.ID_FORMAT_ERROR);
+        }
+        if((Long)cClassId==null){
+            throw new MyException("classId不能为空",MyException.ID_FORMAT_ERROR);
+        }
         final String status="status";
         CClassSeminar cClassSeminar=cClassSeminarService.getCClassSeminar(cClassId,seminarId);
-        cClassSeminar.setReportDDL(JsonUtils.StringToTimestamp(updateMap.get(reportDDL)));
+        if(updateMap.get(status).isEmpty()){
+            throw new MyException("status不能为空",MyException.ERROR);
+        }
         cClassSeminar.setStatus(Integer.parseInt(updateMap.get(status)));
         return ResponseEntity.ok().body(cClassSeminarService.updateCClassSeminar(cClassSeminar));
     }

@@ -34,7 +34,7 @@
           AND seminar_id=#{seminarId}
     </select>
 
-    <update id="updateCClassSeminarByCClassIdAndSeminarId" parameterType="Long">
+    <update id="updateCClassSeminar" parameterType="com.rbs.project.pojo.entity.CClassSeminar">
         update klass_seminar
         set report_ddl=#{reportDDL},
             status=#{status}
