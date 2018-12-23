@@ -18,8 +18,9 @@ public class AttendanceVO {
     private String reportUrl;
     private String reportDDL;
     private TeamBaseInfoVO teamBaseInfoVO;
+    private Integer teamOrder;
 
-    public AttendanceVO(){
+    public AttendanceVO() {
 
     }
 
@@ -32,6 +33,7 @@ public class AttendanceVO {
         reportUrl = attendance.getReportUrl();
         reportDDL = JsonUtils.TimestampToString(attendance.getcClassSeminar().getReportDDL());
         teamBaseInfoVO = new TeamBaseInfoVO(attendance.getTeam());
+        teamOrder = attendance.getTeamOrder();
     }
 
     public long getId() {
@@ -96,5 +98,13 @@ public class AttendanceVO {
 
     public void setTeamBaseInfoVO(TeamBaseInfoVO teamBaseInfoVO) {
         this.teamBaseInfoVO = teamBaseInfoVO;
+    }
+
+    public Integer getTeamOrder() {
+        return teamOrder;
+    }
+
+    public void setTeamOrder(Integer teamOrder) {
+        this.teamOrder = teamOrder;
     }
 }

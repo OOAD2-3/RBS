@@ -2,19 +2,13 @@ package com.rbs.project.controller;
 
 import com.rbs.project.exception.MyException;
 import com.rbs.project.pojo.dto.CreateCClassDTO;
-import com.rbs.project.pojo.entity.CClass;
-import com.rbs.project.pojo.entity.Course;
-import com.rbs.project.pojo.entity.Round;
+import com.rbs.project.pojo.entity.*;
 import com.rbs.project.pojo.strategy.CourseMemberLimitStrategy;
-import com.rbs.project.pojo.vo.CClassInfoVO;
-import com.rbs.project.pojo.vo.CourseAndStrategyVO;
-import com.rbs.project.pojo.vo.CourseInfoVO;
-import com.rbs.project.pojo.vo.RoundInfoVO;
-import com.rbs.project.service.CClassService;
-import com.rbs.project.service.RoundService;
+import com.rbs.project.pojo.vo.*;
+import com.rbs.project.service.*;
 import com.rbs.project.utils.FileLoadUtils;
-import com.rbs.project.service.CourseService;
 import com.rbs.project.utils.JsonUtils;
+import com.rbs.project.utils.UserUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -43,6 +37,12 @@ public class CourseController {
 
     @Autowired
     private RoundService roundService;
+
+    @Autowired
+    private TeamService teamService;
+
+    @Autowired
+    private StudentService studentService;
 
     /**
      * Description: 新建课程
@@ -102,6 +102,12 @@ public class CourseController {
         return ResponseEntity.ok(courseService.createCourse(course));
     }
 
+    /**
+     * Description: 获取我的所有课程
+     *
+     * @Author: 17Wang
+     * @Time: 21:29 2018/12/22
+     */
     @GetMapping
     @ResponseBody
     public List<CourseInfoVO> listMyCourses() throws MyException {
@@ -112,6 +118,12 @@ public class CourseController {
         return courseInfoVOS;
     }
 
+    /**
+     * Description: 通过courseId获取一个课程
+     *
+     * @Author: 17Wang
+     * @Time: 21:30 2018/12/22
+     */
     @GetMapping("/{courseId}")
     @ResponseBody
     public ResponseEntity<CourseAndStrategyVO> getCourseById(@PathVariable("courseId") long courseId) throws MyException {
@@ -119,10 +131,79 @@ public class CourseController {
         return ResponseEntity.ok(new CourseAndStrategyVO(course));
     }
 
+    /**
+     * Description: 删除一个课程
+     *
+     * @Author: 17Wang
+     * @Time: 21:40 2018/12/22
+     */
     @DeleteMapping("/{courseId}")
     @ResponseBody
     public ResponseEntity<Boolean> deleteCourse(@PathVariable("courseId") long courseId) throws Exception {
         return ResponseEntity.ok(courseService.deleteCourseById(courseId));
+    }
+
+    /**
+     * Description: 获取课程下的所有小组
+     *
+     * @Author: 17Wang
+     * @Time: 11:20 2018/12/23
+     */
+    @GetMapping("/{courseId}/team")
+    @ResponseBody
+    public List<TeamBaseInfoVO> listTeamAtCourse(@PathVariable("courseId") long courseId) throws MyException {
+        List<Team> teams = teamService.listTeamByCourseId(courseId);
+        List<TeamBaseInfoVO> teamBaseInfoVOS = new ArrayList<>();
+        for (Team team : teams) {
+            teamBaseInfoVOS.add(new TeamBaseInfoVO(team));
+        }
+        return teamBaseInfoVOS;
+    }
+
+    /**
+     * Description:
+     *
+     * @Author: 17Wang
+     * @Time: 11:44 2018/12/23
+     */
+    @GetMapping("/{courseId}/team/mine")
+    @ResponseBody
+    public Map<String, Object> getMyTeam(@PathVariable("courseId") long courseId) throws MyException {
+        Student nowStudent = (Student) UserUtils.getNowUser();
+        Team team = teamService.getTeamByCourseIdAndStudentId(courseId, nowStudent.getId());
+        Map<String, Object> map = new HashMap<>();
+        map.put("id", team.getId());
+        map.put("name", team.getName());
+        map.put("course", new CourseInfoVO(team.getCourse()));
+        map.put("class", new CClassInfoVO(team.getcClass()));
+        map.put("leader", new UserVO(team.getLeader()));
+
+        List<UserVO> userVOS = new ArrayList<>();
+        for (Student student : team.getStudents()) {
+            if (student.getId() != team.getLeader().getId()) {
+                userVOS.add(new UserVO(student));
+            }
+        }
+
+        map.put("members", userVOS);
+        return map;
+    }
+
+    /**
+     * Description: 查找一个课程下未组队的学生
+     *
+     * @Author: 17Wang
+     * @Time: 12:04 2018/12/23
+     */
+    @GetMapping("/{courseId}/team/free")
+    @ResponseBody
+    public List<UserVO> listFreeStudentAtCourse(@PathVariable("courseId") long courseId) {
+        List<Student> students = studentService.listByCourseIdAndTeamId(courseId);
+        List<UserVO> userVOS = new ArrayList<>();
+        for (Student student : students) {
+            userVOS.add(new UserVO(student));
+        }
+        return userVOS;
     }
 
     /**
@@ -188,32 +269,33 @@ public class CourseController {
 
     /**
      * Description: 在课程下查看讨论课
+     *
      * @Author: WinstonDeng
      * @Date: 17:08 2018/12/21
      */
     @GetMapping("/{courseId}/seminars")
     @ResponseBody
-    public ResponseEntity<Map<String,Object>> listAllSeminarsUnderRoundInCoursePage(@PathVariable("courseId") long courseId) throws MyException{
-        if((Long)courseId==null){
-            throw new MyException("课程id不能为空",MyException.ERROR);
+    public ResponseEntity<Map<String, Object>> listAllSeminarsUnderRoundInCoursePage(@PathVariable("courseId") long courseId) throws MyException {
+        if ((Long) courseId == null) {
+            throw new MyException("课程id不能为空", MyException.ERROR);
         }
-        Map<String,Object> map=new HashMap<>();
-        map.put("courseId",courseId);
-        map.put("courseName",courseService.getCourseById(courseId).getName());
-        List<CClass> cClasses=cClassService.listCClassesByCourseId(courseId);
-        List<CClassInfoVO> cClassInfoVOS=new ArrayList<>();
-        for(CClass cClass
-                :cClasses){
+        Map<String, Object> map = new HashMap<>();
+        map.put("courseId", courseId);
+        map.put("courseName", courseService.getCourseById(courseId).getName());
+        List<CClass> cClasses = cClassService.listCClassesByCourseId(courseId);
+        List<CClassInfoVO> cClassInfoVOS = new ArrayList<>();
+        for (CClass cClass
+                : cClasses) {
             cClassInfoVOS.add(new CClassInfoVO(cClass));
         }
-        map.put("cClasses",cClassInfoVOS);
-        List<Round> rounds=roundService.listRoundsByCourseId(courseId);
-        List<RoundInfoVO> roundInfoVOS=new ArrayList<>();
-        for(Round round
-                :rounds){
+        map.put("cClasses", cClassInfoVOS);
+        List<Round> rounds = roundService.listRoundsByCourseId(courseId);
+        List<RoundInfoVO> roundInfoVOS = new ArrayList<>();
+        for (Round round
+                : rounds) {
             roundInfoVOS.add(new RoundInfoVO(round));
         }
-        map.put("rounds",roundInfoVOS);
+        map.put("rounds", roundInfoVOS);
         return ResponseEntity.ok().body(map);
     }
 }

@@ -13,8 +13,9 @@ public class CourseInfoVO {
     private Boolean ShareTeam;
     private Boolean ShareSeminar;
     private String name;
+    private CClassInfoVO cClassInfoVO;
 
-    public CourseInfoVO(){
+    public CourseInfoVO() {
 
     }
 
@@ -29,6 +30,9 @@ public class CourseInfoVO {
         if (course.getSeminarMainCourseId() == 0) {
             ShareSeminar = false;
         }
+        if (course.getcClasses() != null) {
+            cClassInfoVO = new CClassInfoVO(course.getcClasses().get(0));
+        }
     }
 
     public Long getId() {
@@ -39,7 +43,7 @@ public class CourseInfoVO {
         this.id = id;
     }
 
-    public Boolean isShareTeam() {
+    public Boolean getShareTeam() {
         return ShareTeam;
     }
 
@@ -47,7 +51,7 @@ public class CourseInfoVO {
         ShareTeam = shareTeam;
     }
 
-    public Boolean isShareSeminar() {
+    public Boolean getShareSeminar() {
         return ShareSeminar;
     }
 
@@ -61,5 +65,13 @@ public class CourseInfoVO {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public CClassInfoVO getcClassInfoVO() {
+        return cClassInfoVO;
+    }
+
+    public void setcClassInfoVO(CClassInfoVO cClassInfoVO) {
+        this.cClassInfoVO = cClassInfoVO;
     }
 }

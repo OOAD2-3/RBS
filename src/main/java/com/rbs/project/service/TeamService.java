@@ -1,8 +1,6 @@
 package com.rbs.project.service;
 
-import com.rbs.project.dao.CClassDao;
-import com.rbs.project.dao.StudentDao;
-import com.rbs.project.dao.TeamDao;
+import com.rbs.project.dao.*;
 import com.rbs.project.exception.MyException;
 import com.rbs.project.mapper.StudentMapper;
 import com.rbs.project.pojo.entity.CClass;
@@ -29,10 +27,10 @@ public class TeamService {
     private TeamDao teamDao;
 
     @Autowired
-    private CClassDao cClassDao;
+    private StudentDao studentDao;
 
     @Autowired
-    private StudentDao studentDao;
+    private CClassStudentDao cClassStudentDao;
 
     /**
      * Description: 新建一个Team
@@ -72,9 +70,9 @@ public class TeamService {
 
         //修改klass_Student
         for (Student student : team.getStudents()) {
-            cClassDao.updateTeamIdInKlassStudent(team.getId(), team.getcClassId(), student.getId());
+            cClassStudentDao.updateTeamIdInKlassStudent(team.getId(), team.getcClassId(), student.getId());
         }
-        cClassDao.updateTeamIdInKlassStudent(team.getId(), team.getcClassId(), team.getLeaderId());
+        cClassStudentDao.updateTeamIdInKlassStudent(team.getId(), team.getcClassId(), team.getLeaderId());
         return true;
     }
 
@@ -86,6 +84,43 @@ public class TeamService {
      */
     public Team getTeamById(long teamId) throws MyException {
         Team team = teamDao.getTeamById(teamId,
+                TeamDao.HAS_COURSE,
+                TeamDao.HAS_CCLASS,
+                TeamDao.HAS_LEADER,
+                TeamDao.HAS_MEMBERS);
+        if (team.getCourse() == null) {
+            team.setCourse(new Course());
+        }
+        if (team.getcClass() == null) {
+            team.setcClass(new CClass());
+        }
+        if (team.getLeader() == null) {
+            team.setLeader(new Student());
+        }
+        if (team.getStudents() == null) {
+            team.setStudents(new ArrayList<>());
+        }
+        return team;
+    }
+
+    /**
+     * Description:获取课程下的所有小组
+     *
+     * @Author: 17Wang
+     * @Time: 11:38 2018/12/23
+     */
+    public List<Team> listTeamByCourseId(long courseId) throws MyException {
+        return teamDao.listByCourseId(courseId, TeamDao.HAS_CCLASS);
+    }
+
+    /**
+     * Description:
+     *
+     * @Author: 17Wang
+     * @Time: 11:48 2018/12/23
+     */
+    public Team getTeamByCourseIdAndStudentId(long courseId, long studentId) {
+        Team team = teamDao.getTeamByCourseIdAndStudentId(courseId, studentId,
                 TeamDao.HAS_COURSE,
                 TeamDao.HAS_CCLASS,
                 TeamDao.HAS_LEADER,
@@ -131,10 +166,10 @@ public class TeamService {
             ///如果没有该学生
             studentDao.getStudentById(i);
             //如果该学生已有队伍
-            if (cClassDao.getTeamIdByPrimaryKeys(cClassId, i) != 0) {
+            if (cClassStudentDao.getTeamIdByPrimaryKeys(cClassId, i) != 0) {
                 throw new MyException("添加成员出错！学生已有队伍", MyException.ERROR);
             }
-            cClassDao.updateTeamIdInKlassStudent(teamId, cClassId, i);
+            cClassStudentDao.updateTeamIdInKlassStudent(teamId, cClassId, i);
         }
         return true;
     }
@@ -149,13 +184,31 @@ public class TeamService {
         //确认组长所在的班级
         long cClassId = teamDao.getTeamById(teamId).getcClassId();
         //确认被踢的成员当前是否还在队伍
-        long memberAtTeamId = cClassDao.getTeamIdByPrimaryKeys(cClassId, memberId);
+        long memberAtTeamId = cClassStudentDao.getTeamIdByPrimaryKeys(cClassId, memberId);
         if (memberAtTeamId == 0) {
             throw new MyException("删除成员出错！该成员已被踢出队伍", MyException.ERROR);
         } else if (memberAtTeamId != teamId) {
             throw new MyException("删除成员出错！该成员不属于您的小组", MyException.ERROR);
         }
         //上述判断通过，将该成员踢出
-        return cClassDao.updateTeamIdInKlassStudent(0, cClassId, memberId);
+        return cClassStudentDao.updateTeamIdInKlassStudent(0, cClassId, memberId);
+    }
+
+    /**
+     * Description: 解散小组
+     *
+     * @Author: 17Wang
+     * @Time: 10:45 2018/12/23
+     */
+    @Transactional(rollbackFor = Exception.class)
+    public boolean dissolveTeam(long teamId) throws Exception {
+        //将该小组下的成员置为无小组状态
+        List<Long> studentIds = cClassStudentDao.getStudentIdByTeamId(teamId);
+        for (Long l : studentIds) {
+            removeMemberFromTeam(teamId, l);
+        }
+        //删除这个小组
+        teamDao.deleteTeamById(teamId);
+        return true;
     }
 }

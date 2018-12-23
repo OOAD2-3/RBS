@@ -36,7 +36,7 @@ public class SeminarController {
      * @Author: WinstonDeng
      * @Date: 13:04 2018/12/18
      */
-    @PostMapping("")
+    @PostMapping
     @ResponseBody
     public ResponseEntity<Long> createSeminar(@RequestBody CreateSeminarDTO createSeminarDTO) throws Exception {
         //初始化新增讨论课id
@@ -70,7 +70,7 @@ public class SeminarController {
      * @Author: WinstonDeng
      * @Date: 23:25 2018/12/19
      */
-    @GetMapping("/{seminarId}/")
+    @GetMapping("/{seminarId}")
     @ResponseBody
     public ResponseEntity<Map<String,Object>> getSeminarById(@PathVariable("seminarId")long seminarId,@RequestParam("cClassId") long cClassId) throws MyException{
         if((Long)seminarId==null){
