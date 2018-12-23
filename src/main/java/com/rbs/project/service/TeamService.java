@@ -42,9 +42,17 @@ public class TeamService {
      * @Time: 11:53 2018/12/19
      */
     @Transactional(rollbackFor = Exception.class)
-    public boolean createTeam(Team team) throws Exception {
-        if(teamDao.getTeamByLeaderId(team.getLeaderId())!=null){
+    public Long createTeam(Team team) throws Exception {
+        if (teamDao.getTeamByLeaderId(team.getLeaderId()) != null) {
             throw new MyException("创建小组出错！这个人已经在这个课程下创建了一个小组", MyException.ERROR);
+        }
+        if (cClassStudentDao.getTeamIdByPrimaryKeys(team.getcClassId(), team.getLeaderId()) != 0) {
+            throw new MyException("创建小组出错！这个人已经在这个课程下加入了一个小组", MyException.ERROR);
+        }
+        for(Student student:team.getStudents()){
+            if (cClassStudentDao.getTeamIdByPrimaryKeys(team.getcClassId(), student.getId()) != 0) {
+                throw new MyException("添加成员出错！学生"+student.getId()+"已有队伍", MyException.ERROR);
+            }
         }
         //team Serial
         List<Team> teams = teamDao.listByCClassId(team.getcClassId());
@@ -65,7 +73,7 @@ public class TeamService {
         team.setSerial(teamSerial);
 
         //给team设置班级的策略
-        Course course=courseDao.getCourseById(team.getCourseId(),CourseDao.HAS_COURSE_MEMBER_LIMIT_STRATEGY);
+        Course course = courseDao.getCourseById(team.getCourseId(), CourseDao.HAS_COURSE_MEMBER_LIMIT_STRATEGY);
         team.setCourse(course);
         //判断队伍是否合法
         if (LogicUtils.teamIsValid(team)) {
@@ -82,7 +90,8 @@ public class TeamService {
             cClassStudentDao.updateTeamIdInKlassStudent(team.getId(), team.getcClassId(), student.getId());
         }
         cClassStudentDao.updateTeamIdInKlassStudent(team.getId(), team.getcClassId(), team.getLeaderId());
-        return true;
+        //返回team的id
+        return team.getId();
     }
 
     /**
@@ -131,7 +140,7 @@ public class TeamService {
      * @Author: 17Wang
      * @Time: 11:48 2018/12/23
      */
-    public Team getTeamByCourseIdAndStudentId(long courseId, long studentId) {
+    public Team getTeamByCourseIdAndStudentId(long courseId, long studentId) throws MyException {
         Team team = teamDao.getTeamByCourseIdAndStudentId(courseId, studentId,
                 TeamDao.HAS_COURSE,
                 TeamDao.HAS_CCLASS,
@@ -150,16 +159,6 @@ public class TeamService {
             team.setStudents(new ArrayList<>());
         }
         return team;
-    }
-
-    /**
-     * Description: 修改小组状态，暂时不用
-     *
-     * @Author: 17Wang
-     * @Time: 22:55 2018/12/19
-     */
-    public boolean updateTeam(Team team) {
-        return false;
     }
 
     /**
@@ -187,7 +186,7 @@ public class TeamService {
         Team team = teamDao.getTeamById(teamId, TeamDao.HAS_MEMBERS);
 
         //给team设置班级的策略
-        Course course=courseDao.getCourseById(team.getCourseId(),CourseDao.HAS_COURSE_MEMBER_LIMIT_STRATEGY);
+        Course course = courseDao.getCourseById(team.getCourseId(), CourseDao.HAS_COURSE_MEMBER_LIMIT_STRATEGY);
         team.setCourse(course);
         if (LogicUtils.teamIsValid(team)) {
             teamDao.updateStatusByTeamId(Team.STATUS_OK, teamId);
@@ -220,7 +219,7 @@ public class TeamService {
         //小组状态判断和修改
         Team team = teamDao.getTeamById(teamId, TeamDao.HAS_MEMBERS);
         //给team设置班级的策略
-        Course course=courseDao.getCourseById(team.getCourseId(),CourseDao.HAS_COURSE_MEMBER_LIMIT_STRATEGY);
+        Course course = courseDao.getCourseById(team.getCourseId(), CourseDao.HAS_COURSE_MEMBER_LIMIT_STRATEGY);
         team.setCourse(course);
         if (LogicUtils.teamIsValid(team)) {
             teamDao.updateStatusByTeamId(Team.STATUS_OK, teamId);

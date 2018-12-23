@@ -190,8 +190,7 @@ public class CourseController {
         Student nowStudent = (Student) UserUtils.getNowUser();
         Team team = teamService.getTeamByCourseIdAndStudentId(courseId, nowStudent.getId());
         Map<String, Object> map = new HashMap<>();
-        map.put("id", team.getId());
-        map.put("name", team.getName());
+        map.put("teamInfo", new TeamBaseInfoVO(team));
         map.put("course", new CourseInfoVO(team.getCourse()));
         map.put("class", new CClassInfoVO(team.getcClass()));
         map.put("leader", new UserVO(team.getLeader()));

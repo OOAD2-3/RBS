@@ -46,7 +46,7 @@ public class TeamDao {
                 team.setCourse(courseMapper.findById(team.getCourseId()));
             }
             if (i == HAS_CCLASS) {
-                team.setcClass(cClassMapper.findById(team.getCourseId()));
+                team.setcClass(cClassMapper.findById(team.getcClassId()));
             }
             if (i == HAS_LEADER) {
                 team.setLeader(studentMapper.findById(team.getLeaderId()));
@@ -74,23 +74,22 @@ public class TeamDao {
 
     /**
      * Description: 通过leaderId返回一个team
+     *
      * @Author: 17Wang
      * @Time: 21:02 2018/12/23
-    */
+     */
     public Team getTeamByLeaderId(long leaderId, int... hasSomething) throws MyException {
         Team team = teamMapper.findByLeaderId(leaderId);
-        if (team == null) {
-            throw new MyException("获取队伍错误！找不到该队伍", MyException.NOT_FOUND_ERROR);
-        }
         hasSomethingFun(team, hasSomething);
         return team;
     }
 
     /**
      * Description: 新建队伍
+     *
      * @Author: 17Wang
      * @Time: 9:06 2018/12/20
-    */
+     */
     public boolean addTeam(Team team) throws Exception {
         if (!teamMapper.insertTeam(team)) {
             throw new MyException("新建队伍出错！数据库处理错误", MyException.ERROR);
@@ -100,12 +99,16 @@ public class TeamDao {
 
     /**
      * Description:
+     *
      * @Author: 17
      * @Date: 15:48 2018/12/23
      */
-    public Team getTeamByCourseIdAndStudentId(long courseId,long studentId,int ...hasSomething){
-        Team team=teamMapper.getTeamByCourseIdAndStudentId(courseId,studentId);
-        hasSomethingFun(team,hasSomething);
+    public Team getTeamByCourseIdAndStudentId(long courseId, long studentId, int... hasSomething) throws MyException {
+        Team team = teamMapper.getTeamByCourseIdAndStudentId(courseId, studentId);
+        if (team == null) {
+            throw new MyException("该学生在该课程下无小组", MyException.NOT_FOUND_ERROR);
+        }
+        hasSomethingFun(team, hasSomething);
         return team;
     }
 
