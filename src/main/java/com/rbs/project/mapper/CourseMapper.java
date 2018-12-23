@@ -40,6 +40,13 @@ public interface CourseMapper {
      * @return
      */
     List<Course> findByStudentId(long studentId);
+
+    /**
+     * 获取所有的课程
+     *
+     * @return
+     */
+    List<Course> listAllCourse();
     //=========================新增=======================
 
     /**

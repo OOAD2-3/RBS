@@ -40,6 +40,12 @@
         WHERE student.id=#{studentId}
     </select>
 
+    <select id="listAllCourse" resultMap="tab_course">
+        SELECT course.id,teacher_id,course_name,introduction,presentation_percentage,question_percentage,report_percentage,
+        team_start_time,team_end_time,team_main_course_id,seminar_main_course_id
+        FROM course
+    </select>
+
     <delete id="deleteById" parameterType="Long">
         DELETE
         FROM course
