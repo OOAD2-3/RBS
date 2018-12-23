@@ -111,12 +111,10 @@ public class TeamController {
      */
     @PutMapping("/{teamId}/members")
     @ResponseBody
-    public ResponseEntity<Boolean> addMemberToTeam(@PathVariable("teamId") long teamId, @RequestBody List<Map<String, Long>> members) throws Exception {
+    public ResponseEntity<Boolean> addMemberToTeam(@PathVariable("teamId") long teamId, @RequestBody List<Long> members) throws Exception {
         List<Long> membersIds = new ArrayList<>();
-        for (Map<String, Long> map : members) {
-            if (map.get("studentId") != null) {
-                membersIds.add(map.get("studentId"));
-            }
+        for (Long map : members) {
+                membersIds.add(map);
         }
         return ResponseEntity.ok(teamService.addMemberToTeam(teamId, membersIds));
     }
