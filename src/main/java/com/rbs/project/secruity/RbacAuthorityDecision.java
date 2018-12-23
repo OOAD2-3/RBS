@@ -39,6 +39,7 @@ public class RbacAuthorityDecision {
         urls.add("/attendance/**");
         urls.add("/seminarscore/**");
         urls.add("/seminar/**");
+        urls.add("/request/**");
         if (userInfo instanceof Student) {
             System.out.println("我是学生");
 

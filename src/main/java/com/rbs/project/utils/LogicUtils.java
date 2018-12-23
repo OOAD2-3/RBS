@@ -20,7 +20,7 @@ public class LogicUtils {
      * @Author: 17Wang
      * @Time: 19:33 2018/12/19
      */
-    public static boolean TeamIsValid(Team team) {
+    public static boolean teamIsValid(Team team) {
         return true;
     }
 
