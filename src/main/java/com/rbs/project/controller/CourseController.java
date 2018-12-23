@@ -330,8 +330,8 @@ public class CourseController {
             throw new MyException("courseId不能为空",MyException.ID_FORMAT_ERROR);
         }
         List<ShareSeminarApplication> seminarSharesInMainCourse=shareService.listAllShareSeminarsInMainCourseByCourseId(courseId);
-//        for(ShareSeminarApplication shareSeminarApplication:seminarSharesInMainCourse){
-//            ShareInfoVO shareInfoVO=new ShareInfoVO();
+        for(ShareSeminarApplication shareSeminarApplication:seminarSharesInMainCourse){
+            ShareInfoVO shareInfoVO=new ShareInfoVO();
 //            shareInfoVO.setInfo("主课程");
 //            shareInfoVO.setShareType("共享讨论课");
 //            shareInfoVO.setMainCourseId(courseId);
@@ -339,7 +339,7 @@ public class CourseController {
 //            shareInfoVO.setSubCourseId(shareSeminarApplication.getSubCourseId());
 //            shareInfoVO.setSubCourseName();
 //            shareInfoVO.setSubTeacherName();
-//        }
+        }
         List<ShareSeminarApplication> seminarSharesInSubCourse=shareService.listAllShareSeminarsInSubCourseByCourseId(courseId);
         return ResponseEntity.ok().body(shareInfoVOS);
     }
