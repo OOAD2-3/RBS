@@ -37,8 +37,16 @@ public class UserController {
     @PutMapping("/password")
     @ResponseBody
     public ResponseEntity<Boolean> resetPassword(@RequestBody Map<String, String> password) throws MyException {
-        if (password.get("password") == null || password.get("password").equals("")) {
-            throw new MyException("密码不能为空", MyException.ERROR);
+        String newPassword = password.get("newPassword");
+        String oldPassword = password.get("oldPassword");
+        if(oldPassword.equals(oldPassword)){
+            throw new MyException("老老密码不能相同", MyException.ERROR);
+        }
+        if (oldPassword == null || newPassword.equals("")) {
+            throw new MyException("老密码不能为空", MyException.ERROR);
+        }
+        if (newPassword == null || newPassword.equals("")) {
+            throw new MyException("新密码不能为空", MyException.ERROR);
         }
         return ResponseEntity.ok(userService.resetPassword(password.get("password")));
     }

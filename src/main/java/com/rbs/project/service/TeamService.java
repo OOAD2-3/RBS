@@ -24,6 +24,9 @@ import java.util.List;
 @Service
 public class TeamService {
     @Autowired
+    private CourseDao courseDao;
+
+    @Autowired
     private TeamDao teamDao;
 
     @Autowired
@@ -174,6 +177,14 @@ public class TeamService {
             }
             cClassStudentDao.updateTeamIdInKlassStudent(teamId, cClassId, i);
         }
+        //小组状态判断和修改
+        Team team = teamDao.getTeamById(teamId, TeamDao.HAS_MEMBERS);
+        if (LogicUtils.teamIsValid(team)) {
+            teamDao.updateStatusByTeamId(Team.STATUS_OK, teamId);
+        } else {
+            teamDao.updateStatusByTeamId(Team.STATUS_ERROR, teamId);
+        }
+
         return true;
     }
 
@@ -194,7 +205,16 @@ public class TeamService {
             throw new MyException("删除成员出错！该成员不属于您的小组", MyException.ERROR);
         }
         //上述判断通过，将该成员踢出
-        return cClassStudentDao.updateTeamIdInKlassStudent(0, cClassId, memberId);
+        cClassStudentDao.updateTeamIdInKlassStudent(0, cClassId, memberId);
+        //小组状态判断和修改
+        Team team = teamDao.getTeamById(teamId, TeamDao.HAS_MEMBERS);
+        if (LogicUtils.teamIsValid(team)) {
+            teamDao.updateStatusByTeamId(Team.STATUS_OK, teamId);
+        } else {
+            teamDao.updateStatusByTeamId(Team.STATUS_ERROR, teamId);
+        }
+
+        return true;
     }
 
     /**
