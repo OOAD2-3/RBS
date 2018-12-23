@@ -72,6 +72,24 @@ public class TeamDao {
         return team;
     }
 
+
+    /**
+     * Description: 新建队伍
+     * @Author: 17Wang
+     * @Time: 9:06 2018/12/20
+    */
+    public boolean addTeam(Team team) throws Exception {
+        if (!teamMapper.insertTeam(team)) {
+            throw new MyException("新建队伍出错！数据库处理错误", MyException.ERROR);
+        }
+        return true;
+    }
+
+    /**
+     * Description:
+     * @Author: 17
+     * @Date: 15:48 2018/12/23
+     */
     public Team getTeamByCourseIdAndStudentId(long courseId,long studentId,int ...hasSomething){
         Team team=teamMapper.getTeamByCourseIdAndStudentId(courseId,studentId);
         hasSomethingFun(team,hasSomething);
@@ -100,27 +118,10 @@ public class TeamDao {
      */
     public List<Team> listByCourseId(long courseId,int ...hasSomething) throws MyException {
         List<Team> teams = teamMapper.findByCourseId(courseId);
-        if (teams == null) {
-            throw new MyException("查看队伍错误！该记录不存在", MyException.NOT_FOUND_ERROR);
-        }
         for(Team team:teams){
             hasSomethingFun(team,hasSomething);
         }
         return teams;
-    }
-
-    /**
-     * Description: 新建队伍
-     *
-     * @Author: 17Wang
-     * @Time: 9:06 2018/12/20
-     */
-    public boolean addTeam(Team team) throws Exception {
-        if (!teamMapper.insertTeam(team)) {
-            throw new MyException("新建队伍出错！数据库处理错误", MyException.ERROR);
-        }
-
-        return true;
     }
 
     /**

@@ -81,14 +81,15 @@ public class SeminarController {
         }
         Seminar seminar=seminarService.getSeminarById(seminarId);
         //转换格式
-        Map<String, Object> seminarView = new HashMap<>();
-        seminarView.put("courseId", seminar.getCourseId());
-        seminarView.put("courseName", seminar.getCourse().getName());
-        seminarView.put("roundSerial", seminar.getRound().getSerial());
-        seminarView.put("seminarTopic", seminar.getName());
-        seminarView.put("seminarSerial", seminar.getSerial());
-        seminarView.put("seminarIntro", seminar.getIntro());
-        seminarView.put("visible", seminar.getVisible());
+        Map<String,Object> seminarView=new HashMap<>();
+        seminarView.put("seminarId",seminar.getId());
+        seminarView.put("courseId",seminar.getCourseId());
+        seminarView.put("courseName",seminar.getCourse().getName());
+        seminarView.put("roundSerial",seminar.getRound().getSerial());
+        seminarView.put("seminarTopic",seminar.getName());
+        seminarView.put("seminarSerial",seminar.getSerial());
+        seminarView.put("seminarIntro",seminar.getIntro());
+        seminarView.put("visible",seminar.getVisible());
         //状态
         seminarView.put("status", cClassSeminarService.getCClassSeminar(cClassId, seminarId).getStatus());
         return ResponseEntity.ok().body(seminarView);
@@ -211,5 +212,42 @@ public class SeminarController {
         }
         question.setId(questionInfoVO.getQuestionId());
         return ResponseEntity.ok().body(cClassSeminarService.updateQuestion(question));
+    }
+
+    /**
+     * Description: 发起提问
+     * ！！！！！！此次应有websocket！！！！！！
+     *
+     * @Author: WinstonDeng
+     * @Date: 22:15 2018/12/22
+     */
+    @PostMapping("/{seminarId}/class/{classId}/question")
+    public ResponseEntity<Long> createQuestion(@PathVariable("seminarId")long seminarId,
+                                               @PathVariable("classId") long cClassId,
+                                               @RequestBody QuestionInfoVO questionInfoVO)throws MyException{
+        Question question=new Question();
+        if((Long)seminarId==null){
+            throw new MyException("seminarId不能为空",MyException.ID_FORMAT_ERROR);
+        }
+        if((Long)cClassId==null){
+            throw new MyException("classId不能为空",MyException.ID_FORMAT_ERROR);
+        }
+        CClassSeminar cClassSeminar=cClassSeminarService.getCClassSeminar(cClassId,seminarId);
+        question.setcClassSeminarId(cClassSeminar.getId());
+        if(questionInfoVO.getAttendanceId()==null){
+            throw new MyException("attendanceId不能为空",MyException.ID_FORMAT_ERROR);
+        }
+        question.setAttendanceId(questionInfoVO.getAttendanceId());
+        if(questionInfoVO.getTemId()==null){
+            throw new MyException("teamId不能为空",MyException.ID_FORMAT_ERROR);
+        }
+        question.setTeamId(questionInfoVO.getTemId());
+        if(questionInfoVO.getStudentId()==null){
+            throw new MyException("studentId不能为空",MyException.ID_FORMAT_ERROR);
+        }
+        question.setStudentId(questionInfoVO.getStudentId());
+        //默认未被选中
+        question.setSelected(0);
+        return ResponseEntity.ok().body(cClassSeminarService.addQuestion(question));
     }
 }
