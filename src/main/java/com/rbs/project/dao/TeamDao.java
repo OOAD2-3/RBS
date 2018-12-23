@@ -80,7 +80,6 @@ public class TeamDao {
         if (!teamMapper.insertTeam(team)) {
             throw new MyException("新建队伍出错！数据库处理错误", MyException.ERROR);
         }
-
         return true;
     }
 
@@ -103,9 +102,6 @@ public class TeamDao {
      * @Date: 21:24 2018/12/22
      */
     public List<Team> listByCourseId(long courseId) throws MyException{
-        if(courseMapper.findById(courseId)==null){
-            throw new MyException("查看队伍错误！课程不存在",MyException.NOT_FOUND_ERROR);
-        }
         List<Team> teams=teamMapper.findByCourseId(courseId);
         if(teams==null){
             throw new MyException("查看队伍错误！该记录不存在",MyException.NOT_FOUND_ERROR);

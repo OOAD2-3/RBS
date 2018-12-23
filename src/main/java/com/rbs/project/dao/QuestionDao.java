@@ -80,19 +80,7 @@ public class QuestionDao {
      * @Date: 15:28 2018/12/22
      */
     public List<Question> listAllQuestionsByCClassSemianr(CClassSeminar cClassSeminar,int ...hasSomething) throws MyException{
-        if(cClassSeminarMapper.findById(cClassSeminar.getId())==null){
-            throw new MyException("查看提问错误！班级讨论课不存在",MyException.NOT_FOUND_ERROR);
-        }
-        if(cClassMapper.findById(cClassSeminar.getcClassId())==null){
-            throw new MyException("查看提问错误！班级讨不存在",MyException.NOT_FOUND_ERROR);
-        }
-        if(seminarMapper.findById(cClassSeminar.getSeminarId())==null){
-            throw new MyException("查看提问错误！讨论课不存在",MyException.NOT_FOUND_ERROR);
-        }
         List<Question> questions=questionMapper.findByCClassSeminarId(cClassSeminar.getId());
-        if(questions==null){
-            throw new MyException("查看提问错误！该记录不存在",MyException.NOT_FOUND_ERROR);
-        }
         for(Question question
                 :questions){
             hasSomethingFun(question,hasSomething);
@@ -106,12 +94,12 @@ public class QuestionDao {
      * @Date: 15:46 2018/12/22
      */
     public boolean updateQuestion(Question question) throws  MyException{
-        if(questionMapper.findById(question.getId())==null){
+        Question temp=questionMapper.findById(question.getId());
+        if(temp==null){
             throw new MyException("修改提问错误！未找到记录",MyException.NOT_FOUND_ERROR);
         }
         boolean flag=false;
         try {
-            Question temp=questionMapper.findById(question.getId());
             if(temp.getScore()!=question.getScore()){
                 temp.setScore(question.getScore());
             }
@@ -131,15 +119,6 @@ public class QuestionDao {
      * @Date: 16:54 2018/12/22
      */
     public Question findByPrimaryKeys(long cClassSeminarId, long teamId, long studentId,int ...hasSomething) throws MyException{
-        if(cClassSeminarMapper.findById(cClassSeminarId)==null){
-            throw new MyException("查找提问错误！未找到班级讨论课",MyException.NOT_FOUND_ERROR);
-        }
-        if(teamMapper.findById(teamId)==null){
-            throw new MyException("查找提问错误！未找到队伍",MyException.NOT_FOUND_ERROR);
-        }
-        if(studentMapper.findById(studentId)==null){
-            throw new MyException("查找提问错误！未找到学生",MyException.NOT_FOUND_ERROR);
-        }
         Question question=questionMapper.findByPrimaryKeys(cClassSeminarId,teamId,studentId);
         if(question==null){
             throw new MyException("查找提问错误！未找到该记录",MyException.NOT_FOUND_ERROR);
@@ -153,22 +132,7 @@ public class QuestionDao {
      * @Author: WinstonDeng
      * @Date: 20:44 2018/12/22
      */
-    public boolean addQuestionByStudent(Question question)throws MyException{
-        if(questionMapper.findById(question.getId())!=null){
-            throw new MyException("新增提问错误！该记录已存在",MyException.ERROR);
-        }
-        if(cClassSeminarMapper.findById(question.getcClassSeminarId())==null){
-            throw new MyException("新增提问错误！班级讨论课不存在",MyException.NOT_FOUND_ERROR);
-        }
-        if(attendanceMapper.findById(question.getAttendanceId())==null){
-            throw new MyException("新增提问错误！被提问的展示不存在",MyException.NOT_FOUND_ERROR);
-        }
-        if(teamMapper.findById(question.getTeamId())==null){
-            throw new MyException("新增提问错误！队伍不存在",MyException.NOT_FOUND_ERROR);
-        }
-        if(studentMapper.findById(question.getStudentId())==null){
-            throw new MyException("新增提问错误！学生不存在",MyException.NOT_FOUND_ERROR);
-        }
+    public boolean addQuestion(Question question)throws MyException{
         boolean flag=false;
         try {
             flag=questionMapper.insertQuestion(question);

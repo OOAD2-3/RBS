@@ -46,9 +46,6 @@ public class RoundDao {
      */
     public long addRound(Round round) throws MyException{
         long createRoundId = -1;
-        if(courseMapper.findById(round.getCourseId())==null){
-            throw new MyException("新增轮次错误！课程未找到",MyException.NOT_FOUND_ERROR);
-        }
         try {
             roundMapper.insertRound(round);
             createRoundId=round.getId();
@@ -65,12 +62,6 @@ public class RoundDao {
      * @Date: 16:01 2018/12/20
      */
     public List<Round> listByCourseId(long courseId,int ...hasSomething) throws MyException{
-        if((Long)courseId==null){
-            throw new MyException("courseId不能为空",MyException.ERROR);
-        }
-        if(courseMapper.findById(courseId)==null){
-            throw new MyException("查看轮次错误！课程不存在",MyException.NOT_FOUND_ERROR);
-        }
         List<Round> rounds=null;
         try {
             rounds=roundMapper.findByCourseId(courseId);

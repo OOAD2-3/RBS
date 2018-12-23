@@ -64,9 +64,6 @@ public class CClassDao {
      */
     public CClass getById(long cClassId) throws MyException {
         CClass cClass = null;
-        if (cClassMapper.findById(cClassId) == null) {
-            throw new MyException("通过id查找班级错误！未找到班级", MyException.NOT_FOUND_ERROR);
-        }
         try {
             cClass = cClassMapper.findById(cClassId);
         } catch (Exception e) {
@@ -82,9 +79,6 @@ public class CClassDao {
      * @Date: 12:58 2018/12/16
      */
     public List<CClass> listByCourseId(long courseId, int... hasSomething) throws MyException {
-        if (courseMapper.findById(courseId) == null) {
-            throw new MyException("通过课程查找班级列表错误！该课程不存在", MyException.NOT_FOUND_ERROR);
-        }
         List<CClass> cClasses = cClassMapper.findByCourseId(courseId);
 
         for (CClass cClass : cClasses) {
@@ -155,15 +149,6 @@ public class CClassDao {
      */
     public boolean addCClassStudent(CClassStudent cClassStudent) throws MyException {
         boolean flag = false;
-        if (cClassMapper.findById(cClassStudent.getcClassId()) == null) {
-            throw new MyException("新增班级学生错误！未找到班级", MyException.NOT_FOUND_ERROR);
-        }
-        if (courseMapper.findById(cClassStudent.getCourseId()) == null) {
-            throw new MyException("新增班级学生错误！未找到课程", MyException.NOT_FOUND_ERROR);
-        }
-        if (studentMapper.findById(cClassStudent.getStudentId()) == null) {
-            throw new MyException("新增班级学生错误！未找到学生", MyException.NOT_FOUND_ERROR);
-        }
         try {
             flag = cClassStudentMapper.insertCClassStudent(cClassStudent);
         } catch (Exception e) {
@@ -195,9 +180,6 @@ public class CClassDao {
      * @Time: 23:23 2018/12/19
      */
     public long getTeamIdByPrimaryKeys(long cClassId, long studentId) throws MyException {
-        if (cClassStudentMapper.getByPrimaryKeys(cClassId, studentId) == null) {
-            throw new MyException("修改klass_student的teamid字段错误！找不到该行", MyException.NOT_FOUND_ERROR);
-        }
         Long l = cClassStudentMapper.getTeamIdByPrimaryKeys(cClassId, studentId);
         if (l == null) {
             return 0;
@@ -211,15 +193,6 @@ public class CClassDao {
      * @Date: 15:34 2018/12/20
      */
     public boolean addCClassRound(CClassRound cClassRound) throws MyException{
-        if(cClassMapper.findById(cClassRound.getcClassId())==null){
-            throw new MyException("新增班级轮次错误！未找到班级",MyException.NOT_FOUND_ERROR);
-        }
-        if(roundMapper.findById(cClassRound.getRoundId())==null){
-            throw new MyException("新增班级轮次错误！未找到轮次",MyException.NOT_FOUND_ERROR);
-        }
-        if(cClassRoundMapper.findByPrimaryKeys(cClassRound.getcClassId(),cClassRound.getRoundId())!=null){
-            throw new MyException("新增班级轮次错误！该班级轮次已存在",MyException.ERROR);
-        }
         try {
             cClassRoundMapper.insertCClassRound(cClassRound);
         }catch (Exception e){

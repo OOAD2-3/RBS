@@ -56,13 +56,11 @@ public class CClassSeminarService {
      * @Date: 17:47 2018/12/21
      */
     public CClassSeminar getCClassSeminar(long cClassId,long seminarId) throws MyException{
-        if((Long)cClassId==null){
-            throw new MyException("cClassId不能为空",MyException.ERROR);
+        CClassSeminar cClassSeminar=cClassSeminarDao.findCClassSeminarByCClassIdAndSeminarId(cClassId,seminarId);
+        if(cClassSeminar==null){
+            throw new MyException("查看班级讨论课错误！该记录不存在",MyException.NOT_FOUND_ERROR);
         }
-        if((Long)seminarId==null){
-            throw new MyException("seminarId不能为空",MyException.ERROR);
-        }
-        return cClassSeminarDao.findCClassSeminarByCClassIdAndSeminarId(cClassId,seminarId);
+        return cClassSeminar;
     }
 
     /**
@@ -73,7 +71,6 @@ public class CClassSeminarService {
     public List<CClassSeminar> listAllCClassSeminarsBySeminarId(long seminarId) throws MyException{
         return cClassSeminarDao.findBySeminarId(seminarId);
     }
-
     /**
      * Description: 查看班级讨论课下所有提问
      * @Author: WinstonDeng
@@ -95,5 +92,16 @@ public class CClassSeminarService {
         temp.setSelected(question.getSelected());
         temp.setScore(question.getScore());
         return questionDao.updateQuestion(temp);
+    }
+
+    /**
+     * Description: 新增提问
+     * ！！！！！！websocket！！！！！通知
+     * @Author: WinstonDeng
+     * @Date: 22:10 2018/12/22
+     */
+    public long addQuestion(Question question) throws MyException{
+        questionDao.addQuestion(question);
+        return question.getId();
     }
 }

@@ -53,10 +53,6 @@ public class SeminarDao {
      * @Date: 15:46 2018/12/18
      */
     public boolean addSeminar(Seminar seminar)throws MyException {
-        //判空
-        if(courseMapper.findById(seminar.getCourseId())==null){
-            throw new MyException("新建讨论课错误！未找到课程",MyException.NOT_FOUND_ERROR);
-        }
         try {
              seminarMapper.insertSeminar(seminar);
         }catch (Exception e){
@@ -97,9 +93,6 @@ public class SeminarDao {
      * @Date: 16:24 2018/12/18
      */
     public boolean removeSeminarById(long seminarId) throws MyException{
-        if(seminarMapper.findById(seminarId)==null){
-            throw new MyException("删除讨论课错误！未找到讨论课",MyException.NOT_FOUND_ERROR);
-        }
         try {
             seminarMapper.removeSeminarById(seminarId);
         }catch (Exception e){
@@ -114,12 +107,6 @@ public class SeminarDao {
      * @Date: 21:26 2018/12/20
      */
     public boolean removeCClassSeminarBySeminarId(long seminarId) throws MyException{
-        if(seminarMapper.findById(seminarId)==null){
-            throw new MyException("删除班级讨论课错误！未找到讨论课",MyException.NOT_FOUND_ERROR);
-        }
-        if(cClassSeminarMapper.findBySeminarId(seminarId)==null){
-            throw new MyException("删除班级讨论课错误！未找到此条记录",MyException.NOT_FOUND_ERROR);
-        }
         try {
             cClassSeminarMapper.removeCClassSeminarBySeminarId(seminarId);
         }catch (Exception e){
@@ -134,9 +121,6 @@ public class SeminarDao {
      * @Date: 20:53 2018/12/20
      */
     public Seminar findSeminarById(long seminarId,int ...hasSomething) throws MyException{
-        if(seminarMapper.findById(seminarId)==null){
-            throw new MyException("查看讨论课错误！未找到讨论课",MyException.NOT_FOUND_ERROR);
-        }
         Seminar seminar=null;
         try {
             seminar=seminarMapper.findById(seminarId);
@@ -155,13 +139,7 @@ public class SeminarDao {
      * @Date: 10:11 2018/12/21
      */
     public List<Seminar> findSeminarByCourseId(long courseId,int ...hasSomething) throws MyException{
-        if(courseMapper.findById(courseId)==null){
-            throw new MyException("查看讨论课错误！未找到课程",MyException.NOT_FOUND_ERROR);
-        }
         List<Seminar> seminars=seminarMapper.findByCourseId(courseId);
-        if(seminars==null){
-            throw new MyException("查看讨论课错误！未找到讨论课",MyException.NOT_FOUND_ERROR);
-        }
         for(Seminar seminar:seminars){
             hasSomethingFun(seminar,hasSomething);
         }

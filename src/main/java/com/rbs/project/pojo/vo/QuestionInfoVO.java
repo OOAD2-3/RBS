@@ -12,6 +12,7 @@ public class QuestionInfoVO {
     private Long questionId;
     private Long temId;
     private String teamSerial;
+    private Long attendanceId;
     private Boolean selected;
     private Double score;
     private Long studentId;
@@ -24,6 +25,7 @@ public class QuestionInfoVO {
         questionId=question.getId();
         temId=question.getTeamId();
         teamSerial=question.getcClassSeminar().getcClassId()+"-"+question.getTeam().getSerial();
+        attendanceId=question.getAttendanceId();
         if(question.getSelected()==0){
             //未被选中
             selected=false;
@@ -90,5 +92,13 @@ public class QuestionInfoVO {
 
     public void setScore(Double score) {
         this.score = score;
+    }
+
+    public Long getAttendanceId() {
+        return attendanceId;
+    }
+
+    public void setAttendanceId(Long attendanceId) {
+        this.attendanceId = attendanceId;
     }
 }
