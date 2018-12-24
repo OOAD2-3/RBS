@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 
 
@@ -30,8 +31,8 @@ public class CClassController {
      */
     @PostMapping("/{classId}/studentfile")
     @ResponseBody
-    public ResponseEntity<String> uploadStudentFileAfterCreateCClass(@RequestParam("file") MultipartFile file){
-        return ResponseEntity.ok().body(FileLoadUtils.upload(file));
+    public ResponseEntity<String> uploadStudentFileAfterCreateCClass(HttpServletRequest request,@RequestParam("file") MultipartFile file){
+        return ResponseEntity.ok().body(FileLoadUtils.upload(request.getServletContext().getRealPath("/resources/studentfile/"),file));
     }
     /**
      * Description: 班级界面，上传学生名单后，解析
@@ -40,12 +41,12 @@ public class CClassController {
      */
     @PostMapping("/{classId}")
     @ResponseBody
-    public ResponseEntity<Boolean> handleStudentFile(@PathVariable("classId") long cClassId, @RequestBody Map<String,String> file) throws MyException{
+    public ResponseEntity<Boolean> handleStudentFile(HttpServletRequest request,@PathVariable("classId") long cClassId, @RequestBody Map<String,String> file) throws MyException{
         boolean flag=false;
         String text="fileName";
         if(file.get(text)!=null){
             //直接解析，补充原来没有的学生
-            flag=cClassService.transStudentListFileToDataBase(cClassId,file.get(text));
+            flag=cClassService.transStudentListFileToDataBase(cClassId,request.getServletContext().getRealPath("/resources/studentfile/"),file.get(text));
         }
         return ResponseEntity.ok().body(flag);
     }

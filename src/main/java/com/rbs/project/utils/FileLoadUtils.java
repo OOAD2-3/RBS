@@ -18,8 +18,10 @@ public class FileLoadUtils {
 
     /**
      *  设置文件存储路径 上传路径
+     *  本地使用："/D:projectTemp/"
+     *  服务器使用："request.getServletContext().getRealPath("/studentfile/");//target的目录
      */
-    private static String filePath="/studentfile/" ;
+    private static String filePath;
     /**
      *  设置文件下载路径
      */
@@ -29,7 +31,7 @@ public class FileLoadUtils {
      * @Author: WinstonDeng
      * @Date: 13:11 2018/12/12
      */
-    public static String upload(MultipartFile file){
+    public static String upload(String filePath,MultipartFile file){
 
         try {
             if (file.isEmpty()) {
@@ -46,6 +48,7 @@ public class FileLoadUtils {
             System.out.println("文件的后缀名为：" + suffixName);
 
             //fileName中有后缀，所以没必要再加suffixName
+            System.out.println(filePath);
             String path = filePath + fileName ;
             File dest = new File(path);
             // 检测是否存在目录
