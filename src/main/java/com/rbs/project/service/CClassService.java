@@ -66,9 +66,8 @@ public class CClassService {
      * @Date: 14:44 2018/12/12
      */
     @Transactional(rollbackFor = Exception.class)
-    public boolean transStudentListFileToDataBase(long cclassId,String fileName) throws MyException {
+    public boolean transStudentListFileToDataBase(long cclassId,String filePath, String fileName) throws MyException {
         //读取路径
-        String filePath="D:/projectTemp/studentfile/";
         Set<Student> students= ExcelUtils.transExcelToSet(filePath+fileName);
         for(Student student
                 :students){

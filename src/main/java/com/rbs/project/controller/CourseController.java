@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -232,8 +233,8 @@ public class CourseController {
      */
     @PostMapping("/{courseId}/class/studentfile")
     @ResponseBody
-    public ResponseEntity<String> uploadStudentFile(@RequestParam("file") MultipartFile file) {
-        return ResponseEntity.ok().body(FileLoadUtils.upload(file));
+    public ResponseEntity<String> uploadStudentFile(HttpServletRequest request,@RequestParam("file") MultipartFile file) {
+        return ResponseEntity.ok().body(FileLoadUtils.upload(request.getServletContext().getRealPath("/studentfile/"),file));
     }
 
     /**
@@ -244,7 +245,7 @@ public class CourseController {
      */
     @PostMapping("/{courseId}/class")
     @ResponseBody
-    public ResponseEntity<Long> createcClassInCoursePage(@PathVariable("courseId") long courseId, @RequestBody CreateCClassDTO createCClassDTO) throws MyException {
+    public ResponseEntity<Long> createcClassInCoursePage(HttpServletRequest request,@PathVariable("courseId") long courseId, @RequestBody CreateCClassDTO createCClassDTO) throws MyException {
         //初始化为-1 表示新建失败
         long cclassId = -1;
         //设置班级基本信息
@@ -261,7 +262,7 @@ public class CourseController {
             //调用解析学生名单的函数
 
             if (createCClassDTO.getFileName() != null) {
-                cClassService.transStudentListFileToDataBase(cclassId, createCClassDTO.getFileName());
+                cClassService.transStudentListFileToDataBase(cclassId, request.getServletContext().getRealPath("/resources/studentfile/"),createCClassDTO.getFileName());
             }
         }
         return ResponseEntity.ok().body(cclassId);
@@ -324,23 +325,32 @@ public class CourseController {
      */
     @GetMapping("/{courseId}/share")
     @ResponseBody
-    public ResponseEntity<List<ShareInfoVO>> listAllSeminarSharesByCourseId(@PathVariable("courseId") long courseId) throws Exception {
+    public ResponseEntity<List<ShareInfoVO>> listAllSharesByCourseId(@PathVariable("courseId") long courseId) throws Exception {
         List<ShareInfoVO> shareInfoVOS=new ArrayList<>();
         if((Long) courseId==null){
             throw new MyException("courseId不能为空",MyException.ID_FORMAT_ERROR);
         }
+        //主课程
         List<ShareSeminarApplication> seminarSharesInMainCourse=shareService.listAllShareSeminarsInMainCourseByCourseId(courseId);
         for(ShareSeminarApplication shareSeminarApplication:seminarSharesInMainCourse){
             ShareInfoVO shareInfoVO=new ShareInfoVO();
-//            shareInfoVO.setInfo("主课程");
-//            shareInfoVO.setShareType("共享讨论课");
-//            shareInfoVO.setMainCourseId(courseId);
-//            shareInfoVO.setMainCourseName();
-//            shareInfoVO.setSubCourseId(shareSeminarApplication.getSubCourseId());
-//            shareInfoVO.setSubCourseName();
-//            shareInfoVO.setSubTeacherName();
+            shareInfoVO.setInfo("主课程");
+            shareInfoVO.setShareType("共享讨论课");
+            shareInfoVO.setSubCourseId(shareSeminarApplication.getSubCourseId());
+            shareInfoVO.setSubCourseName(shareSeminarApplication.getSubCourse().getName());
+            shareInfoVO.setSubTeacherName(shareSeminarApplication.getSubCourseTeacher().getTeacherName());
+            shareInfoVOS.add(shareInfoVO);
         }
+        //从课程
         List<ShareSeminarApplication> seminarSharesInSubCourse=shareService.listAllShareSeminarsInSubCourseByCourseId(courseId);
+        for(ShareSeminarApplication shareSeminarApplication:seminarSharesInSubCourse){
+            ShareInfoVO shareInfoVO=new ShareInfoVO();
+            shareInfoVO.setInfo("从课程");
+            shareInfoVO.setShareType("共享讨论课");
+            shareInfoVO.setMainCourseId(shareSeminarApplication.getMainCourseId());
+            shareInfoVO.setMainCourseName(shareSeminarApplication.getMainCourse().getName());
+            shareInfoVO.setMainTeacherName(shareSeminarApplication.getMainCourseTeacher().getTeacherName());
+        }
         return ResponseEntity.ok().body(shareInfoVOS);
     }
 }
