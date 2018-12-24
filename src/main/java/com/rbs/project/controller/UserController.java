@@ -39,8 +39,8 @@ public class UserController {
     public ResponseEntity<Boolean> resetPassword(@RequestBody Map<String, String> password) throws MyException {
         String newPassword = password.get("newPassword");
         String oldPassword = password.get("oldPassword");
-        if(oldPassword.equals(oldPassword)){
-            throw new MyException("老老密码不能相同", MyException.ERROR);
+        if(oldPassword.equals(newPassword)){
+            throw new MyException("新老密码不能相同", MyException.ERROR);
         }
         if (oldPassword == null || newPassword.equals("")) {
             throw new MyException("老密码不能为空", MyException.ERROR);
