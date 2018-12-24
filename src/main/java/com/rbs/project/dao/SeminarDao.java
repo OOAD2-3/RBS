@@ -35,6 +35,7 @@ public class SeminarDao {
 
     public final static int HAS_CClASS_SEMINAR=0;
     public final static int HAS_ROUND=1;
+    public final static int HAS_COURSE=2;
 
     private void hasSomethingFun(Seminar seminar,int ...hasSomething){
         for(int i:hasSomething){
@@ -43,6 +44,9 @@ public class SeminarDao {
             }
             if(i==HAS_ROUND){
                 seminar.setRound(roundMapper.findById(seminar.getRoundId()));
+            }
+            if(i==HAS_COURSE){
+                seminar.setCourse(courseMapper.findById(seminar.getCourseId()));
             }
         }
     }
@@ -121,13 +125,9 @@ public class SeminarDao {
      * @Date: 20:53 2018/12/20
      */
     public Seminar findSeminarById(long seminarId,int ...hasSomething) throws MyException{
-        Seminar seminar=null;
-        try {
-            seminar=seminarMapper.findById(seminarId);
-            seminar.setCourse(courseMapper.findById(seminar.getCourseId()));
-            seminar.setRound(roundMapper.findById(seminar.getRoundId()));
-        }catch (Exception e){
-            throw new MyException("查看讨论课错误！数据库处理错误",MyException.ERROR);
+        Seminar seminar=seminarMapper.findById(seminarId);
+        if(seminar==null){
+            throw new MyException("查看讨论课错误！未找到该记录",MyException.NOT_FOUND_ERROR);
         }
         hasSomethingFun(seminar,hasSomething);
         return seminar;
