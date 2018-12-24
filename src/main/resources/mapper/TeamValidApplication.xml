@@ -32,6 +32,12 @@
         VALUES (#{teamId},#{teacherId},#{reason},#{status})
     </insert>
 
+    <update id="updateStatusById">
+        UPDATE team_valid_application
+        SET status=#{status}
+        WHERE id=#{id}
+    </update>
+
     <update id="updateReasonById">
         UPDATE team_valid_application
         SET reason=#{reason}
