@@ -42,6 +42,7 @@ public class UserService {
         if (user.getEmail() == null) {
             throw new MyException("激活失败！邮箱不能为空", MyException.ERROR);
         }
+        user.setActive(true);
         if (user instanceof Student) {
             studentDao.updatePasswordAndEmailAndActiveByStudent((Student) user);
         } else if (user instanceof Teacher) {

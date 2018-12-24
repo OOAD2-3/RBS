@@ -27,6 +27,14 @@ public interface TeamMapper {
     Team findById(Long id);
 
     /**
+     * 通过leaderId返回一个team
+     *
+     * @param leaderId
+     * @return
+     */
+    Team findByLeaderId(long leaderId);
+
+    /**
      * 通过班级查找队伍列表
      *
      * @param cClassId

@@ -24,7 +24,7 @@ public class LogicUtils {
      * @Time: 19:33 2018/12/19
      */
     public static boolean teamIsValid(Team team) throws MyException {
-        Course course = courseDao.getCourseById(team.getCourseId(), CourseDao.HAS_COURSE_MEMBER_LIMIT_STRATEGY);
+        Course course = team.getCourse();
         //人数策略
         int peopleNum = team.getStudents().size() + 1;
         if (peopleNum < course.getCourseMemberLimitStrategy().getMinMember() || peopleNum > course.getCourseMemberLimitStrategy().getMaxMember()) {

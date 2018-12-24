@@ -7,6 +7,7 @@ import com.rbs.project.pojo.entity.Team;
 import com.rbs.project.pojo.entity.TeamValidApplication;
 import com.rbs.project.pojo.vo.CClassInfoVO;
 import com.rbs.project.pojo.vo.CourseInfoVO;
+import com.rbs.project.pojo.vo.TeamBaseInfoVO;
 import com.rbs.project.pojo.vo.UserVO;
 import com.rbs.project.service.ApplicationService;
 import com.rbs.project.service.TeamService;
@@ -43,7 +44,7 @@ public class TeamController {
      */
     @PostMapping
     @ResponseBody
-    public ResponseEntity<Boolean> createTeam(@RequestBody Team team) throws Exception {
+    public Map<String, Object> createTeam(@RequestBody Team team) throws Exception {
         Team trueTeam = new Team();
         trueTeam.setName(team.getName());
         trueTeam.setCourseId(team.getCourseId());
@@ -56,7 +57,7 @@ public class TeamController {
             trueTeam.setStudents(team.getStudents());
         }
 
-        return ResponseEntity.ok(teamService.createTeam(trueTeam));
+        return getTeamById(teamService.createTeam(trueTeam));
     }
 
     /**
@@ -70,8 +71,7 @@ public class TeamController {
     public Map<String, Object> getTeamById(@PathVariable("teamId") long teamId) throws MyException {
         Team team = teamService.getTeamById(teamId);
         Map<String, Object> map = new HashMap<>();
-        map.put("id", team.getId());
-        map.put("name", team.getName());
+        map.put("teamInfo", new TeamBaseInfoVO(team));
         map.put("course", new CourseInfoVO(team.getCourse()));
         map.put("class", new CClassInfoVO(team.getcClass()));
         map.put("leader", new UserVO(team.getLeader()));
