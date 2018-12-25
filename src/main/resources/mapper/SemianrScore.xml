@@ -5,20 +5,20 @@
         <result column="klass_seminar_id" property="cClassSeminarId"/>
         <result column="team_id" property="teamId"/>
         <result column="total_score" property="totalScore"/>
-        <result column="presentaton_score" property="presentationScore"/>
+        <result column="presentation_score" property="presentationScore"/>
         <result column="question_score" property="questionScore"/>
         <result column="report_score" property="reportScore"/>
     </resultMap>
 
     <select id="getBySeminarIdAndCClassIdAndTeamId" resultMap="tab_seminar_score">
-        SELECT klass_seminar_id,team_id,total_score,presentaton_score,question_score,report_score
+        SELECT klass_seminar_id,team_id,total_score,presentation_score,question_score,report_score
         FROM seminar_score LEFT JOIN klass_seminar
         ON seminar_score.klass_seminar_id = klass_seminar.id
         WHERE klass_seminar.seminar_id=#{seminarId} AND klass_seminar.klass_id=#{classId} AND seminar_score.team_id=#{teamId}
     </select>
 
     <select id="listAllBySeminarIdAndCClassId" resultMap="tab_seminar_score">
-        SELECT klass_seminar_id,team_id,total_score,presentaton_score,question_score,report_score
+        SELECT klass_seminar_id,team_id,total_score,presentation_score,question_score,report_score
         FROM seminar_score LEFT JOIN klass_seminar
         ON seminar_score.klass_seminar_id = klass_seminar.id
         WHERE klass_seminar.seminar_id=#{seminarId} AND klass_seminar.klass_id=#{classId}
@@ -35,7 +35,7 @@
     </delete>
 
     <update id="updatePresentationScore">
-        UPDATE seminar_score SET presentaton_score=#{presentationScore}
+        UPDATE seminar_score SET presentation_score=#{presentationScore}
         WHERE team_id=#{teamId}
         AND
         klass_seminar_id=(SELECT klass_seminar_id FROM klass_seminar WHERE klass_id=#{classId} AND seminar_id=#{seminarId})
