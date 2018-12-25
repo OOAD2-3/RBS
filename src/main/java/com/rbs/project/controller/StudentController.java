@@ -6,6 +6,7 @@ import com.rbs.project.pojo.entity.User;
 import com.rbs.project.pojo.vo.UserVO;
 import com.rbs.project.service.StudentService;
 import com.rbs.project.service.UserService;
+import com.rbs.project.utils.UserUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -76,6 +77,7 @@ public class StudentController {
     @PutMapping("/active")
     @ResponseBody
     public ResponseEntity<Boolean> studentActive(@RequestBody Student student) throws MyException {
-        return ResponseEntity.ok(userService.userActivation(student));
+        Student nowStudent= (Student) UserUtils.getNowUser();
+        return ResponseEntity.ok(userService.userActivation(nowStudent));
     }
 }

@@ -40,7 +40,9 @@ public class WebSocket {
     private Long seminarClassId;
     private User user;
 
-    //当做是一种依赖注入吧
+    /**
+     * 当做是一种依赖注入吧
+     */
     private static ApplicationContext applicationContext;
 
     public static void setApplicationContext(ApplicationContext context) {
