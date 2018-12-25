@@ -3,9 +3,11 @@ package com.rbs.project.dao;
 import com.rbs.project.exception.MyException;
 import com.rbs.project.mapper.CourseMapper;
 import com.rbs.project.mapper.ShareSeminarApplicationMapper;
+import com.rbs.project.mapper.ShareTeamApplicationMapper;
 import com.rbs.project.mapper.TeacherMapper;
 import com.rbs.project.pojo.entity.Course;
 import com.rbs.project.pojo.entity.ShareSeminarApplication;
+import com.rbs.project.pojo.entity.ShareTeamApplication;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -25,6 +27,9 @@ public class ShareDao {
     private ShareSeminarApplicationMapper shareSeminarApplicationMapper;
 
     @Autowired
+    private ShareTeamApplicationMapper shareTeamApplicationMapper;
+
+    @Autowired
     private CourseMapper courseMapper;
 
     @Autowired
@@ -40,20 +45,41 @@ public class ShareDao {
             if(i==HAS_MAIN_COURSE){
                 Course mainCourse=courseMapper.findById(shareSeminarApplication.getMainCourseId());
                 shareSeminarApplication.setMainCourse(mainCourse);
-                if(i==HAS_MAIN_COURSE_TEACHER){
-                    shareSeminarApplication.setMainCourseTeacher(teacherMapper.findById(mainCourse.getTeacherId()));
-                }
+            }
+            if(i==HAS_MAIN_COURSE_TEACHER){
+                Course mainCourse=courseMapper.findById(shareSeminarApplication.getMainCourseId());
+                shareSeminarApplication.setMainCourseTeacher(teacherMapper.findById(mainCourse.getTeacherId()));
             }
             if(i==HAS_SUB_COURSE){
                 Course subCourse=courseMapper.findById(shareSeminarApplication.getSubCourseId());
                 shareSeminarApplication.setSubCourse(subCourse);
-                if(i==HAS_SUB_COURSE_TEACHER){
-                    shareSeminarApplication.setSubCourseTeacher(teacherMapper.findById(subCourse.getTeacherId()));
-                }
+            }if(i==HAS_SUB_COURSE_TEACHER){
+                shareSeminarApplication.setSubCourseTeacher(teacherMapper.findById(shareSeminarApplication.getSubCourseTeacherId()));
             }
-
         }
     }
+    /**
+    警告：此处重载了，但不是个好做法，根本原因在于两种请求字段完全重复，应该用多态来实现，但是没有这样做
+     */
+    private void hasSomethingFun(ShareTeamApplication shareTeamApplication,int ...hasSomething){
+        for(int i:hasSomething){
+            if(i==HAS_MAIN_COURSE){
+                Course mainCourse=courseMapper.findById(shareTeamApplication.getMainCourseId());
+                shareTeamApplication.setMainCourse(mainCourse);
+            }
+            if(i==HAS_MAIN_COURSE_TEACHER){
+                Course mainCourse=courseMapper.findById(shareTeamApplication.getMainCourseId());
+                shareTeamApplication.setMainCourseTeacher(teacherMapper.findById(mainCourse.getTeacherId()));
+            }
+            if(i==HAS_SUB_COURSE){
+                Course subCourse=courseMapper.findById(shareTeamApplication.getSubCourseId());
+                shareTeamApplication.setSubCourse(subCourse);
+            }if(i==HAS_SUB_COURSE_TEACHER){
+                shareTeamApplication.setSubCourseTeacher(teacherMapper.findById(shareTeamApplication.getSubCourseTeacherId()));
+            }
+        }
+    }
+
 
     /**
      * Description: 通过id查找共享讨论课信息
@@ -93,5 +119,30 @@ public class ShareDao {
             hasSomethingFun(shareSeminarApplication,hasSomething);
         }
         return shareSeminarApplications;
+    }
+    /**
+     * Description: 通过主课程id查找共享分组信息列表
+     * @Author: WinstonDeng
+     * @Date: 16:42 2018/12/23
+     */
+    public List<ShareTeamApplication> listAllShareTeamApplicationsByMainCourseId(long mainCourseId, int ...hasSomething)throws Exception{
+        List<ShareTeamApplication> shareTeamApplications=shareTeamApplicationMapper.findByMainCourseId(mainCourseId);
+        for(ShareTeamApplication shareTeamApplication:shareTeamApplications){
+            hasSomethingFun(shareTeamApplication,hasSomething);
+        }
+        return shareTeamApplications;
+    }
+
+    /**
+     * Description: 通过从课程id查找共享分组信息列表
+     * @Author: WinstonDeng
+     * @Date: 16:55 2018/12/23
+     */
+    public List<ShareTeamApplication> listAllShareTeamApplicationsBySubCourseId(long subCourseId,int ...hasSomething) throws Exception{
+        List<ShareTeamApplication> shareTeamApplications=shareTeamApplicationMapper.findBySubCourseId(subCourseId);
+        for(ShareTeamApplication shareTeamApplication:shareTeamApplications){
+            hasSomethingFun(shareTeamApplication,hasSomething);
+        }
+        return shareTeamApplications;
     }
 }

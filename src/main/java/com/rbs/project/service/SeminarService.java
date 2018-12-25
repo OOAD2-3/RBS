@@ -54,9 +54,6 @@ public class SeminarService {
             seminar = addRoundBussiness(seminar);
         }
         //其他判空
-        if (seminar.getCourseId() == -1) {
-            throw new MyException("courseId不能为空", MyException.ERROR);
-        }
         if (seminar.getName() == null) {
             throw new MyException("name不能为空", MyException.ERROR);
         }

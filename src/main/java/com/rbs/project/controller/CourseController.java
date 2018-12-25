@@ -329,26 +329,55 @@ public class CourseController {
         if((Long) courseId==null){
             throw new MyException("courseId不能为空",MyException.ID_FORMAT_ERROR);
         }
-        //主课程
+        //  1.共享讨论课
+        //作为主课程
         List<ShareSeminarApplication> seminarSharesInMainCourse=shareService.listAllShareSeminarsInMainCourseByCourseId(courseId);
         for(ShareSeminarApplication shareSeminarApplication:seminarSharesInMainCourse){
             ShareInfoVO shareInfoVO=new ShareInfoVO();
             shareInfoVO.setInfo("主课程");
             shareInfoVO.setShareType("共享讨论课");
+            shareInfoVO.setShareId(shareSeminarApplication.getId());
             shareInfoVO.setSubCourseId(shareSeminarApplication.getSubCourseId());
             shareInfoVO.setSubCourseName(shareSeminarApplication.getSubCourse().getName());
             shareInfoVO.setSubTeacherName(shareSeminarApplication.getSubCourseTeacher().getTeacherName());
             shareInfoVOS.add(shareInfoVO);
         }
-        //从课程
+        //作为从课程
         List<ShareSeminarApplication> seminarSharesInSubCourse=shareService.listAllShareSeminarsInSubCourseByCourseId(courseId);
         for(ShareSeminarApplication shareSeminarApplication:seminarSharesInSubCourse){
             ShareInfoVO shareInfoVO=new ShareInfoVO();
             shareInfoVO.setInfo("从课程");
             shareInfoVO.setShareType("共享讨论课");
+            shareInfoVO.setShareId(shareSeminarApplication.getId());
             shareInfoVO.setMainCourseId(shareSeminarApplication.getMainCourseId());
             shareInfoVO.setMainCourseName(shareSeminarApplication.getMainCourse().getName());
             shareInfoVO.setMainTeacherName(shareSeminarApplication.getMainCourseTeacher().getTeacherName());
+            shareInfoVOS.add(shareInfoVO);
+        }
+        //  2.共享分组
+        //作为主课程
+        List<ShareTeamApplication> teamSharesInMainCourse=shareService.listAllShareTeamsInMainCourseByCourseId(courseId);
+        for(ShareTeamApplication shareTeamApplication:teamSharesInMainCourse){
+            ShareInfoVO shareInfoVO=new ShareInfoVO();
+            shareInfoVO.setInfo("主课程");
+            shareInfoVO.setShareType("共享分组");
+            shareInfoVO.setShareId(shareTeamApplication.getId());
+            shareInfoVO.setSubCourseId(shareTeamApplication.getSubCourseId());
+            shareInfoVO.setSubCourseName(shareTeamApplication.getSubCourse().getName());
+            shareInfoVO.setSubTeacherName(shareTeamApplication.getSubCourseTeacher().getTeacherName());
+            shareInfoVOS.add(shareInfoVO);
+        }
+        //作为从课程
+        List<ShareTeamApplication> teamSharesInSubCourse=shareService.listAllShareTeamsInSubCourseByCourseId(courseId);
+        for(ShareTeamApplication shareTeamApplication:teamSharesInSubCourse){
+            ShareInfoVO shareInfoVO=new ShareInfoVO();
+            shareInfoVO.setInfo("从课程");
+            shareInfoVO.setShareType("共享分组");
+            shareInfoVO.setShareId(shareTeamApplication.getId());
+            shareInfoVO.setMainCourseId(shareTeamApplication.getMainCourseId());
+            shareInfoVO.setMainCourseName(shareTeamApplication.getMainCourse().getName());
+            shareInfoVO.setMainTeacherName(shareTeamApplication.getMainCourseTeacher().getTeacherName());
+            shareInfoVOS.add(shareInfoVO);
         }
         return ResponseEntity.ok().body(shareInfoVOS);
     }

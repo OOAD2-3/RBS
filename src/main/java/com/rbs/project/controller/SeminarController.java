@@ -43,10 +43,9 @@ public class SeminarController {
         long createSeminarId = -1;
         Seminar seminar = new Seminar();
         if (createSeminarDTO.getCourseId() == null) {
-            seminar.setCourseId(-1);
-        } else {
-            seminar.setCourseId(createSeminarDTO.getCourseId());
+            throw new MyException("courseId不能为空",MyException.ID_FORMAT_ERROR);
         }
+        seminar.setCourseId(createSeminarDTO.getCourseId());
         if (createSeminarDTO.getRoundId() == null) {
             seminar.setRoundId(-1);
         } else {
@@ -125,6 +124,11 @@ public class SeminarController {
         //DTO转Entity
         Seminar seminar = new Seminar();
         seminar.setId(seminarId);
+        if(updateSeminarDTO.getRoundId()==null){
+            seminar.setRoundId(-1);
+        }else{
+        seminar.setRoundId(updateSeminarDTO.getRoundId());
+        }
         seminar.setName(updateSeminarDTO.getTopic());
         seminar.setIntro(updateSeminarDTO.getIntro());
         seminar.setMaxTeam(updateSeminarDTO.getMaxTeam());
