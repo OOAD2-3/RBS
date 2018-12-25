@@ -65,49 +65,49 @@ public class MySecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-//        http.cors().and().csrf().disable()
-//                //禁用session
-//                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-//                .and()
-//
-//                .httpBasic().authenticationEntryPoint(myAuthenticationEntryPoint)
-//
-//                .and()
-//                .authorizeRequests()
-//
-//                .anyRequest()
-//                .access("@RBAC.hasPermission(request,authentication)")
-//
-//                .and()
-//                //开启表单登录
-//                .formLogin()
-//
-//                //自定义登录url，可删除，默认为login
-//                .loginProcessingUrl("/user/login").usernameParameter("account").passwordParameter("password")
-//                // 登录成功
-//                .successHandler(myAuthenticationSuccessHandler)
-//                // 登录失败
-//                .failureHandler(myAuthenticationFailureHandler)
-//                .permitAll()
-//
-//                .and()
-//                .logout()
-//                .logoutSuccessHandler(myLogoutSuccessHandler)
-//                .permitAll();
-//
-//        // 记住我
-//        http.rememberMe().rememberMeParameter("remember-me")
-//                .userDetailsService(jwtUserDetailsService).tokenValiditySeconds(7 * 24 * 60 * 60);
-//
-//        // 无权访问 JSON 格式的数据
-//        http.exceptionHandling().accessDeniedHandler(myAccessDeniedHandler);
-//        // JWT Filter
-//        http.addFilterBefore(jwtAuthenticationTokenFilter, UsernamePasswordAuthenticationFilter.class);
-//        //禁用缓存
-//        http.headers().cacheControl();
+        http.cors().and().csrf().disable()
+                //禁用session
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
 
-        http.authorizeRequests().antMatchers("/**/**").permitAll()
-                .anyRequest().permitAll()
-                .and().csrf().disable();
+                .httpBasic().authenticationEntryPoint(myAuthenticationEntryPoint)
+
+                .and()
+                .authorizeRequests()
+
+                .anyRequest()
+                .access("@RBAC.hasPermission(request,authentication)")
+
+                .and()
+                //开启表单登录
+                .formLogin()
+
+                //自定义登录url，可删除，默认为login
+                .loginProcessingUrl("/user/login").usernameParameter("account").passwordParameter("password")
+                // 登录成功
+                .successHandler(myAuthenticationSuccessHandler)
+                // 登录失败
+                .failureHandler(myAuthenticationFailureHandler)
+                .permitAll()
+
+                .and()
+                .logout()
+                .logoutSuccessHandler(myLogoutSuccessHandler)
+                .permitAll();
+
+        // 记住我
+        http.rememberMe().rememberMeParameter("remember-me")
+                .userDetailsService(jwtUserDetailsService).tokenValiditySeconds(7 * 24 * 60 * 60);
+
+        // 无权访问 JSON 格式的数据
+        http.exceptionHandling().accessDeniedHandler(myAccessDeniedHandler);
+        // JWT Filter
+        http.addFilterBefore(jwtAuthenticationTokenFilter, UsernamePasswordAuthenticationFilter.class);
+        //禁用缓存
+        http.headers().cacheControl();
+
+//        http.authorizeRequests().antMatchers("/**/**").permitAll()
+//                .anyRequest().permitAll()
+//                .and().csrf().disable();
     }
 }
