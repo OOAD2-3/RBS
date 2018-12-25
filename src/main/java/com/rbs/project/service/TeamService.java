@@ -189,7 +189,11 @@ public class TeamService {
             //因为只有主课程能修改team，所以拿team表里的class没有任何问题
             Team team = teamDao.getTeamById(teamId);
             //如果该学生已有队伍
-            if (teamDao.getTeamBycClassIdAndStudentId(team.getcClassId(), memberId) != null) {
+            Team tempTeam = null;
+            try {
+                tempTeam = teamDao.getTeamBycClassIdAndStudentId(team.getcClassId(), memberId);
+            } catch (Exception e) {}
+            if (tempTeam != null) {
                 throw new MyException("成员" + student.getStudentName() + "已有队伍", MyException.AUTHORIZATION_ERROR);
             }
             teamDao.addTeamStudentByTeamIdAndStudentId(teamId, memberId);
@@ -217,6 +221,10 @@ public class TeamService {
      */
     @Transactional(rollbackFor = Exception.class)
     public boolean removeMemberFromTeam(long teamId, long memberId) throws Exception {
+        //自己不能踢出自己
+        if (teamId == memberId) {
+            throw new MyException("自己不能踢出自己么么", MyException.AUTHORIZATION_ERROR);
+        }
         //上述判断通过，将该成员踢出
         teamDao.deleteTeamStudentByTeamIdAndStudentId(teamId, memberId);
 
