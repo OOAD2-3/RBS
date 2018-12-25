@@ -39,7 +39,7 @@ public class UserController {
     public ResponseEntity<Boolean> resetPassword(@RequestBody Map<String, String> password) throws MyException {
         String newPassword = password.get("newPassword");
         String oldPassword = password.get("oldPassword");
-        if(oldPassword.equals(newPassword)){
+        if (oldPassword.equals(newPassword)) {
             throw new MyException("新老密码不能相同", MyException.ERROR);
         }
         if (oldPassword == null || newPassword.equals("")) {
@@ -80,5 +80,10 @@ public class UserController {
     @ResponseBody
     public ResponseEntity<Boolean> resetEmail(@RequestBody Map<String, String> email) throws MyException {
         return ResponseEntity.ok(userService.resetEmail(email.get("email")));
+    }
+
+    @RequestMapping(value = "test.html")
+    public String test(){
+        return "test";
     }
 }
