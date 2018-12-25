@@ -222,7 +222,8 @@ public class TeamService {
     @Transactional(rollbackFor = Exception.class)
     public boolean removeMemberFromTeam(long teamId, long memberId) throws Exception {
         //自己不能踢出自己
-        if (teamId == memberId) {
+        Team myTeam=teamDao.getTeamById(teamId);
+        if (myTeam.getLeaderId() == memberId) {
             throw new MyException("自己不能踢出自己么么", MyException.AUTHORIZATION_ERROR);
         }
         //上述判断通过，将该成员踢出
