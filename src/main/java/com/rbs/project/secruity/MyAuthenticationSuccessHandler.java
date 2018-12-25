@@ -36,6 +36,7 @@ public class MyAuthenticationSuccessHandler implements AuthenticationSuccessHand
         RespInfo respInfo=new RespInfo();
         respInfo.setStatus(200);
         respInfo.setMsg("Login Success!");
+        respInfo.setObj(jwtUserDetailsService.loadUserByUsername(username).isActive());
 
         //生成token
         String jwtToken = JwtTokenUtils.generateToken(username, 7*24*60*60);
