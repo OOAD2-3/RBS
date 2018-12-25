@@ -2,7 +2,6 @@ package com.rbs.project.controller;
 
 import com.rbs.project.exception.MyException;
 import com.rbs.project.pojo.entity.Student;
-import com.rbs.project.pojo.entity.User;
 import com.rbs.project.pojo.vo.UserVO;
 import com.rbs.project.service.StudentService;
 import com.rbs.project.service.UserService;
@@ -12,7 +11,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Description:student资源接口

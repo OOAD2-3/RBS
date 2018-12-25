@@ -54,14 +54,15 @@ public interface TeamMapper {
     /**
      * 学生查询自己在一个课程下属于的小组
      *
-     * @param courseId
+     * @param cClassId
      * @param studentId
      * @return
      */
-    Team getTeamByCourseIdAndStudentId(@Param("courseId") long courseId, @Param("studentId") long studentId);
+    Team getTeamBycClassIdAndStudentId(@Param("cClassId") long cClassId, @Param("studentId") long studentId);
 
     /**
      * 通过课程id查找队伍列表
+     * 主从课程都可以
      *
      * @param courseId
      * @return

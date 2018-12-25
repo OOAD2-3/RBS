@@ -107,14 +107,14 @@ public class AttendanceService {
         System.out.println(attendance);
         long cClassSeminarId = attendance.getcClassSeminarId();
         long teamId = attendance.getTeamId();
-        long seminarId=cClassSeminarDao.getCClassSeminarById(cClassSeminarId).getSeminarId();
+        long seminarId = cClassSeminarDao.getCClassSeminarById(cClassSeminarId).getSeminarId();
         long roundId = seminarDao.findSeminarById(seminarId).getRoundId();
 
         //删除讨论课成绩
         seminarScoreDao.deleteSeminarScoreByPrimaryKey(cClassSeminarId, teamId);
 
         //删除轮次成绩
-        roundScoreDao.deleteRoundScoreByPrimaryKey(roundId,teamId);
+        roundScoreDao.deleteRoundScoreByPrimaryKey(roundId, teamId);
 
         //删除报名
         attendanceDao.deleteAttendanceById(attendanceId);

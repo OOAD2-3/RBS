@@ -9,24 +9,8 @@
     </resultMap>
 
     <insert id="insertCClassStudent" parameterType="com.rbs.project.pojo.relationship.CClassStudent">
-        insert into klass_student(klass_id, student_id, course_id, team_id)
-        values (#{cClassId},#{studentId},#{courseId},#{teamId})
+      insert into klass_student(klass_id, student_id, course_id)
+      values (#{cClassId},#{studentId},#{courseId})
     </insert>
 
-    <select id="getTeamIdByPrimaryKeys" resultType="Long">
-        SELECT team_id FROM klass_student WHERE klass_id=#{cClassId} AND student_id=#{studentId}
-    </select>
-
-    <select id="getByPrimaryKeys" resultType="Object">
-        SELECT * FROM klass_student WHERE klass_id=#{cClassId} AND student_id=#{studentId}
-    </select>
-
-    <select id="getStudentIdByTeamId" parameterType="Long" resultType="Long">
-        SELECT student_id from klass_student WHERE team_id=#{teamId}
-    </select>
-
-    <update id="updateTeamIdByPrimaryKeys">
-        UPDATE klass_student SET team_id=#{teamId}
-        WHERE klass_id=#{cClassId} AND student_id=#{studentId}
-    </update>
 </mapper>

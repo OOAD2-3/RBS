@@ -25,22 +25,30 @@
     </select>
 
     <select id="findByCourseId" parameterType="Long" resultMap="tab_team" resultType="com.rbs.project.pojo.entity.Team">
-        select id,klass_id,course_id,leader_id,team_name,team_serial,status
-        from team
-        where course_id=#{courseId}
+        select team.id,team.klass_id,team.course_id,team.leader_id,team.team_name,team.team_serial,team.status
+        from team LEFT JOIN klass_team
+        ON team.id=klass_team.team_id
+        LEFT JOIN klass
+        ON klass_team.klass_id=klass.id
+        LEFT JOIN course
+        ON klass.course_id=course.id
+        where course.id=#{courseId}
     </select>
 
     <select id="findByCClassId" parameterType="Long" resultMap="tab_team" resultType="com.rbs.project.pojo.entity.Team">
-        SELECT id,klass_id,course_id,leader_id,team_name,team_serial,status
-        FROM team
-        WHERE klass_id=#{cClassId}
+        SELECT team.id,team.klass_id,team.course_id,team.leader_id,team.team_name,team.team_serial,team.status
+        FROM klass_team LEFT JOIN team
+        ON klass_team.team_id=team.id
+        WHERE klass_team.klass_id=#{cClassId}
     </select>
 
-    <select id="getTeamByCourseIdAndStudentId" resultMap="tab_team" resultType="com.rbs.project.pojo.entity.Team">
-        SELECT id,team.klass_id,team.course_id,leader_id,team_name,team_serial,status
-        FROM team LEFT JOIN klass_student
-        ON team.id=klass_student.team_id
-        WHERE klass_student.course_id=#{courseId} AND klass_student.student_id=#{studentId}
+    <select id="getTeamBycClassIdAndStudentId" resultMap="tab_team" resultType="com.rbs.project.pojo.entity.Team">
+        SELECT team.id,team.klass_id,team.course_id,team.leader_id,team.team_name,team.team_serial,team.status
+        FROM team LEFT JOIN team_student
+        ON team.id=team_student.team_id
+        LEFT JOIN klass_team
+        ON team.id=klass_team.team_id
+        WHERE klass_team.klass_id=#{cClassId} AND team_student.student_id=#{studentId}
     </select>
 
     <insert id="insertTeam" parameterType="com.rbs.project.pojo.entity.Team" useGeneratedKeys="true" keyProperty="id">

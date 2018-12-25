@@ -34,13 +34,22 @@ public class StudentDao {
     }
 
     /**
-     * Description: 获取一个课程下TeamId为空或者为0的所有学生
+     * Description: 获取一个课程下没有组队的所有学生
      *
      * @Author: 17Wang
      * @Time: 13:17 2018/12/23
      */
-    public List<Student> listByCourseIdAndTeamId(long courseId) {
-        return studentMapper.findByCourseIdAndTeamId(courseId);
+    public List<Student> listByCourseIdAndTeamIdIsNULL(long courseId) {
+        return studentMapper.findByCourseIdAndTeamIdIsNULL(courseId);
+    }
+
+    /**
+     * Description: 获取一个team下面的所有成员
+     * @Author: 17Wang
+     * @Time: 22:15 2018/12/25
+    */
+    public List<Student> listByTeamId(long teamId){
+        return studentMapper.findByTeamId(teamId);
     }
 
     /**

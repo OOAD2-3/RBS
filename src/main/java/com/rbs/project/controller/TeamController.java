@@ -2,7 +2,6 @@ package com.rbs.project.controller;
 
 import com.rbs.project.exception.MyException;
 import com.rbs.project.pojo.entity.Student;
-import com.rbs.project.pojo.entity.Teacher;
 import com.rbs.project.pojo.entity.Team;
 import com.rbs.project.pojo.entity.TeamValidApplication;
 import com.rbs.project.pojo.vo.CClassInfoVO;
@@ -11,7 +10,6 @@ import com.rbs.project.pojo.vo.TeamBaseInfoVO;
 import com.rbs.project.pojo.vo.UserVO;
 import com.rbs.project.service.ApplicationService;
 import com.rbs.project.service.TeamService;
-import com.rbs.project.utils.UserUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

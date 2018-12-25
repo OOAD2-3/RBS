@@ -51,14 +51,14 @@ public interface StudentMapper {
      * @param teamId
      * @return
      */
-    List<Student> listByTeamId(long teamId);
+    List<Student> findByTeamId(long teamId);
 
     /**
-     * 获取一个课程下TeamId为空或者为0的所有学生
+     * 获取一个课程下没有组队的所有学生
      * @param courseId
      * @return
      */
-    List<Student> findByCourseIdAndTeamId(@Param("courseId") long courseId);
+    List<Student> findByCourseIdAndTeamIdIsNULL(@Param("courseId") long courseId);
 
     /**
      * 通过id，同时修改密码和邮箱

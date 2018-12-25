@@ -1,6 +1,5 @@
 package com.rbs.project.controller;
 
-import com.rbs.project.dao.UserDao;
 import com.rbs.project.exception.MyException;
 import com.rbs.project.pojo.entity.Student;
 import com.rbs.project.pojo.entity.Teacher;
@@ -8,9 +7,7 @@ import com.rbs.project.pojo.entity.User;
 import com.rbs.project.service.UserService;
 import com.rbs.project.utils.UserUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
