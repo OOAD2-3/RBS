@@ -61,6 +61,14 @@ public interface StudentMapper {
     List<Student> findByCourseIdAndTeamIdIsNULL(@Param("courseId") long courseId);
 
     /**
+     * 获取一个队伍里，属于courseId下的学生
+     * @param courseId
+     * @param teamId
+     * @return
+     */
+    List<Student> findByCourseIdAndTeamId(@Param("courseId") long courseId,@Param("teamId") long teamId);
+
+    /**
      * 通过id，同时修改密码和邮箱
      *
      * @param student

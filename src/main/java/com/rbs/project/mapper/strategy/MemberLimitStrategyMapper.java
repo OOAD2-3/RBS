@@ -4,6 +4,8 @@ import com.rbs.project.pojo.strategy.MemberLimitStrategy;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 /**
  * Description:
  *
@@ -20,5 +22,5 @@ public interface MemberLimitStrategyMapper {
      * @param id
      * @return
      */
-    MemberLimitStrategy findById(long id);
+    List<MemberLimitStrategy> findById(long id);
 }

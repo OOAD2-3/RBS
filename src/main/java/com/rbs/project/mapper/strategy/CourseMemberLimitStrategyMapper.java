@@ -1,8 +1,11 @@
 package com.rbs.project.mapper.strategy;
 
 import com.rbs.project.pojo.strategy.CourseMemberLimitStrategy;
+import org.apache.catalina.LifecycleState;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 /**
  * Description:
@@ -43,5 +46,5 @@ public interface CourseMemberLimitStrategyMapper {
      * @param id
      * @return
      */
-    CourseMemberLimitStrategy findById(long id);
+    List<CourseMemberLimitStrategy> findById(long id);
 }
