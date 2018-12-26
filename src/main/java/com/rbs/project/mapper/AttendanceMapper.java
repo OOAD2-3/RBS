@@ -20,10 +20,19 @@ public interface AttendanceMapper {
 
     /**
      * 通过attendanceId查询一个报名状况
+     *
      * @param attendanceId
      * @return
      */
     Attendance findById(long attendanceId);
+
+    /**
+     * 获取一节班级讨论课下的展示信息
+     *
+     * @param attendance
+     * @return
+     */
+    Attendance findByCClassIdAndSeminarIdAndTeamOrder(Attendance attendance);
 
     /**
      * 获得一个班级下的讨论课的报名信息
@@ -44,6 +53,7 @@ public interface AttendanceMapper {
 
     /**
      * 删除一个队伍的一个讨论课展示信息
+     *
      * @param id
      * @return
      * @throws Exception
@@ -52,6 +62,7 @@ public interface AttendanceMapper {
 
     /**
      * 修改展示 PPT信息
+     *
      * @param attendance
      * @return
      */
@@ -59,8 +70,18 @@ public interface AttendanceMapper {
 
     /**
      * 修改展示 Report信息
+     *
      * @param attendance
      * @return
      */
     boolean updateAttendanceReport(Attendance attendance);
+
+    /**
+     * 修改展示的状态
+     *
+     * @param present
+     * @param id
+     * @return
+     */
+    boolean updatePresentById(@Param("present") int present, @Param("id") long id);
 }

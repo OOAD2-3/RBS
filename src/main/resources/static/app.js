@@ -37,7 +37,7 @@ function sendName() {
         name:"wsq"
     };
     //stompClient.send("/app/hello", {}, JSON.stringify({'name': $("#name").val()}));
-    stompClient.send("/app/hello", {}, 1);
+    stompClient.send("/app/hello", {}, JSON.stringify(1));
     console.log(JSON.stringify(object));
     //stompClient.send("/app/hello", {}, JSON.stringify(object));
 }

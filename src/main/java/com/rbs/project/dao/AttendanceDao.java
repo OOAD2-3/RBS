@@ -53,8 +53,22 @@ public class AttendanceDao {
         if (attendance == null) {
             throw new MyException("通过attendanceId查询一个报名状况失败！", MyException.NOT_FOUND_ERROR);
         }
-        hasSomethingFun(attendance,hasSomething);
+        hasSomethingFun(attendance, hasSomething);
         return attendance;
+    }
+
+    /**
+     * Description: 通过teamorder 获取一节班级讨论课下的展示信息
+     * @Author: 17Wang
+     * @Time: 15:09 2018/12/26
+    */
+    public Attendance getAttendanceBycClassIdAndSeminarIdAndTeamOrder(Attendance attendance, int... hasSomething) throws MyException {
+        Attendance myAttendance = attendanceMapper.findByCClassIdAndSeminarIdAndTeamOrder(attendance);
+        if (myAttendance == null) {
+            throw new MyException("通过teamorder 获取一节班级讨论课下的展示信息AttendanceDao！数据不存在", MyException.NOT_FOUND_ERROR);
+        }
+        hasSomethingFun(myAttendance, hasSomething);
+        return myAttendance;
     }
 
     /**
@@ -83,11 +97,12 @@ public class AttendanceDao {
 
     /**
      * Description: 通过主键删除展示信息
+     *
      * @Author: 17Wang
      * @Time: 23:14 2018/12/21
-    */
+     */
     public boolean deleteAttendanceById(long attendanceId) throws Exception {
-        if(!attendanceMapper.deleteAttendanceById(attendanceId)){
+        if (!attendanceMapper.deleteAttendanceById(attendanceId)) {
             throw new MyException("通过id删除展示信息！数据库处理错误", MyException.ERROR);
         }
         return true;
@@ -96,24 +111,39 @@ public class AttendanceDao {
 
     /**
      * Description: 通过id修改attendance PPT
+     *
      * @Author: WinstonDeng
      * @Date: 19:48 2018/12/25
      */
-    public boolean updateAttendancePPT(Attendance attendance) throws Exception{
-        if(!attendanceMapper.updateAttendancePPT(attendance)){
-            throw new MyException("修改attendance错误！数据库处理错误",MyException.ERROR);
+    public boolean updateAttendancePPT(Attendance attendance) throws Exception {
+        if (!attendanceMapper.updateAttendancePPT(attendance)) {
+            throw new MyException("修改attendance错误！数据库处理错误", MyException.ERROR);
         }
         return true;
     }
 
     /**
      * Description: 通过id修改attendance Report
+     *
      * @Author: WinstonDeng
      * @Date: 19:48 2018/12/25
      */
-    public boolean updateAttendanceReport(Attendance attendance) throws Exception{
-        if(!attendanceMapper.updateAttendanceReport(attendance)){
-            throw new MyException("修改attendance错误！数据库处理错误",MyException.ERROR);
+    public boolean updateAttendanceReport(Attendance attendance) throws Exception {
+        if (!attendanceMapper.updateAttendanceReport(attendance)) {
+            throw new MyException("修改attendance错误！数据库处理错误", MyException.ERROR);
+        }
+        return true;
+    }
+
+    /**
+     * Description:修改展示的状态 0为未展示 1为已展示
+     *
+     * @Author: 17Wang
+     * @Time: 14:51 2018/12/26
+     */
+    public boolean updateAttendancePresent(int present, long attendanceId) throws Exception {
+        if (!attendanceMapper.updatePresentById(present, attendanceId)) {
+            throw new MyException("修改展示的状态！数据库处理错误", MyException.ERROR);
         }
         return true;
     }
