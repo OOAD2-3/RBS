@@ -442,7 +442,12 @@ public class TeamDao {
         for (CourseMemberLimitStrategy courseMemberLimitStrategy : courseMemberLimitStrategies) {
             //获取一个 课程人数限制策略组 的策略的course是哪一个
             Long courseId = courseMemberLimitStrategy.getCourseId();
-
+            int teamMemberCount = studentMapper.findByCourseIdAndTeamId(courseId, teamId).size();
+            //如果有一个不符合返回false
+            if (teamMemberCount < courseMemberLimitStrategy.getMinMember() ||
+                    teamMemberCount > courseMemberLimitStrategy.getMaxMember()) {
+                return false;
+            }
         }
 
         return true;
