@@ -1,6 +1,7 @@
 package com.rbs.project.mapper;
 
 import com.rbs.project.pojo.entity.ShareTeamApplication;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -33,4 +34,13 @@ public interface ShareTeamApplicationMapper {
      * @return
      */
     List<ShareTeamApplication> findBySubCourseId(long subCourseId);
+
+
+    /**
+     * 通过id 和状态码 status 修改组队共享请求状态
+     * @param id
+     * @param status
+     * @return
+     */
+    boolean updateStatusById(@Param("id") long id,@Param("status") Integer status);
 }

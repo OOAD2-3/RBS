@@ -54,4 +54,9 @@
         AND
         klass_seminar_id=(SELECT klass_seminar_id FROM klass_seminar WHERE klass_id=#{classId} AND seminar_id=#{seminarId})
     </update>
+
+    <delete id="deleteByTeamId">
+        delete from seminar_score
+        where team_id=#{teamId}
+    </delete>
 </mapper>

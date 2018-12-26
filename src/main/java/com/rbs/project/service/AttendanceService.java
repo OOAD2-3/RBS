@@ -5,10 +5,14 @@ import com.rbs.project.exception.MyException;
 import com.rbs.project.pojo.entity.Attendance;
 import com.rbs.project.pojo.entity.CClassSeminar;
 import com.rbs.project.pojo.entity.RoundScore;
+import com.rbs.project.utils.FileLoadUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 /**
@@ -120,5 +124,58 @@ public class AttendanceService {
         attendanceDao.deleteAttendanceById(attendanceId);
 
         return true;
+    }
+
+    /**
+     * Description: 向attendanceId上传PPT
+     * @Author: WinstonDeng
+     * @Date: 19:39 2018/12/25
+     */
+    public String uploadPPT(long attendanceId, String realPath, MultipartFile file) throws Exception{
+        Attendance attendance=attendanceDao.getById(attendanceId);
+        if(attendance==null){
+            throw new MyException("上传PPT错误！未找到该attendance记录",MyException.NOT_FOUND_ERROR);
+        }
+        String fileName= FileLoadUtils.upload(realPath,file);
+        if(fileName.isEmpty()){
+            throw new MyException("上传PPT错误！",MyException.ERROR);
+        }
+        attendance.setPptName(fileName);
+        attendance.setPptUrl(realPath);
+        attendanceDao.updateAttendancePPT(attendance);
+        return fileName;
+    }
+
+    /**
+     * Description: 向attendanceId上传report
+     * @Author: WinstonDeng
+     * @Date: 19:39 2018/12/25
+     */
+    public String uploadReport(long attendanceId, String realPath, MultipartFile file) throws Exception{
+        Attendance attendance=attendanceDao.getById(attendanceId);
+        if(attendance==null){
+            throw new MyException("上传Report错误！未找到该attendance记录",MyException.NOT_FOUND_ERROR);
+        }
+        String fileName= FileLoadUtils.upload(realPath,file);
+        if(fileName.isEmpty()){
+            throw new MyException("上传Report错误！",MyException.ERROR);
+        }
+        attendance.setReportName(fileName);
+        attendance.setReportUrl(realPath);
+        attendanceDao.updateAttendanceReport(attendance);
+        return fileName;
+    }
+
+    /**
+     * Description: 通过id获得展示
+     * @Author: WinstonDeng
+     * @Date: 22:05 2018/12/25
+     */
+    public Attendance getAttendanceById(long attendanceId) throws MyException {
+        Attendance attendance=attendanceDao.getById(attendanceId);
+        if(attendance==null){
+            throw new MyException("获得attendance错误！未找到该记录",MyException.NOT_FOUND_ERROR);
+        }
+        return attendance;
     }
 }

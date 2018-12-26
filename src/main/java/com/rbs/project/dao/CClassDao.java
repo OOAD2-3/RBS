@@ -218,4 +218,19 @@ public class CClassDao {
         }
         return true;
     }
+
+    /**
+     * Description: 批量修改klass_student的某一teamId为null
+     * @Author: WinstonDeng
+     * @Date: 11:26 2018/12/25
+     */
+    public boolean updateTeamIdCollectionToNull(long teamId) throws Exception {
+        if(cClassStudentMapper.getStudentIdByTeamId(teamId)==null){
+            throw new MyException("批量修改班级学生队伍id错误！未找到该队伍下的记录",MyException.NOT_FOUND_ERROR);
+        }
+        if(!cClassStudentMapper.updateTeamIdCollectionToNull(teamId)){
+            throw new MyException("批量修改班级学生队伍id错误！数据库处理错误",MyException.ERROR);
+        }
+        return true;
+    }
 }

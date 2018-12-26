@@ -1,9 +1,8 @@
 package com.rbs.project.service;
 
-import com.rbs.project.dao.CourseDao;
-import com.rbs.project.dao.TeamApplicationDao;
-import com.rbs.project.dao.TeamDao;
+import com.rbs.project.dao.*;
 import com.rbs.project.exception.MyException;
+import com.rbs.project.pojo.entity.ShareTeamApplication;
 import com.rbs.project.pojo.entity.Team;
 import com.rbs.project.pojo.entity.TeamValidApplication;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +27,18 @@ public class ApplicationService {
 
     @Autowired
     private CourseDao courseDao;
+
+    @Autowired
+    private ShareDao shareDao;
+
+    @Autowired
+    private CClassDao cClassDao;
+
+    @Autowired
+    private RoundScoreDao roundScoreDao;
+
+    @Autowired
+    private SeminarScoreDao seminarScoreDao;
 
     /**
      * Description: 查看team的请求
@@ -99,5 +110,43 @@ public class ApplicationService {
                     teamApplicationDao.getTeamValidRequestById(requestId).getTeamId());
         }
         return teamApplicationDao.updateTeamValidApplicationStatusById(requestId, status);
+    }
+
+    /**
+     * Description: 修改组队共享请求的状态
+     * @Author: WinstonDeng
+     * @Date: 20:59 2018/12/24
+     */
+    @Transactional(rollbackFor = Exception.class)
+    public boolean updateTeamShareApplicationStatus(long requestId, Integer status) throws Exception{
+        //如果同意
+        if(status== ShareTeamApplication.STATUS_ACCEPT){
+            //  若请求通过，发出申请的课程为主课程，接受申请的课程为从课程，主课程小组名单映射到从课程中
+            //  例如，某小组主课程 A 有5 人，五人中选修从课程 B 的为其中的 3 人，则 B 中此小组为此 3 人组成的小组
+            //  若接受共享分组请求，该课程原有分组将被删除，并且，失去发起共享分组、接受其他共享分组请求以及课程中组队的功能
+            //  1.删除从课程原有分组
+            ShareTeamApplication shareTeamApplication=shareDao.getShareTeamApplicationById(requestId);
+            List<Team> teams=teamDao.listByCourseId(shareTeamApplication.getSubCourseId());
+            for(Team team:teams){
+                //1.把klass_student表的team_id置为主课程team_id
+                cClassDao.updateTeamIdCollectionToNull(team.getId());
+                //2.把round_score表置为主课程team_id
+                roundScoreDao.deleteRoundScoreByTeamId(team.getId());
+                //3.把seminar_score表置为主课程team_id
+                seminarScoreDao.deleteSemianrScoreByTeamId(team.getId());
+                //4.把team_valid_application清空
+                teamApplicationDao.deleteTeamValidApplicationByTeamId(team.getId());
+                //5.删除分组
+                teamDao.deleteTeamById(team.getId());
+            }
+            //  2.建立主从课程映射
+            //  从课程使用队伍学生时，要先确认自己是从课程
+            //  从课程学生只看klass_student表的course_id klass_id，不看主课程里这两个字段
+            //  3.从课程小组调整
+            //  要确认从课程队伍属于哪个班，要先查klass_student表里courseid和teamid对应学生的klass_id，再通过分班策略
+            //  进行区分，建议做成工具类方法
+        }
+        //如果拒绝，只更新请求表的字段
+        return shareDao.updateShareTeamApplicationStatus(requestId,status);
     }
 }

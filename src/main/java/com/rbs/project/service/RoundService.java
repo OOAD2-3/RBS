@@ -3,6 +3,7 @@ package com.rbs.project.service;
 import com.rbs.project.dao.RoundDao;
 import com.rbs.project.exception.MyException;
 import com.rbs.project.pojo.entity.Round;
+import com.rbs.project.pojo.relationship.CClassRound;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -41,5 +42,23 @@ public class RoundService {
             throw new MyException("courseId不能为空",MyException.NOT_FOUND_ERROR);
         }
         return roundDao.listByCourseId(courseId,RoundDao.HAS_SEMINAR);
+    }
+
+    /**
+     * Description: 修改分数计算方法
+     * @Author: WinstonDeng
+     * @Date: 1:45 2018/12/26
+     */
+    public boolean updateScoreMethod(Round round) throws MyException{
+        return roundDao.updateScoreMethod(round);
+    }
+
+    /**
+     * Description: 修改班级轮次的报名数
+     * @Author: WinstonDeng
+     * @Date: 1:45 2018/12/26
+     */
+    public boolean updateEnrollNumber(CClassRound cClassRound) throws MyException{
+        return roundDao.updateEnrollNumber(cClassRound);
     }
 }

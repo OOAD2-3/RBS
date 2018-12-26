@@ -29,4 +29,9 @@
         UPDATE klass_student SET team_id=#{teamId}
         WHERE klass_id=#{cClassId} AND student_id=#{studentId}
     </update>
+
+    <update id="updateTeamIdCollectionToNull">
+        update klass_student
+        set team_id= replace(team_id,#{teamId},null)
+    </update>
 </mapper>

@@ -94,4 +94,27 @@ public class AttendanceDao {
     }
 
 
+    /**
+     * Description: 通过id修改attendance PPT
+     * @Author: WinstonDeng
+     * @Date: 19:48 2018/12/25
+     */
+    public boolean updateAttendancePPT(Attendance attendance) throws Exception{
+        if(!attendanceMapper.updateAttendancePPT(attendance)){
+            throw new MyException("修改attendance错误！数据库处理错误",MyException.ERROR);
+        }
+        return true;
+    }
+
+    /**
+     * Description: 通过id修改attendance Report
+     * @Author: WinstonDeng
+     * @Date: 19:48 2018/12/25
+     */
+    public boolean updateAttendanceReport(Attendance attendance) throws Exception{
+        if(!attendanceMapper.updateAttendanceReport(attendance)){
+            throw new MyException("修改attendance错误！数据库处理错误",MyException.ERROR);
+        }
+        return true;
+    }
 }

@@ -2,10 +2,7 @@ package com.rbs.project.controller;
 
 import com.rbs.project.dao.TeamDao;
 import com.rbs.project.exception.MyException;
-import com.rbs.project.pojo.entity.Course;
-import com.rbs.project.pojo.entity.Teacher;
-import com.rbs.project.pojo.entity.Team;
-import com.rbs.project.pojo.entity.TeamValidApplication;
+import com.rbs.project.pojo.entity.*;
 import com.rbs.project.pojo.vo.TeamValidApplicationVO;
 import com.rbs.project.service.ApplicationService;
 import com.rbs.project.service.CourseService;
@@ -17,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Description:
@@ -63,5 +61,29 @@ public class RequestController {
     @ResponseBody
     public ResponseEntity<Boolean> updateTeamApplicationStatus(@RequestParam("requestId") long requestId, @RequestParam("status") int status) throws Exception {
         return ResponseEntity.ok(applicationService.updateTeamValidApplicationStatus(requestId, status));
+    }
+
+    /**
+     * Description: 按id处理共享请求 同意/拒绝 注意这里输入的是字符串accept/reject
+     * @Author: WinstonDeng
+     * @Date: 20:02 2018/12/24
+     */
+    @PutMapping("/teamshare/{teamshareId}")
+    @ResponseBody
+    public ResponseEntity<Boolean> handleTeamShareRequest(@PathVariable("teamshareId") long requestId, @RequestBody Map<String,String> handle) throws Exception {
+        String handleType="handleType";
+        String accept="accept";
+        String reject="reject";
+        Integer status=null;
+        if(handle.get(handleType).equals(accept)){
+            status= ShareTeamApplication.STATUS_ACCEPT;
+        }
+        if(handle.get(handleType).equals(reject)){
+            status=ShareTeamApplication.STATUS_REJECT;
+        }
+        if(handle.get(handleType)==null){
+            throw new MyException("handleType不能为空",MyException.ERROR);
+        }
+        return ResponseEntity.ok().body(applicationService.updateTeamShareApplicationStatus(requestId,status));
     }
 }

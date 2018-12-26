@@ -4,10 +4,14 @@ import com.rbs.project.exception.MyException;
 import com.rbs.project.pojo.entity.Attendance;
 import com.rbs.project.pojo.vo.AttendanceVO;
 import com.rbs.project.service.AttendanceService;
+import com.rbs.project.utils.FileLoadUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -75,4 +79,65 @@ public class AttendanceController {
         }
         return ResponseEntity.ok(attendanceService.deleteAttendance(attendanceId));
     }
+
+    /**
+     * Description: 上传PPT
+     *
+     * @Author: WinstonDeng
+     * @Date: 19:20 2018/12/25
+     */
+    @PostMapping("/{attendanceId}/ppt")
+    @ResponseBody
+    public ResponseEntity<String> uploadPPT(HttpServletRequest request, @PathVariable("attendanceId") long attendanceId, @RequestParam("ppt") MultipartFile file) throws Exception {
+        if((Long)attendanceId==null){
+            throw new MyException("attendanceId不能为空",MyException.ID_FORMAT_ERROR);
+        }
+        return ResponseEntity.ok().body(attendanceService.uploadPPT(attendanceId,request.getServletContext().getRealPath("/resources/ppt/"),file));
+    }
+
+    /**
+     * Description: 下载PPT
+     * @Author: WinstonDeng
+     * @Date: 20:36 2018/12/25
+     */
+    @GetMapping("/{attendanceId}/ppt")
+    @ResponseBody
+    public ResponseEntity<String> downloadPPT(HttpServletRequest request,HttpServletResponse response,@PathVariable("attendanceId") long attendanceId)throws Exception{
+        if((Long)attendanceId==null){
+            throw new MyException("attendanceId不能为空",MyException.ID_FORMAT_ERROR);
+        }
+        Attendance attendance=attendanceService.getAttendanceById(attendanceId);
+        return ResponseEntity.ok().body(FileLoadUtils.downloadFile(request,response,attendance.getPptUrl(),attendance.getPptName()));
+    }
+
+    /**
+     * Description: 上传report
+     *
+     * @Author: WinstonDeng
+     * @Date: 19:20 2018/12/25
+     */
+    @PostMapping("/{attendanceId}/report")
+    @ResponseBody
+    public ResponseEntity<String> uploadReport(HttpServletRequest request, @PathVariable("attendanceId") long attendanceId, @RequestParam("report") MultipartFile file) throws Exception {
+        if((Long)attendanceId==null){
+            throw new MyException("attendanceId不能为空",MyException.ID_FORMAT_ERROR);
+        }
+        return ResponseEntity.ok().body(attendanceService.uploadReport(attendanceId,request.getServletContext().getRealPath("/resources/report/"),file));
+    }
+
+    /**
+     * Description: 下载PPT
+     * @Author: WinstonDeng
+     * @Date: 20:36 2018/12/25
+     */
+    @GetMapping("/{attendanceId}/report")
+    @ResponseBody
+    public ResponseEntity<String> downloadReport(HttpServletRequest request,HttpServletResponse response,@PathVariable("attendanceId") long attendanceId)throws Exception{
+        if((Long)attendanceId==null){
+            throw new MyException("attendanceId不能为空",MyException.ID_FORMAT_ERROR);
+        }
+        Attendance attendance=attendanceService.getAttendanceById(attendanceId);
+        return ResponseEntity.ok().body(FileLoadUtils.downloadFile(request,response,attendance.getReportUrl(),attendance.getReportName()));
+    }
+
 }

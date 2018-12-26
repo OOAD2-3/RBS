@@ -44,4 +44,11 @@ public interface RoundScoreMapper {
      * @throws Exception
      */
     boolean deleteByPrimaryKey(@Param("roundId") long roundId, @Param("teamId") long teamId) throws Exception;
+
+    /**
+     * 通过team_id删除记录
+     * @param teamId
+     * @return
+     */
+    boolean deleteByTeamId(long teamId);
 }

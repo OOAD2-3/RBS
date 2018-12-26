@@ -1,13 +1,11 @@
 package com.rbs.project.dao;
 
 import com.rbs.project.exception.MyException;
-import com.rbs.project.mapper.CClassMapper;
-import com.rbs.project.mapper.CourseMapper;
-import com.rbs.project.mapper.StudentMapper;
-import com.rbs.project.mapper.TeamMapper;
+import com.rbs.project.mapper.*;
 import com.rbs.project.pojo.entity.CClass;
 import com.rbs.project.pojo.entity.Student;
 import com.rbs.project.pojo.entity.Team;
+import com.rbs.project.pojo.relationship.CClassStudent;
 import org.apache.poi.ss.formula.functions.T;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -34,6 +32,9 @@ public class TeamDao {
 
     @Autowired
     private StudentMapper studentMapper;
+
+    @Autowired
+    private CClassStudentMapper cClassStudentMapper;
 
     public static final int HAS_COURSE = 0;
     public static final int HAS_CCLASS = 1;
@@ -171,4 +172,17 @@ public class TeamDao {
         }
         return true;
     }
+
+    /**
+     * Description: 用从课程队伍分班策略,返回共享队伍之后，队伍所在班级
+     *
+     * 要确认从课程队伍属于哪个班，要先查klass_student表里courseid和teamid对应学生的klass_id，
+     * 再通过分班策略确定最后的班级号
+     * @Author: WinstonDeng
+     * @Date: 16:35 2018/12/25
+     */
+//    public long getCClassIdOfSubCourseTeam(long mainTeamId,long subCourseId)throws Exception{
+//        List<CClassStudent> cClassStudents=cClassStudentMapper.getByTeamIdAndCourseId(mainTeamId,subCourseId);
+//
+//    }
 }

@@ -43,9 +43,9 @@ public class ShareTeamApplication {
      */
     private Teacher subCourseTeacher;
 
-    public final static int STATUS_UNHANDLE=0;
+
     public final static int STATUS_ACCEPT = 1;
-    public final static int STATUS_REJECT=2;
+    public final static int STATUS_REJECT=0;
 
     //==================================================getter AND setter==================================================//
 

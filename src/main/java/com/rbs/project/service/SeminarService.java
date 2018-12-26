@@ -144,7 +144,7 @@ public class SeminarService {
         if ((Long) seminarId == null) {
             throw new MyException("seminarId不能为空", MyException.ERROR);
         }
-        return seminarDao.findSeminarById(seminarId, SeminarDao.HAS_ROUND);
+        return seminarDao.findSeminarById(seminarId, SeminarDao.HAS_ROUND,SeminarDao.HAS_COURSE);
     }
 
     /**

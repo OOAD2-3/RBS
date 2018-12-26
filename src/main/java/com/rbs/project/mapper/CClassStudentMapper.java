@@ -58,4 +58,12 @@ public interface CClassStudentMapper {
      * @return
      */
     boolean updateTeamIdByPrimaryKeys(@Param("teamId") long teamId, @Param("cClassId") long cClassId, @Param("studentId") long studentId) throws Exception;
+
+    /**
+     * 批量修改team_id为null
+     * @param teamId
+     * @return
+     * @throws Exception
+     */
+    boolean updateTeamIdCollectionToNull(long teamId) throws Exception;
 }

@@ -7,10 +7,12 @@ import com.rbs.project.mapper.CourseMapper;
 import com.rbs.project.mapper.SeminarMapper;
 import com.rbs.project.pojo.entity.CClass;
 import com.rbs.project.pojo.entity.CClassSeminar;
+import com.rbs.project.pojo.entity.Course;
 import com.rbs.project.pojo.entity.Seminar;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -137,4 +139,49 @@ public class CClassSeminarDao {
         return cClassSeminars;
     }
 
+    /**
+     * Description: 通过courseId获得正在进行讨论课列表
+     * @Author: WinstonDeng
+     * @Date: 23:20 2018/12/25
+     */
+    public List<CClassSeminar> findUnderWayByCourseId(long courseId) throws MyException {
+        List<CClass> cClasses=cClassMapper.findByCourseId(courseId);
+        List<CClassSeminar> cClassSeminars=new ArrayList<>();
+        for(CClass cClass
+                :cClasses){
+            List<CClassSeminar> temp=cClassSeminarMapper.findByCClassId(cClass.getId());
+            for(CClassSeminar cClassSeminar:temp){
+                if(cClassSeminar.getStatus()==CClassSeminar.STATUS_UNDERWAY){
+                    System.out.println(cClassSeminar.getId());
+                    cClassSeminars.add(cClassSeminar);
+                }
+            }
+        }
+        return cClassSeminars;
+    }
+
+    /**
+     * Description: 通过teacherId获得正在进行的讨论课
+     * @Author: WinstonDeng
+     * @Date: 0:07 2018/12/26
+     */
+    public List<CClassSeminar> findUnderWayByTeacherId(long teacherId) {
+        List<CClassSeminar> cClassSeminars=new ArrayList<>();
+        List<Course> courses=courseMapper.findByTeacherId(teacherId);
+        for(Course course
+                :courses){
+            List<CClass> cClasses=cClassMapper.findByCourseId(course.getId());
+            for(CClass cClass
+                    :cClasses){
+                List<CClassSeminar> temp=cClassSeminarMapper.findByCClassId(cClass.getId());
+                for(CClassSeminar cClassSeminar:temp){
+                    if(cClassSeminar.getStatus()==CClassSeminar.STATUS_UNDERWAY){
+                        System.out.println(cClassSeminar.getId());
+                        cClassSeminars.add(cClassSeminar);
+                    }
+                }
+            }
+        }
+        return cClassSeminars;
+    }
 }

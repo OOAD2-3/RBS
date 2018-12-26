@@ -82,7 +82,7 @@ public class ShareDao {
 
 
     /**
-     * Description: 通过id查找共享讨论课信息
+     * Description: 通过id查找共享讨论课申请信息
      * @Author: WinstonDeng
      * @Date: 16:29 2018/12/23
      */
@@ -120,6 +120,20 @@ public class ShareDao {
         }
         return shareSeminarApplications;
     }
+
+    /**
+     * Description: 通过id查找共享组队申请信息
+     * @Author: WinstonDeng
+     * @Date: 16:29 2018/12/23
+     */
+    public ShareTeamApplication getShareTeamApplicationById(long id,int ...hasSomething) throws MyException{
+        ShareTeamApplication shareTeamApplication=shareTeamApplicationMapper.findById(id);
+        if(shareTeamApplication==null){
+            throw new MyException("获取共享分组请求错误！该记录不存在",MyException.NOT_FOUND_ERROR);
+        }
+        hasSomethingFun(shareTeamApplication,hasSomething);
+        return shareTeamApplication;
+    }
     /**
      * Description: 通过主课程id查找共享分组信息列表
      * @Author: WinstonDeng
@@ -144,5 +158,21 @@ public class ShareDao {
             hasSomethingFun(shareTeamApplication,hasSomething);
         }
         return shareTeamApplications;
+    }
+
+    /**
+     * Description: 通过id更新组队共享请求状态
+     * @Author: WinstonDeng
+     * @Date: 0:20 2018/12/25
+     */
+    public boolean updateShareTeamApplicationStatus(long requestId, Integer status) throws MyException {
+        ShareTeamApplication shareTeamApplication=shareTeamApplicationMapper.findById(requestId);
+        if(shareTeamApplication==null){
+            throw new MyException("修改组队共享请求状态错误！未找到该条记录",MyException.NOT_FOUND_ERROR);
+        }
+        if(!shareTeamApplicationMapper.updateStatusById(requestId,status)){
+            throw new MyException("修改组队共享请求状态错误！数据库处理错误",MyException.ERROR);
+        }
+        return true;
     }
 }
