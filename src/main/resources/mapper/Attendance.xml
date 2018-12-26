@@ -14,20 +14,23 @@
     </resultMap>
 
     <select id="findById" resultMap="tab_attendance">
-        SELECT id,klass_seminar_id,team_id,team_order,is_present,ppt_name,ppt_url,report_name,report_url
+        SELECT attendance.id,attendance.klass_seminar_id,attendance.team_id,
+        attendance.team_order,attendance.is_present,attendance.ppt_name,attendance.ppt_url,attendance.report_name,attendance.report_url
         FROM attendance
         WHERE id=#{attendanceId}
     </select>
 
     <select id="findByCClassIdAndSeminarIdAndTeamOrder" parameterType="com.rbs.project.pojo.entity.Attendance" resultMap="tab_attendance">
-        SELECT attendance.id,klass_seminar_id,team_id,team_order,is_present,ppt_name,ppt_url,report_name,report_url
+        SELECT attendance.id,attendance.klass_seminar_id,attendance.team_id,
+        attendance.team_order,attendance.is_present,attendance.ppt_name,attendance.ppt_url,attendance.report_name,attendance.report_url
         FROM attendance LEFT JOIN klass_seminar
         ON attendance.klass_seminar_id = klass_seminar.id
         WHERE klass_seminar.klass_id = #{cClassId} AND klass_seminar.seminar_id=#{seminarId} AND attendance.team_order=#{teamOrder}
     </select>
 
     <select id="findByCClassIdAndSeminarId" resultMap="tab_attendance">
-        SELECT attendance.id,klass_seminar_id,team_id,team_order,is_present,ppt_name,ppt_url,report_name,report_url
+        SELECT attendance.id,attendance.klass_seminar_id,attendance.team_id,
+        attendance.team_order,attendance.is_present,attendance.ppt_name,attendance.ppt_url,attendance.report_name,attendance.report_url
         FROM attendance LEFT JOIN klass_seminar
         ON attendance.klass_seminar_id = klass_seminar.id
         WHERE klass_seminar.klass_id = #{cClassId} AND klass_seminar.seminar_id=#{seminarId}

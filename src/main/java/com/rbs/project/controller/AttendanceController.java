@@ -70,10 +70,9 @@ public class AttendanceController {
      * @Author: 17Wang
      * @Time: 17:57 2018/12/22
      */
-    @DeleteMapping
+    @DeleteMapping("/{attendanceId}")
     @ResponseBody
-    public ResponseEntity<Boolean> cancelAttendance(@RequestBody Map<String, Long> map) throws Exception {
-        Long attendanceId = map.get("attendanceId");
+    public ResponseEntity<Boolean> cancelAttendance(@PathVariable("attendanceId") Long attendanceId) throws Exception {
         if (attendanceId == null) {
             throw new MyException("存在为空的字段，请检查字段命名和赋值_attendanceId", MyException.NOT_FOUND_ERROR);
         }
