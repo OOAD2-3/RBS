@@ -34,12 +34,12 @@
     </select>
 
     <select id="findByCourseIdAndTeamIdIsNULL" resultMap="tab_student">
-        SELECT student.id,student.account,student.password,student.is_active,student.student_name,email
-        FROM klass_student LEFT JOIN team_student
-          ON klass_student.student_id=team_student.student_id
-        LEFT JOIN student
-          ON student.id
-        WHERE klass_student.course_id=#{courseId} AND team_student.team_id IS NULL GROUP BY student.id
+        SELECT *
+	    FROM student LEFT JOIN klass_student
+		  ON student.id=klass_student.student_id
+	    LEFT JOIN team_student
+		  ON team_student.student_id=klass_student.student_id
+	    WHERE team_student.team_id is null AND klass_student.course_id=#{courseId};
     </select>
 
     <select id="findByCourseIdAndTeamId" resultMap="tab_student">
