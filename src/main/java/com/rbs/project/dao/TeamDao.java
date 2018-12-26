@@ -99,7 +99,7 @@ public class TeamDao {
         if (!teamMapper.insertTeam(team)) {
             throw new MyException("新建队伍出错！Team数据库处理错误", MyException.ERROR);
         }
-        if(!cClassTeamMapper.insertBycClassIdAndTeamId(team.getcClassId(),team.getId())){
+        if (!cClassTeamMapper.insertBycClassIdAndTeamId(team.getcClassId(), team.getId())) {
             throw new MyException("新建队伍出错！KlassTeam数据库处理错误", MyException.ERROR);
         }
         return true;
@@ -152,16 +152,20 @@ public class TeamDao {
     }
 
     /**
-     * Description: 删除小组
+     * Description: 删除小组 在这个方法同时删除klass_team 级联删除被共享班级的小组？
      *
      * @Author: 17Wang
      * @Time: 10:59 2018/12/23
      */
     public boolean deleteTeamById(long teamId) throws MyException {
         //检查是否有该行
-        getTeamById(teamId);
+        Team team = getTeamById(teamId);
         if (!teamMapper.deleteById(teamId)) {
             throw new MyException("删除小组错误！数据库处理错误", MyException.ERROR);
+        }
+        //直接删掉所有关于team的东西
+        if(!cClassTeamMapper.deleteByTeamId(teamId)){
+            throw new MyException("删除小组错误！klass_team处理错误",MyException.ERROR );
         }
         return true;
     }
@@ -182,11 +186,12 @@ public class TeamDao {
 
     /**
      * Description: 新增teamStudent表字段
+     *
      * @Author: 17Wang
      * @Time: 22:52 2018/12/25
-    */
-    public boolean addTeamStudentByTeamIdAndStudentId(long teamId,long studentId) throws Exception {
-        if(!teamStudentMapper.insertByTeamIdAndStudentId(teamId,studentId)){
+     */
+    public boolean addTeamStudentByTeamIdAndStudentId(long teamId, long studentId) throws Exception {
+        if (!teamStudentMapper.insertByTeamIdAndStudentId(teamId, studentId)) {
             throw new MyException("新增teamStudent表字段错误！数据库处理错误", MyException.ERROR);
         }
         return true;
@@ -194,11 +199,12 @@ public class TeamDao {
 
     /**
      * Description: 删除teamStudent表字段
+     *
      * @Author: 17Wang
      * @Time: 23:43 2018/12/25
-    */
-    public boolean deleteTeamStudentByTeamIdAndStudentId(long teamId,long studentId) throws MyException {
-        if(!teamStudentMapper.deleteByTeamIdAndStudentId(teamId,studentId)){
+     */
+    public boolean deleteTeamStudentByTeamIdAndStudentId(long teamId, long studentId) throws MyException {
+        if (!teamStudentMapper.deleteByTeamIdAndStudentId(teamId, studentId)) {
             throw new MyException("新增teamStudent表字段错误！数据库处理错误", MyException.ERROR);
         }
         return true;

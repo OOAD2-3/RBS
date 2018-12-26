@@ -43,6 +43,10 @@ public class TeamController {
     @PostMapping
     @ResponseBody
     public Map<String, Object> createTeam(@RequestBody Team team) throws Exception {
+        if (team.getName() == null || team.getCourseId() == 0 || team.getcClassId() == 0 || team.getLeaderId() == 0) {
+            throw new MyException("存在为空的字段！请检查字段的问题", MyException.ERROR);
+        }
+
         Team trueTeam = new Team();
         trueTeam.setName(team.getName());
         trueTeam.setCourseId(team.getCourseId());
@@ -96,7 +100,7 @@ public class TeamController {
     public ResponseEntity<Boolean> addMemberToTeam(@PathVariable("teamId") long teamId, @RequestBody List<Long> members) throws Exception {
         List<Long> membersIds = new ArrayList<>();
         for (Long map : members) {
-                membersIds.add(map);
+            membersIds.add(map);
         }
         return ResponseEntity.ok(teamService.addMemberToTeam(teamId, membersIds));
     }
@@ -139,19 +143,20 @@ public class TeamController {
     @ResponseBody
     public ResponseEntity<Boolean> addTeamValidRequest(@PathVariable("teamId") long teamId, @RequestBody Map<String, String> map) throws Exception {
         String reason = map.get("reason");
-        return ResponseEntity.ok(applicationService.addTeamValidApplication(teamId,reason));
+        return ResponseEntity.ok(applicationService.addTeamValidApplication(teamId, reason));
     }
-    
+
     /**
      * Description: 查看team的请求
+     *
      * @Author: 17Wang
      * @Time: 14:12 2018/12/23
-    */
+     */
     @GetMapping("/{teamId}/request")
     @ResponseBody
-    public Map<String,Object> getTeamValidRequest(@PathVariable("teamId") long teamId) throws MyException {
-        TeamValidApplication teamValidApplication=applicationService.getTeamValidRequestByTeamId(teamId);
-        Map<String,Object> map=new HashMap<>();
+    public Map<String, Object> getTeamValidRequest(@PathVariable("teamId") long teamId) throws MyException {
+        TeamValidApplication teamValidApplication = applicationService.getTeamValidRequestByTeamId(teamId);
+        Map<String, Object> map = new HashMap<>();
         map.put("applicationId", teamValidApplication.getId());
         map.put("reason", teamValidApplication.getReason());
         map.put("status", teamValidApplication.getStatus());

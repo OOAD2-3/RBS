@@ -16,10 +16,19 @@ public interface CClassTeamMapper {
 
     /**
      * 新增一条数据
+     *
      * @param cClassId
      * @param teamId
      * @return
      * @throws Exception
      */
-    boolean insertBycClassIdAndTeamId(@Param("cClassId") long cClassId,@Param("teamId") long teamId) throws Exception;
+    boolean insertBycClassIdAndTeamId(@Param("cClassId") long cClassId, @Param("teamId") long teamId) throws Exception;
+
+    /**
+     * 解除所有与teamId共享的关联信息
+     *
+     * @param teamId
+     * @return
+     */
+    boolean deleteByTeamId(long teamId);
 }

@@ -43,17 +43,25 @@ public class TeamService {
      */
     @Transactional(rollbackFor = Exception.class)
     public Long createTeam(Team team) throws Exception {
-        //如果出错，说明这个leader已经在这个课程下有了小组
+        //如果出错，说明这个leader已经在这个课程下没有小组
+        Team myTeam;
         try {
-            teamDao.getTeamBycClassIdAndStudentId(team.getcClassId(), team.getLeaderId());
+            myTeam = teamDao.getTeamBycClassIdAndStudentId(team.getcClassId(), team.getLeaderId());
         } catch (Exception e) {
+            myTeam = null;
+        }
+        if (myTeam != null) {
             throw new MyException("创建小组出错！这个人已经在这个课程下加入了一个小组", MyException.ERROR);
         }
+
         for (Student student : team.getStudents()) {
             //如果出错，说明有成员已经在这个课程下有了小组
             try {
-                teamDao.getTeamBycClassIdAndStudentId(team.getcClassId(), student.getId());
+                myTeam = teamDao.getTeamBycClassIdAndStudentId(team.getcClassId(), student.getId());
             } catch (Exception e) {
+                myTeam = null;
+            }
+            if (myTeam != null) {
                 throw new MyException("添加成员出错！学生" + student.getId() + "已有队伍", MyException.ERROR);
             }
         }
@@ -192,7 +200,8 @@ public class TeamService {
             Team tempTeam = null;
             try {
                 tempTeam = teamDao.getTeamBycClassIdAndStudentId(team.getcClassId(), memberId);
-            } catch (Exception e) {}
+            } catch (Exception e) {
+            }
             if (tempTeam != null) {
                 throw new MyException("成员" + student.getStudentName() + "已有队伍", MyException.AUTHORIZATION_ERROR);
             }
@@ -222,7 +231,7 @@ public class TeamService {
     @Transactional(rollbackFor = Exception.class)
     public boolean removeMemberFromTeam(long teamId, long memberId) throws Exception {
         //自己不能踢出自己
-        Team myTeam=teamDao.getTeamById(teamId);
+        Team myTeam = teamDao.getTeamById(teamId);
         if (myTeam.getLeaderId() == memberId) {
             throw new MyException("自己不能踢出自己么么", MyException.AUTHORIZATION_ERROR);
         }
@@ -252,10 +261,12 @@ public class TeamService {
     @Transactional(rollbackFor = Exception.class)
     public boolean dissolveTeam(long teamId) throws Exception {
         //将该小组下的成员置为无小组状态
+        //通过删除team_student表，解除team和student的关系
         List<Student> students = studentDao.listByTeamId(teamId);
         for (Student student : students) {
-            removeMemberFromTeam(teamId, student.getId());
+            teamDao.deleteTeamStudentByTeamIdAndStudentId(teamId, student.getId());
         }
+
         //删除这个小组
         teamDao.deleteTeamById(teamId);
         return true;

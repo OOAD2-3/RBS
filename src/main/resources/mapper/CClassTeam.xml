@@ -5,4 +5,8 @@
       INSERT INTO klass_team(klass_id, team_id)
       VALUES (#{cClassId},#{teamId})
     </insert>
+
+    <delete id="deleteByTeamId" parameterType="Long">
+      DELETE FROM klass_team WHERE team_id=#{teamId}
+    </delete>
 </mapper>
