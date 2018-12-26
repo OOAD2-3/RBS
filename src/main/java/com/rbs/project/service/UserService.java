@@ -34,8 +34,8 @@ public class UserService {
      * @Time: 13:09 2018/12/16
      */
     public boolean userActivation(User user) throws MyException {
-        User nowUser=UserUtils.getNowUser();
-        if(user.getPassword()==nowUser.getPassword()){
+        User nowUser = UserUtils.getNowUser();
+        if (user.getPassword().equals(nowUser.getPassword())) {
             throw new MyException("激活密码不能和初始密码一样", MyException.ERROR);
         }
         //判断json格式，密码不能为空
@@ -104,9 +104,10 @@ public class UserService {
 
     /**
      * Description: 修改邮箱
+     *
      * @Author: 17Wang
      * @Time: 16:02 2018/12/16
-    */
+     */
     public boolean resetEmail(String email) throws MyException {
         //获取当前用户信息
         User user;
