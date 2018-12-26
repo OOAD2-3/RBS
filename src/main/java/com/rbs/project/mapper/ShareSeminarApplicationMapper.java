@@ -15,6 +15,7 @@ import java.util.List;
 public interface ShareSeminarApplicationMapper {
     /**
      * 通过id查找共享讨论课申请
+     *
      * @param id
      * @return
      */
@@ -22,6 +23,7 @@ public interface ShareSeminarApplicationMapper {
 
     /**
      * 通过主课程id查找共享讨论课申请列表
+     *
      * @param mainCourseId
      * @return
      */
@@ -29,8 +31,19 @@ public interface ShareSeminarApplicationMapper {
 
     /**
      * 通过从课程id查找讨论课共享申请列表
+     *
      * @param subCourseId
      * @return
+     * @throws Exception
      */
     List<ShareSeminarApplication> findBySubCourseId(long subCourseId) throws Exception;
+
+    /**
+     * 删除主从课程和courseId有关的请求
+     *
+     * @param courseId
+     * @return
+     * @throws Exception
+     */
+    boolean deleteByCourseId(long courseId) throws Exception;
 }

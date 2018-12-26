@@ -31,5 +31,10 @@
         set status=#{status}
         where id=#{id}
     </update>
+
+    <delete id="deleteByCourseId" parameterType="Long">
+        DELETE FROM share_team_application
+        WHERE main_course_id=#{courseId} OR sub_course_id=#{courseId}
+    </delete>
 </mapper>
 
