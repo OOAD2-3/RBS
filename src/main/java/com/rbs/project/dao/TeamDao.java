@@ -9,6 +9,7 @@ import com.rbs.project.pojo.relationship.CClassStudent;
 import org.apache.poi.ss.formula.functions.T;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
 import java.util.List;
@@ -34,7 +35,14 @@ public class TeamDao {
     private StudentMapper studentMapper;
 
     @Autowired
+    private TeamStudentMapper teamStudentMapper;
+
+    @Autowired
+    private CClassTeamMapper cClassTeamMapper;
+    
+    @Autowired
     private CClassStudentMapper cClassStudentMapper;
+
 
     public static final int HAS_COURSE = 0;
     public static final int HAS_CCLASS = 1;
@@ -53,7 +61,7 @@ public class TeamDao {
                 team.setLeader(studentMapper.findById(team.getLeaderId()));
             }
             if (i == HAS_MEMBERS) {
-                team.setStudents(studentMapper.listByTeamId(team.getId()));
+                team.setStudents(studentMapper.findByTeamId(team.getId()));
             }
         }
     }
@@ -86,14 +94,18 @@ public class TeamDao {
     }
 
     /**
-     * Description: 新建队伍
+     * Description: 新建队伍 在这个方法同时新增klass_team
      *
      * @Author: 17Wang
      * @Time: 9:06 2018/12/20
      */
+    @Transactional(rollbackFor = Exception.class)
     public boolean addTeam(Team team) throws Exception {
         if (!teamMapper.insertTeam(team)) {
-            throw new MyException("新建队伍出错！数据库处理错误", MyException.ERROR);
+            throw new MyException("新建队伍出错！Team数据库处理错误", MyException.ERROR);
+        }
+        if (!cClassTeamMapper.insertBycClassIdAndTeamId(team.getcClassId(), team.getId())) {
+            throw new MyException("新建队伍出错！KlassTeam数据库处理错误", MyException.ERROR);
         }
         return true;
     }
@@ -104,10 +116,10 @@ public class TeamDao {
      * @Author: 17
      * @Date: 15:48 2018/12/23
      */
-    public Team getTeamByCourseIdAndStudentId(long courseId, long studentId, int... hasSomething) throws MyException {
-        Team team = teamMapper.getTeamByCourseIdAndStudentId(courseId, studentId);
+    public Team getTeamBycClassIdAndStudentId(long cClassId, long studentId, int... hasSomething) throws MyException {
+        Team team = teamMapper.getTeamBycClassIdAndStudentId(cClassId, studentId);
         if (team == null) {
-            throw new MyException("该学生在该课程下无小组", MyException.NOT_FOUND_ERROR);
+            throw new MyException("该学生在该班级下无小组", MyException.NOT_FOUND_ERROR);
         }
         hasSomethingFun(team, hasSomething);
         return team;
@@ -128,7 +140,7 @@ public class TeamDao {
     }
 
     /**
-     * Description: 通过课程id查看队伍列表
+     * Description: 通过课程id查看队伍列表（主从都可以）
      *
      * @Author: WinstonDeng
      * @Date: 21:24 2018/12/22
@@ -145,16 +157,20 @@ public class TeamDao {
     }
 
     /**
-     * Description: 删除小组
+     * Description: 删除小组 在这个方法同时删除klass_team 级联删除被共享班级的小组？
      *
      * @Author: 17Wang
      * @Time: 10:59 2018/12/23
      */
     public boolean deleteTeamById(long teamId) throws MyException {
         //检查是否有该行
-        getTeamById(teamId);
+        Team team = getTeamById(teamId);
         if (!teamMapper.deleteById(teamId)) {
             throw new MyException("删除小组错误！数据库处理错误", MyException.ERROR);
+        }
+        //直接删掉所有关于team的东西
+        if(!cClassTeamMapper.deleteByTeamId(teamId)){
+            throw new MyException("删除小组错误！klass_team处理错误",MyException.ERROR );
         }
         return true;
     }
@@ -174,15 +190,29 @@ public class TeamDao {
     }
 
     /**
-     * Description: 用从课程队伍分班策略,返回共享队伍之后，队伍所在班级
+     * Description: 新增teamStudent表字段
      *
-     * 要确认从课程队伍属于哪个班，要先查klass_student表里courseid和teamid对应学生的klass_id，
-     * 再通过分班策略确定最后的班级号
-     * @Author: WinstonDeng
-     * @Date: 16:35 2018/12/25
+     * @Author: 17Wang
+     * @Time: 22:52 2018/12/25
      */
-//    public long getCClassIdOfSubCourseTeam(long mainTeamId,long subCourseId)throws Exception{
-//        List<CClassStudent> cClassStudents=cClassStudentMapper.getByTeamIdAndCourseId(mainTeamId,subCourseId);
-//
-//    }
+    public boolean addTeamStudentByTeamIdAndStudentId(long teamId, long studentId) throws Exception {
+        if (!teamStudentMapper.insertByTeamIdAndStudentId(teamId, studentId)) {
+            throw new MyException("新增teamStudent表字段错误！数据库处理错误", MyException.ERROR);
+        }
+        return true;
+    }
+
+    /**
+     * Description: 删除teamStudent表字段
+     *
+     * @Author: 17Wang
+     * @Time: 23:43 2018/12/25
+     */
+    public boolean deleteTeamStudentByTeamIdAndStudentId(long teamId, long studentId) throws MyException {
+        if (!teamStudentMapper.deleteByTeamIdAndStudentId(teamId, studentId)) {
+            throw new MyException("新增teamStudent表字段错误！数据库处理错误", MyException.ERROR);
+        }
+        return true;
+    }
+
 }

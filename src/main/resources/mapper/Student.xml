@@ -26,18 +26,20 @@
         SELECT id,account,password,is_active,student_name,email FROM student WHERE student_name=#{studentName}
     </select>
 
-    <select id="listByTeamId" resultMap="tab_student">
+    <select id="findByTeamId" resultMap="tab_student">
         SELECT id,account,password,is_active,student_name,email
-        FROM student LEFT JOIN klass_student
-          ON student.id=klass_student.student_id
-        WHERE klass_student.team_id=#{teamId}
+        FROM student LEFT JOIN team_student
+          ON student.id=team_student.student_id
+        WHERE team_student.team_id=#{teamId}
     </select>
 
-    <select id="findByCourseIdAndTeamId" resultMap="tab_student">
-        SELECT id,account,password,is_active,student_name,email
-        FROM student LEFT JOIN klass_student
-          ON student.id=klass_student.student_id
-        WHERE klass_student.course_id=#{courseId} AND klass_student.team_id IS NULL OR klass_student.team_id=0
+    <select id="findByCourseIdAndTeamIdIsNULL" resultMap="tab_student">
+        SELECT *
+        FROM klass_student LEFT JOIN team_student
+          ON klass_student.student_id=team_student.student_id
+        LEFT JOIN student
+          ON student.id
+        WHERE klass_student.course_id=#{courseId} AND team_student.team_id IS NULL
     </select>
 
     <update id="updatePasswordAndEmailAndActiveById" parameterType="com.rbs.project.pojo.entity.Student">

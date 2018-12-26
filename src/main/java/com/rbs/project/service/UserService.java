@@ -38,10 +38,6 @@ public class UserService {
         if (user.getPassword() == null) {
             throw new MyException("激活失败！密码不能为空", MyException.ERROR);
         }
-        //判断json格式，邮箱不能为空
-        if (user.getEmail() == null) {
-            throw new MyException("激活失败！邮箱不能为空", MyException.ERROR);
-        }
         user.setActive(true);
         if (user instanceof Student) {
             studentDao.updatePasswordAndEmailAndActiveByStudent((Student) user);

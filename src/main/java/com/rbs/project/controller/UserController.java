@@ -1,6 +1,5 @@
 package com.rbs.project.controller;
 
-import com.rbs.project.dao.UserDao;
 import com.rbs.project.exception.MyException;
 import com.rbs.project.pojo.entity.Student;
 import com.rbs.project.pojo.entity.Teacher;
@@ -8,9 +7,7 @@ import com.rbs.project.pojo.entity.User;
 import com.rbs.project.service.UserService;
 import com.rbs.project.utils.UserUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -39,7 +36,7 @@ public class UserController {
     public ResponseEntity<Boolean> resetPassword(@RequestBody Map<String, String> password) throws MyException {
         String newPassword = password.get("newPassword");
         String oldPassword = password.get("oldPassword");
-        if(oldPassword.equals(newPassword)){
+        if (oldPassword.equals(newPassword)) {
             throw new MyException("新老密码不能相同", MyException.ERROR);
         }
         if (oldPassword == null || newPassword.equals("")) {
@@ -80,5 +77,10 @@ public class UserController {
     @ResponseBody
     public ResponseEntity<Boolean> resetEmail(@RequestBody Map<String, String> email) throws MyException {
         return ResponseEntity.ok(userService.resetEmail(email.get("email")));
+    }
+
+    @RequestMapping(value = "test.html")
+    public String test(){
+        return "test";
     }
 }

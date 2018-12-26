@@ -175,36 +175,6 @@ public class CClassDao {
     }
 
     /**
-     * Description: 修改klass_student表的teamid字段
-     *
-     * @Author: 17Wang
-     * @Time: 13:01 2018/12/19
-     */
-    public boolean updateTeamIdInKlassStudent(long teamId, long cClassId, long studentId) throws Exception {
-        if (cClassStudentMapper.getByPrimaryKeys(cClassId, studentId) == null) {
-            throw new MyException("修改klass_student的teamid字段错误！找不到该行", MyException.NOT_FOUND_ERROR);
-        }
-        if (!cClassStudentMapper.updateTeamIdByPrimaryKeys(teamId, cClassId, studentId)) {
-            throw new MyException("修改klass_student的teamid字段错误！更新失败", MyException.ERROR);
-        }
-        return true;
-    }
-
-    /**
-     * Description: 检查TeamId
-     *
-     * @Author: 17Wang
-     * @Time: 23:23 2018/12/19
-     */
-    public long getTeamIdByPrimaryKeys(long cClassId, long studentId) throws MyException {
-        Long l = cClassStudentMapper.getTeamIdByPrimaryKeys(cClassId, studentId);
-        if (l == null) {
-            return 0;
-        }
-        return cClassStudentMapper.getTeamIdByPrimaryKeys(cClassId, studentId);
-    }
-
-    /**
      * Description: 新增班级轮次 对应klass_round表
      *
      * @Author: WinstonDeng

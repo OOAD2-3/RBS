@@ -10,13 +10,15 @@ import com.rbs.project.pojo.entity.Team;
  */
 public class TeamBaseInfoVO {
     private Long id;
-    private String TeamSerials;
-    private String TeamName;
-    
+    private String teamSerials;
+    private String teamName;
+    private Integer teamStatus;
+
     public TeamBaseInfoVO(Team team) {
         id = team.getId();
-        TeamSerials = team.getcClass().getSerial() + "-" + String.valueOf(team.getSerial());
-        TeamName = team.getName();
+        teamSerials = team.getcClass().getSerial() + "-" + String.valueOf(team.getSerial());
+        teamName = team.getName();
+        teamStatus = team.getStatus();
     }
 
     public Long getId() {
@@ -28,18 +30,26 @@ public class TeamBaseInfoVO {
     }
 
     public String getTeamSerials() {
-        return TeamSerials;
+        return teamSerials;
     }
 
     public void setTeamSerials(String teamSerials) {
-        TeamSerials = teamSerials;
+        teamSerials = teamSerials;
     }
 
     public String getTeamName() {
-        return TeamName;
+        return teamName;
     }
 
     public void setTeamName(String teamName) {
-        TeamName = teamName;
+        teamName = teamName;
+    }
+
+    public Integer getTeamStatus() {
+        return teamStatus;
+    }
+
+    public void setTeamStatus(Integer teamStatus) {
+        this.teamStatus = teamStatus;
     }
 }

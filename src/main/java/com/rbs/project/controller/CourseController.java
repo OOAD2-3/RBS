@@ -8,7 +8,6 @@ import com.rbs.project.pojo.vo.*;
 import com.rbs.project.service.*;
 import com.rbs.project.utils.FileLoadUtils;
 import com.rbs.project.utils.JsonUtils;
-import com.rbs.project.utils.UserUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -163,7 +162,9 @@ public class CourseController {
     }
 
     /**
-     * Description: 获取课程下的所有小组
+     * Description: 获取课程下的所有小组（主课程）
+     * 如果他是从课程？=====================================================================================================！！！！！！
+     * 搞定，课程下查找有几个班，再把每个班(klass_team）查找有哪些队伍，再把这些队伍信息拿出来
      *
      * @Author: 17Wang
      * @Time: 11:20 2018/12/23
@@ -180,7 +181,8 @@ public class CourseController {
     }
 
     /**
-     * Description:
+     * Description: 查找我在这门课下的队伍
+     * 搞定！ 通过courseid和我的id查找我在哪个班级下面，再通过班级号和学号查找队伍信息
      *
      * @Author: 17Wang
      * @Time: 11:44 2018/12/23
@@ -188,8 +190,7 @@ public class CourseController {
     @GetMapping("/{courseId}/team/mine")
     @ResponseBody
     public Map<String, Object> getMyTeam(@PathVariable("courseId") long courseId) throws MyException {
-        Student nowStudent = (Student) UserUtils.getNowUser();
-        Team team = teamService.getTeamByCourseIdAndStudentId(courseId, nowStudent.getId());
+        Team team = teamService.getTeamByCourseIdAndStudentId(courseId);
         Map<String, Object> map = new HashMap<>();
         map.put("teamInfo", new TeamBaseInfoVO(team));
         map.put("course", new CourseInfoVO(team.getCourse()));

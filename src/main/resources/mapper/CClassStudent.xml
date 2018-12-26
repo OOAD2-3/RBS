@@ -9,9 +9,10 @@
     </resultMap>
 
     <insert id="insertCClassStudent" parameterType="com.rbs.project.pojo.relationship.CClassStudent">
-        insert into klass_student(klass_id, student_id, course_id, team_id)
-        values (#{cClassId},#{studentId},#{courseId},#{teamId})
+      insert into klass_student(klass_id, student_id, course_id)
+      values (#{cClassId},#{studentId},#{courseId})
     </insert>
+
 
     <select id="getTeamIdByPrimaryKeys" resultType="Long">
         SELECT team_id FROM klass_student WHERE klass_id=#{cClassId} AND student_id=#{studentId}
@@ -34,4 +35,5 @@
         update klass_student
         set team_id= replace(team_id,#{teamId},null)
     </update>
+
 </mapper>

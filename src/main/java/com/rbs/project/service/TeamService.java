@@ -2,12 +2,12 @@ package com.rbs.project.service;
 
 import com.rbs.project.dao.*;
 import com.rbs.project.exception.MyException;
-import com.rbs.project.mapper.StudentMapper;
 import com.rbs.project.pojo.entity.CClass;
 import com.rbs.project.pojo.entity.Course;
 import com.rbs.project.pojo.entity.Student;
 import com.rbs.project.pojo.entity.Team;
 import com.rbs.project.utils.LogicUtils;
+import com.rbs.project.utils.UserUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,7 +33,7 @@ public class TeamService {
     private StudentDao studentDao;
 
     @Autowired
-    private CClassStudentDao cClassStudentDao;
+    private CClassDao cClassDao;
 
     /**
      * Description: 新建一个Team
@@ -43,18 +43,30 @@ public class TeamService {
      */
     @Transactional(rollbackFor = Exception.class)
     public Long createTeam(Team team) throws Exception {
-        if (teamDao.getTeamByLeaderId(team.getLeaderId()) != null) {
-            throw new MyException("创建小组出错！这个人已经在这个课程下创建了一个小组", MyException.ERROR);
+        //如果出错，说明这个leader已经在这个课程下没有小组
+        Team myTeam;
+        try {
+            myTeam = teamDao.getTeamBycClassIdAndStudentId(team.getcClassId(), team.getLeaderId());
+        } catch (Exception e) {
+            myTeam = null;
         }
-        if (cClassStudentDao.getTeamIdByPrimaryKeys(team.getcClassId(), team.getLeaderId()) != 0) {
+        if (myTeam != null) {
             throw new MyException("创建小组出错！这个人已经在这个课程下加入了一个小组", MyException.ERROR);
         }
-        for(Student student:team.getStudents()){
-            if (cClassStudentDao.getTeamIdByPrimaryKeys(team.getcClassId(), student.getId()) != 0) {
-                throw new MyException("添加成员出错！学生"+student.getId()+"已有队伍", MyException.ERROR);
+
+        for (Student student : team.getStudents()) {
+            //如果出错，说明有成员已经在这个课程下有了小组
+            try {
+                myTeam = teamDao.getTeamBycClassIdAndStudentId(team.getcClassId(), student.getId());
+            } catch (Exception e) {
+                myTeam = null;
+            }
+            if (myTeam != null) {
+                throw new MyException("添加成员出错！学生" + student.getId() + "已有队伍", MyException.ERROR);
             }
         }
         //team Serial
+        //已改连表，标识一下，做到这里了
         List<Team> teams = teamDao.listByCClassId(team.getcClassId());
 
         int teamSerial = 1;
@@ -83,19 +95,21 @@ public class TeamService {
         }
 
         //插入 team表
+        //在这个方法同时插入到klass_team中
         teamDao.addTeam(team);
 
-        //修改klass_Student
+        //修改team_student 新表
         for (Student student : team.getStudents()) {
-            cClassStudentDao.updateTeamIdInKlassStudent(team.getId(), team.getcClassId(), student.getId());
+            teamDao.addTeamStudentByTeamIdAndStudentId(team.getId(), student.getId());
         }
-        cClassStudentDao.updateTeamIdInKlassStudent(team.getId(), team.getcClassId(), team.getLeaderId());
+        teamDao.addTeamStudentByTeamIdAndStudentId(team.getId(), team.getLeaderId());
+
         //返回team的id
         return team.getId();
     }
 
     /**
-     * Description: 通过teamid锁定一个team
+     * Description: 通过teamId锁定一个team
      *
      * @Author: 17Wang
      * @Time: 22:00 2018/12/19
@@ -125,7 +139,7 @@ public class TeamService {
     }
 
     /**
-     * Description:获取课程下的所有小组
+     * Description:获取课程下的所有小组（主从课程）
      *
      * @Author: 17Wang
      * @Time: 11:38 2018/12/23
@@ -135,13 +149,17 @@ public class TeamService {
     }
 
     /**
-     * Description:
+     * Description: 查找我在这门课下的队伍
+     * 搞定！ 通过courseid和我的id查找我在哪个班级下面，再通过班级号和学号查找队伍信息
      *
      * @Author: 17Wang
      * @Time: 11:48 2018/12/23
      */
-    public Team getTeamByCourseIdAndStudentId(long courseId, long studentId) throws MyException {
-        Team team = teamDao.getTeamByCourseIdAndStudentId(courseId, studentId,
+    public Team getTeamByCourseIdAndStudentId(long courseId) throws MyException {
+        Student nowStudent = (Student) UserUtils.getNowUser();
+        CClass cClass = cClassDao.getCClassByStudentIdAndCourseId(nowStudent.getId(), courseId);
+
+        Team team = teamDao.getTeamBycClassIdAndStudentId(cClass.getId(), nowStudent.getId(),
                 TeamDao.HAS_COURSE,
                 TeamDao.HAS_CCLASS,
                 TeamDao.HAS_LEADER,
@@ -162,7 +180,7 @@ public class TeamService {
     }
 
     /**
-     * Description: 添加成员
+     * Description: 添加成员，修改team_student就可以了
      *
      * @Author: 17Wang
      * @Time: 23:08 2018/12/19
@@ -172,15 +190,22 @@ public class TeamService {
         if (membersIds.isEmpty()) {
             throw new MyException("没有需要添加的成员或者参数名写错了，是studentId哦", MyException.ID_FORMAT_ERROR);
         }
-        long cClassId = teamDao.getTeamById(teamId).getcClassId();
-        for (Long i : membersIds) {
+        for (Long memberId : membersIds) {
             ///如果没有该学生
-            studentDao.getStudentById(i);
+            Student student = studentDao.getStudentById(memberId);
+            //获取team信息，主要是为了拿classId
+            //因为只有主课程能修改team，所以拿team表里的class没有任何问题
+            Team team = teamDao.getTeamById(teamId);
             //如果该学生已有队伍
-            if (cClassStudentDao.getTeamIdByPrimaryKeys(cClassId, i) != 0) {
-                throw new MyException("添加成员出错！学生已有队伍", MyException.ERROR);
+            Team tempTeam = null;
+            try {
+                tempTeam = teamDao.getTeamBycClassIdAndStudentId(team.getcClassId(), memberId);
+            } catch (Exception e) {
             }
-            cClassStudentDao.updateTeamIdInKlassStudent(teamId, cClassId, i);
+            if (tempTeam != null) {
+                throw new MyException("成员" + student.getStudentName() + "已有队伍", MyException.AUTHORIZATION_ERROR);
+            }
+            teamDao.addTeamStudentByTeamIdAndStudentId(teamId, memberId);
         }
         //小组状态判断和修改
         Team team = teamDao.getTeamById(teamId, TeamDao.HAS_MEMBERS);
@@ -205,17 +230,14 @@ public class TeamService {
      */
     @Transactional(rollbackFor = Exception.class)
     public boolean removeMemberFromTeam(long teamId, long memberId) throws Exception {
-        //确认组长所在的班级
-        long cClassId = teamDao.getTeamById(teamId).getcClassId();
-        //确认被踢的成员当前是否还在队伍
-        long memberAtTeamId = cClassStudentDao.getTeamIdByPrimaryKeys(cClassId, memberId);
-        if (memberAtTeamId == 0) {
-            throw new MyException("删除成员出错！该成员已被踢出队伍", MyException.ERROR);
-        } else if (memberAtTeamId != teamId) {
-            throw new MyException("删除成员出错！该成员不属于您的小组", MyException.ERROR);
+        //自己不能踢出自己
+        Team myTeam = teamDao.getTeamById(teamId);
+        if (myTeam.getLeaderId() == memberId) {
+            throw new MyException("自己不能踢出自己么么", MyException.AUTHORIZATION_ERROR);
         }
         //上述判断通过，将该成员踢出
-        cClassStudentDao.updateTeamIdInKlassStudent(0, cClassId, memberId);
+        teamDao.deleteTeamStudentByTeamIdAndStudentId(teamId, memberId);
+
         //小组状态判断和修改
         Team team = teamDao.getTeamById(teamId, TeamDao.HAS_MEMBERS);
         //给team设置班级的策略
@@ -239,10 +261,12 @@ public class TeamService {
     @Transactional(rollbackFor = Exception.class)
     public boolean dissolveTeam(long teamId) throws Exception {
         //将该小组下的成员置为无小组状态
-        List<Long> studentIds = cClassStudentDao.getStudentIdByTeamId(teamId);
-        for (Long l : studentIds) {
-            removeMemberFromTeam(teamId, l);
+        //通过删除team_student表，解除team和student的关系
+        List<Student> students = studentDao.listByTeamId(teamId);
+        for (Student student : students) {
+            teamDao.deleteTeamStudentByTeamIdAndStudentId(teamId, student.getId());
         }
+
         //删除这个小组
         teamDao.deleteTeamById(teamId);
         return true;
