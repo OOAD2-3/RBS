@@ -144,4 +144,16 @@ public class SeminarScoreDao {
         }
         return true;
     }
+
+    /**
+     * Description: 通过team_id删除轮次成绩
+     * @Author: WinstonDeng
+     * @Date: 15:00 2018/12/25
+     */
+    public boolean deleteSemianrScoreByTeamId(long teamId) throws MyException {
+        if(!seminarScoreMapper.deleteByTeamId(teamId)){
+            throw new MyException("删除讨论课成绩错误！数据库处理错误",MyException.ERROR);
+        }
+        return true;
+    }
 }

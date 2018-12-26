@@ -43,4 +43,9 @@
         SET reason=#{reason}
         WHERE id=#{id}
     </update>
+
+    <delete id="deleteByTeamId">
+        delete from team_valid_application
+        where team_id=#{teamId}
+    </delete>
 </mapper>

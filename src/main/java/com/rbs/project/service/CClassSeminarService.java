@@ -100,4 +100,13 @@ public class CClassSeminarService {
         questionDao.addQuestion(question);
         return question.getId();
     }
+
+    /**
+     * Description: 获得当前课程正在进行的讨论课列表
+     * @Author: WinstonDeng
+     * @Date: 23:18 2018/12/25
+     */
+    public List<CClassSeminar> listAllUnderWaySeminarsByTeacherId(long teacherId) throws MyException{
+        return cClassSeminarDao.findUnderWayByTeacherId(teacherId);
+    }
 }

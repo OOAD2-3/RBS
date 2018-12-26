@@ -33,4 +33,11 @@ public interface RoundMapper {
      * @return
      */
     boolean insertRound(Round round);
+
+    /**
+     * 按id修改分数计算方法
+     * @param round
+     * @return
+     */
+    boolean updateScoreMethod(Round round);
 }

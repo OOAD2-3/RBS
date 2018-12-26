@@ -52,4 +52,11 @@ public class RoundScoreDao {
         }
         return true;
     }
+
+    public boolean deleteRoundScoreByTeamId(long teamId) throws MyException {
+        if(!roundScoreMapper.deleteByTeamId(teamId)){
+            throw new MyException("删除轮次分数错误！数据库处理错误",MyException.ERROR);
+        }
+        return true;
+    }
 }

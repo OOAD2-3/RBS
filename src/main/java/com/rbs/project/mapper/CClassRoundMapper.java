@@ -26,4 +26,11 @@ public interface CClassRoundMapper {
      * @return
      */
     boolean insertCClassRound(CClassRound cClassRound);
+
+    /**
+     * 修改班级轮次报名数
+     * @param cClassRound
+     * @return
+     */
+    boolean updateEnrollNumber(CClassRound cClassRound);
 }

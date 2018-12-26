@@ -49,4 +49,18 @@ public interface AttendanceMapper {
      * @throws Exception
      */
     boolean deleteAttendanceById(long id) throws Exception;
+
+    /**
+     * 修改展示 PPT信息
+     * @param attendance
+     * @return
+     */
+    boolean updateAttendancePPT(Attendance attendance);
+
+    /**
+     * 修改展示 Report信息
+     * @param attendance
+     * @return
+     */
+    boolean updateAttendanceReport(Attendance attendance);
 }

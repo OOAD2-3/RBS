@@ -19,4 +19,10 @@
         VALUES (#{cClassId},#{roundId},#{enrollNumber})
     </insert>
 
+    <update id="" parameterType="com.rbs.project.pojo.relationship.CClassRound">
+        update klass_round
+        set enroll_number=#{enrollNumber}
+        where klass_id=#{cClassId}
+          and round_id=#{roundId}
+    </update>
 </mapper>

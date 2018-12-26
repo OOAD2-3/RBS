@@ -25,5 +25,11 @@
         from share_team_application
         where sub_course_id=#{subCourseId}
     </select>
+
+    <update id="updateStatusById">
+        update share_team_application
+        set status=#{status}
+        where id=#{id}
+    </update>
 </mapper>
 

@@ -1,11 +1,9 @@
 package com.rbs.project.dao;
 
 import com.rbs.project.exception.MyException;
-import com.rbs.project.mapper.CourseMapper;
-import com.rbs.project.mapper.RoundMapper;
-import com.rbs.project.mapper.SeminarMapper;
-import com.rbs.project.mapper.TeamMapper;
+import com.rbs.project.mapper.*;
 import com.rbs.project.pojo.entity.Round;
+import com.rbs.project.pojo.relationship.CClassRound;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -28,6 +26,9 @@ public class RoundDao {
 
     @Autowired
     private SeminarMapper seminarMapper;
+
+    @Autowired
+    private CClassRoundMapper cClassRoundMapper;
 
 
     public final static int HAS_SEMINAR=1;
@@ -91,5 +92,41 @@ public class RoundDao {
             throw new MyException("查找轮次错误！轮次不存在",MyException.NOT_FOUND_ERROR);
         }
         return round;
+    }
+
+    /**
+     * Description: 修改轮次分数计算方法
+     * @Author: WinstonDeng
+     * @Date: 1:47 2018/12/26
+     */
+    public boolean updateScoreMethod(Round round) throws MyException{
+        Round temp=roundMapper.findById(round.getId());
+        if(temp==null){
+            throw new MyException("更新轮次信息错误！未找到该轮次",MyException.NOT_FOUND_ERROR);
+        }
+        temp.setQuestionScoreMethod(round.getQuestionScoreMethod());
+        temp.setReportScoreMethod(round.getReportScoreMethod());
+        temp.setPresentationScoreMethod(round.getPresentationScoreMethod());
+        if(!roundMapper.updateScoreMethod(round)){
+            throw new MyException("更新轮次信息错误！数据库处理错误",MyException.ERROR);
+        }
+        return true;
+    }
+
+    /**
+     * Description: 修改班级轮次报名数
+     * @Author: WinstonDeng
+     * @Date: 1:47 2018/12/26
+     */
+    public boolean updateEnrollNumber(CClassRound cClassRound) throws MyException{
+        CClassRound temp=cClassRoundMapper.findByPrimaryKeys(cClassRound.getcClassId(),cClassRound.getRoundId());
+        if(temp==null){
+            throw new MyException("修改班级轮次错误！未找到该记录",MyException.NOT_FOUND_ERROR);
+        }
+        temp.setEnrollNumber(cClassRound.getEnrollNumber());
+        if(!cClassRoundMapper.updateEnrollNumber(temp)){
+            throw new MyException("修改班级轮次错误！数据库处理错误",MyException.ERROR);
+        }
+        return true;
     }
 }
