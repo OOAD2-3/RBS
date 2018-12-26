@@ -108,4 +108,16 @@ public class TeamApplicationDao {
         }
         return true;
     }
+
+    /**
+     * Description: 通过team_id删除队伍合法状态请求
+     * @Author: WinstonDeng
+     * @Date: 15:03 2018/12/25
+     */
+    public boolean deleteTeamValidApplicationByTeamId(long teamId) throws MyException {
+        if(!teamValidApplicationMapper.deleteByTeamId(teamId)){
+            throw new MyException("删除队伍合法状态错误！数据库处理错误",MyException.ERROR);
+        }
+        return true;
+    }
 }

@@ -70,4 +70,11 @@ public interface TeamValidApplicationMapper {
      * @throws Exception
      */
     boolean updateStatusById(@Param("status") int status, @Param("id") long id) throws Exception;
+
+    /**
+     * 通过team_id删除记录
+     * @param teamId
+     * @return
+     */
+    boolean deleteByTeamId(long teamId);
 }

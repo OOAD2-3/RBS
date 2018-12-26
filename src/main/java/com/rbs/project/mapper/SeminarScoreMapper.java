@@ -95,4 +95,11 @@ public interface SeminarScoreMapper {
      */
     boolean updateTotalScore(@Param("seminarId") long seminarId, @Param("classId") long classId,
                              @Param("teamId") long teamId, @Param("totalScore") double totalScore) throws Exception;
+
+    /**
+     * 通过team_id删除记录
+     * @param teamId
+     * @return
+     */
+    boolean deleteByTeamId(long teamId);
 }

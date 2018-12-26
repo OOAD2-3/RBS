@@ -61,4 +61,13 @@ public class LogicUtils {
     public static RoundScore calculateRoundScore(long roundId, long teamId) {
         return null;
     }
+
+    /**
+     * Description: 从课程分班策略
+     * @Author: WinstonDeng
+     * @Date: 16:39 2018/12/25
+     */
+    public static void subCourseTeamStrategy(){
+
+    }
 }

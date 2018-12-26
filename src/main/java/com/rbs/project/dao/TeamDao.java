@@ -5,6 +5,7 @@ import com.rbs.project.mapper.*;
 import com.rbs.project.pojo.entity.CClass;
 import com.rbs.project.pojo.entity.Student;
 import com.rbs.project.pojo.entity.Team;
+import com.rbs.project.pojo.relationship.CClassStudent;
 import org.apache.poi.ss.formula.functions.T;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -38,6 +39,10 @@ public class TeamDao {
 
     @Autowired
     private CClassTeamMapper cClassTeamMapper;
+    
+    @Autowired
+    private CClassStudentMapper cClassStudentMapper;
+
 
     public static final int HAS_COURSE = 0;
     public static final int HAS_CCLASS = 1;
@@ -209,4 +214,5 @@ public class TeamDao {
         }
         return true;
     }
+
 }

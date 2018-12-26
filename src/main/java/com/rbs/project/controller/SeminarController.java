@@ -7,6 +7,7 @@ import com.rbs.project.pojo.entity.*;
 import com.rbs.project.pojo.vo.QuestionInfoVO;
 import com.rbs.project.service.*;
 import com.rbs.project.utils.JsonUtils;
+import com.rbs.project.utils.UserUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -283,5 +284,26 @@ public class SeminarController {
         //默认未被选中
         question.setSelected(0);
         return ResponseEntity.ok().body(cClassSeminarService.addQuestion(question));
+    }
+
+    /**
+     * Description: 获取正在进行的讨论课
+     *              //字段需要修改
+     *
+     * @Author: WinstonDeng
+     * @Date: 23:10 2018/12/25
+     */
+    @GetMapping("/underway")
+    @ResponseBody
+    public ResponseEntity<List<Map<String,Long>>> getUnderWaySeminarId()throws MyException{
+        Teacher teacher= (Teacher) UserUtils.getNowUser();
+        List<CClassSeminar> cClassSeminars=cClassSeminarService.listAllUnderWaySeminarsByTeacherId(teacher.getId());
+        List<Map<String,Long>> maps=new ArrayList<>();
+        for(CClassSeminar cClassSeminar:cClassSeminars){
+            Map<String,Long> map=new HashMap<>();
+            map.put("seminarId",cClassSeminar.getSeminarId());
+            maps.add(map);
+        }
+        return ResponseEntity.ok().body(maps);
     }
 }

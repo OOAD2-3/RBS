@@ -56,6 +56,9 @@ public class Round {
      */
     private List<RoundScore> roundScores;
 
+    public final static int SCORE_AVERAGE=0;
+    public final static int SCORE_MAX=1;
+
     //==================================================getter AND setter==================================================//
 
     public long getId() {

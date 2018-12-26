@@ -45,4 +45,18 @@
         DELETE FROM attendance
         WHERE id=#{id}
     </delete>
+
+    <update id="updateAttendancePPT" parameterType="com.rbs.project.pojo.entity.Attendance">
+        update attendance
+        set ppt_name=#{pptName},
+            ppt_url=#{pptUrl}
+        where id=#{id}
+    </update>
+
+    <update id="updateAttendanceReport" parameterType="com.rbs.project.pojo.entity.Attendance">
+        update attendance
+        set report_name=#{reportName},
+            report_url=#{reportUrl}
+        where id=#{id}
+    </update>
 </mapper>

@@ -26,4 +26,11 @@
         values (#{courseId},#{serial},#{presentationScoreMethod},#{reportScoreMethod},#{questionScoreMethod})
     </insert>
 
+    <update id="updateScoreMethod" parameterType="com.rbs.project.pojo.entity.Round">
+        update round
+        set report_score_method=#{reportScoreMethod},
+            presentation_score_method=#{presentationScoreMethod},
+            question_score_method=#{questionScoreMethod}
+        where id=#{id}
+    </update>
 </mapper>
