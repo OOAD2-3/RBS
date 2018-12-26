@@ -260,13 +260,6 @@ public class TeamService {
      */
     @Transactional(rollbackFor = Exception.class)
     public boolean dissolveTeam(long teamId) throws Exception {
-        //将该小组下的成员置为无小组状态
-        //通过删除team_student表，解除team和student的关系
-        List<Student> students = studentDao.listByTeamId(teamId);
-        for (Student student : students) {
-            teamDao.deleteTeamStudentByTeamIdAndStudentId(teamId, student.getId());
-        }
-
         //删除这个小组
         teamDao.deleteTeamById(teamId);
         return true;
