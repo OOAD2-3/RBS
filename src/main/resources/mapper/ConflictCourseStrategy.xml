@@ -1,25 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.rbs.project.mapper.ConflictCourseStrategyMapper">
+    <select id="findMaxId" resultType="Long">
+        SELECT max(id) FROM conflict_course_strategy GROUP BY id;
+    </select>
 
-    <insert id="insertConflictCourseStrategy">
-        INSERT INTO conflict_course_strategy(course_1_id, course_2_id)
-        VALUES (#{a},#{b})
+    <insert id="insertOneLine">
+        INSERT INTO conflict_course_strategy
+        VALUES (#{id},#{courseId})
     </insert>
 
-    <select id="getById1" parameterType="Long" resultType="Long">
-        SELECT course_1_id FROM conflict_course_strategy WHERE course_2_id=#{courseId}
-    </select>
-
-    <select id="getById2" parameterType="Long" resultType="Long">
-        SELECT course_2_id FROM conflict_course_strategy WHERE course_1_id=#{courseId}
-    </select>
-
-    <select id="getIdByCourseId" parameterType="Long" resultType="Long">
-        SELECT id FROM conflict_course_strategy WHERE course_1_id=#{courseId} OR course_2_id=#{courseId}
-    </select>
-
-    <delete id="deleteById" parameterType="Long">
-        DELETE FROM conflict_course_strategy WHERE id=#{id}
+    <delete id="deleteByCourseId" parameterType="Long">
+        DELETE FROM conflict_course_strategy
+        WHERE course_id=#{courseId}
     </delete>
 </mapper>

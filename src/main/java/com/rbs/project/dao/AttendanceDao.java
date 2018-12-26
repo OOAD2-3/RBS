@@ -147,4 +147,13 @@ public class AttendanceDao {
         }
         return true;
     }
+
+    /**
+     * Description: 查找一节班级讨论课下最大的TeamOrder，使用SQL语句查
+     * @Author: 17Wang
+     * @Time: 17:38 2018/12/26
+     */
+    public int getMaxTeamOrderByClassIdAndSeminarId(long classId,long seminarId){
+        return attendanceMapper.findMaxTeamOrderByClassIdAndSeminarId(classId,seminarId);
+    }
 }

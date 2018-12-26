@@ -84,4 +84,14 @@ public interface AttendanceMapper {
      * @return
      */
     boolean updatePresentById(@Param("present") int present, @Param("id") long id);
+
+    /**
+     * 查找一节班级讨论课下最大的TeamOrder，使用SQL语句查
+     *
+     * @param cClassId
+     * @param seminarId
+     * @return
+     */
+    int findMaxTeamOrderByClassIdAndSeminarId(@Param("cClassId") long cClassId, @Param("seminarId") long seminarId);
+
 }

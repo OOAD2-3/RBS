@@ -41,15 +41,19 @@ public class WebSocketController {
      */
     @MessageMapping("/teacher/class/{classId}/seminar/{seminarId}/nextTeam")
     @SendTo("/client/class/{classId}/seminar/{seminarId}/nextTeam")
-    public AttendanceVO nextTeam(@DestinationVariable("classId") long classId, @DestinationVariable("seminarId") long seminarId, Long attendanceId) throws Exception {
+    public AttendanceVO nextTeam(@DestinationVariable("classId") long classId,
+                                 @DestinationVariable("seminarId") long seminarId,
+                                 Long attendanceId) throws Exception {
         Attendance attendance = attendanceService.getAttendanceById(attendanceId);
+        //测试成功没问题 最大TeamOrder
+        long maxTeamOrder = attendanceService.getMaxTeamOrderByClassIdAndSeminarId(classId,seminarId);
 
         //修改当前讨论课的状态
         attendanceService.turnStatusToIsPresent(attendanceId);
         //找出下一个即将进行的信息
         Attendance nextAtteandance = null;
         int teamOrder = attendance.getTeamOrder() + 1;
-        while (attendance == null && teamOrder <= 6) {
+        while (attendance == null && teamOrder <= maxTeamOrder) {
             attendance.setTeamOrder(teamOrder);
             nextAtteandance = attendanceService.getAttendanceBycClassIdAndSeminarIdAndTeamOrder(attendance, AttendanceDao.HAS_TEAM);
             teamOrder++;
