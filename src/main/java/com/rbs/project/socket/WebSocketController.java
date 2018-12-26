@@ -31,6 +31,13 @@ public class WebSocketController {
     @Autowired
     private AttendanceService attendanceService;
 
+    @MessageMapping("/hello")
+    @SendTo("/topic/greetings")
+    public Map<String,String> test(Map<String,String> message){
+        Map<String,String> map=new HashMap<>();
+        return message;
+    }
+
     /**
      * Description:
      * 老师发送一个到服务器说切换到下一组
@@ -40,7 +47,7 @@ public class WebSocketController {
      * @Time: 14:28 2018/12/26
      */
     @MessageMapping("/teacher/class/{classId}/seminar/{seminarId}/nextTeam")
-    @SendTo("/client/class/{classId}/seminar/{seminarId}/nextTeam")
+    @SendTo("/topic/client/class/{classId}/seminar/{seminarId}/nextTeam")
     public AttendanceVO nextTeam(@DestinationVariable("classId") long classId,
                                  @DestinationVariable("seminarId") long seminarId,
                                  Long attendanceId) throws Exception {
@@ -78,7 +85,7 @@ public class WebSocketController {
      * @Time: 15:31 2018/12/26
      */
     @MessageMapping("/teacher/class/{classId}/seminar/{seminarId}/pickQuestion")
-    @SendTo("/client/class/{classId}/seminar/{seminarId}/pickQuestion")
+    @SendTo("/topic/client/class/{classId}/seminar/{seminarId}/pickQuestion")
     public UserVO pickQuestion(@DestinationVariable("classId") long classId, @DestinationVariable("seminarId") long seminarId, Long attendanceId) {
         return new UserVO(studentPool.pick(attendanceId));
     }

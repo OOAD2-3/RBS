@@ -11,6 +11,7 @@ import com.rbs.project.pojo.entity.Seminar;
 public class SeminarInfoVO {
     private Long seminarId;
     private String seminarName;
+    private Integer seminarSerial;
     private Integer visible;
 
     public SeminarInfoVO(){
@@ -21,6 +22,7 @@ public class SeminarInfoVO {
         seminarId=seminar.getId();
         seminarName=seminar.getName();
         visible=seminar.getVisible();
+        seminarSerial=seminar.getSerial();
     }
 
     public Long getSeminarId() {
@@ -45,5 +47,13 @@ public class SeminarInfoVO {
 
     public void setVisible(Integer visible) {
         this.visible = visible;
+    }
+
+    public Integer getSeminarSerial() {
+        return seminarSerial;
+    }
+
+    public void setSeminarSerial(Integer seminarSerial) {
+        this.seminarSerial = seminarSerial;
     }
 }

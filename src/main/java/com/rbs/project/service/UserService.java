@@ -35,6 +35,9 @@ public class UserService {
      */
     public boolean userActivation(User user) throws MyException {
         User nowUser=UserUtils.getNowUser();
+        if(user.getPassword()==nowUser.getPassword()){
+            throw new MyException("激活密码不能和初始密码一样", MyException.ERROR);
+        }
         //判断json格式，密码不能为空
         if (user.getPassword() == null) {
             throw new MyException("激活失败！密码不能为空", MyException.ERROR);

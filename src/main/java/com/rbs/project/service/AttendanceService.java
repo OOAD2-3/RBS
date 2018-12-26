@@ -85,13 +85,7 @@ public class AttendanceService {
         attendance.setPresent(Attendance.PRESENT_NO_START);
         attendanceDao.addAttendance(attendance);
 
-        //新增roundScore应该在新增Round和新增队伍的时候
-//        //新增roundScore
-//        long roundId = seminarDao.findSeminarById(seminarId).getRoundId();
-//        RoundScore roundScore = new RoundScore();
-//        roundScore.setRoundId(roundId);
-//        roundScore.setTeamId(teamId);
-//        roundScoreDao.addRoundScore(roundScore);
+        //TODO 新增roundScore应该在新增Round和新增队伍的时候
 
         //新增seminarScore
         seminarScoreDao.addSeminarScore(cClassSeminarId, teamId);
@@ -117,9 +111,6 @@ public class AttendanceService {
 
         //删除讨论课成绩
         seminarScoreDao.deleteSeminarScoreByPrimaryKey(cClassSeminarId, teamId);
-
-        //删除轮次成绩
-        //roundScoreDao.deleteRoundScoreByPrimaryKey(roundId, teamId);
 
         //删除报名
         attendanceDao.deleteAttendanceById(attendanceId);
