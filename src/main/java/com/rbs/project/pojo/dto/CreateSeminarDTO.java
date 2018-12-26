@@ -18,10 +18,6 @@ public class CreateSeminarDTO {
      */
     private String intro;
     /**
-     * 讨论课序号
-     */
-    private Integer serial;
-    /**
      * 是否可见
      */
     private Integer visible;
@@ -61,14 +57,6 @@ public class CreateSeminarDTO {
 
     public void setIntro(String intro) {
         this.intro = intro;
-    }
-
-    public Integer getSerial() {
-        return serial;
-    }
-
-    public void setSerial(Integer serial) {
-        this.serial = serial;
     }
 
     public String getEnrollStartTime() {

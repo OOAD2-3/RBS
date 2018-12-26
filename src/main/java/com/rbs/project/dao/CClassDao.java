@@ -165,13 +165,12 @@ public class CClassDao {
      * @Date: 16:18 2018/12/19
      */
     public boolean addCClassStudent(CClassStudent cClassStudent) throws MyException {
-        boolean flag = false;
-        try {
-            flag = cClassStudentMapper.insertCClassStudent(cClassStudent);
-        } catch (Exception e) {
-            throw new MyException("新增班级学生错误！数据库处理错误", MyException.ERROR);
+        if(cClassStudentMapper.getByIdAndCourseId(cClassStudent.getStudentId(),cClassStudent.getCourseId())==null){
+            if(!cClassStudentMapper.insertCClassStudent(cClassStudent)){
+                throw new MyException("新增班级学生错误！数据库处理错误", MyException.ERROR);
+            }
         }
-        return flag;
+        return true;
     }
 
     /**
@@ -195,6 +194,7 @@ public class CClassDao {
      * @Author: WinstonDeng
      * @Date: 11:26 2018/12/25
      */
+
     public boolean updateTeamIdCollectionToNull(long teamId) throws Exception {
         //修改查找学生的方式
         if (studentMapper.findByTeamId(teamId) == null) {

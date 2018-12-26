@@ -57,7 +57,7 @@ public class CourseService {
                     CourseDao.HAS_COURSE_MEMBER_LIMIT_STRATEGY,
                     CourseDao.HAS_SEMINAR,
                     CourseDao.HAS_CCLASS,
-                    CourseDao.HAS_CONFLICT_COURSES);
+                   CourseDao.HAS_CONFLICT_COURSES);
         }
         return courseDao.getCourseById(courseId, hasSomething);
     }

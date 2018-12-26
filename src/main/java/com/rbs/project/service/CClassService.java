@@ -82,13 +82,13 @@ public class CClassService {
                 //增加到student
                 long studentId=studentDao.addStudent(student);
                 student.setId(studentId);
-                //增加到klass_student
-                CClassStudent cClassStudent =new CClassStudent();
-                cClassStudent.setcClassId(cclassId);
-                cClassStudent.setCourseId(cClassDao.getById(cclassId).getCourseId());
-                cClassStudent.setStudentId(student.getId());
-                cClassDao.addCClassStudent(cClassStudent);
             }
+            //不管新班级中，学生存不存在，都要增加到klass_student
+            CClassStudent cClassStudent =new CClassStudent();
+            cClassStudent.setcClassId(cclassId);
+            cClassStudent.setCourseId(cClassDao.getById(cclassId).getCourseId());
+            cClassStudent.setStudentId(student.getId());
+            cClassDao.addCClassStudent(cClassStudent);
         }
         return true;
     }
@@ -119,4 +119,12 @@ public class CClassService {
     }
 
 
+    /**
+     * Description: 按id获取班级
+     * @Author: WinstonDeng
+     * @Date: 21:19 2018/12/26
+     */
+    public CClass getClassById(long cClassId) throws MyException{
+        return cClassDao.getById(cClassId);
+    }
 }

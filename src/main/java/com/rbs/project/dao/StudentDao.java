@@ -1,8 +1,10 @@
 package com.rbs.project.dao;
 
 import com.rbs.project.exception.MyException;
+import com.rbs.project.mapper.CClassStudentMapper;
 import com.rbs.project.mapper.StudentMapper;
 import com.rbs.project.pojo.entity.Student;
+import com.rbs.project.pojo.relationship.CClassStudent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -18,6 +20,9 @@ import java.util.List;
 public class StudentDao {
     @Autowired
     private StudentMapper studentMapper;
+
+    @Autowired
+    private CClassStudentMapper cClassStudentMapper;
 
     /**
      * Description: 通过id返回学生信息
@@ -217,5 +222,16 @@ public class StudentDao {
             }
         }
         return studentId;
+    }
+
+    /**
+     * Description: 通过学生id 课程id 查找klass_student记录是否存在
+     * ！！！！！！！仅供共享业务使用！！！！！！
+     *
+     * @Author: WinstonDeng
+     * @Date: 16:10 2018/12/26
+     */
+    public CClassStudent getByIdAndCourseId(long studentId, long subCourseId) {
+        return cClassStudentMapper.getByIdAndCourseId(studentId,subCourseId);
     }
 }

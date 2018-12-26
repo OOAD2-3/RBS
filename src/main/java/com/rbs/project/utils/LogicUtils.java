@@ -2,10 +2,8 @@ package com.rbs.project.utils;
 
 import com.rbs.project.dao.CourseDao;
 import com.rbs.project.exception.MyException;
-import com.rbs.project.pojo.entity.Course;
-import com.rbs.project.pojo.entity.RoundScore;
-import com.rbs.project.pojo.entity.SeminarScore;
-import com.rbs.project.pojo.entity.Team;
+import com.rbs.project.pojo.entity.*;
+
 
 /**
  * Description:
@@ -62,12 +60,7 @@ public class LogicUtils {
         return null;
     }
 
-    /**
-     * Description: 从课程分班策略
-     * @Author: WinstonDeng
-     * @Date: 16:39 2018/12/25
-     */
-    public static void subCourseTeamStrategy(){
 
-    }
+
+
 }

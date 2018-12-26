@@ -36,4 +36,11 @@
         set team_id= replace(team_id,#{teamId},null)
     </update>
 
+    <select id="getByIdAndCourseId" parameterType="Long" resultType="com.rbs.project.pojo.relationship.CClassStudent" resultMap="tab_klass_student">
+        select klass_id,student_id,course_id,team_id
+        from klass_student
+        where student_id=#{studentId}
+          and course_id=#{courseId}
+    </select>
+
 </mapper>

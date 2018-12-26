@@ -4,6 +4,7 @@ import com.rbs.project.exception.MyException;
 import com.rbs.project.pojo.dto.CreateSeminarDTO;
 import com.rbs.project.pojo.dto.UpdateSeminarDTO;
 import com.rbs.project.pojo.entity.*;
+import com.rbs.project.pojo.vo.CClassInfoVO;
 import com.rbs.project.pojo.vo.QuestionInfoVO;
 import com.rbs.project.service.*;
 import com.rbs.project.utils.JsonUtils;
@@ -31,6 +32,9 @@ public class SeminarController {
     @Autowired
     private CClassSeminarService cClassSeminarService;
 
+    @Autowired
+    private CClassService cClassService;
+
     /**
      * Description: 新增讨论课
      *
@@ -56,7 +60,6 @@ public class SeminarController {
         seminar.setIntro(createSeminarDTO.getIntro());
         seminar.setMaxTeam(createSeminarDTO.getMaxTeam());
         seminar.setVisible(createSeminarDTO.getVisible());
-        seminar.setSerial(createSeminarDTO.getSerial());
         seminar.setEnrollStartTime(JsonUtils.StringToTimestamp(createSeminarDTO.getEnrollStartTime()));
         seminar.setEnrollEndTime(JsonUtils.StringToTimestamp(createSeminarDTO.getEnrollEndTime()));
         //获得主键
@@ -90,6 +93,9 @@ public class SeminarController {
         seminarView.put("seminarSerial",seminar.getSerial());
         seminarView.put("seminarIntro",seminar.getIntro());
         seminarView.put("visible",seminar.getVisible());
+        seminarView.put("enrollStartTime",JsonUtils.TimestampToString(seminar.getEnrollStartTime()));
+        seminarView.put("enrollEndTime",JsonUtils.TimestampToString(seminar.getEnrollEndTime()));
+        seminarView.put("maxTeam",seminar.getMaxTeam());
         //状态
         seminarView.put("status", cClassSeminarService.getCClassSeminar(cClassId, seminarId).getStatus());
         return ResponseEntity.ok().body(seminarView);
@@ -134,7 +140,6 @@ public class SeminarController {
         seminar.setIntro(updateSeminarDTO.getIntro());
         seminar.setMaxTeam(updateSeminarDTO.getMaxTeam());
         seminar.setVisible(updateSeminarDTO.getVisible());
-        seminar.setSerial(updateSeminarDTO.getSerial());
         seminar.setEnrollStartTime(JsonUtils.StringToTimestamp(updateSeminarDTO.getEnrollStartTime()));
         seminar.setEnrollEndTime(JsonUtils.StringToTimestamp(updateSeminarDTO.getEnrollEndTime()));
         return ResponseEntity.ok().body(seminarService.updateSeminar(seminar));
@@ -288,20 +293,22 @@ public class SeminarController {
 
     /**
      * Description: 获取正在进行的讨论课
-     *              //字段需要修改
      *
      * @Author: WinstonDeng
      * @Date: 23:10 2018/12/25
      */
     @GetMapping("/underway")
     @ResponseBody
-    public ResponseEntity<List<Map<String,Long>>> getUnderWaySeminarId()throws MyException{
+    public ResponseEntity<List<Map<String,Object>>> getUnderWaySeminarId()throws MyException{
         Teacher teacher= (Teacher) UserUtils.getNowUser();
         List<CClassSeminar> cClassSeminars=cClassSeminarService.listAllUnderWaySeminarsByTeacherId(teacher.getId());
-        List<Map<String,Long>> maps=new ArrayList<>();
+        List<Map<String,Object>> maps=new ArrayList<>();
         for(CClassSeminar cClassSeminar:cClassSeminars){
-            Map<String,Long> map=new HashMap<>();
+            Map<String,Object> map=new HashMap<>();
             map.put("seminarId",cClassSeminar.getSeminarId());
+            CClass cClass=cClassService.getClassById(cClassSeminar.getcClassId());
+            CClassInfoVO cClassInfoVO=new CClassInfoVO(cClass);
+            map.put("class",cClassInfoVO);
             maps.add(map);
         }
         return ResponseEntity.ok().body(maps);
