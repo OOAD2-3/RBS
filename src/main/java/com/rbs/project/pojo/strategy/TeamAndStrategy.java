@@ -8,13 +8,9 @@ package com.rbs.project.pojo.strategy;
  */
 public class TeamAndStrategy {
     private long id;
-    /**
-     *  “与”组队策略1实现类名称
-     */
+
     private String strategyName;
-    /**
-     * “与”组队策略1_id
-     */
+
     private long strategyId;
 
     //==================================================getter AND setter==================================================//

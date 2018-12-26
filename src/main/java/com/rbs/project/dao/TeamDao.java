@@ -2,10 +2,17 @@ package com.rbs.project.dao;
 
 import com.rbs.project.exception.MyException;
 import com.rbs.project.mapper.*;
+import com.rbs.project.mapper.strategy.CourseMemberLimitStrategyMapper;
+import com.rbs.project.mapper.strategy.MemberLimitStrategy;
+import com.rbs.project.mapper.strategy.TeamStrategyMapper;
 import com.rbs.project.pojo.entity.CClass;
 import com.rbs.project.pojo.entity.Student;
 import com.rbs.project.pojo.entity.Team;
 import com.rbs.project.pojo.relationship.CClassStudent;
+import com.rbs.project.pojo.strategy.ConflictCourseStrategy;
+import com.rbs.project.pojo.strategy.TeamAndStrategy;
+import com.rbs.project.pojo.strategy.TeamOrStrategy;
+import com.rbs.project.pojo.strategy.TeamStrategy;
 import org.apache.poi.ss.formula.functions.T;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -43,6 +50,25 @@ public class TeamDao {
     @Autowired
     private CClassStudentMapper cClassStudentMapper;
 
+    //策略
+
+    @Autowired
+    private TeamStrategyMapper teamStrategyMapper;
+
+    @Autowired
+    private TeamOrStrategy teamOrStrategy;
+
+    @Autowired
+    private TeamAndStrategy teamAndStrategy;
+
+    @Autowired
+    private MemberLimitStrategy memberLimitStrategy;
+
+    @Autowired
+    private CourseMemberLimitStrategyMapper courseMemberLimitStrategyMapper;
+
+    @Autowired
+    private ConflictCourseStrategy conflictCourseStrategy;
 
     public static final int HAS_COURSE = 0;
     public static final int HAS_CCLASS = 1;
@@ -236,5 +262,5 @@ public class TeamDao {
     }
 
     //=============================================究极策略递归
-
+    List<TeamStrategy> teamStrategies=
 }

@@ -1,7 +1,6 @@
 package com.rbs.project.mapper.strategy;
 
-import com.rbs.project.pojo.entity.Team;
-import com.rbs.project.pojo.strategy.TeamAndStrategy;
+import com.rbs.project.pojo.strategy.MemberLimitStrategy;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
@@ -9,16 +8,17 @@ import org.springframework.stereotype.Repository;
  * Description:
  *
  * @Author: 17Wang
- * @Date: 23:41 2018/12/26
+ * @Date: 0:08 2018/12/27
  */
 @Mapper
 @Repository
-public interface TeamAndStrategyMapper {
+public interface MemberLimitStrategyMapper {
+
     /**
      * 通过id获取策略信息
      *
      * @param id
      * @return
      */
-    TeamAndStrategy findById(long id);
+    MemberLimitStrategy findById(long id);
 }

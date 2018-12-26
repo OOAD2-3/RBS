@@ -7,24 +7,13 @@ package com.rbs.project.pojo.strategy;
  * @Modified by:
  */
 public class TeamStrategy {
-    /**
-     * 课程id
-     */
+
     private long courseId;
 
-    /**
-     * 第几条策略
-     */
     private long strategySerial;
 
-    /**
-     * 策略名
-     */
     private String strategyName;
 
-    /**
-     * 冲突id
-     */
     private long strategyId;
     //==================================================getter AND setter==================================================//
 
