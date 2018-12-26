@@ -1,5 +1,6 @@
 package com.rbs.project.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.rbs.project.exception.MyException;
 import com.rbs.project.pojo.entity.Student;
 import com.rbs.project.pojo.entity.Teacher;
@@ -77,11 +78,6 @@ public class UserController {
     @ResponseBody
     public ResponseEntity<Boolean> resetEmail(@RequestBody Map<String, String> email) throws MyException {
         return ResponseEntity.ok(userService.resetEmail(email.get("email")));
-    }
-
-    @RequestMapping(value = "test.html")
-    public String test(){
-        return "test";
     }
 
     @RequestMapping(value = "test2.html")

@@ -16,7 +16,7 @@ function connect() {
     var socket = new SockJS('/rbs-websocket');
     stompClient = Stomp.over(socket);
     stompClient.connect({}, function (frame) {
-        setConnected(true);
+        setConnected(true);//界面按钮逻辑
         console.log('Connected: ' + frame);
         stompClient.subscribe('/topic/greetings', function (greeting) {
             showGreeting(JSON.parse(greeting.body).content);
@@ -28,12 +28,18 @@ function disconnect() {
     if (stompClient !== null) {
         stompClient.disconnect();
     }
-    setConnected(false);
+    setConnected(false);//界面按钮逻辑
     console.log("Disconnected");
 }
 
 function sendName() {
-    stompClient.send("/app/hello", {}, JSON.stringify({'name': $("#name").val()}));
+    var object = {
+        name:"wsq"
+    };
+    //stompClient.send("/app/hello", {}, JSON.stringify({'name': $("#name").val()}));
+    stompClient.send("/app/hello", {}, 1);
+    console.log(JSON.stringify(object));
+    //stompClient.send("/app/hello", {}, JSON.stringify(object));
 }
 
 function showGreeting(message) {
@@ -44,7 +50,13 @@ $(function () {
     $("form").on('submit', function (e) {
         e.preventDefault();
     });
-    $( "#connect" ).click(function() { connect(); });
-    $( "#disconnect" ).click(function() { disconnect(); });
-    $( "#send" ).click(function() { sendName(); });
+    $("#connect").click(function () {
+        connect();
+    });
+    $("#disconnect").click(function () {
+        disconnect();
+    });
+    $("#send").click(function () {
+        sendName();
+    });
 });

@@ -21,7 +21,6 @@ public interface CClassStudentMapper {
      */
     boolean insertCClassStudent(CClassStudent cClassStudent);
 
-
     /**
      * 批量修改team_id为null
      * @param teamId
