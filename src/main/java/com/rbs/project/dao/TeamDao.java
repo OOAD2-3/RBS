@@ -56,7 +56,7 @@ public class TeamDao {
             }
             if (i == HAS_CCLASS) {
                 team.setcClass(cClassMapper.findById(team.getcClassId()));
-            }
+        }
             if (i == HAS_LEADER) {
                 team.setLeader(studentMapper.findById(team.getLeaderId()));
             }
@@ -157,12 +157,20 @@ public class TeamDao {
     }
 
     /**
-     * Description: 删除小组 在这个方法同时删除klass_team 级联删除被共享班级的小组？
+     * Description:
+     * （已做）删除小组 删team表 删klass_team表 删team_student
+     * （添加）成绩：
      *
      * @Author: 17Wang
      * @Time: 10:59 2018/12/23
      */
     public boolean deleteTeamById(long teamId) throws MyException {
+        //将该小组下的成员置为无小组状态
+        //通过删除team_student表，解除team和student的关系
+        List<Student> students =studentMapper.findByTeamId(teamId);
+        for (Student student : students) {
+            deleteTeamStudentByTeamIdAndStudentId(teamId, student.getId());
+        }
         //检查是否有该行
         Team team = getTeamById(teamId);
         if (!teamMapper.deleteById(teamId)) {

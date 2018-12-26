@@ -83,4 +83,9 @@ public class UserController {
     public String test(){
         return "test";
     }
+
+    @RequestMapping(value = "test2.html")
+    public String test2(){
+        return "test2";
+    }
 }

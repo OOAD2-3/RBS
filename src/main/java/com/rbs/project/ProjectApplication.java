@@ -1,6 +1,5 @@
 package com.rbs.project;
 
-import com.rbs.project.socket.WebSocket;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -17,7 +16,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 public class ProjectApplication {
     public static void main(String[] args) {
         ConfigurableApplicationContext applicationContext = SpringApplication.run(ProjectApplication.class, args);
-        WebSocket.setApplicationContext(applicationContext);
+        //WebSocket.setApplicationContext(applicationContext);
     }
 }
 
