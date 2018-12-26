@@ -25,7 +25,7 @@ public class AttendanceVO {
     }
 
     public AttendanceVO(Attendance attendance) {
-        id = attendance.getTeamId();
+        id = attendance.getId();
         present = attendance.getPresent();
         pptName = attendance.getPptName();
         pptUrl = attendance.getPptUrl();

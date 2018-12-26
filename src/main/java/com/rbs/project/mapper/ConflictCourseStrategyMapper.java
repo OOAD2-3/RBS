@@ -17,43 +17,26 @@ import java.util.Map;
 @Repository
 public interface ConflictCourseStrategyMapper {
     /**
-     * 插入一条冲突课程策略
+     * 找到最大的id
      *
-     * @param course1Id
-     * @param course2Id
      * @return
-     * @throws Exception
      */
-    boolean insertConflictCourseStrategy(@Param("a") long course1Id, @Param("b") long course2Id) throws Exception;
+    long findMaxId();
 
     /**
-     * （要与getById2合起来使用）获取与courseId相冲突的课程id
+     * 插入一条数据
      *
-     * @param courseId
-     * @return
-     */
-    List<Long> getById1(long courseId);
-
-    /**
-     * （要与getById1合起来使用）获取与courseId相冲突的课程id
-     *
-     * @param courseId
-     * @return
-     */
-    List<Long> getById2(long courseId);
-
-    /**
-     * 获取
-     * @param courseId
-     * @return
-     */
-    List<Long> getIdByCourseId(long courseId);
-
-    /**
-     * 通过id删除一条策略
      * @param id
+     * @param courseId
      * @return
-     * @throws Exception
      */
-    boolean deleteById(long id) throws Exception;
+    boolean insertOneLine(@Param("id") long id, @Param("courseId") long courseId);
+
+    /**
+     * 删除有关该课程的所有冲突策略
+     *
+     * @param courseId
+     * @return
+     */
+    boolean deleteByCourseId(long courseId) throws Exception;
 }

@@ -85,12 +85,7 @@ public class AttendanceService {
         attendance.setPresent(Attendance.PRESENT_NO_START);
         attendanceDao.addAttendance(attendance);
 
-        //新增roundScore
-        long roundId = seminarDao.findSeminarById(seminarId).getRoundId();
-        RoundScore roundScore = new RoundScore();
-        roundScore.setRoundId(roundId);
-        roundScore.setTeamId(teamId);
-        roundScoreDao.addRoundScore(roundScore);
+        //TODO 新增roundScore应该在新增Round和新增队伍的时候
 
         //新增seminarScore
         seminarScoreDao.addSeminarScore(cClassSeminarId, teamId);
@@ -117,9 +112,6 @@ public class AttendanceService {
         //删除讨论课成绩
         seminarScoreDao.deleteSeminarScoreByPrimaryKey(cClassSeminarId, teamId);
 
-        //删除轮次成绩
-        roundScoreDao.deleteRoundScoreByPrimaryKey(roundId, teamId);
-
         //删除报名
         attendanceDao.deleteAttendanceById(attendanceId);
 
@@ -128,17 +120,18 @@ public class AttendanceService {
 
     /**
      * Description: 向attendanceId上传PPT
+     *
      * @Author: WinstonDeng
      * @Date: 19:39 2018/12/25
      */
-    public String uploadPPT(long attendanceId, String realPath, MultipartFile file) throws Exception{
-        Attendance attendance=attendanceDao.getById(attendanceId);
-        if(attendance==null){
-            throw new MyException("上传PPT错误！未找到该attendance记录",MyException.NOT_FOUND_ERROR);
+    public String uploadPPT(long attendanceId, String realPath, MultipartFile file) throws Exception {
+        Attendance attendance = attendanceDao.getById(attendanceId);
+        if (attendance == null) {
+            throw new MyException("上传PPT错误！未找到该attendance记录", MyException.NOT_FOUND_ERROR);
         }
-        String fileName= FileLoadUtils.upload(realPath,file);
-        if(fileName.isEmpty()){
-            throw new MyException("上传PPT错误！",MyException.ERROR);
+        String fileName = FileLoadUtils.upload(realPath, file);
+        if (fileName.isEmpty()) {
+            throw new MyException("上传PPT错误！", MyException.ERROR);
         }
         attendance.setPptName(fileName);
         attendance.setPptUrl(realPath);
@@ -148,17 +141,18 @@ public class AttendanceService {
 
     /**
      * Description: 向attendanceId上传report
+     *
      * @Author: WinstonDeng
      * @Date: 19:39 2018/12/25
      */
-    public String uploadReport(long attendanceId, String realPath, MultipartFile file) throws Exception{
-        Attendance attendance=attendanceDao.getById(attendanceId);
-        if(attendance==null){
-            throw new MyException("上传Report错误！未找到该attendance记录",MyException.NOT_FOUND_ERROR);
+    public String uploadReport(long attendanceId, String realPath, MultipartFile file) throws Exception {
+        Attendance attendance = attendanceDao.getById(attendanceId);
+        if (attendance == null) {
+            throw new MyException("上传Report错误！未找到该attendance记录", MyException.NOT_FOUND_ERROR);
         }
-        String fileName= FileLoadUtils.upload(realPath,file);
-        if(fileName.isEmpty()){
-            throw new MyException("上传Report错误！",MyException.ERROR);
+        String fileName = FileLoadUtils.upload(realPath, file);
+        if (fileName.isEmpty()) {
+            throw new MyException("上传Report错误！", MyException.ERROR);
         }
         attendance.setReportName(fileName);
         attendance.setReportUrl(realPath);
@@ -168,14 +162,45 @@ public class AttendanceService {
 
     /**
      * Description: 通过id获得展示
+     *
      * @Author: WinstonDeng
      * @Date: 22:05 2018/12/25
      */
-    public Attendance getAttendanceById(long attendanceId) throws MyException {
-        Attendance attendance=attendanceDao.getById(attendanceId);
-        if(attendance==null){
-            throw new MyException("获得attendance错误！未找到该记录",MyException.NOT_FOUND_ERROR);
+    public Attendance getAttendanceById(long attendanceId, int... hasSomething) throws MyException {
+        return attendanceDao.getById(attendanceId, hasSomething);
+    }
+
+    /**
+     * Description: 修改当前展示为已经展示过了
+     *
+     * @Author: 17Wang
+     * @Time: 14:48 2018/12/26
+     */
+    public boolean turnStatusToIsPresent(long attendanceId) throws Exception {
+        //查询是否存在
+        attendanceDao.getById(attendanceId);
+        return attendanceDao.updateAttendancePresent(1,attendanceId);
+    }
+
+    /**
+     * Description: 如果这个班级讨论课下没有这个展示，返回null，上层判断是不是null来继续操作
+     * @Author: 17Wang
+     * @Time: 15:07 2018/12/26
+    */
+    public Attendance getAttendanceBycClassIdAndSeminarIdAndTeamOrder(Attendance attendance,int ...hasSomething) throws MyException {
+        try {
+            return attendanceDao.getAttendanceBycClassIdAndSeminarIdAndTeamOrder(attendance,hasSomething);
+        }catch (Exception e){
+            return null;
         }
-        return attendance;
+    }
+
+    /**
+     * Description: 查找一节班级讨论课下最大的TeamOrder，使用SQL语句查
+     * @Author: 17Wang
+     * @Time: 17:38 2018/12/26
+    */
+    public int getMaxTeamOrderByClassIdAndSeminarId(long classId,long seminarId){
+        return attendanceDao.getMaxTeamOrderByClassIdAndSeminarId(classId,seminarId);
     }
 }

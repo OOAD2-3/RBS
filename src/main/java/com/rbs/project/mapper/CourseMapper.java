@@ -47,6 +47,14 @@ public interface CourseMapper {
      * @return
      */
     List<Course> listAllCourse();
+
+    /**
+     * 获取与当前课程冲突的所有课程
+     *
+     * @param nowCourseId
+     * @return
+     */
+    List<Course> findAllConflictCourseByNowCourseId(long nowCourseId);
     //=========================新增=======================
 
     /**

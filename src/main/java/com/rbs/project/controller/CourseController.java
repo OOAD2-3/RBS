@@ -1,6 +1,7 @@
 package com.rbs.project.controller;
 
 import com.rbs.project.exception.MyException;
+import com.rbs.project.pojo.dto.CourseAndStrategyDTO;
 import com.rbs.project.pojo.dto.CreateCClassDTO;
 import com.rbs.project.pojo.entity.*;
 import com.rbs.project.pojo.strategy.CourseMemberLimitStrategy;
@@ -49,25 +50,33 @@ public class CourseController {
 
     /**
      * Description: 新建课程
+     * 修改VO改成了DTO
      *
      * @Author: 17Wang
      * @Time: 16:46 2018/12/18
      */
     @PostMapping
     @ResponseBody
-    public ResponseEntity<Boolean> createCourse(@RequestBody CourseAndStrategyVO courseAndStrategyVO) throws Exception {
+    public ResponseEntity<Boolean> createCourse(@RequestBody CourseAndStrategyDTO courseAndStrategyDTO) throws Exception {
         //课程基本信息
         Course course = new Course();
-        course.setName(courseAndStrategyVO.getName());
-        course.setIntro(courseAndStrategyVO.getIntro());
-        course.setPresentationPercentage(courseAndStrategyVO.getPresentationPercentage());
-        course.setQuestionPercentage(courseAndStrategyVO.getQuestionPercentage());
-        course.setReportPercentage(courseAndStrategyVO.getReportPercentage());
-        course.setTeamStartTime(JsonUtils.StringToTimestamp(courseAndStrategyVO.getTeamStartTime()));
-        course.setTeamEndTime(JsonUtils.StringToTimestamp(courseAndStrategyVO.getTeamEndTime()));
+        course.setName(courseAndStrategyDTO.getName());
+        course.setIntro(courseAndStrategyDTO.getIntro());
+        course.setPresentationPercentage(courseAndStrategyDTO.getPresentationPercentage());
+        course.setQuestionPercentage(courseAndStrategyDTO.getQuestionPercentage());
+        course.setReportPercentage(courseAndStrategyDTO.getReportPercentage());
+        course.setTeamStartTime(JsonUtils.StringToTimestamp(courseAndStrategyDTO.getTeamStartTime()));
+        course.setTeamEndTime(JsonUtils.StringToTimestamp(courseAndStrategyDTO.getTeamEndTime()));
 
-        course.setCourseMemberLimitStrategy(courseAndStrategyVO.getCourseMemberLimitStrategy());
-        course.setConflictCourses(courseAndStrategyVO.getConflictCourses());
+        course.setCourseMemberLimitStrategy(courseAndStrategyDTO.getCourseMemberLimitStrategy());
+        //设置冲突课程的Id
+        List<Course> conflictCourses = new ArrayList<>();
+        for (Long conflictCourse : courseAndStrategyDTO.getConflictCourses()) {
+            Course temp = new Course();
+            temp.setId(conflictCourse);
+            conflictCourses.add(temp);
+        }
+        course.setConflictCourses(conflictCourses);
         //如果人数策略
         if (course.getCourseMemberLimitStrategy() == null) {
             CourseMemberLimitStrategy courseMemberLimitStrategy = new CourseMemberLimitStrategy();
@@ -107,14 +116,15 @@ public class CourseController {
 
     /**
      * Description: 获取所有课程
+     *
      * @Author: 17Wang
      * @Time: 17:38 2018/12/23
-    */
+     */
     @GetMapping("/all")
     @ResponseBody
-    public List<CourseInfoVO> listAllCourses(){
-        List<CourseInfoVO> courseInfoVOS=new ArrayList<>();
-        for(Course course:courseService.listAllCourses()){
+    public List<CourseInfoVO> listAllCourses() {
+        List<CourseInfoVO> courseInfoVOS = new ArrayList<>();
+        for (Course course : courseService.listAllCourses()) {
             courseInfoVOS.add(new CourseInfoVO(course));
         }
         return courseInfoVOS;
@@ -233,8 +243,8 @@ public class CourseController {
      */
     @PostMapping("/{courseId}/class/studentfile")
     @ResponseBody
-    public ResponseEntity<String> uploadStudentFile(HttpServletRequest request,@RequestParam("file") MultipartFile file) {
-        return ResponseEntity.ok().body(FileLoadUtils.upload(request.getServletContext().getRealPath("/studentfile/"),file));
+    public ResponseEntity<String> uploadStudentFile(HttpServletRequest request, @RequestParam("file") MultipartFile file) {
+        return ResponseEntity.ok().body(FileLoadUtils.upload(request.getServletContext().getRealPath("/studentfile/"), file));
     }
 
     /**
@@ -245,7 +255,7 @@ public class CourseController {
      */
     @PostMapping("/{courseId}/class")
     @ResponseBody
-    public ResponseEntity<Long> createcClassInCoursePage(HttpServletRequest request,@PathVariable("courseId") long courseId, @RequestBody CreateCClassDTO createCClassDTO) throws MyException {
+    public ResponseEntity<Long> createcClassInCoursePage(HttpServletRequest request, @PathVariable("courseId") long courseId, @RequestBody CreateCClassDTO createCClassDTO) throws MyException {
         //初始化为-1 表示新建失败
         long cclassId = -1;
         //设置班级基本信息
@@ -262,7 +272,7 @@ public class CourseController {
             //调用解析学生名单的函数
 
             if (createCClassDTO.getFileName() != null) {
-                cClassService.transStudentListFileToDataBase(cclassId, request.getServletContext().getRealPath("/resources/studentfile/"),createCClassDTO.getFileName());
+                cClassService.transStudentListFileToDataBase(cclassId, request.getServletContext().getRealPath("/resources/studentfile/"), createCClassDTO.getFileName());
             }
         }
         return ResponseEntity.ok().body(cclassId);
@@ -320,21 +330,22 @@ public class CourseController {
 
     /**
      * Description: 按课程id获取所有共享信息
+     *
      * @Author: WinstonDeng
      * @Date: 17:28 2018/12/23
      */
     @GetMapping("/{courseId}/share")
     @ResponseBody
     public ResponseEntity<List<ShareInfoVO>> listAllSharesByCourseId(@PathVariable("courseId") long courseId) throws Exception {
-        List<ShareInfoVO> shareInfoVOS=new ArrayList<>();
-        if((Long) courseId==null){
-            throw new MyException("courseId不能为空",MyException.ID_FORMAT_ERROR);
+        List<ShareInfoVO> shareInfoVOS = new ArrayList<>();
+        if ((Long) courseId == null) {
+            throw new MyException("courseId不能为空", MyException.ID_FORMAT_ERROR);
         }
         //  1.共享讨论课
         //作为主课程
-        List<ShareSeminarApplication> seminarSharesInMainCourse=shareService.listAllShareSeminarsInMainCourseByCourseId(courseId);
-        for(ShareSeminarApplication shareSeminarApplication:seminarSharesInMainCourse){
-            ShareInfoVO shareInfoVO=new ShareInfoVO();
+        List<ShareSeminarApplication> seminarSharesInMainCourse = shareService.listAllShareSeminarsInMainCourseByCourseId(courseId);
+        for (ShareSeminarApplication shareSeminarApplication : seminarSharesInMainCourse) {
+            ShareInfoVO shareInfoVO = new ShareInfoVO();
             shareInfoVO.setInfo("主课程");
             shareInfoVO.setShareType("共享讨论课");
             shareInfoVO.setShareId(shareSeminarApplication.getId());
@@ -344,9 +355,9 @@ public class CourseController {
             shareInfoVOS.add(shareInfoVO);
         }
         //作为从课程
-        List<ShareSeminarApplication> seminarSharesInSubCourse=shareService.listAllShareSeminarsInSubCourseByCourseId(courseId);
-        for(ShareSeminarApplication shareSeminarApplication:seminarSharesInSubCourse){
-            ShareInfoVO shareInfoVO=new ShareInfoVO();
+        List<ShareSeminarApplication> seminarSharesInSubCourse = shareService.listAllShareSeminarsInSubCourseByCourseId(courseId);
+        for (ShareSeminarApplication shareSeminarApplication : seminarSharesInSubCourse) {
+            ShareInfoVO shareInfoVO = new ShareInfoVO();
             shareInfoVO.setInfo("从课程");
             shareInfoVO.setShareType("共享讨论课");
             shareInfoVO.setShareId(shareSeminarApplication.getId());
@@ -357,9 +368,9 @@ public class CourseController {
         }
         //  2.共享分组
         //作为主课程
-        List<ShareTeamApplication> teamSharesInMainCourse=shareService.listAllShareTeamsInMainCourseByCourseId(courseId);
-        for(ShareTeamApplication shareTeamApplication:teamSharesInMainCourse){
-            ShareInfoVO shareInfoVO=new ShareInfoVO();
+        List<ShareTeamApplication> teamSharesInMainCourse = shareService.listAllShareTeamsInMainCourseByCourseId(courseId);
+        for (ShareTeamApplication shareTeamApplication : teamSharesInMainCourse) {
+            ShareInfoVO shareInfoVO = new ShareInfoVO();
             shareInfoVO.setInfo("主课程");
             shareInfoVO.setShareType("共享分组");
             shareInfoVO.setShareId(shareTeamApplication.getId());
@@ -369,9 +380,9 @@ public class CourseController {
             shareInfoVOS.add(shareInfoVO);
         }
         //作为从课程
-        List<ShareTeamApplication> teamSharesInSubCourse=shareService.listAllShareTeamsInSubCourseByCourseId(courseId);
-        for(ShareTeamApplication shareTeamApplication:teamSharesInSubCourse){
-            ShareInfoVO shareInfoVO=new ShareInfoVO();
+        List<ShareTeamApplication> teamSharesInSubCourse = shareService.listAllShareTeamsInSubCourseByCourseId(courseId);
+        for (ShareTeamApplication shareTeamApplication : teamSharesInSubCourse) {
+            ShareInfoVO shareInfoVO = new ShareInfoVO();
             shareInfoVO.setInfo("从课程");
             shareInfoVO.setShareType("共享分组");
             shareInfoVO.setShareId(shareTeamApplication.getId());

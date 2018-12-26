@@ -41,8 +41,8 @@ public class CourseDao {
      * 冲突课程策略
      */
     public static final int HAS_CONFLICT_COURSES = 1;
-    public static final int HAS_CCLASS=2;
-    public static final int HAS_SEMINAR=3;
+    public static final int HAS_CCLASS = 2;
+    public static final int HAS_SEMINAR = 3;
 
     private void hasSomethingFun(Course course, int... hasSomething) {
         for (int i : hasSomething) {
@@ -50,23 +50,27 @@ public class CourseDao {
                 CourseMemberLimitStrategy courseMemberLimitStrategy = courseMemberLimitStrategyMapper.getByCourseId(course.getId());
                 course.setCourseMemberLimitStrategy(courseMemberLimitStrategy);
             }
-            if(i==HAS_CCLASS){
+            if (i == HAS_CCLASS) {
                 course.setcClasses(cClassMapper.findByCourseId(course.getId()));
             }
-            if(i==HAS_SEMINAR){
+            if (i == HAS_SEMINAR) {
                 course.setSeminars(seminarMapper.findByCourseId(course.getId()));
             }
             if (i == HAS_CONFLICT_COURSES) {
-                List<Long> conflictCourse1 = conflictCourseStrategyMapper.getById1(course.getId());
-                List<Long> conflictCourse2 = conflictCourseStrategyMapper.getById2(course.getId());
-                Set<Long> conflictCourse = new HashSet<>();
-                for (Long l : conflictCourse1) {
-                    conflictCourse.add(l);
+                //TODO 直接查可能会出现重复的课程和课程自己
+                List<Course> courses = courseMapper.findAllConflictCourseByNowCourseId(course.getId());
+                Map<Long, Course> map = new HashMap<>();
+                for (Course conflictCourse : courses) {
+                    if (conflictCourse.getId() != course.getId()) {
+                        map.put(conflictCourse.getId(), conflictCourse);
+                    }
                 }
-                for (Long l : conflictCourse2) {
-                    conflictCourse.add(l);
+                List<Course> conflictCourses = new ArrayList<>();
+                for (Map.Entry<Long, Course> entry : map.entrySet()) {
+                    conflictCourses.add(entry.getValue());
                 }
-                course.setConflictCourses(new ArrayList<>(conflictCourse));
+
+                course.setConflictCourses(conflictCourses);
             }
         }
     }
@@ -86,10 +90,10 @@ public class CourseDao {
         return course;
     }
 
-    public List<Course> listAllCourses(int ...hasSomething){
-        List<Course> courses=courseMapper.listAllCourse();
-        for(Course course:courses){
-            hasSomethingFun(course,hasSomething);
+    public List<Course> listAllCourses(int... hasSomething) {
+        List<Course> courses = courseMapper.listAllCourse();
+        for (Course course : courses) {
+            hasSomethingFun(course, hasSomething);
         }
         return courses;
     }
@@ -113,10 +117,10 @@ public class CourseDao {
             throw new MyException("创建课程策略表失败！数据库处理错误", MyException.ERROR);
         }
         //冲突课程策略
-        for (long conflictCourseId : course.getConflictCourses()) {
-            if (!conflictCourseStrategyMapper.insertConflictCourseStrategy(course.getId(), conflictCourseId)) {
-                throw new MyException("创建冲突课程策略失败！数据库处理错误", MyException.ERROR);
-            }
+        //TODO 新建课程时冲突课程策略 待测试
+        long tableId = conflictCourseStrategyMapper.findMaxId() + 1;
+        for (Course conflictCourse : course.getConflictCourses()) {
+            conflictCourseStrategyMapper.insertOneLine(tableId, conflictCourse.getId());
         }
         //其他策略
 
@@ -134,13 +138,16 @@ public class CourseDao {
     public boolean deleteCourseById(long courseId) throws Exception {
         //查询是否存在
         getCourseById(courseId);
+
         //删除冲突课程策略
-        List<Long> conflictCourseStratageIds=conflictCourseStrategyMapper.getIdByCourseId(courseId);
-        for(Long conflictCourseStratageId:conflictCourseStratageIds){
-            if(!conflictCourseStrategyMapper.deleteById(conflictCourseStratageId)){
-                throw new MyException("删除课程冲突策略失败！数据库处理错误", MyException.ERROR);
-            }
+        //TODO 删除冲突课程策略 待测试
+        try {
+            conflictCourseStrategyMapper.deleteByCourseId(courseId);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new MyException("删除冲突课程策略失败", MyException.ERROR);
         }
+
         //删除策略表
         if (!courseMemberLimitStrategyMapper.deleteByCourseId(courseId)) {
             throw new MyException("删除课程组队策略失败！数据库处理错误", MyException.ERROR);

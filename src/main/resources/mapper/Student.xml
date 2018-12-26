@@ -34,12 +34,12 @@
     </select>
 
     <select id="findByCourseIdAndTeamIdIsNULL" resultMap="tab_student">
-        SELECT *
+        SELECT student.id,student.account,student.password,student.is_active,student.student_name,email
         FROM klass_student LEFT JOIN team_student
           ON klass_student.student_id=team_student.student_id
         LEFT JOIN student
           ON student.id
-        WHERE klass_student.course_id=#{courseId} AND team_student.team_id IS NULL
+        WHERE klass_student.course_id=#{courseId} AND team_student.team_id IS NULL GROUP BY student.id
     </select>
 
     <update id="updatePasswordAndEmailAndActiveById" parameterType="com.rbs.project.pojo.entity.Student">

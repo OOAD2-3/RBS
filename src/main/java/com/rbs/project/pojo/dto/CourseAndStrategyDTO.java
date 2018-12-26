@@ -1,7 +1,8 @@
-package com.rbs.project.pojo.vo;
+package com.rbs.project.pojo.dto;
 
 import com.rbs.project.pojo.entity.Course;
 import com.rbs.project.pojo.strategy.CourseMemberLimitStrategy;
+import com.rbs.project.pojo.vo.CourseInfoVO;
 import com.rbs.project.utils.JsonUtils;
 
 import java.util.ArrayList;
@@ -13,7 +14,7 @@ import java.util.List;
  * @Author: 17Wang
  * @Date: 23:15 2018/12/18
  */
-public class CourseAndStrategyVO {
+public class CourseAndStrategyDTO {
     private Long id;
     private String name;
     private String intro;
@@ -24,35 +25,12 @@ public class CourseAndStrategyVO {
     private String teamEndTime;
 
     private CourseMemberLimitStrategy courseMemberLimitStrategy;
-    private List<CourseInfoVO> conflictCourses;
+    private List<Long> conflictCourses;
     private Boolean ShareTeam;
     private Boolean ShareSeminar;
 
-    public CourseAndStrategyVO() {
+    public CourseAndStrategyDTO() {
 
-    }
-
-    public CourseAndStrategyVO(Course course) {
-        id = course.getId();
-        name = course.getName();
-        intro = course.getIntro();
-        presentationPercentage = course.getPresentationPercentage();
-        questionPercentage = course.getQuestionPercentage();
-        reportPercentage = course.getReportPercentage();
-        teamStartTime = JsonUtils.TimestampToString(course.getTeamStartTime());
-        teamEndTime = JsonUtils.TimestampToString(course.getTeamEndTime());
-
-        courseMemberLimitStrategy = course.getCourseMemberLimitStrategy();
-        conflictCourses = new ArrayList<>();
-        for (Course conflictCourse : course.getConflictCourses()) {
-            conflictCourses.add(new CourseInfoVO(conflictCourse));
-        }
-        if (course.getTeamMainCourseId() == 0) {
-            ShareTeam = false;
-        }
-        if (course.getSeminarMainCourseId() == 0) {
-            ShareSeminar = false;
-        }
     }
 
     public long getId() {
@@ -147,11 +125,11 @@ public class CourseAndStrategyVO {
         this.id = id;
     }
 
-    public List<CourseInfoVO> getConflictCourses() {
+    public List<Long> getConflictCourses() {
         return conflictCourses;
     }
 
-    public void setConflictCourses(List<CourseInfoVO> conflictCourses) {
+    public void setConflictCourses(List<Long> conflictCourses) {
         this.conflictCourses = conflictCourses;
     }
 

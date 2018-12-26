@@ -30,11 +30,11 @@ public class CClassInfoVO {
      */
     private String fileName;
 
-    public CClassInfoVO(CClass cClass){
-        id=cClass.getId();
-        name= String.valueOf(cClass.getGrade())+'-'+String.valueOf(cClass.getSerial());
-        time=cClass.getTime();
-        classroom=cClass.getPlace();
+    public CClassInfoVO(CClass cClass) {
+        id = cClass.getId();
+        name = String.valueOf(cClass.getGrade()) + '-' + String.valueOf(cClass.getSerial());
+        time = cClass.getTime();
+        classroom = cClass.getPlace();
     }
 
     public Long getId() {
