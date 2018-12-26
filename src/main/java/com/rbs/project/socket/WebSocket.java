@@ -27,7 +27,7 @@ import java.util.concurrent.CopyOnWriteArraySet;
  * @Author: 17Wang
  * @Date: 10:18 2018/12/25
  */
-@ServerEndpoint(value = "/websocket/{semianrClassId}/{account}")
+@ServerEndpoint(value = "/websocket/{cClassSemianrId}/{account}")
 @Component
 public class WebSocket {
 
@@ -37,7 +37,8 @@ public class WebSocket {
 
     private Session session;
 
-    private Long seminarClassId;
+    private Long cClassId;
+    private Long seminarId;
     private User user;
 
     //当做是一种依赖注入吧
@@ -48,12 +49,11 @@ public class WebSocket {
     }
 
     @OnOpen
-    public void onOpen(Session session, @PathParam("semianrClassId") Long semianrClassId, @PathParam("account") String account) {
+    public void onOpen(Session session, @PathParam("cClassId") Long cClassId, @PathParam("seminarId") Long seminarId, @PathParam("account") String account) {
         this.session = session;
-        this.seminarClassId = semianrClassId;
+        this.cClassId = cClassId;
+        this.seminarId = seminarId;
         this.user = applicationContext.getBean(JwtUserDetailsService.class).loadUserByUsername(account);
-        System.out.println("seminarClassId:" + seminarClassId);
-        System.out.println(user);
 
         webSockets.add(this);
         onlineCount++;
@@ -78,18 +78,18 @@ public class WebSocket {
         System.out.println("来自客户端的消息：" + message);
 
         try {
-            JSONObject jsonObject= (JSONObject) JSON.parse(message);
+            JSONObject jsonObject = (JSONObject) JSON.parse(message);
             System.out.println(jsonObject);
-        }catch (Exception e){
+        } catch (Exception e) {
 
         }
 
 
         //群发消息
         for (WebSocket webSocket : webSockets) {
-            if (webSocket.user instanceof Student && webSocket.seminarClassId.equals(this.seminarClassId)) {
+            if (webSocket.user instanceof Student && webSocket.cClassId.equals(this.cClassId) && webSocket.seminarId.equals(this.seminarId)) {
                 webSocket.sendMessage(message);
-            }else{
+            } else {
                 webSocket.sendMessage(JSON.toJSONString(webSocket.user));
             }
         }
