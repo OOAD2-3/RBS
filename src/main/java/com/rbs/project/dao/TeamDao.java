@@ -3,22 +3,18 @@ package com.rbs.project.dao;
 import com.rbs.project.exception.MyException;
 import com.rbs.project.mapper.*;
 import com.rbs.project.mapper.strategy.CourseMemberLimitStrategyMapper;
-import com.rbs.project.mapper.strategy.MemberLimitStrategy;
+import com.rbs.project.mapper.strategy.MemberLimitStrategyMapper;
 import com.rbs.project.mapper.strategy.TeamStrategyMapper;
-import com.rbs.project.pojo.entity.CClass;
 import com.rbs.project.pojo.entity.Student;
 import com.rbs.project.pojo.entity.Team;
-import com.rbs.project.pojo.relationship.CClassStudent;
 import com.rbs.project.pojo.strategy.ConflictCourseStrategy;
 import com.rbs.project.pojo.strategy.TeamAndStrategy;
 import com.rbs.project.pojo.strategy.TeamOrStrategy;
 import com.rbs.project.pojo.strategy.TeamStrategy;
-import org.apache.poi.ss.formula.functions.T;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collection;
 import java.util.List;
 
 /**
@@ -62,7 +58,7 @@ public class TeamDao {
     private TeamAndStrategy teamAndStrategy;
 
     @Autowired
-    private MemberLimitStrategy memberLimitStrategy;
+    private MemberLimitStrategyMapper memberLimitStrategyMapper;
 
     @Autowired
     private CourseMemberLimitStrategyMapper courseMemberLimitStrategyMapper;
@@ -262,5 +258,5 @@ public class TeamDao {
     }
 
     //=============================================究极策略递归
-    List<TeamStrategy> teamStrategies=
+    List<TeamStrategy> teamStrategies=teamStrategyMapper.findByCourseId(1);
 }
