@@ -11,6 +11,7 @@ import java.util.*;
  * @Author: 17Wang
  * @Date: 14:55 2018/12/25
  */
+@Component
 public class QuestionPool {
     private Map<Long, List<Question>> map = new HashMap<>();
 

@@ -124,11 +124,14 @@ public class ApplicationService {
             //  若请求通过，发出申请的课程为主课程，接受申请的课程为从课程，主课程小组名单映射到从课程中
             //  例如，某小组主课程 A 有5 人，五人中选修从课程 B 的为其中的 3 人，则 B 中此小组为此 3 人组成的小组
             //  若接受共享分组请求，该课程原有分组将被删除，并且，失去发起共享分组、接受其他共享分组请求以及课程中组队的功能
+            //1、从课程删掉所有的teamId（team表），调用teamndao的级联删除函数delete
+            //
             //  1.删除从课程原有分组
             ShareTeamApplication shareTeamApplication=shareDao.getShareTeamApplicationById(requestId);
             List<Team> teams=teamDao.listByCourseId(shareTeamApplication.getSubCourseId());
             for(Team team:teams){
                 //1.把klass_student表的team_id置为主课程team_id
+                //底层问题（新表问题未解决）+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
                 cClassDao.updateTeamIdCollectionToNull(team.getId());
                 //2.把round_score表置为主课程team_id
                 roundScoreDao.deleteRoundScoreByTeamId(team.getId());
