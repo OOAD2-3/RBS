@@ -1,9 +1,6 @@
 package com.rbs.project.service;
 
-import com.rbs.project.dao.CClassDao;
-import com.rbs.project.dao.CClassSeminarDao;
-import com.rbs.project.dao.CourseDao;
-import com.rbs.project.dao.UserDao;
+import com.rbs.project.dao.*;
 import com.rbs.project.exception.MyException;
 import com.rbs.project.pojo.entity.*;
 import com.rbs.project.utils.UserUtils;
@@ -64,10 +61,11 @@ public class CourseService {
 
     /**
      * Description: 获取所有课程
+     *
      * @Author: 17Wang
      * @Time: 17:41 2018/12/23
-    */
-    public List<Course> listAllCourses(){
+     */
+    public List<Course> listAllCourses() {
         return courseDao.listAllCourses();
     }
 
@@ -91,12 +89,42 @@ public class CourseService {
     }
 
     /**
-     * Description: 删除课程
+     * Description: 删除课程，只要删掉courseId其他东西别人就拿不到了
+     * 1、
      *
      * @Author: 17Wang
      * @Time: 10:34 2018/12/19
      */
     public boolean deleteCourseById(long courseId) throws Exception {
+        /*
+            1、删除课程
+            2、删除课程冲突策略
+            3、删除课程人数限制策略
+            TODO 删除share_seminar_application
+            TODO 删除share_team_application
+         */
         return courseDao.deleteCourseById(courseId);
+        /*
+            TOD 删除班级klass和klass底下的级联删除
+            TOD 删除klass_round
+            TOD 删除klass_student
+            TOD 删除klass_team
+            TOD 删除
+         */
+        //cClassDao.deleteCClassByCourseId(courseId);
+        /*
+            TOD 删除Team
+         */
+        //teamDao.deleteTeamByCourseId(courseId);
+        /*
+            TOD 删除讨论课seminar
+            TOD 删除klass_seminar
+         */
+        //seminarDao.deleteSeminarByCourseId(courseId);
+        /*
+            TOD 删除轮次round
+            TOD 删除round_score
+         */
+        //roundDao.deleteRoundByCourseId(courseId);
     }
 }
