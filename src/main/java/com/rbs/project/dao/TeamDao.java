@@ -2,15 +2,10 @@ package com.rbs.project.dao;
 
 import com.rbs.project.exception.MyException;
 import com.rbs.project.mapper.*;
-import com.rbs.project.mapper.strategy.CourseMemberLimitStrategyMapper;
-import com.rbs.project.mapper.strategy.MemberLimitStrategyMapper;
-import com.rbs.project.mapper.strategy.TeamStrategyMapper;
+import com.rbs.project.mapper.strategy.*;
 import com.rbs.project.pojo.entity.Student;
 import com.rbs.project.pojo.entity.Team;
-import com.rbs.project.pojo.strategy.ConflictCourseStrategy;
-import com.rbs.project.pojo.strategy.TeamAndStrategy;
-import com.rbs.project.pojo.strategy.TeamOrStrategy;
-import com.rbs.project.pojo.strategy.TeamStrategy;
+import com.rbs.project.pojo.strategy.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -42,7 +37,7 @@ public class TeamDao {
 
     @Autowired
     private CClassTeamMapper cClassTeamMapper;
-    
+
     @Autowired
     private CClassStudentMapper cClassStudentMapper;
 
@@ -52,10 +47,10 @@ public class TeamDao {
     private TeamStrategyMapper teamStrategyMapper;
 
     @Autowired
-    private TeamOrStrategy teamOrStrategy;
+    private TeamOrStrategyMapper teamOrStrategyMapper;
 
     @Autowired
-    private TeamAndStrategy teamAndStrategy;
+    private TeamAndStrategyMapper teamAndStrategyMapper;
 
     @Autowired
     private MemberLimitStrategyMapper memberLimitStrategyMapper;
@@ -64,7 +59,7 @@ public class TeamDao {
     private CourseMemberLimitStrategyMapper courseMemberLimitStrategyMapper;
 
     @Autowired
-    private ConflictCourseStrategy conflictCourseStrategy;
+    private ConflictCourseStrategyMapper conflictCourseStrategyMapper;
 
     public static final int HAS_COURSE = 0;
     public static final int HAS_CCLASS = 1;
@@ -78,7 +73,7 @@ public class TeamDao {
             }
             if (i == HAS_CCLASS) {
                 team.setcClass(cClassMapper.findById(team.getcClassId()));
-        }
+            }
             if (i == HAS_LEADER) {
                 team.setLeader(studentMapper.findById(team.getLeaderId()));
             }
@@ -189,7 +184,7 @@ public class TeamDao {
     public boolean deleteTeamById(long teamId) throws MyException {
         //将该小组下的成员置为无小组状态
         //通过删除team_student表，解除team和student的关系
-        List<Student> students =studentMapper.findByTeamId(teamId);
+        List<Student> students = studentMapper.findByTeamId(teamId);
         for (Student student : students) {
             deleteTeamStudentByTeamIdAndStudentId(teamId, student.getId());
         }
@@ -199,8 +194,8 @@ public class TeamDao {
             throw new MyException("删除小组错误！数据库处理错误", MyException.ERROR);
         }
         //直接删掉所有关于team的东西
-        if(!cClassTeamMapper.deleteByTeamId(teamId)){
-            throw new MyException("删除小组错误！klass_team处理错误",MyException.ERROR );
+        if (!cClassTeamMapper.deleteByTeamId(teamId)) {
+            throw new MyException("删除小组错误！klass_team处理错误", MyException.ERROR);
         }
         return true;
     }
@@ -247,16 +242,135 @@ public class TeamDao {
 
     /**
      * Description: 新增klass_team表
+     *
      * @Author: WinstonDeng
      * @Date: 16:34 2018/12/26
      */
     public boolean addCClassTeam(long teamId, long cClassId) throws Exception {
-        if(!cClassTeamMapper.insertBycClassIdAndTeamId(cClassId,teamId)){
-            throw new MyException("新增klass_team关系错误！数据库处理错误",MyException.ERROR);
+        if (!cClassTeamMapper.insertBycClassIdAndTeamId(cClassId, teamId)) {
+            throw new MyException("新增klass_team关系错误！数据库处理错误", MyException.ERROR);
         }
         return true;
     }
 
-    //=============================================究极策略递归
-    List<TeamStrategy> teamStrategies=teamStrategyMapper.findByCourseId(1);
+    //=============================================究极策略递归============================================//
+
+    public boolean judgeTeam(String strategyName, long strategyId) {
+        boolean flag = false;
+        switch (strategyName) {
+            case "TeamAndStrategy":
+                flag = TeamAndStrategy(strategyId);
+                break;
+            case "TeamOrStrategy":
+                flag = TeamOrStrategy(strategyId);
+                break;
+            case "ConflictCourseStrategy":
+                flag = ConflictCourseStrategy(strategyId);
+                break;
+            case "MemberLimitStrategy":
+                flag = MemberLimitStrategy(strategyId);
+                break;
+            case "CourseMemberLimitStrategy":
+                flag = CourseMemberLimitStrategy(strategyId);
+                break;
+            default:
+                ;
+        }
+        return flag;
+    }
+
+    /**
+     * Description:team策略
+     *
+     * @Author: 17Wang
+     * @Time: 0:44 2018/12/27
+     */
+    private boolean teamStrategy(long teamId) {
+        //获取当前team的信息
+        Team team = teamMapper.findById(teamId);
+        //获取所有的策略
+        List<TeamStrategy> teamStrategies = teamStrategyMapper.findByCourseId(team.getCourseId());
+        for (TeamStrategy teamStrategy : teamStrategies) {
+            //如果一个为false，直接返回false
+            if (!judgeTeam(teamStrategy.getStrategyName(), teamStrategy.getStrategyId())) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * Description:TeamAndStrategy
+     *
+     * @Author: 17Wang
+     * @Time: 0:44 2018/12/27
+     */
+    private boolean TeamAndStrategy(long strategyId) {
+        // 和 策略
+        List<TeamAndStrategy> teamAndStrategies = teamAndStrategyMapper.findById(strategyId);
+        for (TeamAndStrategy teamAndStrategy : teamAndStrategies) {
+            //如果一个为false，直接返回false
+            if (!judgeTeam(teamAndStrategy.getStrategyName(), teamAndStrategy.getStrategyId())) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * Description:TeamOrStrategy
+     *
+     * @Author: 17Wang
+     * @Time: 0:44 2018/12/27
+     */
+    private boolean TeamOrStrategy(long strategyId) {
+        // 或 策略
+        List<TeamOrStrategy> teamOrStrategies = teamOrStrategyMapper.findById(strategyId);
+        for (TeamOrStrategy teamOrStrategy : teamOrStrategies) {
+            //如果一个为false，直接返回false
+            if (!judgeTeam(teamOrStrategy.getStrategyName(), teamOrStrategy.getStrategyId())) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * Description:ConflictCourseStrategy
+     *
+     * @Author: 17Wang
+     * @Time: 0:44 2018/12/27
+     */
+    private boolean ConflictCourseStrategy(long strategyId) {
+        //冲突课程策略
+        List<ConflictCourseStrategy> conflictCourseStrategies=conflictCourseStrategyMapper.findById(strategyId);
+        for(ConflictCourseStrategy conflictCourseStrategy:conflictCourseStrategies){
+            //TODO 判断冲突课程的策略
+        }
+
+        return true;
+    }
+
+    /**
+     * Description:MemberLimitStrategy
+     *
+     * @Author: 17Wang
+     * @Time: 0:44 2018/12/27
+     */
+    private boolean MemberLimitStrategy(long strategyId) {
+        return true;
+    }
+
+    /**
+     * Description:CourseMemberLimitStrategy
+     *
+     * @Author: 17Wang
+     * @Time: 0:44 2018/12/27
+     */
+    private boolean CourseMemberLimitStrategy(long strategyId) {
+        return true;
+    }
+
 }

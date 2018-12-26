@@ -5,6 +5,8 @@ import com.rbs.project.pojo.strategy.TeamAndStrategy;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 /**
  * Description:
  *
@@ -20,5 +22,5 @@ public interface TeamAndStrategyMapper {
      * @param id
      * @return
      */
-    TeamAndStrategy findById(long id);
+    List<TeamAndStrategy> findById(long id);
 }

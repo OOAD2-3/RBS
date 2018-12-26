@@ -47,5 +47,5 @@ public interface ConflictCourseStrategyMapper {
      * @param id
      * @return
      */
-    ConflictCourseStrategy findById(long id);
+    List<ConflictCourseStrategy> findById(long id);
 }
