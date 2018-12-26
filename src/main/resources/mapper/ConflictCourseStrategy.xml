@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.rbs.project.mapper.ConflictCourseStrategyMapper">
     <select id="findMaxId" resultType="Long">
-        SELECT max(id) FROM conflict_course_strategy GROUP BY id;
+        SELECT max(id) FROM conflict_course_strategy;
     </select>
 
     <insert id="insertOneLine">

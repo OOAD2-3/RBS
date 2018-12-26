@@ -57,8 +57,20 @@ public class CourseDao {
                 course.setSeminars(seminarMapper.findByCourseId(course.getId()));
             }
             if (i == HAS_CONFLICT_COURSES) {
-                //TODO 直接查可能会出现重复的课程
-                course.setConflictCourses(courseMapper.findAllConflictCourseByNowCourseId(course.getId()));
+                //TODO 直接查可能会出现重复的课程和课程自己
+                List<Course> courses = courseMapper.findAllConflictCourseByNowCourseId(course.getId());
+                Map<Long, Course> map = new HashMap<>();
+                for (Course conflictCourse : courses) {
+                    if (conflictCourse.getId() != course.getId()) {
+                        map.put(conflictCourse.getId(), conflictCourse);
+                    }
+                }
+                List<Course> conflictCourses = new ArrayList<>();
+                for (Map.Entry<Long, Course> entry : map.entrySet()) {
+                    conflictCourses.add(entry.getValue());
+                }
+
+                course.setConflictCourses(conflictCourses);
             }
         }
     }
@@ -106,7 +118,7 @@ public class CourseDao {
         }
         //冲突课程策略
         //TODO 新建课程时冲突课程策略 待测试
-        long tableId = conflictCourseStrategyMapper.findMaxId()+1;
+        long tableId = conflictCourseStrategyMapper.findMaxId() + 1;
         for (Course conflictCourse : course.getConflictCourses()) {
             conflictCourseStrategyMapper.insertOneLine(tableId, conflictCourse.getId());
         }
@@ -129,9 +141,9 @@ public class CourseDao {
 
         //删除冲突课程策略
         //TODO 删除冲突课程策略 待测试
-        try{
+        try {
             conflictCourseStrategyMapper.deleteByCourseId(courseId);
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             throw new MyException("删除冲突课程策略失败", MyException.ERROR);
         }
