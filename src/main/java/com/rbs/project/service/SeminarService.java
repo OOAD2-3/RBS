@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -66,15 +67,20 @@ public class SeminarService {
         if (seminar.getSerial() == null) {
             throw new MyException("serial不能为空", MyException.ERROR);
         }
+        //新增的讨论课序号
+        int serial=1;
         //判断序号是否存在
         List<Seminar> seminars = seminarDao.findSeminarByCourseId(seminar.getCourseId());
+        List<Integer> serialList=new ArrayList<>();
         for (Seminar temp
                 : seminars) {
-            //若该序号已存在，则报错
-            if (temp.getSerial().equals(seminar.getSerial())) {
-                throw new MyException("该讨论课序号已存在！", MyException.ERROR);
-            }
+            serialList.add(temp.getSerial());
         }
+        //若该序号已存在，则+1，直到发现不存在的值，作为讨论课序号
+        while(serialList.contains(serial)){
+            serial++;
+        }
+        seminar.setSerial(serial);
         //新增讨论课
         seminarDao.addSeminar(seminar);
         //新增班级讨论课

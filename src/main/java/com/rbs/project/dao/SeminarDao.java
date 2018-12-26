@@ -71,14 +71,13 @@ public class SeminarDao {
      * @Date: 16:23 2018/12/18
      */
     public boolean updateSeminarById(Seminar seminar) throws MyException{
-        if(seminarMapper.findById(seminar.getId())==null){
+        Seminar temp=seminarMapper.findById(seminar.getId());
+        if(temp==null){
             throw new MyException("修改讨论课信息错误！未找到讨论课",MyException.NOT_FOUND_ERROR);
         }
         try {
-            Seminar temp=seminarMapper.findById(seminar.getId());
             temp.setName(seminar.getName());
             temp.setIntro(seminar.getIntro());
-            temp.setSerial(seminar.getSerial());
             temp.setVisible(seminar.getVisible());
             temp.setMaxTeam(seminar.getMaxTeam());
             temp.setRoundId(seminar.getRoundId());

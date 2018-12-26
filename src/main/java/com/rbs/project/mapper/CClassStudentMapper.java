@@ -29,4 +29,11 @@ public interface CClassStudentMapper {
      */
     boolean updateTeamIdCollectionToNull(long teamId) throws Exception;
 
+    /**
+     * 通过学生id 和 课程id 确认该记录是否存在，仅用于共享
+     * @param studentId
+     * @param courseId
+     * @return
+     */
+    CClassStudent getByIdAndCourseId(long studentId, long courseId);
 }

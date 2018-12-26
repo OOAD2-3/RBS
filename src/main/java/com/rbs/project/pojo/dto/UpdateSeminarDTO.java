@@ -18,10 +18,7 @@ public class UpdateSeminarDTO {
      * 介绍
      */
     private String intro;
-    /**
-     * 讨论课次序
-     */
-    private Integer serial;
+
     /**
      * 是否可见
      */
@@ -60,13 +57,7 @@ public class UpdateSeminarDTO {
         this.intro = intro;
     }
 
-    public Integer getSerial() {
-        return serial;
-    }
 
-    public void setSerial(Integer serial) {
-        this.serial = serial;
-    }
 
     public Integer getVisible() {
         return visible;

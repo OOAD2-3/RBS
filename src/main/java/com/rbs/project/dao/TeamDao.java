@@ -223,4 +223,15 @@ public class TeamDao {
         return true;
     }
 
+    /**
+     * Description: 新增klass_team表
+     * @Author: WinstonDeng
+     * @Date: 16:34 2018/12/26
+     */
+    public boolean addCClassTeam(long teamId, long cClassId) throws Exception {
+        if(!cClassTeamMapper.insertBycClassIdAndTeamId(cClassId,teamId)){
+            throw new MyException("新增klass_team关系错误！数据库处理错误",MyException.ERROR);
+        }
+        return true;
+    }
 }
