@@ -7,7 +7,7 @@
         <result property="maxMember" column="max_member"/>
     </resultMap>
 
-    <select id="findById" parameterType="Long" resultMap="tab_team_limit_strategy">
+    <select id="findById" parameterType="Long" resultMap="tab_member_limit_strategy">
         SELECT * FROM member_limit_strategy WHERE id=#{id}
     </select>
 
