@@ -128,15 +128,7 @@ public class ApplicationService {
             ShareTeamApplication shareTeamApplication=shareDao.getShareTeamApplicationById(requestId);
             List<Team> teams=teamDao.listByCourseId(shareTeamApplication.getSubCourseId());
             for(Team team:teams){
-                //1.把klass_student表的team_id置为主课程team_id
-                cClassDao.updateTeamIdCollectionToNull(team.getId());
-                //2.把round_score表置为主课程team_id
-                roundScoreDao.deleteRoundScoreByTeamId(team.getId());
-                //3.把seminar_score表置为主课程team_id
-                seminarScoreDao.deleteSemianrScoreByTeamId(team.getId());
-                //4.把team_valid_application清空
-                teamApplicationDao.deleteTeamValidApplicationByTeamId(team.getId());
-                //5.删除分组
+                //删除分组,调用dao层级联删除函数
                 teamDao.deleteTeamById(team.getId());
             }
             //  2.建立主从课程映射

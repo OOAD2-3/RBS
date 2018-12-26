@@ -57,6 +57,11 @@ public class RequestController {
         return teamValidApplicationVOS;
     }
 
+    /**
+     * Description: 更新小组合法状态
+     * @Author: 17（Winston补充的注释，看到删掉）
+     * @Date: 14:24 2018/12/26
+     */
     @PutMapping("/team")
     @ResponseBody
     public ResponseEntity<Boolean> updateTeamApplicationStatus(@RequestParam("requestId") long requestId, @RequestParam("status") int status) throws Exception {

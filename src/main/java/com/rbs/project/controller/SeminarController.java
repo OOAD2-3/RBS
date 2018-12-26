@@ -288,7 +288,6 @@ public class SeminarController {
 
     /**
      * Description: 获取正在进行的讨论课
-     *              //字段需要修改
      *
      * @Author: WinstonDeng
      * @Date: 23:10 2018/12/25
@@ -302,6 +301,7 @@ public class SeminarController {
         for(CClassSeminar cClassSeminar:cClassSeminars){
             Map<String,Long> map=new HashMap<>();
             map.put("seminarId",cClassSeminar.getSeminarId());
+            map.put("cClassId",cClassSeminar.getcClassId());
             maps.add(map);
         }
         return ResponseEntity.ok().body(maps);
