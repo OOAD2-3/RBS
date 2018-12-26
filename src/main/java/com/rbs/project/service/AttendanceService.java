@@ -119,7 +119,7 @@ public class AttendanceService {
         seminarScoreDao.deleteSeminarScoreByPrimaryKey(cClassSeminarId, teamId);
 
         //删除轮次成绩
-        roundScoreDao.deleteRoundScoreByPrimaryKey(roundId, teamId);
+        //roundScoreDao.deleteRoundScoreByPrimaryKey(roundId, teamId);
 
         //删除报名
         attendanceDao.deleteAttendanceById(attendanceId);
