@@ -2,6 +2,8 @@ package com.rbs.project.dao;
 
 import com.rbs.project.exception.MyException;
 import com.rbs.project.mapper.*;
+import com.rbs.project.mapper.strategy.ConflictCourseStrategyMapper;
+import com.rbs.project.mapper.strategy.CourseMemberLimitStrategyMapper;
 import com.rbs.project.pojo.entity.Course;
 import com.rbs.project.pojo.strategy.CourseMemberLimitStrategy;
 import org.springframework.beans.factory.annotation.Autowired;

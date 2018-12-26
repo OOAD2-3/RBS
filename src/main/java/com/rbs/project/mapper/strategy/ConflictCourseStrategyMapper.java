@@ -1,5 +1,6 @@
-package com.rbs.project.mapper;
+package com.rbs.project.mapper.strategy;
 
+import com.rbs.project.pojo.strategy.ConflictCourseStrategy;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
@@ -39,4 +40,12 @@ public interface ConflictCourseStrategyMapper {
      * @return
      */
     boolean deleteByCourseId(long courseId) throws Exception;
+
+    /**
+     * 通过id获取冲突的班级
+     *
+     * @param id
+     * @return
+     */
+    ConflictCourseStrategy findById(long id);
 }

@@ -6,7 +6,6 @@ import com.rbs.project.pojo.entity.*;
 import com.rbs.project.utils.UserUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -100,8 +99,8 @@ public class CourseService {
             1、删除课程
             2、删除课程冲突策略
             3、删除课程人数限制策略
-            TODO 删除share_seminar_application
-            TODO 删除share_team_application
+            TODO 删除share_seminar_application 待测试
+            TODO 删除share_team_application 待测试
          */
         return courseDao.deleteCourseById(courseId);
         /*

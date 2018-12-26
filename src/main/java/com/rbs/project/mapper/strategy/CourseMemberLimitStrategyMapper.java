@@ -1,4 +1,4 @@
-package com.rbs.project.mapper;
+package com.rbs.project.mapper.strategy;
 
 import com.rbs.project.pojo.strategy.CourseMemberLimitStrategy;
 import org.apache.ibatis.annotations.Mapper;
@@ -36,4 +36,12 @@ public interface CourseMemberLimitStrategyMapper {
      * @return
      */
     boolean deleteByCourseId(long courseId);
+
+    /**
+     * 通过id获取策略信息
+     *
+     * @param id
+     * @return
+     */
+    CourseMemberLimitStrategy findById(long id);
 }

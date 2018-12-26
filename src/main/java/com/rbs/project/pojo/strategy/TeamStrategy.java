@@ -6,21 +6,28 @@ package com.rbs.project.pojo.strategy;
  * @Date: Created in 15:30 2018/12/15
  * @Modified by:
  */
-public class TeamStragety {
+public class TeamStrategy {
     /**
      * 课程id
      */
     private long courseId;
+
     /**
-     * 策略id
+     * 第几条策略
      */
-    private long strategyId;
+    private long strategySerial;
+
     /**
-     * 组队策略实现类名称
+     * 策略名
      */
     private String strategyName;
 
+    /**
+     * 冲突id
+     */
+    private long strategyId;
     //==================================================getter AND setter==================================================//
+
 
     public long getCourseId() {
         return courseId;
@@ -30,12 +37,12 @@ public class TeamStragety {
         this.courseId = courseId;
     }
 
-    public long getStrategyId() {
-        return strategyId;
+    public long getStrategySerial() {
+        return strategySerial;
     }
 
-    public void setStrategyId(long strategyId) {
-        this.strategyId = strategyId;
+    public void setStrategySerial(long strategySerial) {
+        this.strategySerial = strategySerial;
     }
 
     public String getStrategyName() {
@@ -44,5 +51,13 @@ public class TeamStragety {
 
     public void setStrategyName(String strategyName) {
         this.strategyName = strategyName;
+    }
+
+    public long getStrategyId() {
+        return strategyId;
+    }
+
+    public void setStrategyId(long strategyId) {
+        this.strategyId = strategyId;
     }
 }
