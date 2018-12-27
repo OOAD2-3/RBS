@@ -35,6 +35,8 @@
     <delete id="deleteByCourseId" parameterType="Long">
         DELETE FROM share_team_application
         WHERE main_course_id=#{courseId} OR sub_course_id=#{courseId}
+    </delete>
+    
     <insert id="addShareTeamApplication" parameterType="com.rbs.project.pojo.entity.ShareTeamApplication" useGeneratedKeys="true" keyProperty="id">
         insert into share_team_application(main_course_id,sub_course_id,sub_course_teacher_id,status)
         values (#{mainCourseId},#{subCourseId},#{subCourseTeacherId},#{status})
