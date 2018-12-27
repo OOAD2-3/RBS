@@ -8,7 +8,7 @@ import com.rbs.project.pojo.strategy.CourseMemberLimitStrategy;
 import com.rbs.project.pojo.vo.*;
 import com.rbs.project.service.*;
 import com.rbs.project.utils.FileLoadUtils;
-import com.rbs.project.utils.JsonUtils
+import com.rbs.project.utils.JsonUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
