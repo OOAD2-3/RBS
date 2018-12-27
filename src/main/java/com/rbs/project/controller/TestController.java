@@ -1,12 +1,10 @@
 package com.rbs.project.controller;
 
+import com.rbs.project.dao.TeamDao;
 import com.rbs.project.mapper.StudentMapper;
-import com.rbs.project.pojo.entity.Student;
-import com.rbs.project.mapper.CourseMapper;
 import com.rbs.project.service.AttendanceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import sun.rmi.runtime.Log;
 
 import java.util.List;
 import java.util.Map;
@@ -26,6 +24,9 @@ public class TestController {
     @Autowired
     StudentMapper studentMapper;
 
+    @Autowired
+    TeamDao teamDao;
+
     @GetMapping("/test")
     @ResponseBody
     public void test(){
@@ -36,7 +37,7 @@ public class TestController {
 
     @GetMapping("/test2")
     @ResponseBody
-    public List<Student> test2(@RequestParam("courseId") long courseId, @RequestParam("teamId") long teamId){
-        return studentMapper.findByCourseIdAndTeamId(courseId, teamId);
+    public boolean test2(@RequestParam("teamId") long teamId){
+        return teamDao.teamStrategy(teamId);
     }
 }
