@@ -264,7 +264,7 @@ public class TeamDao {
      * @Author: 17Wang
      * @Time: 0:59 2018/12/27
      */
-    public boolean judgeTeam(String strategyName, long strategyId, long teamId) {
+    private boolean judgeTeam(String strategyName, long strategyId, long teamId) {
         boolean flag = false;
         switch (strategyName) {
             case "TeamAndStrategy":
@@ -294,7 +294,7 @@ public class TeamDao {
      * @Author: 17Wang
      * @Time: 0:44 2018/12/27
      */
-    private boolean teamStrategy(long teamId) {
+    public boolean teamStrategy(long teamId) {
         //获取当前team的信息
         Team team = teamMapper.findById(teamId);
         //获取所有的策略
@@ -416,7 +416,7 @@ public class TeamDao {
         for (MemberLimitStrategy memberLimitStrategy : memberLimitStrategies) {
             //如果有一个不符合就不行
             if (team.getStudents().size() < memberLimitStrategy.getMinMember() ||
-                    memberLimitStrategy.getMaxMember() > team.getStudents().size()) {
+                    team.getStudents().size() > memberLimitStrategy.getMaxMember()) {
                 return false;
             }
         }
