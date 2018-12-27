@@ -71,4 +71,10 @@
         (#{teacherId},#{name},#{intro},#{presentationPercentage},#{questionPercentage},
         #{reportPercentage},#{teamStartTime},#{teamEndTime},#{teamMainCourseId},#{seminarMainCourseId})
     </insert>
+
+    <update id="updateTeamMainCourseId" parameterType="com.rbs.project.pojo.entity.Course">
+        update course
+        set team_main_course_id=#{teamMainCourseId}
+        where id=#{id}
+    </update>
 </mapper>

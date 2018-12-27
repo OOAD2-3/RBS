@@ -133,12 +133,10 @@ public class ApplicationService {
                 //删除分组,调用dao层级联删除函数
                 teamDao.deleteTeamById(team.getId());
             }
-            //  2.建立主从课程映射
-            //  从课程使用队伍学生时，要先确认自己是从课程
-            //  从课程学生只看klass_student表的course_id klass_id，不看主课程里这两个字段
-            //  3.从课程小组调整
+
+            //  2.从课程小组调整
             //  要确认从课程队伍属于哪个班，要先查klass_student表里courseid和teamid对应学生的klass_id，再通过分班策略
-            //  进行区分，建议做成工具类方法
+            //  进行区分，建议做成类方法
             List<Team> mainCourseTeams=teamDao.listByCourseId(shareTeamApplication.getMainCourseId());
             for(Team team
                     :mainCourseTeams){
@@ -155,11 +153,20 @@ public class ApplicationService {
                         subCourseStudents.add(temp);
                     }
                 }
+                //如果没有从课程学生
+                if(subCourseStudents.isEmpty()){
+                    continue;
+                }
                 //通过主课程学生确定从课程学生共享后队伍所在班级
                 long cClassIdInSubCourseTeam= getCClassIdByStrategy(subCourseStudents);
                 //建立klass_team表的新关系
                 teamDao.addCClassTeam(team.getId(),cClassIdInSubCourseTeam);
             }
+            //  3.建立主从课程映射
+            //  从课程使用队伍学生时，要先确认自己是从课程
+            //  从课程学生只看klass_student表的course_id klass_id，不看主课程里这两个字段
+            //  更新从课程的team_main_course_id字段,建立映射
+            courseDao.updateTeamMainCourseId(shareTeamApplication.getSubCourseId(),shareTeamApplication.getMainCourseId());
         }
         //如果拒绝，只更新请求表的字段
         return shareDao.updateShareTeamApplicationStatus(requestId,status);
@@ -175,6 +182,7 @@ public class ApplicationService {
         final int memberNum=subCourseStudents.size();
         //计数器
         Map<Long,Integer> countMap=new HashMap<>();
+
         //初始化  把第一个学生的的班级存进去
         countMap.put(subCourseStudents.get(0).getcClassId(),1);
         //统计
@@ -220,5 +228,23 @@ public class ApplicationService {
         }
 
 
+    }
+
+    /**
+     * Description: 发起组队共享申请
+     * @Author: WinstonDeng
+     * @Date: 23:18 2018/12/26
+     */
+    public boolean addTeamShareRequest(long courseId, long subCourseId)throws MyException {
+        return shareDao.addTeamShareApplication(courseId,subCourseId);
+    }
+
+    /**
+     * Description: 取消队伍共享
+     * @Author: WinstonDeng
+     * @Date: 23:24 2018/12/26
+     */
+    public boolean removeTeamShare(long requestId) throws MyException{
+        return shareDao.removeTeamShare(requestId);
     }
 }

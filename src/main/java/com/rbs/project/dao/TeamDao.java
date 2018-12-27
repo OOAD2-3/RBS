@@ -42,7 +42,13 @@ public class TeamDao {
     private CClassTeamMapper cClassTeamMapper;
 
     @Autowired
-    private CClassStudentMapper cClassStudentMapper;
+    private RoundScoreMapper roundScoreMapper;
+
+    @Autowired
+    private SeminarScoreMapper seminarScoreMapper;
+
+    @Autowired
+    private AttendanceMapper attendanceMapper;
 
     //策略
 
@@ -179,7 +185,7 @@ public class TeamDao {
     /**
      * Description:
      * （已做）删除小组 删team表 删klass_team表 删team_student
-     * （添加）成绩：
+     * （已做）成绩：round_score seminar_score
      *
      * @Author: 17Wang
      * @Time: 10:59 2018/12/23
@@ -199,6 +205,17 @@ public class TeamDao {
         //直接删掉所有关于team的东西
         if (!cClassTeamMapper.deleteByTeamId(teamId)) {
             throw new MyException("删除小组错误！klass_team处理错误", MyException.ERROR);
+        }
+        //删除attendance
+        if(!attendanceMapper.deleteByTeamId(teamId)){
+            throw new MyException("删除小组错误！attendance处理错误",MyException.ERROR);
+        }
+        //删除成绩
+        if(!roundScoreMapper.deleteByTeamId(teamId)){
+            throw new MyException("删除小组错误！round_score处理错误",MyException.ERROR);
+        }
+        if(!seminarScoreMapper.deleteByTeamId(teamId)){
+            throw new MyException("删除小组错误！seminar_score处理错误",MyException.ERROR);
         }
         return true;
     }
