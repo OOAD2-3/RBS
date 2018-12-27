@@ -47,6 +47,7 @@ public class UserService {
         if (user instanceof Student) {
             studentDao.updatePasswordAndEmailAndActiveByStudent((Student) user);
         } else if (user instanceof Teacher) {
+            user.setEmail(nowUser.getEmail());
             teacherDao.updatePasswordAndEmailAndActiveByTeacher((Teacher) user);
         }
 

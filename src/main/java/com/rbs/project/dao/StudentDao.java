@@ -8,6 +8,7 @@ import com.rbs.project.pojo.relationship.CClassStudent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -45,15 +46,19 @@ public class StudentDao {
      * @Time: 13:17 2018/12/23
      */
     public List<Student> listByCourseIdAndTeamIdIsNULL(long courseId) {
-        return studentMapper.findByCourseIdAndTeamIdIsNULL(courseId);
+        List<Student> studentList = studentMapper.findByCourseId(courseId);
+        List<Student> studentHasTeam = studentMapper.findByCourseIdHasTeam(courseId);
+        studentList.removeAll(studentHasTeam);
+        return studentList;
     }
 
     /**
      * Description: 获取一个team下面的所有成员
+     *
      * @Author: 17Wang
      * @Time: 22:15 2018/12/25
-    */
-    public List<Student> listByTeamId(long teamId){
+     */
+    public List<Student> listByTeamId(long teamId) {
         return studentMapper.findByTeamId(teamId);
     }
 
@@ -232,6 +237,6 @@ public class StudentDao {
      * @Date: 16:10 2018/12/26
      */
     public CClassStudent getByIdAndCourseId(long studentId, long subCourseId) {
-        return cClassStudentMapper.getByIdAndCourseId(studentId,subCourseId);
+        return cClassStudentMapper.getByIdAndCourseId(studentId, subCourseId);
     }
 }

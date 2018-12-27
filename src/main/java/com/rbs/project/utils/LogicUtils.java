@@ -16,23 +16,6 @@ public class LogicUtils {
     private static CourseDao courseDao = new CourseDao();
 
     /**
-     * Description: 判断当前team是否合法
-     *
-     * @Author: 17Wang
-     * @Time: 19:33 2018/12/19
-     */
-    public static boolean teamIsValid(Team team) throws MyException {
-        Course course = team.getCourse();
-        //人数策略
-        int peopleNum = team.getStudents().size() + 1;
-        if (peopleNum < course.getCourseMemberLimitStrategy().getMinMember() || peopleNum > course.getCourseMemberLimitStrategy().getMaxMember()) {
-            return false;
-        }
-        //其他策略
-        return true;
-    }
-
-    /**
      * Description: 计算一次讨论课成绩的总分
      *
      * @Author: 17Wang

@@ -23,4 +23,15 @@ public class Student extends User{
     public void setStudentName(String studentName) {
         this.studentName = studentName;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+        return ((Student) obj).getId() == this.getId() ? true : false;
+    }
 }

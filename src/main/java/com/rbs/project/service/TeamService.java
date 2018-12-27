@@ -2,13 +2,11 @@ package com.rbs.project.service;
 
 import com.rbs.project.dao.*;
 import com.rbs.project.exception.MyException;
-import com.rbs.project.pojo.entity.CClass;
-import com.rbs.project.pojo.entity.Course;
-import com.rbs.project.pojo.entity.Student;
-import com.rbs.project.pojo.entity.Team;
+import com.rbs.project.pojo.entity.*;
 import com.rbs.project.utils.LogicUtils;
 import com.rbs.project.utils.UserUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -83,20 +81,19 @@ public class TeamService {
             }
         }
         team.setSerial(teamSerial);
-
-        //给team设置班级的策略
-        Course course = courseDao.getCourseById(team.getCourseId(), CourseDao.HAS_COURSE_MEMBER_LIMIT_STRATEGY);
-        team.setCourse(course);
-        //判断队伍是否合法
-        if (LogicUtils.teamIsValid(team)) {
-            team.setStatus(Team.STATUS_OK);
-        } else {
-            team.setStatus(Team.STATUS_ERROR);
-        }
+        //默认小组状态为不合法
+        team.setStatus(Team.STATUS_ERROR);
 
         //插入 team表
         //在这个方法同时插入到klass_team中
         teamDao.addTeam(team);
+
+        //判断队伍是否合法
+        if (teamDao.teamStrategy(team.getId())) {
+            teamDao.updateStatusByTeamId(Team.STATUS_OK, team.getId());
+        } else {
+            teamDao.updateStatusByTeamId(Team.STATUS_ERROR, team.getId());
+        }
 
         //修改team_student 新表
         for (Student student : team.getStudents()) {
@@ -210,13 +207,11 @@ public class TeamService {
         //小组状态判断和修改
         Team team = teamDao.getTeamById(teamId, TeamDao.HAS_MEMBERS);
 
-        //给team设置班级的策略
-        Course course = courseDao.getCourseById(team.getCourseId(), CourseDao.HAS_COURSE_MEMBER_LIMIT_STRATEGY);
-        team.setCourse(course);
-        if (LogicUtils.teamIsValid(team)) {
-            teamDao.updateStatusByTeamId(Team.STATUS_OK, teamId);
+        //判断队伍是否合法
+        if (teamDao.teamStrategy(team.getId())) {
+            teamDao.updateStatusByTeamId(Team.STATUS_OK, team.getId());
         } else {
-            teamDao.updateStatusByTeamId(Team.STATUS_ERROR, teamId);
+            teamDao.updateStatusByTeamId(Team.STATUS_ERROR, team.getId());
         }
 
         return true;
@@ -240,13 +235,12 @@ public class TeamService {
 
         //小组状态判断和修改
         Team team = teamDao.getTeamById(teamId, TeamDao.HAS_MEMBERS);
-        //给team设置班级的策略
-        Course course = courseDao.getCourseById(team.getCourseId(), CourseDao.HAS_COURSE_MEMBER_LIMIT_STRATEGY);
-        team.setCourse(course);
-        if (LogicUtils.teamIsValid(team)) {
-            teamDao.updateStatusByTeamId(Team.STATUS_OK, teamId);
+
+        //判断队伍是否合法
+        if (teamDao.teamStrategy(team.getId())) {
+            teamDao.updateStatusByTeamId(Team.STATUS_OK, team.getId());
         } else {
-            teamDao.updateStatusByTeamId(Team.STATUS_ERROR, teamId);
+            teamDao.updateStatusByTeamId(Team.STATUS_ERROR, team.getId());
         }
 
         return true;
@@ -258,10 +252,41 @@ public class TeamService {
      * @Author: 17Wang
      * @Time: 10:45 2018/12/23
      */
-    @Transactional(rollbackFor = Exception.class)
     public boolean dissolveTeam(long teamId) throws Exception {
         //删除这个小组
         teamDao.deleteTeamById(teamId);
         return true;
+    }
+
+    /**
+     * Description: 退出小组
+     *
+     * @Author: 17Wang
+     * @Time: 22:01 2018/12/27
+     */
+    @Transactional(rollbackFor = Exception.class)
+    public boolean quitTeam(long teamId) throws Exception {
+        //获取当前登录用户
+        Student user= (Student) UserUtils.getNowUser();
+        //获取登录用户的队伍信息
+        Team team = teamDao.getTeamById(teamId);
+        //判断当前登录用户是否是队长
+        if(user.getId()==team.getLeaderId()){
+            throw new MyException("队长不能退出队伍！只能解散！么么", MyException.AUTHORIZATION_ERROR);
+        }
+        //删除team_student关系表，解除关系
+        try {
+            teamDao.deleteTeamStudentByTeamIdAndStudentId(teamId, user.getId());
+        }catch (Exception e){
+            throw new MyException("退出队伍失败！不知名Service层原因",MyException.AUTHORIZATION_ERROR );
+        }
+        //更新当前小组状态
+        //判断队伍是否合法
+        if (teamDao.teamStrategy(team.getId())) {
+            teamDao.updateStatusByTeamId(Team.STATUS_OK, team.getId());
+        } else {
+            teamDao.updateStatusByTeamId(Team.STATUS_ERROR, team.getId());
+        }
+        return false;
     }
 }

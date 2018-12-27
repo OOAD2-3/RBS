@@ -354,6 +354,6 @@ public class Course {
         if (obj == null || getClass() != obj.getClass()) {
             return false;
         }
-        return ((Course) obj).id == this.id ? true : false;
+        return ((Course) obj).getId() == this.id ? true : false;
     }
 }

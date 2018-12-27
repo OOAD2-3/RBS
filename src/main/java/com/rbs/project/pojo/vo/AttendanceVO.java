@@ -9,7 +9,7 @@ import com.rbs.project.utils.JsonUtils;
  * @Author: 17Wang
  * @Date: 17:20 2018/12/21
  */
-public class AttendanceVO {
+public class AttendanceVO implements Comparable<AttendanceVO> {
     private long id;
     private Integer present;
     private String pptName;
@@ -106,5 +106,10 @@ public class AttendanceVO {
 
     public void setTeamOrder(Integer teamOrder) {
         this.teamOrder = teamOrder;
+    }
+
+    @Override
+    public int compareTo(AttendanceVO o) {
+        return this.getTeamOrder().compareTo(o.getTeamOrder());
     }
 }
