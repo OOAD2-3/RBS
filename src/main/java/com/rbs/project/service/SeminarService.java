@@ -39,6 +39,12 @@ public class SeminarService {
     @Autowired
     private RoundScoreDao roundScoreDao;
 
+    @Autowired
+    private StudentDao studentDao;
+
+    @Autowired
+    private EmailService emailService;
+
     /**
      * Description: 新建讨论课
      *
@@ -85,6 +91,9 @@ public class SeminarService {
         seminarDao.addSeminar(seminar);
         //新增班级讨论课
         cClassSeminarDao.addCClassSeminar(seminar);
+        //发邮件通知课程下所有班级所有小组成员
+        String message="第"+seminar.getSerial()+"节讨论课:"+seminar.getName()+"已发布，请注意查看！";
+        sendSemianrEmail(seminar,message);
         //获得主键
         createSeminarId = seminar.getId();
         return createSeminarId;
@@ -118,6 +127,9 @@ public class SeminarService {
         if (seminar.getSerial() == null) {
             throw new MyException("seria;不能为空", MyException.ERROR);
         }
+        //发邮件通知课程下所有班级所有小组成员
+        String message="第"+seminar.getSerial()+"节讨论课:"+seminar.getName()+"已修改，请注意查看！";
+        sendSemianrEmail(seminar,message);
         return seminarDao.updateSeminarById(seminar);
     }
 
@@ -128,15 +140,19 @@ public class SeminarService {
      * @Date: 16:29 2018/12/18
      */
     @Transactional(rollbackFor = Exception.class)
-    public boolean removeSeminarById(long seminarId) throws MyException {
+    public boolean removeSeminarById(long seminarId) throws Exception {
         if ((Long) seminarId == null) {
             throw new MyException("seminarId不能为空", MyException.ERROR);
         }
+        Seminar seminar=seminarDao.findSeminarById(seminarId);
         //级联删除
         // 1. 删除班级讨论课
         seminarDao.removeCClassSeminarBySeminarId(seminarId);
         // 2. 删除讨论课
         seminarDao.removeSeminarById(seminarId);
+        //发邮件通知课程下所有班级所有小组成员
+        String message="第"+seminar.getSerial()+"节讨论课:"+seminar.getName()+"已删除，请注意查看！";
+        sendSemianrEmail(seminar,message);
         return true;
     }
 
@@ -215,4 +231,20 @@ public class SeminarService {
         return seminarDao.findSeminarByCourseId(courseId, SeminarDao.HAS_CClASS_SEMINAR, SeminarDao.HAS_ROUND);
     }
 
+    /**
+     * Description: 发讨论课相关邮件
+     * @Author: WinstonDeng
+     * @Date: 1:39 2018/12/28
+     */
+    private void sendSemianrEmail(Seminar seminar,String message)throws Exception{
+        List<Team> teams=teamDao.listByCourseId(seminar.getCourseId());
+        for(Team team
+                :teams){
+            List<Student> students=studentDao.listByTeamId(team.getId());
+            for (Student student
+                    :students){
+                emailService.sendEmail(new String[]{student.getEmail()},message);
+            }
+        }
+    }
 }

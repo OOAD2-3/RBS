@@ -12,6 +12,7 @@ import com.rbs.project.utils.UserUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -48,7 +49,7 @@ public class SeminarController {
         long createSeminarId = -1;
         Seminar seminar = new Seminar();
         if (createSeminarDTO.getCourseId() == null) {
-            throw new MyException("courseId不能为空",MyException.ID_FORMAT_ERROR);
+            throw new MyException("courseId不能为空", MyException.ID_FORMAT_ERROR);
         }
         seminar.setCourseId(createSeminarDTO.getCourseId());
         if (createSeminarDTO.getRoundId() == null) {
@@ -75,28 +76,28 @@ public class SeminarController {
      */
     @GetMapping("/{seminarId}/class/{classId}")
     @ResponseBody
-    public ResponseEntity<Map<String,Object>> getSeminarById(@PathVariable("seminarId")long seminarId,@PathVariable("classId") long cClassId) throws MyException{
-        if(seminarId==0){
-            throw new MyException("seminarId不能为空",MyException.ID_FORMAT_ERROR);
+    public ResponseEntity<Map<String, Object>> getSeminarById(@PathVariable("seminarId") long seminarId, @PathVariable("classId") long cClassId) throws MyException {
+        if (seminarId == 0) {
+            throw new MyException("seminarId不能为空", MyException.ID_FORMAT_ERROR);
         }
-        Seminar seminar=seminarService.getSeminarById(seminarId);
-        Map<String,Object> seminarView=new HashMap<>();
-        if(cClassId==0){
-            throw new MyException("classId不能为空",MyException.ID_FORMAT_ERROR);
+        Seminar seminar = seminarService.getSeminarById(seminarId);
+        Map<String, Object> seminarView = new HashMap<>();
+        if (cClassId == 0) {
+            throw new MyException("classId不能为空", MyException.ID_FORMAT_ERROR);
         }
         //转换格式
-        seminarView.put("seminarId",seminar.getId());
-        seminarView.put("courseId",seminar.getCourseId());
-        seminarView.put("courseName",seminar.getCourse().getName());
-        seminarView.put("roundId",seminar.getRoundId());
-        seminarView.put("roundSerial",seminar.getRound().getSerial());
-        seminarView.put("seminarTopic",seminar.getName());
-        seminarView.put("seminarSerial",seminar.getSerial());
-        seminarView.put("seminarIntro",seminar.getIntro());
-        seminarView.put("visible",seminar.getVisible());
-        seminarView.put("enrollStartTime",JsonUtils.TimestampToString(seminar.getEnrollStartTime()));
-        seminarView.put("enrollEndTime",JsonUtils.TimestampToString(seminar.getEnrollEndTime()));
-        seminarView.put("maxTeam",seminar.getMaxTeam());
+        seminarView.put("seminarId", seminar.getId());
+        seminarView.put("courseId", seminar.getCourseId());
+        seminarView.put("courseName", seminar.getCourse().getName());
+        seminarView.put("roundId", seminar.getRoundId());
+        seminarView.put("roundSerial", seminar.getRound().getSerial());
+        seminarView.put("seminarTopic", seminar.getName());
+        seminarView.put("seminarSerial", seminar.getSerial());
+        seminarView.put("seminarIntro", seminar.getIntro());
+        seminarView.put("visible", seminar.getVisible());
+        seminarView.put("enrollStartTime", JsonUtils.TimestampToString(seminar.getEnrollStartTime()));
+        seminarView.put("enrollEndTime", JsonUtils.TimestampToString(seminar.getEnrollEndTime()));
+        seminarView.put("maxTeam", seminar.getMaxTeam());
         //状态
         seminarView.put("status", cClassSeminarService.getCClassSeminar(cClassId, seminarId).getStatus());
         return ResponseEntity.ok().body(seminarView);
@@ -110,25 +111,25 @@ public class SeminarController {
      */
     @GetMapping("/{seminarId}")
     @ResponseBody
-    public ResponseEntity<Map<String,Object>> getSeminarBySeminarId(@PathVariable("seminarId")long seminarId) throws MyException{
-        if((Long)seminarId==null){
-            throw new MyException("seminarId不能为空",MyException.ID_FORMAT_ERROR);
+    public ResponseEntity<Map<String, Object>> getSeminarBySeminarId(@PathVariable("seminarId") long seminarId) throws MyException {
+        if ((Long) seminarId == null) {
+            throw new MyException("seminarId不能为空", MyException.ID_FORMAT_ERROR);
         }
-        Seminar seminar=seminarService.getSeminarById(seminarId);
-        Map<String,Object> seminarView=new HashMap<>();
+        Seminar seminar = seminarService.getSeminarById(seminarId);
+        Map<String, Object> seminarView = new HashMap<>();
         //转换格式
-        seminarView.put("seminarId",seminar.getId());
-        seminarView.put("courseId",seminar.getCourseId());
-        seminarView.put("courseName",seminar.getCourse().getName());
-        seminarView.put("roundId",seminar.getRoundId());
-        seminarView.put("roundSerial",seminar.getRound().getSerial());
-        seminarView.put("seminarTopic",seminar.getName());
-        seminarView.put("seminarSerial",seminar.getSerial());
-        seminarView.put("seminarIntro",seminar.getIntro());
-        seminarView.put("visible",seminar.getVisible());
-        seminarView.put("enrollStartTime",JsonUtils.TimestampToString(seminar.getEnrollStartTime()));
-        seminarView.put("enrollEndTime",JsonUtils.TimestampToString(seminar.getEnrollEndTime()));
-        seminarView.put("maxTeam",seminar.getMaxTeam());
+        seminarView.put("seminarId", seminar.getId());
+        seminarView.put("courseId", seminar.getCourseId());
+        seminarView.put("courseName", seminar.getCourse().getName());
+        seminarView.put("roundId", seminar.getRoundId());
+        seminarView.put("roundSerial", seminar.getRound().getSerial());
+        seminarView.put("seminarTopic", seminar.getName());
+        seminarView.put("seminarSerial", seminar.getSerial());
+        seminarView.put("seminarIntro", seminar.getIntro());
+        seminarView.put("visible", seminar.getVisible());
+        seminarView.put("enrollStartTime", JsonUtils.TimestampToString(seminar.getEnrollStartTime()));
+        seminarView.put("enrollEndTime", JsonUtils.TimestampToString(seminar.getEnrollEndTime()));
+        seminarView.put("maxTeam", seminar.getMaxTeam());
         return ResponseEntity.ok().body(seminarView);
     }
 
@@ -140,9 +141,9 @@ public class SeminarController {
      */
     @DeleteMapping("/{seminarId}")
     @ResponseBody
-    public ResponseEntity<Boolean> deleteSeminarById(@PathVariable("seminarId") long seminarId) throws MyException{
-        if(seminarId==0){
-            throw new MyException("seminarId不能为空",MyException.ID_FORMAT_ERROR);
+    public ResponseEntity<Boolean> deleteSeminarById(@PathVariable("seminarId") long seminarId) throws Exception {
+        if (seminarId == 0) {
+            throw new MyException("seminarId不能为空", MyException.ID_FORMAT_ERROR);
         }
         return ResponseEntity.ok().body(seminarService.removeSeminarById(seminarId));
     }
@@ -156,16 +157,16 @@ public class SeminarController {
     @PutMapping("/{seminarId}")
     @ResponseBody
     public ResponseEntity<Boolean> updateSeminarById(@PathVariable("seminarId") long seminarId, @RequestBody UpdateSeminarDTO updateSeminarDTO) throws Exception {
-        if(seminarId==0){
-            throw new MyException("seminarId不能为空",MyException.ID_FORMAT_ERROR);
+        if (seminarId == 0) {
+            throw new MyException("seminarId不能为空", MyException.ID_FORMAT_ERROR);
         }
         //DTO转Entity
         Seminar seminar = new Seminar();
         seminar.setId(seminarId);
-        if(updateSeminarDTO.getRoundId()==null){
+        if (updateSeminarDTO.getRoundId() == null) {
             seminar.setRoundId(-1);
-        }else{
-        seminar.setRoundId(updateSeminarDTO.getRoundId());
+        } else {
+            seminar.setRoundId(updateSeminarDTO.getRoundId());
         }
         seminar.setName(updateSeminarDTO.getTopic());
         seminar.setIntro(updateSeminarDTO.getIntro());
@@ -185,18 +186,18 @@ public class SeminarController {
     @PutMapping("/{seminarId}/class/{classId}/reportDDL")
     @ResponseBody
     public ResponseEntity<Boolean> updateCClassSeminarReportDDL(@PathVariable("seminarId") long seminarId,
-                                                       @PathVariable("classId") long cClassId,
-                                                       @RequestBody Map<String,String> updateMap) throws MyException{
-        if((Long)seminarId==null){
-            throw new MyException("seminarId不能为空",MyException.ID_FORMAT_ERROR);
+                                                                @PathVariable("classId") long cClassId,
+                                                                @RequestBody Map<String, String> updateMap) throws MyException {
+        if ((Long) seminarId == null) {
+            throw new MyException("seminarId不能为空", MyException.ID_FORMAT_ERROR);
         }
-        if((Long)cClassId==null){
-            throw new MyException("classId不能为空",MyException.ID_FORMAT_ERROR);
+        if ((Long) cClassId == null) {
+            throw new MyException("classId不能为空", MyException.ID_FORMAT_ERROR);
         }
-        final String reportDDL="reportDDL";
-        CClassSeminar cClassSeminar=cClassSeminarService.getCClassSeminar(cClassId,seminarId);
-        if(updateMap.get(reportDDL).isEmpty()){
-           throw new MyException("reportDDL不能为空",MyException.ERROR);
+        final String reportDDL = "reportDDL";
+        CClassSeminar cClassSeminar = cClassSeminarService.getCClassSeminar(cClassId, seminarId);
+        if (updateMap.get(reportDDL).isEmpty()) {
+            throw new MyException("reportDDL不能为空", MyException.ERROR);
         }
         cClassSeminar.setReportDDL(JsonUtils.StringToTimestamp(updateMap.get(reportDDL)));
         return ResponseEntity.ok().body(cClassSeminarService.updateCClassSeminar(cClassSeminar));
@@ -211,18 +212,18 @@ public class SeminarController {
     @PutMapping("/{seminarId}/class/{classId}/status")
     @ResponseBody
     public ResponseEntity<Boolean> updateCClassSeminarStatus(@PathVariable("seminarId") long seminarId,
-                                                                @PathVariable("classId") long cClassId,
-                                                                @RequestBody Map<String,String> updateMap) throws MyException{
-        if((Long)seminarId==null){
-            throw new MyException("seminarId不能为空",MyException.ID_FORMAT_ERROR);
+                                                             @PathVariable("classId") long cClassId,
+                                                             @RequestBody Map<String, String> updateMap) throws MyException {
+        if ((Long) seminarId == null) {
+            throw new MyException("seminarId不能为空", MyException.ID_FORMAT_ERROR);
         }
-        if((Long)cClassId==null){
-            throw new MyException("classId不能为空",MyException.ID_FORMAT_ERROR);
+        if ((Long) cClassId == null) {
+            throw new MyException("classId不能为空", MyException.ID_FORMAT_ERROR);
         }
-        final String status="status";
-        CClassSeminar cClassSeminar=cClassSeminarService.getCClassSeminar(cClassId,seminarId);
-        if(updateMap.get(status).isEmpty()){
-            throw new MyException("status不能为空",MyException.ERROR);
+        final String status = "status";
+        CClassSeminar cClassSeminar = cClassSeminarService.getCClassSeminar(cClassId, seminarId);
+        if (updateMap.get(status).isEmpty()) {
+            throw new MyException("status不能为空", MyException.ERROR);
         }
         cClassSeminar.setStatus(Integer.parseInt(updateMap.get(status)));
         return ResponseEntity.ok().body(cClassSeminarService.updateCClassSeminar(cClassSeminar));
@@ -237,16 +238,16 @@ public class SeminarController {
      */
     @GetMapping("/{seminarId}/class/{classId}/question")
     @ResponseBody
-    public ResponseEntity<List<QuestionInfoVO>> listAllQuestions(@PathVariable("seminarId")long seminarId, @PathVariable("classId") long cClassId) throws MyException{
-        if((Long)seminarId==null){
-            throw new MyException("seminarId不能为空",MyException.ID_FORMAT_ERROR);
+    public ResponseEntity<List<QuestionInfoVO>> listAllQuestions(@PathVariable("seminarId") long seminarId, @PathVariable("classId") long cClassId) throws MyException {
+        if ((Long) seminarId == null) {
+            throw new MyException("seminarId不能为空", MyException.ID_FORMAT_ERROR);
         }
-        if((Long)cClassId==null){
-            throw new MyException("classId不能为空",MyException.ID_FORMAT_ERROR);
+        if ((Long) cClassId == null) {
+            throw new MyException("classId不能为空", MyException.ID_FORMAT_ERROR);
         }
-        List<Question> questions=cClassSeminarService.listAllQuestionsByCClassIdAndSeminarId(cClassId,seminarId);
-        List<QuestionInfoVO> questionInfoVOS=new ArrayList<>();
-        for(Question question:questions){
+        List<Question> questions = cClassSeminarService.listAllQuestionsByCClassIdAndSeminarId(cClassId, seminarId);
+        List<QuestionInfoVO> questionInfoVOS = new ArrayList<>();
+        for (Question question : questions) {
             questionInfoVOS.add(new QuestionInfoVO(question));
         }
         return ResponseEntity.ok().body(questionInfoVOS);
@@ -254,32 +255,33 @@ public class SeminarController {
 
     /**
      * Description: 修改班级下讨论课的提问
-     *   1.选择提问
-     *   2.打分
-     *   ！！！！！websocket通知！！！！！！
+     * 1.选择提问
+     * 2.打分
+     * ！！！！！websocket通知！！！！！！
+     *
      * @Author: WinstonDeng
      * @Date: 16:40 2018/12/22
      */
     @PutMapping("/{seminarId}/class/{classId}/question")
     @ResponseBody
-    public ResponseEntity<Boolean> updateQuestion(@PathVariable("seminarId")long seminarId,
+    public ResponseEntity<Boolean> updateQuestion(@PathVariable("seminarId") long seminarId,
                                                   @PathVariable("classId") long cClassId,
-                                                  @RequestBody QuestionInfoVO questionInfoVO) throws MyException{
-        if((Long)seminarId==null){
-            throw new MyException("seminarId不能为空",MyException.ID_FORMAT_ERROR);
+                                                  @RequestBody QuestionInfoVO questionInfoVO) throws MyException {
+        if ((Long) seminarId == null) {
+            throw new MyException("seminarId不能为空", MyException.ID_FORMAT_ERROR);
         }
-        if((Long)cClassId==null){
-            throw new MyException("classId不能为空",MyException.ID_FORMAT_ERROR);
+        if ((Long) cClassId == null) {
+            throw new MyException("classId不能为空", MyException.ID_FORMAT_ERROR);
         }
-        Question question=new Question();
+        Question question = new Question();
         question.setScore(questionInfoVO.getScore());
-        if(questionInfoVO.getSelected()==true){
+        if (questionInfoVO.getSelected() == true) {
             question.setSelected(1);
-        }else if(questionInfoVO.getSelected()==false){
+        } else if (questionInfoVO.getSelected() == false) {
             question.setSelected(0);
         }
-        if(questionInfoVO.getQuestionId()==null){
-           throw new MyException("questionId不能为空",MyException.ID_FORMAT_ERROR);
+        if (questionInfoVO.getQuestionId() == null) {
+            throw new MyException("questionId不能为空", MyException.ID_FORMAT_ERROR);
         }
         question.setId(questionInfoVO.getQuestionId());
         return ResponseEntity.ok().body(cClassSeminarService.updateQuestion(question));
@@ -293,28 +295,28 @@ public class SeminarController {
      * @Date: 22:15 2018/12/22
      */
     @PostMapping("/{seminarId}/class/{classId}/question")
-    public ResponseEntity<Long> createQuestion(@PathVariable("seminarId")long seminarId,
+    public ResponseEntity<Long> createQuestion(@PathVariable("seminarId") long seminarId,
                                                @PathVariable("classId") long cClassId,
-                                               @RequestBody QuestionInfoVO questionInfoVO)throws MyException{
-        Question question=new Question();
-        if((Long)seminarId==null){
-            throw new MyException("seminarId不能为空",MyException.ID_FORMAT_ERROR);
+                                               @RequestBody QuestionInfoVO questionInfoVO) throws MyException {
+        Question question = new Question();
+        if ((Long) seminarId == null) {
+            throw new MyException("seminarId不能为空", MyException.ID_FORMAT_ERROR);
         }
-        if((Long)cClassId==null){
-            throw new MyException("classId不能为空",MyException.ID_FORMAT_ERROR);
+        if ((Long) cClassId == null) {
+            throw new MyException("classId不能为空", MyException.ID_FORMAT_ERROR);
         }
-        CClassSeminar cClassSeminar=cClassSeminarService.getCClassSeminar(cClassId,seminarId);
+        CClassSeminar cClassSeminar = cClassSeminarService.getCClassSeminar(cClassId, seminarId);
         question.setcClassSeminarId(cClassSeminar.getId());
-        if(questionInfoVO.getAttendanceId()==null){
-            throw new MyException("attendanceId不能为空",MyException.ID_FORMAT_ERROR);
+        if (questionInfoVO.getAttendanceId() == null) {
+            throw new MyException("attendanceId不能为空", MyException.ID_FORMAT_ERROR);
         }
         question.setAttendanceId(questionInfoVO.getAttendanceId());
-        if(questionInfoVO.getTeamId()==null){
-            throw new MyException("teamId不能为空",MyException.ID_FORMAT_ERROR);
+        if (questionInfoVO.getTeamId() == null) {
+            throw new MyException("teamId不能为空", MyException.ID_FORMAT_ERROR);
         }
         question.setTeamId(questionInfoVO.getTeamId());
-        if(questionInfoVO.getStudentId()==null){
-            throw new MyException("studentId不能为空",MyException.ID_FORMAT_ERROR);
+        if (questionInfoVO.getStudentId() == null) {
+            throw new MyException("studentId不能为空", MyException.ID_FORMAT_ERROR);
         }
         question.setStudentId(questionInfoVO.getStudentId());
         //默认未被选中
@@ -330,16 +332,16 @@ public class SeminarController {
      */
     @GetMapping("/underway")
     @ResponseBody
-    public ResponseEntity<List<Map<String,Object>>> getUnderWaySeminarId()throws MyException{
-        Teacher teacher= (Teacher) UserUtils.getNowUser();
-        List<CClassSeminar> cClassSeminars=cClassSeminarService.listAllUnderWaySeminarsByTeacherId(teacher.getId());
-        List<Map<String,Object>> maps=new ArrayList<>();
-        for(CClassSeminar cClassSeminar:cClassSeminars){
-            Map<String,Object> map=new HashMap<>();
-            map.put("seminarId",cClassSeminar.getSeminarId());
-            CClass cClass=cClassService.getClassById(cClassSeminar.getcClassId());
-            CClassInfoVO cClassInfoVO=new CClassInfoVO(cClass);
-            map.put("class",cClassInfoVO);
+    public ResponseEntity<List<Map<String, Object>>> getUnderWaySeminarId() throws MyException {
+        Teacher teacher = (Teacher) UserUtils.getNowUser();
+        List<CClassSeminar> cClassSeminars = cClassSeminarService.listAllUnderWaySeminarsByTeacherId(teacher.getId());
+        List<Map<String, Object>> maps = new ArrayList<>();
+        for (CClassSeminar cClassSeminar : cClassSeminars) {
+            Map<String, Object> map = new HashMap<>();
+            map.put("seminarId", cClassSeminar.getSeminarId());
+            CClass cClass = cClassService.getClassById(cClassSeminar.getcClassId());
+            CClassInfoVO cClassInfoVO = new CClassInfoVO(cClass);
+            map.put("class", cClassInfoVO);
             maps.add(map);
         }
         return ResponseEntity.ok().body(maps);
