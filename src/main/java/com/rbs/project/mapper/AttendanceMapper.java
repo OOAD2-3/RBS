@@ -94,4 +94,10 @@ public interface AttendanceMapper {
      */
     int findMaxTeamOrderByClassIdAndSeminarId(@Param("cClassId") long cClassId, @Param("seminarId") long seminarId);
 
+    /**
+     * 通过课程id删除展示
+     * @param teamId
+     * @return
+     */
+    boolean deleteByTeamId(long teamId);
 }

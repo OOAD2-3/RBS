@@ -172,9 +172,9 @@ public class SeminarService {
         round.setSerial(roundNum + 1);
         round.setCourseId(seminar.getCourseId());
         //设置其他默认值
-        round.setPresentationScoreMethod(0);
-        round.setReportScoreMethod(0);
-        round.setQuestionScoreMethod(0);
+        round.setPresentationScoreMethod(Round.SCORE_AVERAGE);
+        round.setReportScoreMethod(Round.SCORE_AVERAGE);
+        round.setQuestionScoreMethod(Round.SCORE_AVERAGE);
         long roundId = roundDao.addRound(round);
         round.setId(roundId);
         //      2.新增klass_round记录

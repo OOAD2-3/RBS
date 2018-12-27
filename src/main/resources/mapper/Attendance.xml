@@ -82,4 +82,10 @@
         SET is_present = #{present}
         WHERE id=#{id}
     </update>
+
+    <delete id="deleteByTeamId">
+        delete
+        from attendance
+        where team_id=#{teamId}
+    </delete>
 </mapper>

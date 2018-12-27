@@ -43,4 +43,18 @@ public interface ShareTeamApplicationMapper {
      * @return
      */
     boolean updateStatusById(@Param("id") long id,@Param("status") Integer status);
+
+    /**
+     * 新增组队共享申请
+     * @param shareTeamApplication
+     * @return
+     */
+    boolean addShareTeamApplication(ShareTeamApplication shareTeamApplication);
+
+    /**
+     * 删除队伍共享记录
+     * @param id
+     * @return
+     */
+    boolean deleteTeamShareApplication(long id);
 }

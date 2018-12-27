@@ -9,6 +9,7 @@ import com.rbs.project.pojo.vo.*;
 import com.rbs.project.service.*;
 import com.rbs.project.utils.FileLoadUtils;
 import com.rbs.project.utils.JsonUtils;
+import com.sun.org.apache.regexp.internal.RE;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -47,6 +48,9 @@ public class CourseController {
 
     @Autowired
     private ShareService shareService;
+
+    @Autowired
+    private ApplicationService applicationService;
 
     /**
      * Description: 新建课程
@@ -305,7 +309,7 @@ public class CourseController {
     @GetMapping("/{courseId}/seminars")
     @ResponseBody
     public ResponseEntity<Map<String, Object>> listAllSeminarsUnderRoundInCoursePage(@PathVariable("courseId") long courseId) throws MyException {
-        if ((Long) courseId == null) {
+        if ( courseId == 0) {
             throw new MyException("课程id不能为空", MyException.ERROR);
         }
         Map<String, Object> map = new HashMap<>();
@@ -338,7 +342,7 @@ public class CourseController {
     @ResponseBody
     public ResponseEntity<List<ShareInfoVO>> listAllSharesByCourseId(@PathVariable("courseId") long courseId) throws Exception {
         List<ShareInfoVO> shareInfoVOS = new ArrayList<>();
-        if ((Long) courseId == null) {
+        if ( courseId == 0) {
             throw new MyException("courseId不能为空", MyException.ID_FORMAT_ERROR);
         }
         //  1.共享讨论课
@@ -394,5 +398,35 @@ public class CourseController {
         return ResponseEntity.ok().body(shareInfoVOS);
     }
 
+    /**
+     * Description: 新增队伍共享申请
+     * @Author: WinstonDeng
+     * @Date: 22:23 2018/12/26
+     */
+    @PostMapping("/{courseId}/teamshare")
+    @ResponseBody
+    public ResponseEntity<Boolean> createTeamShareRequest(@PathVariable("courseId")long courseId,@RequestBody Map<String,String> map)throws Exception{
+        if(courseId==0){
+            throw new MyException("courseId不能为空",MyException.ID_FORMAT_ERROR);
+        }
+        String subCourseId="subCourseId";
+        if(map.get(subCourseId)==null){
+            throw new MyException("subCourseId不能为空",MyException.ID_FORMAT_ERROR);
+        }
+        return ResponseEntity.ok().body(applicationService.addTeamShareRequest(courseId,Long.parseLong(map.get(subCourseId))));
+    }
 
+    /**
+     * Description: 取消队伍共享
+     * @Author: WinstonDeng
+     * @Date: 22:32 2018/12/26
+     */
+    @DeleteMapping("/teamshare/{teamshareId}")
+    @ResponseBody
+    public ResponseEntity<Boolean> deleteTeamShare(@PathVariable("teamshareId") long requestId) throws Exception{
+        if(requestId==0){
+            throw new MyException("teamshareId不能为空",MyException.ID_FORMAT_ERROR);
+        }
+        return ResponseEntity.ok().body(applicationService.removeTeamShare(requestId));
+    }
 }
