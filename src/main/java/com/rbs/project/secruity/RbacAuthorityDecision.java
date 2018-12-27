@@ -30,34 +30,19 @@ public class RbacAuthorityDecision {
 
         //获取资源
         Set<String> urls = new HashSet();
-        urls.add("/user/**");
-        urls.add("/teacher/**");
-        urls.add("/student/**");
-        urls.add("/course/**");
-        urls.add("/class/**");
-        urls.add("/team/**");
-        urls.add("/attendance/**");
-        urls.add("/seminarscore/**");
-        urls.add("/seminar/**");
-        urls.add("/request/**");
-        urls.add("/roundscore/**");
-        urls.add("/round/**");
-        urls.add("/rbs-websocket/**");
-        urls.add("/topic/**");
-        urls.add("/app/**");
-        if (userInfo instanceof Student) {
-            System.out.println("我是学生");
+        Set<UrlAuthorization> urlAuthorizations = new HashSet<>();
+        urlAuthorizations.add(new UrlAuthorization("/**/**").addAllMethod());
 
-            // 这些 url 都是要登录后才能访问，且其他的 url 都不能访问！
-            // 学生的接口权限
-            urls.add("/student/**");
+        if (userInfo instanceof Student) {
+            System.out.println("我是学生" + ((Student) userInfo).getStudentName());
+            urlAuthorizations.add(new UrlAuthorization("/student/**").addAllMethod());
+            urlAuthorizations.add(new UrlAuthorization("/course/**").addGetMethod());
+
 
 
         } else if (userInfo instanceof Teacher) {
-            System.out.println("我是老师");
-
-            // 这些 url 都是要登录后才能访问，且其他的 url 都不能访问！
-            // 老师的接口权限
+            System.out.println("我是老师" + ((Teacher) userInfo).getTeacherName());
+            urlAuthorizations.add(new UrlAuthorization("/teacher/**").addAllMethod());
 
         } else {
             return false;
@@ -65,10 +50,11 @@ public class RbacAuthorityDecision {
 
         //当前接口和权限接口进行匹配
         AntPathMatcher antPathMatcher = new AntPathMatcher();
-        for (String url : urls) {
-            if (antPathMatcher.match(url, request.getRequestURI())) {
+        for (UrlAuthorization urlAuthorization : urlAuthorizations) {
+            //判断接口url是否相等 并判断接口url的请求方法
+            if (antPathMatcher.match(urlAuthorization.getUrl(), request.getRequestURI())
+                    && urlAuthorization.getMethod().contains(request.getMethod())) {
                 hasPermission = true;
-                break;
             }
         }
 
