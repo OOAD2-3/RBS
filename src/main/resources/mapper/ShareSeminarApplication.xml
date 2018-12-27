@@ -25,5 +25,10 @@
         from share_seminar_application
         where sub_course_id=#{subCourseId}
     </select>
+
+    <delete id="deleteByCourseId" parameterType="Long">
+        DELETE FROM share_seminar_application
+        WHERE main_course_id=#{courseId} OR sub_course_id=#{courseId}
+    </delete>
 </mapper>
 

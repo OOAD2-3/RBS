@@ -9,13 +9,9 @@ package com.rbs.project.pojo.strategy;
 public class ConflictCourseStrategy {
     private long id;
     /**
-     * 冲突课程1
+     * 冲突课程
      */
-    private long courseAId;
-    /**
-     * 冲突课程2
-     */
-    private long courseBId;
+    private long courseId;
 
     //==================================================getter AND setter==================================================//
 
@@ -27,19 +23,11 @@ public class ConflictCourseStrategy {
         this.id = id;
     }
 
-    public long getCourseAId() {
-        return courseAId;
+    public long getCourseId() {
+        return courseId;
     }
 
-    public void setCourseAId(long courseAId) {
-        this.courseAId = courseAId;
-    }
-
-    public long getCourseBId() {
-        return courseBId;
-    }
-
-    public void setCourseBId(long courseBId) {
-        this.courseBId = courseBId;
+    public void setCourseId(long courseId) {
+        this.courseId = courseId;
     }
 }

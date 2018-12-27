@@ -2,6 +2,8 @@ package com.rbs.project.dao;
 
 import com.rbs.project.exception.MyException;
 import com.rbs.project.mapper.*;
+import com.rbs.project.mapper.strategy.ConflictCourseStrategyMapper;
+import com.rbs.project.mapper.strategy.CourseMemberLimitStrategyMapper;
 import com.rbs.project.pojo.entity.Course;
 import com.rbs.project.pojo.strategy.CourseMemberLimitStrategy;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +34,12 @@ public class CourseDao {
 
     @Autowired
     private ConflictCourseStrategyMapper conflictCourseStrategyMapper;
+
+    @Autowired
+    private ShareSeminarApplicationMapper shareSeminarApplicationMapper;
+
+    @Autowired
+    private ShareTeamApplicationMapper shareTeamApplicationMapper;
 
     /**
      * 组队人数限制策略
@@ -140,7 +148,7 @@ public class CourseDao {
         getCourseById(courseId);
 
         //删除冲突课程策略
-        //TODO 删除冲突课程策略 待测试
+        //删除冲突课程策略 已测试
         try {
             conflictCourseStrategyMapper.deleteByCourseId(courseId);
         } catch (Exception e) {
@@ -152,18 +160,23 @@ public class CourseDao {
         if (!courseMemberLimitStrategyMapper.deleteByCourseId(courseId)) {
             throw new MyException("删除课程组队策略失败！数据库处理错误", MyException.ERROR);
         }
+
+        //
+
         //删除课程
         if (!courseMapper.deleteById(courseId)) {
             throw new MyException("删除课程失败！数据库处理错误", MyException.ERROR);
         }
 
-        //删除冲突课程策略
+        //TODO 删除share_seminar_application 待测试
+        if(!shareSeminarApplicationMapper.deleteByCourseId(courseId)){
+            throw new MyException("删除share_seminar_application失败！数据库处理错误",MyException.ERROR );
+        }
 
-        //删除班级
-
-        //删除讨论课
-
-        //删除其他
+        //TODO 删除share_team_application 待测试
+        if(!shareTeamApplicationMapper.deleteByCourseId(courseId)){
+            throw new MyException("删除share_team_application失败！数据库处理错误",MyException.ERROR );
+        }
 
         return true;
     }

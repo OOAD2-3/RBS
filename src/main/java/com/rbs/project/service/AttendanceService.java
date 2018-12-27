@@ -50,6 +50,7 @@ public class AttendanceService {
     public List<Attendance> listAttendanceByCClassIdAndSeminarId(long cClassId, long seminarId) throws MyException {
         List<Attendance> attendances = attendanceDao.listByCClassIdAndSeminarId(cClassId, seminarId, AttendanceDao.HAS_CLASS_SEMINAR);
         for (Attendance attendance : attendances) {
+            System.out.println("TeamId:"+attendance.getTeamId());
             attendance.setTeam(teamDao.getTeamById(attendance.getTeamId(), TeamDao.HAS_CCLASS));
         }
         return attendances;

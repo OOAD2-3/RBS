@@ -2,11 +2,11 @@ package com.rbs.project.pojo.strategy;
 
 /**
  * @Author: WinstonDeng
- * @Description: “与”组队策略
- * @Date: Created in 15:18 2018/12/15
+ * @Description: “或”组队策略
+ * @Date: Created in 15:21 2018/12/15
  * @Modified by:
  */
-public class TeamAndStrategy {
+public class TeamOrStrategy {
     private long id;
 
     private String strategyName;
