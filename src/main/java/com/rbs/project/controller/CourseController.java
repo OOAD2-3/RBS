@@ -452,7 +452,7 @@ public class CourseController {
      * @Author: WinstonDeng
      * @Date: 22:32 2018/12/26
      */
-    @DeleteMapping("/teamshare/{seminarshareId}")
+    @DeleteMapping("/seminarshare/{seminarshareId}")
     @ResponseBody
     public ResponseEntity<Boolean> deleteSeminarShare(@PathVariable("seminarshareId") long requestId) throws Exception{
         if(requestId==0){
