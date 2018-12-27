@@ -1,10 +1,7 @@
 package com.rbs.project.dao;
 
 import com.rbs.project.exception.MyException;
-import com.rbs.project.mapper.CourseMapper;
-import com.rbs.project.mapper.ShareSeminarApplicationMapper;
-import com.rbs.project.mapper.ShareTeamApplicationMapper;
-import com.rbs.project.mapper.TeacherMapper;
+import com.rbs.project.mapper.*;
 import com.rbs.project.pojo.entity.Course;
 import com.rbs.project.pojo.entity.ShareSeminarApplication;
 import com.rbs.project.pojo.entity.ShareTeamApplication;
@@ -34,6 +31,7 @@ public class ShareDao {
 
     @Autowired
     private TeacherMapper teacherMapper;
+
 
     public final static int HAS_MAIN_COURSE=0;
     public final static int HAS_MAIN_COURSE_TEACHER=1;
@@ -172,6 +170,53 @@ public class ShareDao {
         }
         if(!shareTeamApplicationMapper.updateStatusById(requestId,status)){
             throw new MyException("修改组队共享请求状态错误！数据库处理错误",MyException.ERROR);
+        }
+        return true;
+    }
+
+
+    /**
+     * Description: 发起队伍共享请求
+     * @Author: WinstonDeng
+     * @Date: 10:45 2018/12/27
+     */
+    public boolean addTeamShareApplication(long courseId, long subCourseId) throws MyException{
+        //1. 检查是否为组队共享从课程
+        if(courseMapper.findById(courseId).getTeamMainCourseId()!=0){
+            throw new MyException("发起组队共享申请错误！从课程不能发起共享",MyException.ERROR);
+        }
+        //3. 若无，新建队伍共享请求
+        Course subCourse=courseMapper.findById(subCourseId);
+        if(subCourse==null){
+            throw new MyException("发起队伍共享请求错误！未找到从课程",MyException.NOT_FOUND_ERROR);
+        }
+        ShareTeamApplication shareTeamApplication=new ShareTeamApplication();
+        shareTeamApplication.setMainCourseId(courseId);
+        shareTeamApplication.setSubCourseId(subCourse.getId());
+        shareTeamApplication.setSubCourseTeacherId(subCourse.getTeacherId());
+        if(!shareTeamApplicationMapper.addShareTeamApplication(shareTeamApplication)){
+            throw new MyException("发起队伍共享请求错误！数据库处理错误",MyException.ERROR);
+        }
+        return true;
+    }
+
+    /**
+     * Description: 取消队伍共享
+     * @Author: WinstonDeng
+     * @Date: 11:16 2018/12/27
+     */
+    public boolean removeTeamShare(long requestId) throws MyException{
+        //1. 删除从课程的共享小组  删除从课程的klass_team中的从课程班级
+
+        //2. 删除共享记录
+        ShareTeamApplication shareTeamApplication=shareTeamApplicationMapper.findById(requestId);
+        Course course=courseMapper.findById(shareTeamApplication.getSubCourseId());
+        course.setTeamMainCourseId(0);
+        if(!courseMapper.updateTeamMainCourseId(course)){
+            throw new MyException("取消队伍共享错误！从课程取消映射数据库处理错误",MyException.ERROR);
+        }
+        if(!shareTeamApplicationMapper.deleteTeamShareApplication(requestId)){
+            throw new MyException("取消队伍共享错误！删除共享记录数据库处理错误",MyException.ERROR);
         }
         return true;
     }

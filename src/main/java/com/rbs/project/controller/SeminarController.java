@@ -68,26 +68,27 @@ public class SeminarController {
     }
 
     /**
-     * Description: 按id获取讨论课
+     * Description: 按id和班级获取讨论课
      *
      * @Author: WinstonDeng
      * @Date: 23:25 2018/12/19
      */
-    @GetMapping("/{seminarId}")
+    @GetMapping("/{seminarId}/class/{classId}")
     @ResponseBody
-    public ResponseEntity<Map<String,Object>> getSeminarById(@PathVariable("seminarId")long seminarId,@RequestParam("cClassId") long cClassId) throws MyException{
+    public ResponseEntity<Map<String,Object>> getSeminarById(@PathVariable("seminarId")long seminarId,@PathVariable("classId") long cClassId) throws MyException{
         if((Long)seminarId==null){
             throw new MyException("seminarId不能为空",MyException.ID_FORMAT_ERROR);
         }
+        Seminar seminar=seminarService.getSeminarById(seminarId);
+        Map<String,Object> seminarView=new HashMap<>();
         if((Long)cClassId==null){
             throw new MyException("classId不能为空",MyException.ID_FORMAT_ERROR);
         }
-        Seminar seminar=seminarService.getSeminarById(seminarId);
         //转换格式
-        Map<String,Object> seminarView=new HashMap<>();
         seminarView.put("seminarId",seminar.getId());
         seminarView.put("courseId",seminar.getCourseId());
         seminarView.put("courseName",seminar.getCourse().getName());
+        seminarView.put("roundId",seminar.getRoundId());
         seminarView.put("roundSerial",seminar.getRound().getSerial());
         seminarView.put("seminarTopic",seminar.getName());
         seminarView.put("seminarSerial",seminar.getSerial());
@@ -98,6 +99,36 @@ public class SeminarController {
         seminarView.put("maxTeam",seminar.getMaxTeam());
         //状态
         seminarView.put("status", cClassSeminarService.getCClassSeminar(cClassId, seminarId).getStatus());
+        return ResponseEntity.ok().body(seminarView);
+    }
+
+    /**
+     * Description: 按id和班级获取讨论课
+     *
+     * @Author: WinstonDeng
+     * @Date: 23:25 2018/12/19
+     */
+    @GetMapping("/{seminarId}")
+    @ResponseBody
+    public ResponseEntity<Map<String,Object>> getSeminarBySeminarId(@PathVariable("seminarId")long seminarId) throws MyException{
+        if((Long)seminarId==null){
+            throw new MyException("seminarId不能为空",MyException.ID_FORMAT_ERROR);
+        }
+        Seminar seminar=seminarService.getSeminarById(seminarId);
+        Map<String,Object> seminarView=new HashMap<>();
+        //转换格式
+        seminarView.put("seminarId",seminar.getId());
+        seminarView.put("courseId",seminar.getCourseId());
+        seminarView.put("courseName",seminar.getCourse().getName());
+        seminarView.put("roundId",seminar.getRoundId());
+        seminarView.put("roundSerial",seminar.getRound().getSerial());
+        seminarView.put("seminarTopic",seminar.getName());
+        seminarView.put("seminarSerial",seminar.getSerial());
+        seminarView.put("seminarIntro",seminar.getIntro());
+        seminarView.put("visible",seminar.getVisible());
+        seminarView.put("enrollStartTime",JsonUtils.TimestampToString(seminar.getEnrollStartTime()));
+        seminarView.put("enrollEndTime",JsonUtils.TimestampToString(seminar.getEnrollEndTime()));
+        seminarView.put("maxTeam",seminar.getMaxTeam());
         return ResponseEntity.ok().body(seminarView);
     }
 

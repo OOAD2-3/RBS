@@ -73,5 +73,15 @@ public interface CourseMapper {
      * @return
      */
     boolean deleteById(long id);
+
+
+
     //=========================修改=======================
+
+    /**
+     * 修改team_main_course_id字段
+     * @param course
+     * @return
+     */
+    boolean updateTeamMainCourseId(Course course);
 }

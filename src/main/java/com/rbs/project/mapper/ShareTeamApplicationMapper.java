@@ -56,4 +56,19 @@ public interface ShareTeamApplicationMapper {
      * @throws Exception
      */
     boolean deleteByCourseId(long courseId) throws Exception;
+
+    /**
+     * 新增组队共享申请
+     * @param shareTeamApplication
+     * @return
+     */
+    boolean addShareTeamApplication(ShareTeamApplication shareTeamApplication);
+
+    /**
+     * 删除队伍共享记录
+     * @param id
+     * @return
+     */
+    boolean deleteTeamShareApplication(long id);
+  
 }
