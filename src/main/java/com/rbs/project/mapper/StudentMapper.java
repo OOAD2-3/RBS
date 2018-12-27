@@ -54,11 +54,18 @@ public interface StudentMapper {
     List<Student> findByTeamId(long teamId);
 
     /**
-     * 获取一个课程下没有组队的所有学生
+     * 获取一个课程下没有组队的所有学生的ID
      * @param courseId
      * @return
      */
-    List<Student> findByCourseIdAndTeamIdIsNULL(@Param("courseId") long courseId);
+    List<Student> findByCourseIdHasTeam(@Param("courseId") long courseId);
+
+    /**
+     * 获取一个课程下的所有学生
+     * @param courseId
+     * @return
+     */
+    List<Student> findByCourseId(long courseId);
 
     /**
      * 获取一个队伍里，属于courseId下的学生

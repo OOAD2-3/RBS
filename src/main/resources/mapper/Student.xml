@@ -33,13 +33,24 @@
         WHERE team_student.team_id=#{teamId}
     </select>
 
-    <select id="findByCourseIdAndTeamIdIsNULL" resultMap="tab_student">
-        SELECT *
-	    FROM student LEFT JOIN klass_student
-		  ON student.id=klass_student.student_id
-	    LEFT JOIN team_student
-		  ON team_student.student_id=klass_student.student_id
-	    WHERE team_student.team_id is null AND klass_student.course_id=#{courseId};
+    <!--没问题-->
+    <select id="findByCourseId" resultMap="tab_student">
+        SELECT student.id,student.account,student.password,student.is_active,student.student_name,student.email
+        FROM klass_student LEFT JOIN student
+        ON klass_student.student_id=student.id
+        WHERE klass_student.course_id=#{courseId}
+    </select>
+
+    <!--获取一个课程下有队伍的学生-->
+    <select id="findByCourseIdHasTeam" resultMap="tab_student">
+        select student.*
+	    from klass left join klass_team
+	      on klass.id=klass_team.klass_id
+	    left join team_student
+	      on klass_team.team_id=team_student.team_id
+	    left join student
+	      on team_student.student_id=student.id
+	    where klass.course_id=#{courseId};
     </select>
 
     <select id="findByCourseIdAndTeamId" resultMap="tab_student">
@@ -66,7 +77,8 @@
         WHERE id=#{id}
     </update>
 
-    <insert id="insertStudent" parameterType="com.rbs.project.pojo.entity.Student" useGeneratedKeys="true" keyProperty="id">
+    <insert id="insertStudent" parameterType="com.rbs.project.pojo.entity.Student" useGeneratedKeys="true"
+            keyProperty="id">
         insert into student(account,password,is_active,student_name,email)
         values (#{account},#{password},#{active},#{studentName},#{email})
     </insert>
