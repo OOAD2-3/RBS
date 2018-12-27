@@ -8,8 +8,8 @@
         <result property="strategyId" column="strategy_id"/>
     </resultMap>
 
-    <select id="findById" parameterType="Long" resultMap="tab_team_strategy">
-        SELECT * FROM team_strategy WHERE id=#{id}
+    <select id="findByCourseId" parameterType="Long" resultMap="tab_team_strategy">
+        SELECT * FROM team_strategy WHERE course_id=#{courseId}
     </select>
 
 </mapper>
