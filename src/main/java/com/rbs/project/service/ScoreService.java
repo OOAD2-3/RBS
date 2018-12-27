@@ -2,9 +2,7 @@ package com.rbs.project.service;
 
 import com.rbs.project.dao.*;
 import com.rbs.project.exception.MyException;
-import com.rbs.project.pojo.entity.Course;
-import com.rbs.project.pojo.entity.RoundScore;
-import com.rbs.project.pojo.entity.SeminarScore;
+import com.rbs.project.pojo.entity.*;
 import com.rbs.project.utils.LogicUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,6 +29,15 @@ public class ScoreService {
 
     @Autowired
     private CClassDao cClassDao;
+
+    @Autowired
+    private StudentDao studentDao;
+
+    @Autowired
+    private EmailService emailService;
+
+    @Autowired
+    private SeminarDao seminarDao;
 
     /**
      * Description: 获取一个班级下的一节讨论课的所有展示成绩
@@ -74,6 +81,12 @@ public class ScoreService {
         SeminarScore seminarScore = seminarScoreDao.getSeminarScoreBySeminarIdAndCClassIdAndTeamId(seminarId, classId, teamId);
         double totalScore = LogicUtils.calculateSeminarTotalScore(seminarScore, cClassDao.getById(classId, CClassDao.HAS_COURSE).getCourse());
         seminarScoreDao.updateTotalScore(seminarId, classId, teamId, totalScore);
+        //发送邮件
+        Seminar seminar = seminarDao.findSeminarById(seminarId);
+        Team team = teamDao.getTeamById(teamId);
+        String message = "第" + seminar.getSerial() + "节讨论课:" + seminar.getName() + "\n" +
+                "小组：" + team.getName() + " 的展示分数已修改为:" + presentationScore + "，总分变为:" + totalScore + "，请注意查看！";
+        sendScoreEmail(seminar, message);
         return true;
     }
 
@@ -90,6 +103,30 @@ public class ScoreService {
         SeminarScore seminarScore = seminarScoreDao.getSeminarScoreBySeminarIdAndCClassIdAndTeamId(seminarId, classId, teamId);
         double totalScore = LogicUtils.calculateSeminarTotalScore(seminarScore, cClassDao.getById(classId, CClassDao.HAS_COURSE).getCourse());
         seminarScoreDao.updateTotalScore(seminarId, classId, teamId, totalScore);
+        //发送邮件
+        Seminar seminar = seminarDao.findSeminarById(seminarId);
+        Team team = teamDao.getTeamById(teamId);
+        String message = "第" + seminar.getSerial() + "节讨论课:" + seminar.getName() + "\n" +
+                "小组：" + team.getName() + " 的报告分数已修改为:" + reportScore + "，总分变为:" + totalScore + "，请注意查看！";
+        sendScoreEmail(seminar, message);
         return true;
+    }
+
+    /**
+     * Description: 发送成绩相关邮件
+     *
+     * @Author: WinstonDeng
+     * @Date: 1:44 2018/12/28
+     */
+    private void sendScoreEmail(Seminar seminar, String message) throws Exception {
+        List<Team> teams = teamDao.listByCourseId(seminar.getCourseId());
+        for (Team team
+                : teams) {
+            List<Student> students = studentDao.listByTeamId(team.getId());
+            for (Student student
+                    : students) {
+                emailService.sendEmail(new String[]{student.getEmail()}, message);
+            }
+        }
     }
 }
