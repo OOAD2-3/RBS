@@ -46,7 +46,7 @@ public class UserController {
         if (newPassword == null || newPassword.equals("")) {
             throw new MyException("新密码不能为空", MyException.ERROR);
         }
-        return ResponseEntity.ok(userService.resetPassword(password.get("password")));
+        return ResponseEntity.ok(userService.resetPassword(password.get("newPassword")));
     }
 
     @GetMapping("/information")

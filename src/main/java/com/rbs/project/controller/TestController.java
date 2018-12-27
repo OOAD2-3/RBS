@@ -6,6 +6,7 @@ import com.rbs.project.mapper.CourseMapper;
 import com.rbs.project.service.AttendanceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import sun.rmi.runtime.Log;
 
 import java.util.List;
 import java.util.Map;
@@ -27,8 +28,9 @@ public class TestController {
 
     @GetMapping("/test")
     @ResponseBody
-    public void test(@RequestBody Map<String,Long> map){
-        System.out.println(attendanceService.getMaxTeamOrderByClassIdAndSeminarId(map.get("classId"), map.get("seminarId")));
+    public void test(){
+
+        return;
     }
 
 

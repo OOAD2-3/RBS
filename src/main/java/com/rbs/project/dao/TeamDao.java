@@ -190,6 +190,7 @@ public class TeamDao {
      * @Author: 17Wang
      * @Time: 10:59 2018/12/23
      */
+    @Transactional(rollbackFor = Exception.class)
     public boolean deleteTeamById(long teamId) throws MyException {
         //将该小组下的成员置为无小组状态
         //通过删除team_student表，解除team和student的关系

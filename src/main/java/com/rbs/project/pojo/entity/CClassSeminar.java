@@ -50,10 +50,10 @@ public class CClassSeminar {
      */
     private List<SeminarScore> seminarScores;
 
-    public final static int STATUS_UNSTART=0;
-    public final static int STATUS_UNDERWAY=1;
-    public final static int STATUS_END=2;
-    public final static int STATUS_PAUSE=3;
+    public final static int STATUS_UNSTART = 0;
+    public final static int STATUS_UNDERWAY = 1;
+    public final static int STATUS_END = 2;
+    public final static int STATUS_PAUSE = 3;
 
     //==================================================getter AND setter==================================================//
 
