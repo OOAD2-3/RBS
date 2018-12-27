@@ -61,4 +61,13 @@ public class RoundService {
     public boolean updateEnrollNumber(CClassRound cClassRound) throws MyException{
         return roundDao.updateEnrollNumber(cClassRound);
     }
+
+    /**
+     * Description: 通过classId roundId获取班级轮次
+     * @Author: WinstonDeng
+     * @Date: 16:47 2018/12/27
+     */
+    public CClassRound getCClassRoundByPrimaryKeys(long cClassId, long roundId) throws MyException {
+        return roundDao.findCClassRoundByPrimaryKeys(cClassId,roundId);
+    }
 }

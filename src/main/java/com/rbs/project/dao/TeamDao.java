@@ -507,4 +507,21 @@ public class TeamDao {
         return true;
     }
 
+    /**
+     *
+     * Description: TODO ！！！！！FBI警告 ！！！！！
+     *              判断当前小组是否在klass_team中，用于共享小组共享删除后，对其参与的attendence score等
+     *              存在性的判断
+     *
+     * @Author: WinstonDeng
+     * @Date: 17:26 2018/12/27
+     */
+    public boolean isExistInCClassTeam(long teamId){
+        if(!cClassTeamMapper.findByTeamId(teamId).isEmpty()){
+            return true;
+        }else {
+            return false;
+        }
+    }
+
 }

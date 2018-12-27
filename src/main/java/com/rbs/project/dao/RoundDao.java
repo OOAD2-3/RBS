@@ -11,6 +11,7 @@ import java.util.List;
 
 /**
  * @Author: WinstonDeng
+ * TODO 判断是否为讨论课从课程
  * @Description: OOAD_Course_ManageSystem
  * @Date: Created in 11:17 2018/12/20
  * @Modified by:
@@ -31,12 +32,16 @@ public class RoundDao {
     private CClassRoundMapper cClassRoundMapper;
 
 
+    public final static int HAS_CCLASS_ROUND=0;
     public final static int HAS_SEMINAR=1;
 
     private void hasSomethingFun(Round round,int ...hasSomething){
         for(int i:hasSomething){
             if(i== HAS_SEMINAR){
                 round.setSeminars(seminarMapper.findByRoundId(round.getId()));
+            }
+            if(i==HAS_CCLASS_ROUND){
+                round.setcClassRounds(cClassRoundMapper.findByRoundId(round.getId()));
             }
         }
     }
@@ -81,7 +86,7 @@ public class RoundDao {
      * @Author: WinstonDeng
      * @Date: 19:21 2018/12/21
      */
-    public Round findById(long roundId) throws MyException {
+    public Round findById(long roundId,int ...hasSomething) throws MyException {
         Round round=null;
         try {
             round=roundMapper.findById(roundId);
@@ -91,6 +96,7 @@ public class RoundDao {
         if(round==null){
             throw new MyException("查找轮次错误！轮次不存在",MyException.NOT_FOUND_ERROR);
         }
+        hasSomethingFun(round,hasSomething);
         return round;
     }
 
@@ -128,5 +134,18 @@ public class RoundDao {
             throw new MyException("修改班级轮次错误！数据库处理错误",MyException.ERROR);
         }
         return true;
+    }
+
+    /**
+     * Description: 通过classId roundId查找班级轮次
+     * @Author: WinstonDeng
+     * @Date: 16:49 2018/12/27
+     */
+    public CClassRound findCClassRoundByPrimaryKeys(long cClassId, long roundId) throws MyException{
+        CClassRound cClassRound=cClassRoundMapper.findByPrimaryKeys(cClassId,roundId);
+        if(cClassRound==null){
+            throw new MyException("查找班级轮次错误！未找到该记录",MyException.NOT_FOUND_ERROR);
+        }
+        return cClassRound;
     }
 }

@@ -40,4 +40,11 @@ public interface RoundMapper {
      * @return
      */
     boolean updateScoreMethod(Round round);
+
+    /**
+     * 通过id删除轮次
+     * @param id
+     * @return
+     */
+    boolean deleteById(long id);
 }

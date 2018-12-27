@@ -64,4 +64,6 @@ public interface SeminarMapper {
      * @return
      */
     boolean updateSeminar(Seminar seminar);
+
+
 }
