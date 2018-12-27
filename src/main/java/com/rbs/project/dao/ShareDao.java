@@ -334,7 +334,7 @@ public class ShareDao {
      * @Date: 23:22 2018/12/27
      */
     public boolean removeSeminarShare(long requestId) throws MyException{
-        ShareSeminarApplication shareSeminarApplication=new ShareSeminarApplication();
+        ShareSeminarApplication shareSeminarApplication=shareSeminarApplicationMapper.findById(requestId);
         long subCourseId=shareSeminarApplication.getSubCourseId();
         //1. 删除从课程讨论课
         List<Seminar> seminars = seminarMapper.findByCourseId(subCourseId);
