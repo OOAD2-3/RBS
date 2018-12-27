@@ -4,6 +4,8 @@ import com.rbs.project.pojo.relationship.CClassRound;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 /**
  * @Author: WinstonDeng
  * @Description: OOAD_Course_ManageSystem
@@ -33,4 +35,11 @@ public interface CClassRoundMapper {
      * @return
      */
     boolean updateEnrollNumber(CClassRound cClassRound);
+
+    /**
+     * 通过roundId查找所有班级轮次
+     * @param roundId
+     * @return
+     */
+    List<CClassRound> findByRoundId(long roundId);
 }

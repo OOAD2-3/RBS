@@ -70,5 +70,6 @@ public interface ShareTeamApplicationMapper {
      * @return
      */
     boolean deleteTeamShareApplication(long id);
-  
+
+
 }

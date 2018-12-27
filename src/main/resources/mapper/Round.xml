@@ -33,4 +33,10 @@
             question_score_method=#{questionScoreMethod}
         where id=#{id}
     </update>
+
+    <delete id="deleteById" parameterType="Long">
+        delete
+        from round
+        where id=#{id}
+    </delete>
 </mapper>

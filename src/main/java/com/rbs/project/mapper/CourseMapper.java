@@ -79,9 +79,17 @@ public interface CourseMapper {
     //=========================修改=======================
 
     /**
-     * 修改team_main_course_id字段
+     * 修改 team_main_course_id
      * @param course
      * @return
      */
     boolean updateTeamMainCourseId(Course course);
+
+    /**
+     * 修改 seminar_main_course_id
+     * @param course
+     * @return
+     */
+    boolean updateSeminarMainCourseId(Course course);
+
 }

@@ -2,10 +2,7 @@ package com.rbs.project.service;
 
 import com.rbs.project.dao.*;
 import com.rbs.project.exception.MyException;
-import com.rbs.project.pojo.entity.ShareTeamApplication;
-import com.rbs.project.pojo.entity.Student;
-import com.rbs.project.pojo.entity.Team;
-import com.rbs.project.pojo.entity.TeamValidApplication;
+import com.rbs.project.pojo.entity.*;
 import com.rbs.project.pojo.relationship.CClassStudent;
 import com.rbs.project.utils.LogicUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +36,15 @@ public class ApplicationService {
 
     @Autowired
     private StudentDao studentDao;
+
+    @Autowired
+    private SeminarDao seminarDao;
+
+    @Autowired
+    private RoundDao roundDao;
+
+    @Autowired
+    private CClassSeminarDao cClassSeminarDao;
 
     /**
      * Description: 查看team的请求
@@ -231,6 +237,54 @@ public class ApplicationService {
     }
 
     /**
+     * Description: 修改讨论课共享请求状态
+     *              controller已经把控好输入，此处无需判断
+     * @Author: WinstonDeng
+     * @Date: 19:07 2018/12/27
+     */
+    @Transactional(rollbackFor = Exception.class)
+    public boolean updateSeminarShareApplicationStatus(long requestId, Integer status) throws MyException{
+        //如果同意，创建副本
+        if(status== ShareSeminarApplication.STATUS_ACCEPT){
+            ShareSeminarApplication shareSeminarApplication=shareDao.getShareSeminarApplicationById(requestId);
+            long mainCourseId=shareSeminarApplication.getMainCourseId();
+            long subCourseId=shareSeminarApplication.getSubCourseId();
+            //1.删除从课程原有讨论课 调用到dao层联的级联删除
+            seminarDao.deleteSeminarByCourseId(subCourseId);
+            //2.建立副本
+            //  2.1 新建round副本
+            List<Round> rounds=roundDao.listByCourseId(mainCourseId);
+            for(Round round
+                    :rounds){
+                //除了Id courseId全复制
+                Round tempRound=new Round(round);
+                tempRound.setCourseId(round.getCourseId());
+                roundDao.addRound(tempRound);
+                //  2.2 新建seminar副本
+                List<Seminar> seminars=seminarDao.listAllSeminarsByRoundId(round.getId());
+                for(Seminar seminar
+                        :seminars){
+                    //除了id courseId roundId全复制
+                    seminar.setCourseId(subCourseId);
+                    seminar.setRoundId(round.getId());
+                    Seminar tempSeminar=new Seminar(seminar);
+                    seminarDao.addSeminar(tempSeminar);
+                }
+            }
+            //  2.3 新建class_seminar副本
+            List<Seminar> seminars=seminarDao.findSeminarByCourseId(subCourseId);
+            for(Seminar seminar:seminars){
+                    cClassSeminarDao.addCClassSeminar(seminar);
+            }
+           //3.创建主从关系，仅表示是从课程，不作为映射关系
+            courseDao.updateSeminarMainCourseId(subCourseId,mainCourseId);
+        }
+        //如果不同意，直接修改
+        return shareDao.updateShareSeminarApplicationStatus(requestId,status);
+    }
+
+
+    /**
      * Description: 发起组队共享申请
      * @Author: WinstonDeng
      * @Date: 23:18 2018/12/26
@@ -246,5 +300,24 @@ public class ApplicationService {
      */
     public boolean removeTeamShare(long requestId) throws MyException{
         return shareDao.removeTeamShare(requestId);
+    }
+
+
+    /**
+     * Description: 发起讨论课共享申请
+     * @Author: WinstonDeng
+     * @Date: 23:07 2018/12/27
+     */
+    public boolean addSeminarShareRequest(long courseId, long subCourseId) throws MyException {
+        return shareDao.addSeminarShareApplication(courseId,subCourseId);
+    }
+
+    /**
+     * Description: 取消讨论课共享
+     * @Author: WinstonDeng
+     * @Date: 23:09 2018/12/27
+     */
+    public boolean removeSeminarShare(long requestId) throws MyException {
+        return shareDao.removeSeminarShare(requestId);
     }
 }

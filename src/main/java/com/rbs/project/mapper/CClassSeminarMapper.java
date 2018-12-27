@@ -73,4 +73,6 @@ public interface CClassSeminarMapper {
      * @return
      */
     boolean insertCClassSeminar(CClassSeminar cClassSeminar);
+
+
 }

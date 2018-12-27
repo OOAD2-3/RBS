@@ -69,7 +69,7 @@ public class RequestController {
     }
 
     /**
-     * Description: 按id处理共享请求 同意/拒绝 注意这里输入的是字符串accept/reject
+     * Description: 按id处理共享队伍请求 同意/拒绝 注意这里输入的是字符串accept/reject
      * @Author: WinstonDeng
      * @Date: 20:02 2018/12/24
      */
@@ -80,17 +80,40 @@ public class RequestController {
         String accept="accept";
         String reject="reject";
         Integer status=null;
-        if(handle.get(handleType).equals(accept)){
-            status= ShareTeamApplication.STATUS_ACCEPT;
-        }
-        if(handle.get(handleType).equals(reject)){
-            status=ShareTeamApplication.STATUS_REJECT;
-        }
         if(handle.get(handleType)==null){
             throw new MyException("handleType不能为空",MyException.ERROR);
+        } else if(handle.get(handleType).equals(accept)){
+            status= ShareTeamApplication.STATUS_ACCEPT;
+        } else if(handle.get(handleType).equals(reject)){
+            status=ShareTeamApplication.STATUS_REJECT;
+        }else{
+            throw new MyException("handleType格式错误，只能输入accept或reject",MyException.ERROR);
         }
         return ResponseEntity.ok().body(applicationService.updateTeamShareApplicationStatus(requestId,status));
     }
 
+    /**
+     * Description: 按id处理共享讨论课请求 同意/拒绝 注意这里输入的是字符串accept/reject
+     * @Author: WinstonDeng
+     * @Date: 18:12 2018/12/27
+     */
+    @PutMapping("/seminarshare/{seminarshareId}")
+    @ResponseBody
+    public ResponseEntity<Boolean> handleSeminarShareRequest(@PathVariable("seminarshareId")long requestId,@RequestBody Map<String,String> handle) throws Exception{
+        String handleType="handleType";
+        String accept="accept";
+        String reject="reject";
+        Integer status=null;
+        if(handle.get(handleType)==null){
+            throw new MyException("handleType不能为空",MyException.ERROR);
+        }else if(handle.get(handleType).equals(accept)){
+            status= ShareSeminarApplication.STATUS_ACCEPT;
+        }else if(handle.get(handleType).equals(reject)){
+            status=ShareSeminarApplication.STATUS_REJECT;
+        }else {
+            throw new MyException("handleType格式错误，只能输入accept或reject",MyException.ERROR);
+        }
+        return ResponseEntity.ok().body(applicationService.updateSeminarShareApplicationStatus(requestId,status));
+    }
 
 }

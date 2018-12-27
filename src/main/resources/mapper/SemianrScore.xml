@@ -59,4 +59,10 @@
         delete from seminar_score
         where team_id=#{teamId}
     </delete>
+
+    <delete id="deleteByCClassSeminarId" parameterType="Long">
+        delete
+        from seminar_score
+        where klass_seminar_id=#{cClassSeminarId}
+    </delete>
 </mapper>

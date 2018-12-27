@@ -102,4 +102,11 @@ public interface SeminarScoreMapper {
      * @return
      */
     boolean deleteByTeamId(long teamId);
+
+    /**
+     * 通过班级讨论课删除轮次成绩
+     * @param cClassSeminarId
+     * @return
+     */
+    boolean deleteByCClassSeminarId(long cClassSeminarId);
 }

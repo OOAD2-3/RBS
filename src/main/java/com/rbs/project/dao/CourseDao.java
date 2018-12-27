@@ -197,4 +197,21 @@ public class CourseDao {
         }
         return true;
     }
+
+    /**
+     * Description: 通过id修改讨论课共享主课程字段
+     * @Author: WinstonDeng
+     * @Date: 21:15 2018/12/27
+     */
+    public boolean updateSeminarMainCourseId(long subCourseId, long mainCourseId) throws MyException{
+        Course course=courseMapper.findById(subCourseId);
+        if(course==null){
+            throw new MyException("更新从课程seminar_main_course_id错误！未找到该课程",MyException.NOT_FOUND_ERROR);
+        }
+        course.setSeminarMainCourseId(mainCourseId);
+        if(!courseMapper.updateSeminarMainCourseId(course)){
+            throw new MyException("更新从课程seminar_main_course_id错误！数据库处理错误",MyException.ERROR);
+        }
+        return true;
+    }
 }
