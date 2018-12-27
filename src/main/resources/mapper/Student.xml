@@ -53,13 +53,16 @@
 	    where klass.course_id=#{courseId};
     </select>
 
+    <!--获取team下属于courseId的学生-->
     <select id="findByCourseIdAndTeamId" resultMap="tab_student">
-        SELECT student.id,student.account,student.password,student.is_active,student.student_name,email
-        FROM student LEFT JOIN team_student
-        ON student.id=team_student.student_id
-        LEFT JOIN team
-        ON team_student.team_id=team.id
-        WHERE team.course_id=#{courseId} AND team.id =#{teamId} GROUP BY student.id
+        SELECT student.*
+        FROM klass LEFT JOIN klass_team
+          ON klass.id=klass_team.klass_id
+        LEFT JOIN team_student
+          ON klass_team.team_id=team_student.team_id
+        LEFT join student
+          ON team_student.student_id=student.id
+        WHERE klass.course_id=#{courseId} AND team_student.team_id=#{teamId}
     </select>
 
     <update id="updatePasswordAndEmailAndActiveById" parameterType="com.rbs.project.pojo.entity.Student">
