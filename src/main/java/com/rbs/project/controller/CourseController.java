@@ -429,4 +429,36 @@ public class CourseController {
         }
         return ResponseEntity.ok().body(applicationService.removeTeamShare(requestId));
     }
+
+    /**
+     * Description: 新增讨论课共享申请
+     * @Author: WinstonDeng
+     * @Date: 22:23 2018/12/26
+     */
+    @PostMapping("/{courseId}/seminarshare")
+    @ResponseBody
+    public ResponseEntity<Boolean> createSeminarShareRequest(@PathVariable("courseId")long courseId,@RequestBody Map<String,String> map)throws Exception{
+        if(courseId==0){
+            throw new MyException("courseId不能为空",MyException.ID_FORMAT_ERROR);
+        }
+        String subCourseId="subCourseId";
+        if(map.get(subCourseId)==null){
+            throw new MyException("subCourseId不能为空",MyException.ID_FORMAT_ERROR);
+        }
+        return ResponseEntity.ok().body(applicationService.addSeminarShareRequest(courseId,Long.parseLong(map.get(subCourseId))));
+    }
+
+    /**
+     * Description: 取消讨论课共享
+     * @Author: WinstonDeng
+     * @Date: 22:32 2018/12/26
+     */
+    @DeleteMapping("/teamshare/{seminarshareId}")
+    @ResponseBody
+    public ResponseEntity<Boolean> deleteSeminarShare(@PathVariable("seminarshareId") long requestId) throws Exception{
+        if(requestId==0){
+            throw new MyException("seminarshareId不能为空",MyException.ID_FORMAT_ERROR);
+        }
+        return ResponseEntity.ok().body(applicationService.removeSeminarShare(requestId));
+    }
 }

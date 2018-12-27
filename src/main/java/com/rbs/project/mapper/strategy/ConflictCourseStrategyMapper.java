@@ -1,5 +1,6 @@
 package com.rbs.project.mapper.strategy;
 
+import com.rbs.project.pojo.entity.Course;
 import com.rbs.project.pojo.strategy.ConflictCourseStrategy;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -48,4 +49,6 @@ public interface ConflictCourseStrategyMapper {
      * @return
      */
     List<ConflictCourseStrategy> findById(long id);
+
+
 }

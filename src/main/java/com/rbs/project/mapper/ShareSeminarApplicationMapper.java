@@ -1,6 +1,7 @@
 package com.rbs.project.mapper;
 
 import com.rbs.project.pojo.entity.ShareSeminarApplication;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -46,4 +47,26 @@ public interface ShareSeminarApplicationMapper {
      * @throws Exception
      */
     boolean deleteByCourseId(long courseId) throws Exception;
+
+    /**
+     * 通过id修改讨论课共享请求状态
+     * @param id
+     * @param status
+     * @return
+     */
+    boolean updateStatusById(@Param("id") long id, @Param("status") Integer status);
+
+    /**
+     * 新增讨论课共享申请记录
+     * @param shareSeminarApplication
+     * @return
+     */
+    boolean addShareSeminarApplication(ShareSeminarApplication shareSeminarApplication);
+
+    /**
+     * 取消讨论课共享记录
+     * @param id
+     * @return
+     */
+    boolean deleteSeminarShareApplication(long id);
 }

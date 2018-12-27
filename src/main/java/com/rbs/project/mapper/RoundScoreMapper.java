@@ -51,4 +51,11 @@ public interface RoundScoreMapper {
      * @return
      */
     boolean deleteByTeamId(long teamId);
+
+    /**
+     * 通过轮次id删除轮次成绩
+     * @param roundId
+     * @return
+     */
+    boolean deleteByRoundId(long roundId);
 }

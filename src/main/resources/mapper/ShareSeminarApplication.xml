@@ -30,5 +30,23 @@
         DELETE FROM share_seminar_application
         WHERE main_course_id=#{courseId} OR sub_course_id=#{courseId}
     </delete>
+
+    <update id="updateStatusById">
+        update share_seminar_application
+        set status=#{status}
+        where id=#{id}
+    </update>
+
+    <insert id="addShareSeminarApplication" parameterType="com.rbs.project.pojo.entity.ShareSeminarApplication" useGeneratedKeys="true" keyProperty="id">
+        insert into share_seminar_application(main_course_id,sub_course_id,sub_course_teacher_id,status)
+        values (#{mainCourseId},#{subCourseId},#{subCourseTeacherId},#{status})
+    </insert>
+
+    <delete id="deleteSeminarShareApplication" parameterType="Long">
+        delete
+        from share_seminar_application
+        where id=#{id}
+    </delete>
+
 </mapper>
 

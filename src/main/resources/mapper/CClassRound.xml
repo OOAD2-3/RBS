@@ -25,4 +25,10 @@
         where klass_id=#{cClassId}
           and round_id=#{roundId}
     </update>
+
+    <select id="findByRoundId" parameterType="Long">
+        select klass_id,round_id,enroll_number
+        from klass_round
+        where round_id=#{roundId}
+    </select>
 </mapper>

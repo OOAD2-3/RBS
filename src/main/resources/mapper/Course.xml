@@ -77,4 +77,10 @@
         set team_main_course_id=#{teamMainCourseId}
         where id=#{id}
     </update>
+
+    <update id="updateSeminarMainCourseId" parameterType="com.rbs.project.pojo.entity.Course">
+        update course
+        set seminar_main_course_id=#{seminarMainCourseId}
+        where id=#{id}
+    </update>
 </mapper>

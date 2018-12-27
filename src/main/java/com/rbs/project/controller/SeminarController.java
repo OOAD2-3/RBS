@@ -76,12 +76,12 @@ public class SeminarController {
     @GetMapping("/{seminarId}/class/{classId}")
     @ResponseBody
     public ResponseEntity<Map<String,Object>> getSeminarById(@PathVariable("seminarId")long seminarId,@PathVariable("classId") long cClassId) throws MyException{
-        if((Long)seminarId==null){
+        if(seminarId==0){
             throw new MyException("seminarId不能为空",MyException.ID_FORMAT_ERROR);
         }
         Seminar seminar=seminarService.getSeminarById(seminarId);
         Map<String,Object> seminarView=new HashMap<>();
-        if((Long)cClassId==null){
+        if(cClassId==0){
             throw new MyException("classId不能为空",MyException.ID_FORMAT_ERROR);
         }
         //转换格式
@@ -103,7 +103,7 @@ public class SeminarController {
     }
 
     /**
-     * Description: 按id和班级获取讨论课
+     * Description: 按id获取讨论课
      *
      * @Author: WinstonDeng
      * @Date: 23:25 2018/12/19
@@ -141,7 +141,7 @@ public class SeminarController {
     @DeleteMapping("/{seminarId}")
     @ResponseBody
     public ResponseEntity<Boolean> deleteSeminarById(@PathVariable("seminarId") long seminarId) throws MyException{
-        if((Long)seminarId==null){
+        if(seminarId==0){
             throw new MyException("seminarId不能为空",MyException.ID_FORMAT_ERROR);
         }
         return ResponseEntity.ok().body(seminarService.removeSeminarById(seminarId));
@@ -156,7 +156,7 @@ public class SeminarController {
     @PutMapping("/{seminarId}")
     @ResponseBody
     public ResponseEntity<Boolean> updateSeminarById(@PathVariable("seminarId") long seminarId, @RequestBody UpdateSeminarDTO updateSeminarDTO) throws Exception {
-        if((Long)seminarId==null){
+        if(seminarId==0){
             throw new MyException("seminarId不能为空",MyException.ID_FORMAT_ERROR);
         }
         //DTO转Entity

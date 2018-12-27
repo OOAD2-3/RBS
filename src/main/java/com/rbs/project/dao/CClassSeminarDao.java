@@ -17,6 +17,7 @@ import java.util.List;
 
 /**
  * @Author: WinstonDeng
+ * TODO 判断是否为讨论课从课程
  * @Description: Dao只做直接的增删改查操作及逻辑，改删前先查处对象，修改相应字段，再改到保存
  * @Date: Created in 23:51 2018/12/18
  * @Modified by:

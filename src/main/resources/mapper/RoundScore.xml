@@ -27,4 +27,9 @@
         delete from round_score
         where team_id=#{teamId}
     </delete>
+
+    <delete id="deleteByRoundId" parameterType="Long">
+        delete from round_score
+        where round_id=#{roundId}
+    </delete>
 </mapper>

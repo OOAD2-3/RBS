@@ -12,7 +12,7 @@ import java.util.List;
 
 /**
  * Description:
- *
+ * TODO 判断是否为讨论课从课程
  * @Author: 17Wang
  * @Date: 16:11 2018/12/22
  */

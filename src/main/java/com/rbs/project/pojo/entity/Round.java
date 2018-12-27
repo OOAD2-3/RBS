@@ -1,5 +1,7 @@
 package com.rbs.project.pojo.entity;
 
+import com.rbs.project.pojo.relationship.CClassRound;
+
 import java.util.List;
 
 /**
@@ -55,6 +57,10 @@ public class Round {
      * 多个小组的轮次成绩
      */
     private List<RoundScore> roundScores;
+    /**
+     * 多个班级轮次
+     */
+    private List<CClassRound> cClassRounds;
 
     public final static int SCORE_AVERAGE=0;
     public final static int SCORE_MAX=1;
@@ -157,7 +163,25 @@ public class Round {
         this.roundScores = roundScores;
     }
 
-    //============= toString =========================================
+    public List<CClassRound> getcClassRounds() {
+        return cClassRounds;
+    }
 
+    public void setcClassRounds(List<CClassRound> cClassRounds) {
+        this.cClassRounds = cClassRounds;
+    }
 
+//============= toString =========================================
+
+//============= 构造方法 除了id courseId全部复制============================
+
+    public Round(){
+        
+    }
+    public Round(Round round){
+        serial=round.getSerial();
+        presentationScoreMethod=round.getPresentationScoreMethod();
+        reportScoreMethod=round.getReportScoreMethod();
+        questionScoreMethod=round.getQuestionScoreMethod();
+    }
 }

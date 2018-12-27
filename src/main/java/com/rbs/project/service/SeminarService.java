@@ -214,4 +214,5 @@ public class SeminarService {
     public List<Seminar> getSeminarsByCourseId(long courseId) throws MyException {
         return seminarDao.findSeminarByCourseId(courseId, SeminarDao.HAS_CClASS_SEMINAR, SeminarDao.HAS_ROUND);
     }
+
 }
