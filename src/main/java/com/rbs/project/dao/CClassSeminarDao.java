@@ -211,4 +211,13 @@ public class CClassSeminarDao {
         }
         return cClassSeminars;
     }
+
+    /**
+     * Description: 通过课程id查找班级讨论课
+     * @Author: WinstonDeng
+     * @Date: 2:17 2018/12/29
+     */
+    public List<CClassSeminar> listByCClassId(long cClassId) {
+        return cClassSeminarMapper.findByCClassId(cClassId);
+    }
 }

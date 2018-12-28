@@ -1,6 +1,7 @@
 package com.rbs.project.mapper;
 
 import com.rbs.project.pojo.entity.Round;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -53,4 +54,6 @@ public interface RoundMapper {
      * @throws Exception
      */
     boolean deleteById(long id) throws Exception;
+
+
 }
