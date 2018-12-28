@@ -208,11 +208,7 @@ public class StudentDao {
             throw new MyException("删除学生错误！不存在该用户", MyException.NOT_FOUND_ERROR);
         }
 
-        if (!studentMapper.deleteStudentById(studentId)) {
-            throw new MyException("删除学生错误！数据库处理错误", MyException.ERROR);
-        }
-        return true;
-
+        return studentMapper.deleteStudentById(studentId);
     }
 
     /**
