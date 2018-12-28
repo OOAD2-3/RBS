@@ -22,4 +22,6 @@ public interface TeamStrategyMapper {
      * @return
      */
     List<TeamStrategy> findByCourseId(long courseId);
+
+
 }

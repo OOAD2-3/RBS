@@ -2,10 +2,9 @@ package com.rbs.project.dao;
 
 import com.rbs.project.exception.MyException;
 import com.rbs.project.mapper.*;
-import com.rbs.project.mapper.strategy.ConflictCourseStrategyMapper;
-import com.rbs.project.mapper.strategy.CourseMemberLimitStrategyMapper;
+import com.rbs.project.mapper.strategy.*;
 import com.rbs.project.pojo.entity.Course;
-import com.rbs.project.pojo.strategy.CourseMemberLimitStrategy;
+import com.rbs.project.pojo.strategy.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,33 +29,40 @@ public class CourseDao {
     private SeminarMapper seminarMapper;
 
     @Autowired
-    private CourseMemberLimitStrategyMapper courseMemberLimitStrategyMapper;
-
-    @Autowired
-    private ConflictCourseStrategyMapper conflictCourseStrategyMapper;
-
-    @Autowired
     private ShareSeminarApplicationMapper shareSeminarApplicationMapper;
 
     @Autowired
     private ShareTeamApplicationMapper shareTeamApplicationMapper;
 
+    @Autowired
+    private TeamStrategyMapper teamStrategyMapper;
+
+    @Autowired
+    private TeamAndStrategyMapper teamAndStrategyMapper;
+
+    @Autowired
+    private TeamOrStrategyMapper teamOrStrategyMapper;
+
+    @Autowired
+    private MemberLimitStrategyMapper memberLimitStrategyMapper;
+
+    @Autowired
+    private CourseMemberLimitStrategyMapper courseMemberLimitStrategyMapper;
+
+    @Autowired
+    private ConflictCourseStrategyMapper conflictCourseStrategyMapper;
+
     /**
      * 组队人数限制策略
      */
-    public static final int HAS_COURSE_MEMBER_LIMIT_STRATEGY = 0;
-    /**
-     * 冲突课程策略
-     */
-    public static final int HAS_CONFLICT_COURSES = 1;
+    public static final int HAS_STRATEGY = 0;
     public static final int HAS_CCLASS = 2;
     public static final int HAS_SEMINAR = 3;
 
     private void hasSomethingFun(Course course, int... hasSomething) {
         for (int i : hasSomething) {
-            if (i == HAS_COURSE_MEMBER_LIMIT_STRATEGY) {
-                CourseMemberLimitStrategy courseMemberLimitStrategy = courseMemberLimitStrategyMapper.getByCourseId(course.getId());
-                course.setCourseMemberLimitStrategy(courseMemberLimitStrategy);
+            if (i == HAS_STRATEGY) {
+
             }
             if (i == HAS_CCLASS) {
                 course.setcClasses(cClassMapper.findByCourseId(course.getId()));
@@ -64,23 +70,60 @@ public class CourseDao {
             if (i == HAS_SEMINAR) {
                 course.setSeminars(seminarMapper.findByCourseId(course.getId()));
             }
-            if (i == HAS_CONFLICT_COURSES) {
-                //TODO 直接查可能会出现重复的课程和课程自己
-                List<Course> courses = courseMapper.findAllConflictCourseByNowCourseId(course.getId());
-                Map<Long, Course> map = new HashMap<>();
-                for (Course conflictCourse : courses) {
-                    if (conflictCourse.getId() != course.getId()) {
-                        map.put(conflictCourse.getId(), conflictCourse);
-                    }
-                }
-                List<Course> conflictCourses = new ArrayList<>();
-                for (Map.Entry<Long, Course> entry : map.entrySet()) {
-                    conflictCourses.add(entry.getValue());
-                }
-
-                course.setConflictCourses(conflictCourses);
-            }
         }
+    }
+
+    private void hasStrategy(String strategyName, long strategyId, Course course) {
+        switch (strategyName) {
+            case "TeamAndStrategy":
+                myTeamAndStrategy(strategyId, course);
+                break;
+            case "TeamOrStrategy":
+                myTeamOrStrategy(strategyId, course);
+                break;
+            case "ConflictCourseStrategy":
+                myConflictCourseStrategy(strategyId, course);
+                break;
+            case "MemberLimitStrategy":
+                myMemberLimitStrategy(strategyId, course);
+                break;
+            case "CourseMemberLimitStrategy":
+                myCourseMemberLimitStrategy(strategyId, course);
+                break;
+            default:
+                ;
+        }
+    }
+
+    private void myTeamAndStrategy(long strategyId, Course course) {
+        List<TeamAndStrategy> teamAndStrategies = teamAndStrategyMapper.findById(strategyId);
+        for (TeamAndStrategy teamAndStrategy : teamAndStrategies) {
+            hasStrategy(teamAndStrategy.getStrategyName(), teamAndStrategy.getStrategyId(), course);
+        }
+    }
+
+    private void myTeamOrStrategy(long strategyId, Course course) {
+        List<TeamOrStrategy> teamOrStrategies = teamOrStrategyMapper.findById(strategyId);
+        for (TeamOrStrategy teamOrStrategy : teamOrStrategies) {
+            hasStrategy(teamOrStrategy.getStrategyName(), teamOrStrategy.getStrategyId(), course);
+        }
+    }
+
+    private void myConflictCourseStrategy(long strategyId, Course course) {
+        List<ConflictCourseStrategy> conflictCourseStrategies = conflictCourseStrategyMapper.findById(strategyId);
+        List<Course> courses = new ArrayList<>();
+        for (ConflictCourseStrategy conflictCourseStrategy : conflictCourseStrategies) {
+            courses.add(getCourseById(conflictCourseStrategy.getCourseId(),HAS_TEACHER));
+        }
+        course.getConflictCourses().add(courses);
+    }
+
+    private void myMemberLimitStrategy(long strategyId, Course course) {
+        List<MemberLimitStrategy> memberLimitStrategies
+    }
+
+    private void myCourseMemberLimitStrategy(long strategyId, Course course) {
+
     }
 
     /**
@@ -119,11 +162,8 @@ public class CourseDao {
         if (!courseMapper.insertCourse(course)) {
             throw new MyException("创建课程失败！数据库处理错误", MyException.ERROR);
         }
-        //组队人数策略
-        course.getCourseMemberLimitStrategy().setCourseId(course.getId());
-        if (!courseMemberLimitStrategyMapper.insertStrategy(course.getCourseMemberLimitStrategy())) {
-            throw new MyException("创建课程策略表失败！数据库处理错误", MyException.ERROR);
-        }
+        //TODO 策略
+
         //冲突课程策略
         //TODO 新建课程时冲突课程策略 待测试
         long tableId = conflictCourseStrategyMapper.findMaxId() + 1;
@@ -164,7 +204,7 @@ public class CourseDao {
         //
 
         //删除课程
-       courseMapper.deleteById(courseId);
+        courseMapper.deleteById(courseId);
 
         //TODO 删除share_seminar_application 待测试
         shareSeminarApplicationMapper.deleteByCourseId(courseId);
@@ -177,34 +217,36 @@ public class CourseDao {
 
     /**
      * Description: 更新从课程team_main_course_id字段
+     *
      * @Author: WinstonDeng
      * @Date: 10:21 2018/12/27
      */
-    public boolean updateTeamMainCourseId(long subCourseId, long mainCourseId) throws MyException{
-        Course course=courseMapper.findById(subCourseId);
-        if(course==null){
-            throw new MyException("更新从课程team_main_course_id错误！未找到该课程",MyException.NOT_FOUND_ERROR);
+    public boolean updateTeamMainCourseId(long subCourseId, long mainCourseId) throws MyException {
+        Course course = courseMapper.findById(subCourseId);
+        if (course == null) {
+            throw new MyException("更新从课程team_main_course_id错误！未找到该课程", MyException.NOT_FOUND_ERROR);
         }
         course.setTeamMainCourseId(mainCourseId);
-        if(!courseMapper.updateTeamMainCourseId(course)){
-            throw new MyException("更新从课程team_main_course_id错误！数据库处理错误",MyException.ERROR);
+        if (!courseMapper.updateTeamMainCourseId(course)) {
+            throw new MyException("更新从课程team_main_course_id错误！数据库处理错误", MyException.ERROR);
         }
         return true;
     }
 
     /**
      * Description: 通过id修改讨论课共享主课程字段
+     *
      * @Author: WinstonDeng
      * @Date: 21:15 2018/12/27
      */
-    public boolean updateSeminarMainCourseId(long subCourseId, long mainCourseId) throws MyException{
-        Course course=courseMapper.findById(subCourseId);
-        if(course==null){
-            throw new MyException("更新从课程seminar_main_course_id错误！未找到该课程",MyException.NOT_FOUND_ERROR);
+    public boolean updateSeminarMainCourseId(long subCourseId, long mainCourseId) throws MyException {
+        Course course = courseMapper.findById(subCourseId);
+        if (course == null) {
+            throw new MyException("更新从课程seminar_main_course_id错误！未找到该课程", MyException.NOT_FOUND_ERROR);
         }
         course.setSeminarMainCourseId(mainCourseId);
-        if(!courseMapper.updateSeminarMainCourseId(course)){
-            throw new MyException("更新从课程seminar_main_course_id错误！数据库处理错误",MyException.ERROR);
+        if (!courseMapper.updateSeminarMainCourseId(course)) {
+            throw new MyException("更新从课程seminar_main_course_id错误！数据库处理错误", MyException.ERROR);
         }
         return true;
     }

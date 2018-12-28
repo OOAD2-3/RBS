@@ -1,6 +1,7 @@
 package com.rbs.project.pojo.entity;
 
 import com.rbs.project.pojo.strategy.CourseMemberLimitStrategy;
+import com.rbs.project.pojo.strategy.MemberLimitStrategy;
 
 import java.sql.Timestamp;
 import java.util.HashMap;
@@ -59,13 +60,17 @@ public class Course {
 
     //关系
     /**
-     * 课程组队限制
+     * 课程组队人数限制
      */
-    private CourseMemberLimitStrategy courseMemberLimitStrategy;
+    private MemberLimitStrategy memberLimitStrategy;
     /**
-     * 冲突的课程们的id
+     * 课程组队选修人数限制
      */
-    private List<Course> conflictCourses;
+    private List<CourseMemberLimitStrategy> courseMemberLimitStrategies;
+    /**
+     * 冲突的课程
+     */
+    private List<List<Course>> conflictCourses;
     /**
      * 一个老师
      */
@@ -190,19 +195,27 @@ public class Course {
         return seminarMainCourseId;
     }
 
-    public CourseMemberLimitStrategy getCourseMemberLimitStrategy() {
-        return courseMemberLimitStrategy;
+    public MemberLimitStrategy getMemberLimitStrategy() {
+        return memberLimitStrategy;
     }
 
-    public void setCourseMemberLimitStrategy(CourseMemberLimitStrategy courseMemberLimitStrategy) {
-        this.courseMemberLimitStrategy = courseMemberLimitStrategy;
+    public void setMemberLimitStrategy(MemberLimitStrategy memberLimitStrategy) {
+        this.memberLimitStrategy = memberLimitStrategy;
     }
 
-    public List<Course> getConflictCourses() {
+    public List<CourseMemberLimitStrategy> getCourseMemberLimitStrategies() {
+        return courseMemberLimitStrategies;
+    }
+
+    public void setCourseMemberLimitStrategies(List<CourseMemberLimitStrategy> courseMemberLimitStrategies) {
+        this.courseMemberLimitStrategies = courseMemberLimitStrategies;
+    }
+
+    public List<List<Course>> getConflictCourses() {
         return conflictCourses;
     }
 
-    public void setConflictCourses(List<Course> conflictCourses) {
+    public void setConflictCourses(List<List<Course>> conflictCourses) {
         this.conflictCourses = conflictCourses;
     }
 
@@ -272,7 +285,6 @@ public class Course {
 
     //======================= toString=============================
 
-
     @Override
     public String toString() {
         return "Course{" +
@@ -287,7 +299,9 @@ public class Course {
                 ", teamEndTime=" + teamEndTime +
                 ", teamMainCourseId=" + teamMainCourseId +
                 ", seminarMainCourseId=" + seminarMainCourseId +
-                ", courseMemberLimitStrategy=" + courseMemberLimitStrategy +
+                ", memberLimitStrategy=" + memberLimitStrategy +
+                ", courseMemberLimitStrategies=" + courseMemberLimitStrategies +
+                ", conflictCourses=" + conflictCourses +
                 ", teacher=" + teacher +
                 ", teamMainCourse=" + teamMainCourse +
                 ", seminarMainCourse=" + seminarMainCourse +
@@ -298,53 +312,6 @@ public class Course {
                 ", students=" + students +
                 '}';
     }
-
-    /**
-     * Indicates whether some other object is "equal to" this one.
-     * <p>
-     * The {@code equals} method implements an equivalence relation
-     * on non-null object references:
-     * <ul>
-     * <li>It is <i>reflexive</i>: for any non-null reference value
-     * {@code x}, {@code x.equals(x)} should return
-     * {@code true}.
-     * <li>It is <i>symmetric</i>: for any non-null reference values
-     * {@code x} and {@code y}, {@code x.equals(y)}
-     * should return {@code true} if and only if
-     * {@code y.equals(x)} returns {@code true}.
-     * <li>It is <i>transitive</i>: for any non-null reference values
-     * {@code x}, {@code y}, and {@code z}, if
-     * {@code x.equals(y)} returns {@code true} and
-     * {@code y.equals(z)} returns {@code true}, then
-     * {@code x.equals(z)} should return {@code true}.
-     * <li>It is <i>consistent</i>: for any non-null reference values
-     * {@code x} and {@code y}, multiple invocations of
-     * {@code x.equals(y)} consistently return {@code true}
-     * or consistently return {@code false}, provided no
-     * information used in {@code equals} comparisons on the
-     * objects is modified.
-     * <li>For any non-null reference value {@code x},
-     * {@code x.equals(null)} should return {@code false}.
-     * </ul>
-     * <p>
-     * The {@code equals} method for class {@code Object} implements
-     * the most discriminating possible equivalence relation on objects;
-     * that is, for any non-null reference values {@code x} and
-     * {@code y}, this method returns {@code true} if and only
-     * if {@code x} and {@code y} refer to the same object
-     * ({@code x == y} has the value {@code true}).
-     * <p>
-     * Note that it is generally necessary to override the {@code hashCode}
-     * method whenever this method is overridden, so as to maintain the
-     * general contract for the {@code hashCode} method, which states
-     * that equal objects must have equal hash codes.
-     *
-     * @param obj the reference object with which to compare.
-     * @return {@code true} if this object is the same as the obj
-     * argument; {@code false} otherwise.
-     * @see #hashCode()
-     * @see HashMap
-     */
 
     @Override
     public boolean equals(Object obj) {
