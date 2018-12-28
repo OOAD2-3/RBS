@@ -66,7 +66,7 @@ public class SeminarController {
         seminar.setEnrollStartTime(JsonUtils.StringToTimestamp(createSeminarDTO.getEnrollStartTime()));
         seminar.setEnrollEndTime(JsonUtils.StringToTimestamp(createSeminarDTO.getEnrollEndTime()));
         //获得主键
-        createSeminarId = seminarService.addSemianr(seminar);
+        createSeminarId = seminarService.addSemianr(seminar,true);
         return ResponseEntity.ok().body(createSeminarId);
     }
 
@@ -147,7 +147,7 @@ public class SeminarController {
         if (seminarId == 0) {
             throw new MyException("seminarId不能为空", MyException.ID_FORMAT_ERROR);
         }
-        return ResponseEntity.ok().body(seminarService.removeSeminarById(seminarId));
+        return ResponseEntity.ok().body(seminarService.removeSeminarById(seminarId,true));
     }
 
     /**

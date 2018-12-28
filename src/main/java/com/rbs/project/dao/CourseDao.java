@@ -52,12 +52,16 @@ public class CourseDao {
     @Autowired
     private ConflictCourseStrategyMapper conflictCourseStrategyMapper;
 
+    @Autowired
+    private TeacherMapper teacherMapper;
+
     /**
      * 组队人数限制策略
      */
     public static final int HAS_STRATEGY = 0;
     public static final int HAS_CCLASS = 2;
     public static final int HAS_SEMINAR = 3;
+    public static final int HAS_TEACHER = 4;
 
     private void hasSomethingFun(Course course, int... hasSomething) {
         for (int i : hasSomething) {
@@ -69,6 +73,9 @@ public class CourseDao {
             }
             if (i == HAS_SEMINAR) {
                 course.setSeminars(seminarMapper.findByCourseId(course.getId()));
+            }
+            if (i == HAS_TEACHER) {
+                course.setTeacher(teacherMapper.findById(course.getTeacherId()));
             }
         }
     }
@@ -207,10 +214,13 @@ public class CourseDao {
         courseMapper.deleteById(courseId);
 
         //TODO 删除share_seminar_application 待测试
+
+
         shareSeminarApplicationMapper.deleteByCourseId(courseId);
 
         //TODO 删除share_team_application 待测试
         shareTeamApplicationMapper.deleteByCourseId(courseId);
+
 
         return true;
     }
@@ -249,5 +259,19 @@ public class CourseDao {
             throw new MyException("更新从课程seminar_main_course_id错误！数据库处理错误", MyException.ERROR);
         }
         return true;
+    }
+
+    /**
+     * Description: 通过老师id查看当前已有课程
+     * @Author: WinstonDeng
+     * @Date: 15:41 2018/12/28
+     */
+    public List<Course> listAllCoursesByTeacherId(long teacherId, int ...hasSomething) {
+         List<Course> courses=courseMapper.findByTeacherId(teacherId);
+         for(Course course
+                 :courses){
+             hasSomethingFun(course,hasSomething);
+         }
+         return courses;
     }
 }

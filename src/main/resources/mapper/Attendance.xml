@@ -88,4 +88,10 @@
         from attendance
         where team_id=#{teamId}
     </delete>
+
+    <delete id="deleteByCClassSeminarId" parameterType="Long">
+        delete
+        from attendance
+        where klass_seminar_id=#{cClassSeminarId}
+    </delete>
 </mapper>
