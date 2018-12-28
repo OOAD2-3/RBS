@@ -66,7 +66,10 @@ public class CourseDao {
     private void hasSomethingFun(Course course, int... hasSomething) {
         for (int i : hasSomething) {
             if (i == HAS_STRATEGY) {
-
+                List<TeamStrategy> teamStrategies = teamStrategyMapper.findByCourseId(course.getId());
+                for (TeamStrategy teamStrategy : teamStrategies) {
+                    hasStrategy(teamStrategy.getStrategyName(), teamStrategy.getStrategyId(), course);
+                }
             }
             if (i == HAS_CCLASS) {
                 course.setcClasses(cClassMapper.findByCourseId(course.getId()));
@@ -120,17 +123,30 @@ public class CourseDao {
         List<ConflictCourseStrategy> conflictCourseStrategies = conflictCourseStrategyMapper.findById(strategyId);
         List<Course> courses = new ArrayList<>();
         for (ConflictCourseStrategy conflictCourseStrategy : conflictCourseStrategies) {
-            courses.add(getCourseById(conflictCourseStrategy.getCourseId(),HAS_TEACHER));
+            System.out.println(conflictCourseStrategy.getCourseId());
+            try {
+                courses.add(getCourseById(conflictCourseStrategy.getCourseId(), HAS_TEACHER));
+            } catch (MyException e) {
+                e.printStackTrace();
+            }
+        }
+        if (course.getConflictCourses() == null) {
+            course.setConflictCourses(new ArrayList<>());
         }
         course.getConflictCourses().add(courses);
     }
 
     private void myMemberLimitStrategy(long strategyId, Course course) {
-        List<MemberLimitStrategy> memberLimitStrategies
+        MemberLimitStrategy memberLimitStrategy = memberLimitStrategyMapper.findById(strategyId);
+        course.setMemberLimitStrategy(memberLimitStrategy);
     }
 
     private void myCourseMemberLimitStrategy(long strategyId, Course course) {
-
+        CourseMemberLimitStrategy courseMemberLimitStrategy = courseMemberLimitStrategyMapper.findById(strategyId);
+        if (course.getCourseMemberLimitStrategies() == null) {
+            course.setCourseMemberLimitStrategies(new ArrayList<>());
+        }
+        course.getCourseMemberLimitStrategies().add(courseMemberLimitStrategy);
     }
 
     /**
@@ -164,20 +180,79 @@ public class CourseDao {
      * @Time: 19:50 2018/12/18
      */
     @Transactional(rollbackFor = Exception.class)
-    public boolean addCourse(Course course) throws Exception {
+    public boolean addCourse(Course course, Integer flag) throws Exception {
         //添加课程
         if (!courseMapper.insertCourse(course)) {
             throw new MyException("创建课程失败！数据库处理错误", MyException.ERROR);
         }
-        //TODO 策略
+        //TODO 添加策略
+        long teamStrategySerial = 1;
+        //冲突表策略
+        long conflictCourseStrategyId = conflictCourseStrategyMapper.findMaxId();
 
-        //冲突课程策略
-        //TODO 新建课程时冲突课程策略 待测试
-        long tableId = conflictCourseStrategyMapper.findMaxId() + 1;
-        for (Course conflictCourse : course.getConflictCourses()) {
-            conflictCourseStrategyMapper.insertOneLine(tableId, conflictCourse.getId());
+        for (List<Course> courses : course.getConflictCourses()) {
+            //表下一个 、策略组id
+            conflictCourseStrategyId++;
+            //将同一组策略写入 冲突策略表中
+            for (Course temp : courses) {
+                conflictCourseStrategyMapper.insertOneLine(conflictCourseStrategyId, temp.getId());
+            }
+            //将冲突策略写入最上层策略表中
+            TeamStrategy teamStrategy = new TeamStrategy();
+            teamStrategy.setCourseId(course.getId());
+            teamStrategy.setStrategySerial(teamStrategySerial++);
+            teamStrategy.setStrategyName("ConflictCourseStrategy");
+            teamStrategy.setStrategyId(conflictCourseStrategyId);
+            teamStrategyMapper.insertStrategy(teamStrategy);
         }
-        //其他策略
+
+        //人数限制策略
+        MemberLimitStrategy memberLimitStrategy = course.getMemberLimitStrategy();
+        if (memberLimitStrategy != null) {
+            memberLimitStrategyMapper.insertStrategy(memberLimitStrategy);
+            //将人数限制策略写入最上层策略表中
+            TeamStrategy t = new TeamStrategy();
+            t.setCourseId(course.getId());
+            t.setStrategySerial(teamStrategySerial++);
+            t.setStrategyName("MemberLimitStrategy");
+            t.setStrategyId(memberLimitStrategy.getId());
+            teamStrategyMapper.insertStrategy(t);
+        }
+
+
+        //选修课程人数限制策略（两种  与 或）
+        //与
+        if (flag == 1) {
+            for (CourseMemberLimitStrategy courseMemberLimitStrategy : course.getCourseMemberLimitStrategies()) {
+                courseMemberLimitStrategyMapper.insertStrategy(courseMemberLimitStrategy);
+                //写入最上层策略表中
+                TeamStrategy teamStrategy = new TeamStrategy();
+                teamStrategy.setCourseId(course.getId());
+                teamStrategy.setStrategySerial(teamStrategySerial++);
+                teamStrategy.setStrategyName("CourseMemberLimitStrategy");
+                teamStrategy.setStrategyId(courseMemberLimitStrategy.getId());
+                teamStrategyMapper.insertStrategy(teamStrategy);
+            }
+        } else if (flag == 0) {
+            long maxId = teamOrStrategyMapper.findMaxId() + 1;
+            for (CourseMemberLimitStrategy courseMemberLimitStrategy : course.getCourseMemberLimitStrategies()) {
+                courseMemberLimitStrategyMapper.insertStrategy(courseMemberLimitStrategy);
+                //写入或表
+                TeamOrStrategy teamOrStrategy = new TeamOrStrategy();
+                teamOrStrategy.setId(maxId);
+                teamOrStrategy.setStrategyName("CourseMemberLimitStrategy");
+                teamOrStrategy.setStrategyId(courseMemberLimitStrategy.getId());
+                teamOrStrategyMapper.insertStrategy(teamOrStrategy);
+            }
+            //把或表写入最上层策略表中
+            TeamStrategy teamStrategy = new TeamStrategy();
+            teamStrategy.setCourseId(course.getId());
+            teamStrategy.setStrategySerial(teamStrategySerial++);
+            teamStrategy.setStrategyName("TeamOrStrategy");
+            teamStrategy.setStrategyId(maxId);
+            teamStrategyMapper.insertStrategy(teamStrategy);
+        }
+
 
         return true;
     }
@@ -263,15 +338,16 @@ public class CourseDao {
 
     /**
      * Description: 通过老师id查看当前已有课程
+     *
      * @Author: WinstonDeng
      * @Date: 15:41 2018/12/28
      */
-    public List<Course> listAllCoursesByTeacherId(long teacherId, int ...hasSomething) {
-         List<Course> courses=courseMapper.findByTeacherId(teacherId);
-         for(Course course
-                 :courses){
-             hasSomethingFun(course,hasSomething);
-         }
-         return courses;
+    public List<Course> listAllCoursesByTeacherId(long teacherId, int... hasSomething) {
+        List<Course> courses = courseMapper.findByTeacherId(teacherId);
+        for (Course course
+                : courses) {
+            hasSomethingFun(course, hasSomething);
+        }
+        return courses;
     }
 }

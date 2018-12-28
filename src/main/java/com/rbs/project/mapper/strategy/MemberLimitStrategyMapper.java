@@ -22,5 +22,13 @@ public interface MemberLimitStrategyMapper {
      * @param id
      * @return
      */
-    List<MemberLimitStrategy> findById(long id);
+    MemberLimitStrategy findById(long id);
+
+    /**
+     * 新增人数策略
+     *
+     * @param memberLimitStrategy
+     * @return
+     */
+    boolean insertStrategy(MemberLimitStrategy memberLimitStrategy);
 }

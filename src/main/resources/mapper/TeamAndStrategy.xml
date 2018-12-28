@@ -7,8 +7,17 @@
         <result property="strategyId" column="strategy_id"/>
     </resultMap>
 
+    <select id="findMaxId" resultType="Long">
+        SELECT max(id) FROM team_and_strategy;
+    </select>
+
     <select id="findById" parameterType="Long" resultMap="tab_team_and_strategy">
         SELECT * FROM team_and_strategy WHERE id=#{id}
     </select>
+
+    <insert id="insertStrategy" parameterType="com.rbs.project.pojo.strategy.TeamAndStrategy">
+        INSERT INTO team_and_strategy(id, strategy_name, strategy_id)
+        VALUES (#{id},#{strategyName},#{strategyId})
+    </insert>
 
 </mapper>

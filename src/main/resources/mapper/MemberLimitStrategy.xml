@@ -11,4 +11,12 @@
         SELECT * FROM member_limit_strategy WHERE id=#{id}
     </select>
 
+    <insert id="insertStrategy" parameterType="com.rbs.project.pojo.strategy.MemberLimitStrategy"
+            useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO
+        member_limit_strategy(min_member, max_member)
+        VALUES
+        (#{minMember},#{maxMember})
+    </insert>
+
 </mapper>

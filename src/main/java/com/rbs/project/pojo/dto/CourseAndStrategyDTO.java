@@ -28,6 +28,8 @@ public class CourseAndStrategyDTO {
     private MemberLimitStrategy memberLimitStrategy;
     private List<CourseMemberLimitStrategy> courseMemberLimitStrategies;
     private List<List<Long>> conflictCourses;
+    private Integer courseMemberLimitFlag;
+
     private Boolean ShareTeam;
     private Boolean ShareSeminar;
 
@@ -149,5 +151,13 @@ public class CourseAndStrategyDTO {
 
     public Boolean getShareSeminar() {
         return ShareSeminar;
+    }
+
+    public Integer getCourseMemberLimitFlag() {
+        return courseMemberLimitFlag;
+    }
+
+    public void setCourseMemberLimitFlag(Integer courseMemberLimitFlag) {
+        this.courseMemberLimitFlag = courseMemberLimitFlag;
     }
 }
