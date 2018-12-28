@@ -358,9 +358,7 @@ public class ShareDao {
         for (Round round
                 : rounds) {
             //  1. 删除round
-            if (!roundMapper.deleteById(round.getId())) {
-                throw new MyException("删除讨论课错误！删除轮次数据库处理错误", MyException.ERROR);
-            }
+            roundMapper.deleteById(round.getId());
             //  2. 删除round_score
             roundScoreMapper.deleteByRoundId(round.getId());
         }

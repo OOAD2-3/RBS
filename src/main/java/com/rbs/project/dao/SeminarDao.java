@@ -180,18 +180,14 @@ public class SeminarDao {
                 seminarScoreMapper.deleteByCClassSeminarId(cClassSeminar.getId());
             }
             //  1.3 删除class_seminar
-            if (!cClassSeminarMapper.removeCClassSeminarBySeminarId(seminar.getId())) {
-                throw new MyException("删除讨论课错误！删除班级讨论课数据库处理错误", MyException.ERROR);
-            }
+            cClassSeminarMapper.removeCClassSeminarBySeminarId(seminar.getId());
         }
         for (Round round
                 : rounds) {
             //  1.4 删除round
             roundMapper.deleteById(round.getId());
             //  1.5 删除round_score
-            if(!roundScoreMapper.deleteByRoundId(round.getId())){
-                throw new MyException("删除讨论课错误！删除轮次成绩错误",MyException.ERROR);
-            }
+            roundScoreMapper.deleteByRoundId(round.getId());
         }
         return true;
     }
