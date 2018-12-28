@@ -28,7 +28,7 @@ public class ScoreService {
     private TeamDao teamDao;
 
     @Autowired
-    private CClassDao cClassDao;
+    private RoundDao roundDao;
 
     @Autowired
     private StudentDao studentDao;
@@ -76,17 +76,11 @@ public class ScoreService {
      */
     @Transactional(rollbackFor = Exception.class)
     public boolean updatePresentationScore(long seminarId, long classId, long teamId, double presentationScore) throws Exception {
+        //修改展示的展示分数
         seminarScoreDao.updatePresentationScore(seminarId, classId, teamId, presentationScore);
-        //修改总分
-        SeminarScore seminarScore = seminarScoreDao.getSeminarScoreBySeminarIdAndCClassIdAndTeamId(seminarId, classId, teamId);
-        double totalScore = LogicUtils.calculateSeminarTotalScore(seminarScore, cClassDao.getById(classId, CClassDao.HAS_COURSE).getCourse());
-        seminarScoreDao.updateTotalScore(seminarId, classId, teamId, totalScore);
-        //发送邮件
-        Seminar seminar = seminarDao.findSeminarById(seminarId);
-        Team team = teamDao.getTeamById(teamId);
-        String message = "第" + seminar.getSerial() + "节讨论课:" + seminar.getName() + "\n" +
-                "小组：" + team.getName() + " 的展示分数已修改为:" + presentationScore + "，总分变为:" + totalScore + "，请注意查看！";
-        sendScoreEmail(seminar, message);
+        //修改轮次的展示分数
+        roundScoreDao.updatePresentationScore(seminarDao.findSeminarById(seminarId).getRoundId(), teamId);
+
         return true;
     }
 
@@ -98,17 +92,27 @@ public class ScoreService {
      */
     @Transactional(rollbackFor = Exception.class)
     public boolean updateReportScore(long seminarId, long classId, long teamId, double reportScore) throws Exception {
+        //修改展示的报告分数
         seminarScoreDao.updateReportScore(seminarId, classId, teamId, reportScore);
-        //修改总分
-        SeminarScore seminarScore = seminarScoreDao.getSeminarScoreBySeminarIdAndCClassIdAndTeamId(seminarId, classId, teamId);
-        double totalScore = LogicUtils.calculateSeminarTotalScore(seminarScore, cClassDao.getById(classId, CClassDao.HAS_COURSE).getCourse());
-        seminarScoreDao.updateTotalScore(seminarId, classId, teamId, totalScore);
-        //发送邮件
-        Seminar seminar = seminarDao.findSeminarById(seminarId);
-        Team team = teamDao.getTeamById(teamId);
-        String message = "第" + seminar.getSerial() + "节讨论课:" + seminar.getName() + "\n" +
-                "小组：" + team.getName() + " 的报告分数已修改为:" + reportScore + "，总分变为:" + totalScore + "，请注意查看！";
-        sendScoreEmail(seminar, message);
+        //修改轮次的报告分数
+        roundScoreDao.updateReportScore(seminarDao.findSeminarById(seminarId).getRoundId(), teamId);
+
+        return true;
+    }
+
+    /**
+     * Description: 修改展示的提问分数的同时修改总分
+     *
+     * @Author: 17Wang
+     * @Time: 20:04 2018/12/28
+     */
+    @Transactional(rollbackFor = Exception.class)
+    public boolean updateQuestionScore(long seminarId, long classId, long teamId, double questionScore) throws Exception {
+        //修改提问分数
+        seminarScoreDao.updateQuestionScore(seminarId, classId, teamId, questionScore);
+        //修改轮次的提问分数
+        roundScoreDao.updateQuestionScore(seminarDao.findSeminarById(seminarId).getRoundId(), teamId);
+
         return true;
     }
 

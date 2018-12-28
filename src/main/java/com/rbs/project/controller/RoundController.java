@@ -40,7 +40,7 @@ public class RoundController {
      */
     @PutMapping("/{roundId}")
     @ResponseBody
-    public ResponseEntity<Boolean> updateRoundInfo(@PathVariable("roundId")long roundId,@RequestBody UpdateRoundDTO updateRoundDTO) throws MyException{
+    public ResponseEntity<Boolean> updateRoundInfo(@PathVariable("roundId")long roundId,@RequestBody UpdateRoundDTO updateRoundDTO) throws Exception {
 
         if((Long) roundId==null){
             throw new MyException("roundId不能为空",MyException.ID_FORMAT_ERROR);

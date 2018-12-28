@@ -98,6 +98,7 @@ public class ScoreController {
     @GetMapping("/roundscore")
     @ResponseBody
     public Map<String, Object> listAllRoundScore(@RequestParam("roundId") long roundId) throws MyException {
+        //带有队伍信息的
         List<RoundScore> roundScores = scoreService.listAllRoundScoreByRoundId(roundId);
         return null;
     }

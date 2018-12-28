@@ -2,8 +2,7 @@ package com.rbs.project.dao;
 
 import com.rbs.project.exception.MyException;
 import com.rbs.project.mapper.*;
-import com.rbs.project.pojo.entity.Course;
-import com.rbs.project.pojo.entity.SeminarScore;
+import com.rbs.project.pojo.entity.*;
 import com.rbs.project.utils.LogicUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -13,6 +12,7 @@ import java.util.List;
 /**
  * Description:
  * TODO 判断是否为讨论课从课程
+ *
  * @Author: 17Wang
  * @Date: 16:11 2018/12/22
  */
@@ -26,6 +26,9 @@ public class SeminarScoreDao {
 
     @Autowired
     private TeamMapper teamMapper;
+
+    @Autowired
+    private CourseMapper courseMapper;
 
     public final static int HAS_TEAM = 0;
 
@@ -102,9 +105,11 @@ public class SeminarScoreDao {
     public boolean updatePresentationScore(long seminarId, long classId, long teamId, double presentationScore) throws Exception {
         //检查是否有该行
         SeminarScore seminarScore = getSeminarScoreBySeminarIdAndCClassIdAndTeamId(seminarId, classId, teamId);
+        System.out.println("seminarScoreDao: "+seminarScore);
         if (!seminarScoreMapper.updatePresentationScore(seminarId, classId, teamId, presentationScore)) {
             throw new MyException("修改展示的展示分数错误！数据库执行错误", MyException.ERROR);
         }
+        //updateTotalScore(seminarId, classId, teamId);
         return true;
     }
 
@@ -120,6 +125,23 @@ public class SeminarScoreDao {
         if (!seminarScoreMapper.updateReportScore(seminarId, classId, teamId, reportScore)) {
             throw new MyException("修改展示的报告分数错误！数据库执行错误", MyException.ERROR);
         }
+        //updateTotalScore(seminarId, classId, teamId);
+        return true;
+    }
+
+    /**
+     * Description:修改展示的提问分数
+     *
+     * @Author: 17Wang
+     * @Time: 23:01 2018/12/28
+     */
+    public boolean updateQuestionScore(long seminarId, long classId, long teamId, double questionScore) throws Exception {
+        //检查是否有该行
+        getSeminarScoreBySeminarIdAndCClassIdAndTeamId(seminarId, classId, teamId);
+        if (!seminarScoreMapper.updateQuestionScore(seminarId, classId, teamId, questionScore)) {
+            throw new MyException("修改展示的提问分数错误！数据库执行错误", MyException.ERROR);
+        }
+        //updateTotalScore(seminarId, classId, teamId);
         return true;
     }
 
@@ -130,9 +152,16 @@ public class SeminarScoreDao {
      * @Author: 17Wang
      * @Time: 21:03 2018/12/22
      */
-    public boolean updateTotalScore(long seminarId, long classId, long teamId, double totalScore) throws Exception {
-        //检查是否有该行
-        getSeminarScoreBySeminarIdAndCClassIdAndTeamId(seminarId, classId, teamId);
+    private boolean updateTotalScore(long seminarId, long classId, long teamId) throws Exception {
+        //获取讨论课成绩
+        SeminarScore seminarScore = getSeminarScoreBySeminarIdAndCClassIdAndTeamId(seminarId, classId, teamId);
+        //获取班级讨论课信息
+        CClassSeminar cClassSeminar = cClassSeminarMapper.findById(seminarScore.getcClassSeminarId());
+        //获取班级信息，班级信息里有分数计算规则
+        Course course = courseMapper.findByCClassId(cClassSeminar.getcClassId());
+        //计算总分
+        double totalScore = LogicUtils.calculateSeminarTotalScore(seminarScore, course);
+        //修改总分
         if (!seminarScoreMapper.updateTotalScore(seminarId, classId, teamId, totalScore)) {
             throw new MyException("修改展示的总分数错误！数据库执行错误", MyException.ERROR);
         }
@@ -141,6 +170,7 @@ public class SeminarScoreDao {
 
     /**
      * Description: 通过team_id删除轮次成绩
+     *
      * @Author: WinstonDeng
      * @Date: 15:00 2018/12/25
      */
@@ -150,12 +180,13 @@ public class SeminarScoreDao {
 
     /**
      * Description: 按班级讨论课id删除讨论课成绩
+     *
      * @Author: WinstonDeng
      * @Date: 14:29 2018/12/28
      */
-    public boolean deleteSeminarScoreByCClassSeminarId(long cClassSeminarId) throws MyException{
-        if(!seminarScoreMapper.deleteByCClassSeminarId(cClassSeminarId)){
-            throw new MyException("删除讨论课成绩错误！数据库处理错误",MyException.ERROR);
+    public boolean deleteSeminarScoreByCClassSeminarId(long cClassSeminarId) throws MyException {
+        if (!seminarScoreMapper.deleteByCClassSeminarId(cClassSeminarId)) {
+            throw new MyException("删除讨论课成绩错误！数据库处理错误", MyException.ERROR);
         }
         return true;
     }

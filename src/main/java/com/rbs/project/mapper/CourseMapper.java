@@ -40,6 +40,15 @@ public interface CourseMapper {
      * @return
      */
     List<Course> findByStudentId(long studentId);
+
+    /**
+     * 通过班级获取课程
+     *
+     * @param cClassId
+     * @return
+     */
+    Course findByCClassId(long cClassId);
+
     /**
      * 获取所有的课程
      *
@@ -74,11 +83,11 @@ public interface CourseMapper {
     boolean deleteById(long id) throws Exception;
 
 
-
     //=========================修改=======================
 
     /**
      * 修改 team_main_course_id
+     *
      * @param course
      * @return
      */
@@ -86,6 +95,7 @@ public interface CourseMapper {
 
     /**
      * 修改 seminar_main_course_id
+     *
      * @param course
      * @return
      */

@@ -21,6 +21,13 @@
         WHERE id = #{id}
     </select>
 
+    <select id="findByCClassId" parameterType="Long" resultMap="tab_course">
+        SELECT course.*
+        FROM course LEFT JOIN klass
+        ON course.id=klass.course_id
+        WHERE klass.id=#{cClassId}
+    </select>
+
     <select id="findByTeacherId" parameterType="Long" resultMap="tab_course"
             resultType="com.rbs.project.pojo.entity.Course">
         SELECT id,teacher_id,course_name,introduction,presentation_percentage,question_percentage,report_percentage,

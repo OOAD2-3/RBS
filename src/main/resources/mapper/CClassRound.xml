@@ -14,6 +14,13 @@
           AND round_id=#{roundId}
     </select>
 
+    <select id="findByRoundIdAndTeamId" resultMap="tab_klass_round">
+      SELECT klass_round.*
+	  FROM klass_round LEFT JOIN klass_team
+	  ON klass_round.klass_id=klass_team.klass_id
+	  WHERE klass_round.round_id=#{roundId} and klass_team.team_id=#{teamId};
+    </select>
+
     <insert id="insertCClassRound" parameterType="com.rbs.project.pojo.relationship.CClassRound">
         insert into klass_round(klass_id, round_id, enroll_number)
         VALUES (#{cClassId},#{roundId},#{enrollNumber})
