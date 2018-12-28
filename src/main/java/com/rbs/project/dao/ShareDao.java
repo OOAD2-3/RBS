@@ -362,10 +362,7 @@ public class ShareDao {
                 throw new MyException("删除讨论课错误！删除轮次数据库处理错误", MyException.ERROR);
             }
             //  2. 删除round_score
-            if(!roundScoreMapper.deleteByRoundId(round.getId())){
-                throw new MyException("删除讨论课错误！删除轮次成绩错误",MyException.ERROR);
-
-            }
+            roundScoreMapper.deleteByRoundId(round.getId());
         }
         //2. 删除共享记录
         Course course = courseMapper.findById(subCourseId);
@@ -375,5 +372,31 @@ public class ShareDao {
         }
         shareSeminarApplicationMapper.deleteSeminarShareApplication(requestId);
         return true;
+    }
+
+    /**
+     * Description: 通过从课程老师id获取所有讨论课共享申请
+     * @Author: WinstonDeng
+     * @Date: 17:08 2018/12/28
+     */
+    public List<ShareSeminarApplication> listAllShareSeminarApplicationsByTeacherId(long subTeacherId, int ...hasSomething) throws Exception {
+        List<ShareSeminarApplication> shareSeminarApplications=shareSeminarApplicationMapper.findBySubTeacherId(subTeacherId);
+        for(ShareSeminarApplication shareSeminarApplication:shareSeminarApplications){
+            hasSomethingFun(shareSeminarApplication,hasSomething);
+        }
+        return shareSeminarApplications;
+    }
+
+    /**
+     * Description: 通过从课程老师id获取所有组队共享申请
+     * @Author: WinstonDeng
+     * @Date: 17:19 2018/12/28
+     */
+    public List<ShareTeamApplication> listAllShareTeamApplicationsByTeacherId(long subTeacherId, int ...hasSomething) throws Exception{
+        List<ShareTeamApplication> shareTeamApplications=shareTeamApplicationMapper.findBySubTeacherId(subTeacherId);
+        for(ShareTeamApplication shareTeamApplication:shareTeamApplications){
+            hasSomethingFun(shareTeamApplication,hasSomething);
+        }
+        return shareTeamApplications;
     }
 }

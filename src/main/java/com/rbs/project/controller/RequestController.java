@@ -3,6 +3,7 @@ package com.rbs.project.controller;
 import com.rbs.project.dao.TeamDao;
 import com.rbs.project.exception.MyException;
 import com.rbs.project.pojo.entity.*;
+import com.rbs.project.pojo.vo.RequestInfoVO;
 import com.rbs.project.pojo.vo.TeamValidApplicationVO;
 import com.rbs.project.service.ApplicationService;
 import com.rbs.project.service.CourseService;
@@ -117,16 +118,26 @@ public class RequestController {
     }
 
     /**
-     * Description: 获取所有代办
+     * Description: 获取所有待办共享申请
      * @Author: WinstonDeng
      * @Date: 15:32 2018/12/28
      */
-//    @GetMapping()
-//    @ResponseBody
-//    public ResponseEntity<List<RequestInfoVO>> listAllUnhandleRequest() throws Exception{
-//        //获取当前的老师
-//        Teacher teacher=(Teacher) UserUtils.getNowUser();
-//
-//
-//    }
+    @GetMapping()
+    @ResponseBody
+    public ResponseEntity<List<RequestInfoVO>> listAllUnhandleRequest() throws Exception{
+        //获取当前的老师
+        Teacher teacher=(Teacher) UserUtils.getNowUser();
+        List<RequestInfoVO> requestInfoVOS=new ArrayList<>();
+        //讨论课共享请求
+        List<ShareSeminarApplication> shareSeminarApplications=applicationService.listSeminarShareApplicationByTeacherId(teacher.getId());
+        for(ShareSeminarApplication shareSeminarApplication:shareSeminarApplications){
+            requestInfoVOS.add(new RequestInfoVO(shareSeminarApplication));
+        }
+        //组队共享请求
+        List<ShareTeamApplication> shareTeamApplications=applicationService.listTeamShareApplicationByTeacherId(teacher.getId());
+        for(ShareTeamApplication shareTeamApplication:shareTeamApplications){
+            requestInfoVOS.add(new RequestInfoVO(shareTeamApplication));
+        }
+        return ResponseEntity.ok().body(requestInfoVOS);
+    }
 }
