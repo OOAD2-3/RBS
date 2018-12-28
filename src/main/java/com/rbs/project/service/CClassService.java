@@ -1,10 +1,8 @@
 package com.rbs.project.service;
 
-import com.rbs.project.dao.CClassDao;
-import com.rbs.project.dao.CClassSeminarDao;
-import com.rbs.project.dao.SeminarDao;
-import com.rbs.project.dao.StudentDao;
+import com.rbs.project.dao.*;
 import com.rbs.project.exception.MyException;
+import com.rbs.project.pojo.entity.Round;
 import com.rbs.project.pojo.entity.Seminar;
 import com.rbs.project.pojo.relationship.CClassStudent;
 import com.rbs.project.pojo.entity.CClass;
@@ -37,6 +35,9 @@ public class CClassService {
 
     @Autowired
     private SeminarDao seminarDao;
+
+    @Autowired
+    private RoundDao roundDao;
 
     /**
      * Description: 创建班级
@@ -75,12 +76,16 @@ public class CClassService {
         for (Seminar seminar : seminars) {
             cClassSeminarDao.addCClassSeminar(seminar);
         }
-
-        //TODO 建立班级轮次关系klass_round
-
-
         //获得主键
         createCClassId = cClass.getId();
+
+        //TODO 建立班级轮次关系klass_round 已完成
+        List<Round> rounds=roundDao.listByCourseId(courseId);
+        for(Round round
+                :rounds){
+            roundDao.addCClassRoundByPrimaryKeys(createCClassId,round.getId());
+        }
+
         return createCClassId;
     }
 

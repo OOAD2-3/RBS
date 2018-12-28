@@ -148,4 +148,17 @@ public class RoundDao {
         }
         return cClassRound;
     }
+
+    /**
+     * Description: 新增班级轮次
+     * @Author: WinstonDeng
+     * @Date: 13:54 2018/12/28
+     */
+    public boolean addCClassRoundByPrimaryKeys(long cClassId, long roundId) throws MyException {
+        CClassRound cClassRound=new CClassRound();
+        cClassRound.setcClassId(cClassId);
+        cClassRound.setRoundId(roundId);
+        cClassRound.setEnrollNumber(CClassRound.DEFAULT_ENROLL_NUM);
+        return cClassRoundMapper.insertCClassRound(cClassRound);
+    }
 }

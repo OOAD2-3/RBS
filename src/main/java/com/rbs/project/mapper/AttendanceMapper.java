@@ -100,4 +100,11 @@ public interface AttendanceMapper {
      * @return
      */
     boolean deleteByTeamId(long teamId);
+
+    /**
+     * 通过班级讨论课id删除展示
+     * @param cClassSeminarId
+     * @return
+     */
+    boolean deleteByCClassSeminarId(long cClassSeminarId);
 }

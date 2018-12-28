@@ -57,6 +57,9 @@ public class ShareDao {
     @Autowired
     private SeminarScoreMapper seminarScoreMapper;
 
+    @Autowired
+    private AttendanceMapper attendanceMapper;
+
     public final static int HAS_MAIN_COURSE = 0;
     public final static int HAS_MAIN_COURSE_TEACHER = 1;
     public final static int HAS_SUB_COURSE = 2;
@@ -263,15 +266,27 @@ public class ShareDao {
         //如果用从课程班级找到了主课程队伍，即是共享队伍的记录，把这个班级记录下来
         for (CClass cClass
                 : cClasses) {
-            for (Team team : teams) {
+            for (Team team
+                    : teams) {
                 if (teamMapper.findByCClassId(cClass.getId()).contains(team)) {
                     //删除从课程的klass_team中的从课程班级
                     cClassTeamMapper.deleteByCClassIdAndTeamId(cClass.getId(), team.getId());
-                    //TODO 删除以从课程班级队伍为单位的所有活动
-                    // 删除score
-                    // 删除attendance
+                    //TODO 删除以从课程班级队伍为单位的所有活动 已完成
+                    List<CClassSeminar> cClassSeminars=cClassSeminarMapper.findByCClassId(cClass.getId());
+                    for(CClassSeminar cClassSeminar:cClassSeminars){
+                        //TODO 删除seminar_score 已完成
+                        seminarScoreMapper.deleteByCClassSeminarId(cClassSeminar.getId());
+                        //TODO 删除attendance 已完成
+                        attendanceMapper.deleteByCClassSeminarId(cClassSeminar.getId());
+                    }
                 }
             }
+        }
+        //TODO 删除round_score 已完成
+        List<Round> rounds=roundMapper.findByCourseId(shareTeamApplication.getSubCourseId());
+        for (Round round
+                :rounds){
+            roundScoreMapper.deleteByRoundId(round.getId());
         }
 
         //2. 删除共享记录
@@ -334,35 +349,20 @@ public class ShareDao {
      * @Author: WinstonDeng
      * @Date: 23:22 2018/12/27
      */
-    public boolean removeSeminarShare(long requestId) throws Exception {
-        ShareSeminarApplication shareSeminarApplication = shareSeminarApplicationMapper.findById(requestId);
-        long subCourseId = shareSeminarApplication.getSubCourseId();
-        //1. 删除从课程讨论课
-        List<Seminar> seminars = seminarMapper.findByCourseId(subCourseId);
+    public boolean removeSeminarShare(long requestId) throws MyException{
+        ShareSeminarApplication shareSeminarApplication=shareSeminarApplicationMapper.findById(requestId);
+        long subCourseId=shareSeminarApplication.getSubCourseId();
         List<Round> rounds = roundMapper.findByCourseId(subCourseId);
-        List<CClass> cClasses = cClassMapper.findByCourseId(subCourseId);
-        for (Seminar seminar
-                : seminars) {
-            //  1.1 删除semianr
-            seminarMapper.removeSeminarById(seminar.getId());
-            //  1.2 删除seminar_score
-            for (CClass cClass
-                    : cClasses) {
-                CClassSeminar cClassSeminar = cClassSeminarMapper.findByCClassIdAndSeminarId(cClass.getId(), seminar.getId());
-                seminarScoreMapper.deleteByCClassSeminarId(cClassSeminar.getId());
-            }
-            //  1.3 删除class_seminar
-            if (!cClassSeminarMapper.removeCClassSeminarBySeminarId(seminar.getId())) {
-                throw new MyException("删除讨论课错误！删除班级讨论课数据库处理错误", MyException.ERROR);
-            }
-        }
         for (Round round
                 : rounds) {
-            //  1.4 删除round
-            roundMapper.deleteById(round.getId());
-            //  1.5 删除round_score
-            if (!roundScoreMapper.deleteByRoundId(round.getId())) {
-                throw new MyException("删除讨论课错误！删除轮次成绩错误", MyException.ERROR);
+            //  1. 删除round
+            if (!roundMapper.deleteById(round.getId())) {
+                throw new MyException("删除讨论课错误！删除轮次数据库处理错误", MyException.ERROR);
+            }
+            //  2. 删除round_score
+            if(!roundScoreMapper.deleteByRoundId(round.getId())){
+                throw new MyException("删除讨论课错误！删除轮次成绩错误",MyException.ERROR);
+
             }
         }
         //2. 删除共享记录

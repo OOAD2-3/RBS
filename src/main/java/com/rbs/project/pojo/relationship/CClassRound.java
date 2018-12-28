@@ -20,6 +20,8 @@ public class CClassRound {
      */
     private Integer enrollNumber;
 
+    public final static int DEFAULT_ENROLL_NUM=1;
+
     public long getcClassId() {
         return cClassId;
     }

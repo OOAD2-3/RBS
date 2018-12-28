@@ -116,4 +116,10 @@ public class RequestController {
         return ResponseEntity.ok().body(applicationService.updateSeminarShareApplicationStatus(requestId,status));
     }
 
+    /**
+     * Description: 获取所有代办
+     * @Author: WinstonDeng
+     * @Date: 15:32 2018/12/28
+     */
+    //public ResponseEntity<List<RequestInfoVO>> listAllUnhandleRequest()
 }

@@ -147,4 +147,16 @@ public class SeminarScoreDao {
     public boolean deleteSemianrScoreByTeamId(long teamId) throws MyException {
         return seminarScoreMapper.deleteByTeamId(teamId);
     }
+
+    /**
+     * Description: 按班级讨论课id删除讨论课成绩
+     * @Author: WinstonDeng
+     * @Date: 14:29 2018/12/28
+     */
+    public boolean deleteSeminarScoreByCClassSeminarId(long cClassSeminarId) throws MyException{
+        if(!seminarScoreMapper.deleteByCClassSeminarId(cClassSeminarId)){
+            throw new MyException("删除讨论课成绩错误！数据库处理错误",MyException.ERROR);
+        }
+        return true;
+    }
 }

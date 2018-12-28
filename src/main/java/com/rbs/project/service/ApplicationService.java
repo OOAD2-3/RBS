@@ -46,6 +46,9 @@ public class ApplicationService {
     @Autowired
     private CClassSeminarDao cClassSeminarDao;
 
+    @Autowired
+    private SeminarService seminarService;
+
     /**
      * Description: 查看team的请求
      * 1、需要加上主从课程！
@@ -268,7 +271,8 @@ public class ApplicationService {
                     seminar.setCourseId(subCourseId);
                     seminar.setRoundId(round.getId());
                     Seminar tempSeminar=new Seminar(seminar);
-                    seminarDao.addSeminar(tempSeminar);
+                    //TODO 调用seminarService新建业务 级联操作 已完成
+                    seminarService.addSemianr(tempSeminar,false);
                 }
             }
             //  2.3 新建class_seminar副本
@@ -318,6 +322,13 @@ public class ApplicationService {
      * @Date: 23:09 2018/12/27
      */
     public boolean removeSeminarShare(long requestId) throws Exception {
+        //先删除讨论课及相关信息 调用seminarService的方法
+        ShareSeminarApplication shareSeminarApplication=shareDao.getShareSeminarApplicationById(requestId);
+        List<Seminar> seminars=seminarDao.findSeminarByCourseId(shareSeminarApplication.getSubCourseId());
+        for(Seminar seminar:seminars){
+            seminarService.removeSeminarById(seminar.getId(),false);
+        }
+        //再删除轮次
         return shareDao.removeSeminarShare(requestId);
     }
 }

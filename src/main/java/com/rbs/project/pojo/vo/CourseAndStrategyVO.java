@@ -22,6 +22,10 @@ public class CourseAndStrategyVO {
     private Integer reportPercentage;
     private String teamStartTime;
     private String teamEndTime;
+    private Long teamMainCourseId;
+    private Long seminarMainCourseId;
+    private Long teacherId;
+    private String teacherName;
 
     private CourseMemberLimitStrategy courseMemberLimitStrategy;
     private List<CourseInfoVO> conflictCourses;
@@ -36,12 +40,15 @@ public class CourseAndStrategyVO {
         id = course.getId();
         name = course.getName();
         intro = course.getIntro();
+        teamMainCourseId=course.getTeamMainCourseId();
+        seminarMainCourseId=course.getSeminarMainCourseId();
         presentationPercentage = course.getPresentationPercentage();
         questionPercentage = course.getQuestionPercentage();
         reportPercentage = course.getReportPercentage();
         teamStartTime = JsonUtils.TimestampToString(course.getTeamStartTime());
         teamEndTime = JsonUtils.TimestampToString(course.getTeamEndTime());
-
+        teacherId=course.getTeacherId();
+        teacherName=course.getTeacher().getTeacherName();
         courseMemberLimitStrategy = course.getCourseMemberLimitStrategy();
         conflictCourses = new ArrayList<>();
         for (Course conflictCourse : course.getConflictCourses()) {
@@ -53,6 +60,22 @@ public class CourseAndStrategyVO {
         if (course.getSeminarMainCourseId() == 0) {
             ShareSeminar = false;
         }
+    }
+
+    public Long getTeamMainCourseId() {
+        return teamMainCourseId;
+    }
+
+    public void setTeamMainCourseId(Long teamMainCourseId) {
+        this.teamMainCourseId = teamMainCourseId;
+    }
+
+    public Long getSeminarMainCourseId() {
+        return seminarMainCourseId;
+    }
+
+    public void setSeminarMainCourseId(Long seminarMainCourseId) {
+        this.seminarMainCourseId = seminarMainCourseId;
     }
 
     public long getId() {

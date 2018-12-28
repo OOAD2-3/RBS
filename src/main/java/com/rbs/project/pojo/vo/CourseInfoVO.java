@@ -12,6 +12,9 @@ public class CourseInfoVO {
     private Long id;
     private Boolean ShareTeam;
     private Boolean ShareSeminar;
+    private Long teamMainCourseId;
+    private Long seminarMainCourseId;
+    private Long teacherId;
     private String name;
     private CClassInfoVO cClassInfoVO;
 
@@ -23,6 +26,9 @@ public class CourseInfoVO {
         id = course.getId();
         ShareTeam = true;
         ShareSeminar = true;
+        teacherId=course.getTeacherId();
+        teamMainCourseId=course.getTeamMainCourseId();
+        seminarMainCourseId=course.getSeminarMainCourseId();
         name = course.getName();
         if (course.getTeamMainCourseId() == 0) {
             ShareTeam = false;
@@ -33,6 +39,30 @@ public class CourseInfoVO {
         if (course.getcClasses() != null) {
             cClassInfoVO = new CClassInfoVO(course.getcClasses().get(0));
         }
+    }
+
+    public Long getTeamMainCourseId() {
+        return teamMainCourseId;
+    }
+
+    public void setTeamMainCourseId(Long teamMainCourseId) {
+        this.teamMainCourseId = teamMainCourseId;
+    }
+
+    public Long getSeminarMainCourseId() {
+        return seminarMainCourseId;
+    }
+
+    public void setSeminarMainCourseId(Long seminarMainCourseId) {
+        this.seminarMainCourseId = seminarMainCourseId;
+    }
+
+    public Long getTeacherId() {
+        return teacherId;
+    }
+
+    public void setTeacherId(Long teacherId) {
+        this.teacherId = teacherId;
     }
 
     public Long getId() {
