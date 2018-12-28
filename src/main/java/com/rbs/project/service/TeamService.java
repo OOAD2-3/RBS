@@ -22,9 +22,6 @@ import java.util.List;
 @Service
 public class TeamService {
     @Autowired
-    private CourseDao courseDao;
-
-    @Autowired
     private TeamDao teamDao;
 
     @Autowired
@@ -34,10 +31,16 @@ public class TeamService {
     private CClassDao cClassDao;
 
     @Autowired
+    private CClassSeminarDao cClassSeminarDao;
+
+    @Autowired
     private RoundScoreDao roundScoreDao;
 
     @Autowired
     private RoundDao roundDao;
+
+    @Autowired
+    private SeminarScoreDao seminarScoreDao;
 
     /**
      * Description: 新建一个Team
@@ -99,17 +102,19 @@ public class TeamService {
 
         //TODO 建立小组轮次关系round_score 已完成
         //获取这个小组属于的课程下的所有轮次
-        RoundScore roundScore=new RoundScore();
+        RoundScore roundScore = new RoundScore();
         roundScore.setTeamId(team.getId());
-        for(Round round: roundDao.listByCourseId(team.getCourseId())){
+        for (Round round : roundDao.listByCourseId(team.getCourseId())) {
             roundScore.setRoundId(round.getId());
             roundScoreDao.addRoundScore(roundScore);
         }
 
 
-        //TODO 建立小组讨论课关系seminar_score
-
-
+        //TODO 建立小组讨论课关系seminar_score 已完成
+        List<CClassSeminar> cClassSeminars = cClassSeminarDao.listByCourseId(team.getCourseId());
+        for(CClassSeminar cClassSeminar:cClassSeminars){
+            seminarScoreDao.addSeminarScore(cClassSeminar.getId(), team.getId());
+        }
 
 
         //判断队伍是否合法
@@ -119,7 +124,7 @@ public class TeamService {
             teamDao.updateStatusByTeamId(Team.STATUS_ERROR, team.getId());
         }
 
-        //修改team_student 新表
+        //新增team_student
         for (Student student : team.getStudents()) {
             teamDao.addTeamStudentByTeamIdAndStudentId(team.getId(), student.getId());
         }
@@ -291,18 +296,18 @@ public class TeamService {
     @Transactional(rollbackFor = Exception.class)
     public boolean quitTeam(long teamId) throws Exception {
         //获取当前登录用户
-        Student user= (Student) UserUtils.getNowUser();
+        Student user = (Student) UserUtils.getNowUser();
         //获取登录用户的队伍信息
         Team team = teamDao.getTeamById(teamId);
         //判断当前登录用户是否是队长
-        if(user.getId()==team.getLeaderId()){
+        if (user.getId() == team.getLeaderId()) {
             throw new MyException("队长不能退出队伍！只能解散！么么", MyException.AUTHORIZATION_ERROR);
         }
         //删除team_student关系表，解除关系
         try {
             teamDao.deleteTeamStudentByTeamIdAndStudentId(teamId, user.getId());
-        }catch (Exception e){
-            throw new MyException("退出队伍失败！不知名Service层原因",MyException.AUTHORIZATION_ERROR );
+        } catch (Exception e) {
+            throw new MyException("退出队伍失败！不知名Service层原因", MyException.AUTHORIZATION_ERROR);
         }
         //更新当前小组状态
         //判断队伍是否合法

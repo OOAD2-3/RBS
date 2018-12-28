@@ -204,20 +204,12 @@ public class TeamDao {
             throw new MyException("删除小组错误！数据库处理错误", MyException.ERROR);
         }
         //直接删掉所有关于team的东西
-        if (!cClassTeamMapper.deleteByTeamId(teamId)) {
-            throw new MyException("删除小组错误！klass_team处理错误", MyException.ERROR);
-        }
+        cClassTeamMapper.deleteByTeamId(teamId);
         //删除attendance
-        if (!attendanceMapper.deleteByTeamId(teamId)) {
-            throw new MyException("删除小组错误！attendance处理错误", MyException.ERROR);
-        }
+        attendanceMapper.deleteByTeamId(teamId);
         //删除成绩
-        if (!roundScoreMapper.deleteByTeamId(teamId)) {
-            throw new MyException("删除小组错误！round_score处理错误", MyException.ERROR);
-        }
-        if (!seminarScoreMapper.deleteByTeamId(teamId)) {
-            throw new MyException("删除小组错误！seminar_score处理错误", MyException.ERROR);
-        }
+        roundScoreMapper.deleteByTeamId(teamId);
+        seminarScoreMapper.deleteByTeamId(teamId);
         return true;
     }
 
@@ -255,10 +247,7 @@ public class TeamDao {
      * @Time: 23:43 2018/12/25
      */
     public boolean deleteTeamStudentByTeamIdAndStudentId(long teamId, long studentId) throws MyException {
-        if (!teamStudentMapper.deleteByTeamIdAndStudentId(teamId, studentId)) {
-            throw new MyException("新增teamStudent表字段错误！数据库处理错误", MyException.ERROR);
-        }
-        return true;
+        return teamStudentMapper.deleteByTeamIdAndStudentId(teamId, studentId);
     }
 
     /**
@@ -508,18 +497,17 @@ public class TeamDao {
     }
 
     /**
-     *
      * Description: TODO ！！！！！FBI警告 ！！！！！
-     *              判断当前小组是否在klass_team中，用于共享小组共享删除后，对其参与的attendence score等
-     *              存在性的判断
+     * 判断当前小组是否在klass_team中，用于共享小组共享删除后，对其参与的attendence score等
+     * 存在性的判断
      *
      * @Author: WinstonDeng
      * @Date: 17:26 2018/12/27
      */
-    public boolean isExistInCClassTeam(long teamId){
-        if(!cClassTeamMapper.findByTeamId(teamId).isEmpty()){
+    public boolean isExistInCClassTeam(long teamId) {
+        if (!cClassTeamMapper.findByTeamId(teamId).isEmpty()) {
             return true;
-        }else {
+        } else {
             return false;
         }
     }

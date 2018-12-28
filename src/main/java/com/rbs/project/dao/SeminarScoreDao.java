@@ -27,9 +27,6 @@ public class SeminarScoreDao {
     @Autowired
     private TeamMapper teamMapper;
 
-    @Autowired
-    private CourseMapper courseMapper;
-
     public final static int HAS_TEAM = 0;
 
     private void hasSomethingFun(SeminarScore seminarScore, int... hasSomething) {
@@ -93,10 +90,7 @@ public class SeminarScoreDao {
      * @Time: 22:49 2018/12/21
      */
     public boolean deleteSeminarScoreByPrimaryKey(long cClassSeminarId, long teamId) throws Exception {
-        if (!seminarScoreMapper.deleteSeminarScoreByPrimaryKey(cClassSeminarId, teamId)) {
-            throw new MyException("通过主键删除展示分数！数据库处理错误", MyException.ERROR);
-        }
-        return true;
+        return seminarScoreMapper.deleteSeminarScoreByPrimaryKey(cClassSeminarId, teamId);
     }
 
     /**
@@ -151,9 +145,6 @@ public class SeminarScoreDao {
      * @Date: 15:00 2018/12/25
      */
     public boolean deleteSemianrScoreByTeamId(long teamId) throws MyException {
-        if(!seminarScoreMapper.deleteByTeamId(teamId)){
-            throw new MyException("删除讨论课成绩错误！数据库处理错误",MyException.ERROR);
-        }
-        return true;
+        return seminarScoreMapper.deleteByTeamId(teamId);
     }
 }

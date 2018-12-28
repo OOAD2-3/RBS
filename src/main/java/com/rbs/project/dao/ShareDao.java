@@ -280,18 +280,17 @@ public class ShareDao {
         if (!courseMapper.updateTeamMainCourseId(course)) {
             throw new MyException("取消队伍共享错误！从课程取消映射数据库处理错误", MyException.ERROR);
         }
-        if (!shareTeamApplicationMapper.deleteTeamShareApplication(requestId)) {
-            throw new MyException("取消队伍共享错误！删除共享记录数据库处理错误", MyException.ERROR);
-        }
+        shareTeamApplicationMapper.deleteTeamShareApplication(requestId);
         return true;
     }
 
     /**
      * Description: 修改讨论课共享申请状态
+     *
      * @Author: WinstonDeng
      * @Date: 21:23 2018/12/27
      */
-    public boolean updateShareSeminarApplicationStatus(long requestId, Integer status) throws MyException{
+    public boolean updateShareSeminarApplicationStatus(long requestId, Integer status) throws MyException {
         ShareSeminarApplication shareSeminarApplication = shareSeminarApplicationMapper.findById(requestId);
         if (shareSeminarApplication == null) {
             throw new MyException("修改讨论课共享请求状态错误！未找到该条记录", MyException.NOT_FOUND_ERROR);
@@ -304,10 +303,11 @@ public class ShareDao {
 
     /**
      * Description: 发起讨论课共享请求
+     *
      * @Author: WinstonDeng
      * @Date: 23:10 2018/12/27
      */
-    public boolean addSeminarShareApplication(long courseId, long subCourseId) throws MyException{
+    public boolean addSeminarShareApplication(long courseId, long subCourseId) throws MyException {
         //1. 检查主课程是否为组队共享从课程 和 从课程是否已接受共享
         if (courseMapper.findById(courseId).getSeminarMainCourseId() != 0 &&
                 courseMapper.findById(subCourseId).getSeminarMainCourseId() != 0) {
@@ -318,7 +318,7 @@ public class ShareDao {
         if (subCourse == null) {
             throw new MyException("发起讨论课共享请求错误！未找到从课程", MyException.NOT_FOUND_ERROR);
         }
-        ShareSeminarApplication shareSeminarApplication=new ShareSeminarApplication();
+        ShareSeminarApplication shareSeminarApplication = new ShareSeminarApplication();
         shareSeminarApplication.setMainCourseId(courseId);
         shareSeminarApplication.setSubCourseId(subCourse.getId());
         shareSeminarApplication.setSubCourseTeacherId(subCourse.getTeacherId());
@@ -330,12 +330,13 @@ public class ShareDao {
 
     /**
      * Description: 取消讨论课共享
+     *
      * @Author: WinstonDeng
      * @Date: 23:22 2018/12/27
      */
-    public boolean removeSeminarShare(long requestId) throws MyException{
-        ShareSeminarApplication shareSeminarApplication=shareSeminarApplicationMapper.findById(requestId);
-        long subCourseId=shareSeminarApplication.getSubCourseId();
+    public boolean removeSeminarShare(long requestId) throws Exception {
+        ShareSeminarApplication shareSeminarApplication = shareSeminarApplicationMapper.findById(requestId);
+        long subCourseId = shareSeminarApplication.getSubCourseId();
         //1. 删除从课程讨论课
         List<Seminar> seminars = seminarMapper.findByCourseId(subCourseId);
         List<Round> rounds = roundMapper.findByCourseId(subCourseId);
@@ -343,16 +344,12 @@ public class ShareDao {
         for (Seminar seminar
                 : seminars) {
             //  1.1 删除semianr
-            if (!seminarMapper.removeSeminarById(seminar.getId())) {
-                throw new MyException("删除讨论课错误！删除讨论课数据库处理错误", MyException.ERROR);
-            }
+            seminarMapper.removeSeminarById(seminar.getId());
             //  1.2 删除seminar_score
             for (CClass cClass
                     : cClasses) {
-                CClassSeminar cClassSeminar=cClassSeminarMapper.findByCClassIdAndSeminarId(cClass.getId(),seminar.getId());
-                if(!seminarScoreMapper.deleteByCClassSeminarId(cClassSeminar.getId())){
-                    throw new MyException("删除讨论课错误！删除讨论课成绩数据库处理错误",MyException.ERROR);
-                }
+                CClassSeminar cClassSeminar = cClassSeminarMapper.findByCClassIdAndSeminarId(cClass.getId(), seminar.getId());
+                seminarScoreMapper.deleteByCClassSeminarId(cClassSeminar.getId());
             }
             //  1.3 删除class_seminar
             if (!cClassSeminarMapper.removeCClassSeminarBySeminarId(seminar.getId())) {
@@ -362,12 +359,10 @@ public class ShareDao {
         for (Round round
                 : rounds) {
             //  1.4 删除round
-            if (!roundMapper.deleteById(round.getId())) {
-                throw new MyException("删除讨论课错误！删除轮次数据库处理错误", MyException.ERROR);
-            }
+            roundMapper.deleteById(round.getId());
             //  1.5 删除round_score
-            if(!roundScoreMapper.deleteByRoundId(round.getId())){
-                throw new MyException("删除讨论课错误！删除轮次成绩错误",MyException.ERROR);
+            if (!roundScoreMapper.deleteByRoundId(round.getId())) {
+                throw new MyException("删除讨论课错误！删除轮次成绩错误", MyException.ERROR);
             }
         }
         //2. 删除共享记录
@@ -376,9 +371,7 @@ public class ShareDao {
         if (!courseMapper.updateSeminarMainCourseId(course)) {
             throw new MyException("取消讨论课共享错误！从课程取消映射数据库处理错误", MyException.ERROR);
         }
-        if (!shareSeminarApplicationMapper.deleteSeminarShareApplication(requestId)) {
-            throw new MyException("取消讨论课共享错误！删除共享记录数据库处理错误", MyException.ERROR);
-        }
+        shareSeminarApplicationMapper.deleteSeminarShareApplication(requestId);
         return true;
     }
 }

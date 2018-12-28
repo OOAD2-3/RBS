@@ -164,19 +164,13 @@ public class CourseDao {
         //
 
         //删除课程
-        if (!courseMapper.deleteById(courseId)) {
-            throw new MyException("删除课程失败！数据库处理错误", MyException.ERROR);
-        }
+       courseMapper.deleteById(courseId);
 
         //TODO 删除share_seminar_application 待测试
-        if(!shareSeminarApplicationMapper.deleteByCourseId(courseId)){
-            throw new MyException("删除share_seminar_application失败！数据库处理错误",MyException.ERROR );
-        }
+        shareSeminarApplicationMapper.deleteByCourseId(courseId);
 
         //TODO 删除share_team_application 待测试
-        if(!shareTeamApplicationMapper.deleteByCourseId(courseId)){
-            throw new MyException("删除share_team_application失败！数据库处理错误",MyException.ERROR );
-        }
+        shareTeamApplicationMapper.deleteByCourseId(courseId);
 
         return true;
     }

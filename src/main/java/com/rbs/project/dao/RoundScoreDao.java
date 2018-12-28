@@ -47,16 +47,10 @@ public class RoundScoreDao {
      * @Time: 23:12 2018/12/21
      */
     public boolean deleteRoundScoreByPrimaryKey(long roundId, long teamId) throws Exception {
-        if (!roundScoreMapper.deleteByPrimaryKey(roundId, teamId)) {
-            throw new MyException("删除轮次分数失败！数据库处理错误", MyException.ERROR);
-        }
-        return true;
+        return roundScoreMapper.deleteByPrimaryKey(roundId, teamId);
     }
 
     public boolean deleteRoundScoreByTeamId(long teamId) throws MyException {
-        if(!roundScoreMapper.deleteByTeamId(teamId)){
-            throw new MyException("删除轮次分数错误！数据库处理错误",MyException.ERROR);
-        }
-        return true;
+        return roundScoreMapper.deleteByTeamId(teamId);
     }
 }

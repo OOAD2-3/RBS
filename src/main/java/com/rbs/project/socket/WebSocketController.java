@@ -2,8 +2,6 @@ package com.rbs.project.socket;
 
 import com.rbs.project.dao.AttendanceDao;
 import com.rbs.project.pojo.entity.Attendance;
-import com.rbs.project.pojo.entity.Student;
-import com.rbs.project.pojo.entity.User;
 import com.rbs.project.pojo.vo.AttendanceVO;
 import com.rbs.project.pojo.vo.UserVO;
 import com.rbs.project.service.AttendanceService;
@@ -26,9 +24,6 @@ import java.util.Map;
 @Controller
 @CrossOrigin
 public class WebSocketController {
-
-    @Autowired
-    private StudentPool studentPool;
 
     @Autowired
     private AttendanceService attendanceService;
@@ -68,7 +63,7 @@ public class WebSocketController {
             teamOrder++;
         }
         //清空已展示完的提问信息
-        studentPool.clearAll(attendanceId);
+        //studentPool.clearAll(attendanceId);
 
         //如果是最后一组展示完了，返回null
         if (attendance == null) {
@@ -89,6 +84,7 @@ public class WebSocketController {
     @MessageMapping("/teacher/class/{classId}/seminar/{seminarId}/pickQuestion")
     @SendTo("/topic/client/class/{classId}/seminar/{seminarId}/pickQuestion")
     public UserVO pickQuestion(@DestinationVariable("classId") long classId, @DestinationVariable("seminarId") long seminarId, Long attendanceId) {
-        return new UserVO(studentPool.pick(attendanceId));
+        //return new UserVO(studentPool.pick(attendanceId));
+        return new UserVO();
     }
 }

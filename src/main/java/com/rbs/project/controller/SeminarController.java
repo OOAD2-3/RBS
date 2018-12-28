@@ -289,39 +289,16 @@ public class SeminarController {
 
     /**
      * Description: 发起提问
-     * ！！！！！！此次应有websocket！！！！！！
      *
      * @Author: WinstonDeng
      * @Date: 22:15 2018/12/22
      */
     @PostMapping("/{seminarId}/class/{classId}/question")
-    public ResponseEntity<Long> createQuestion(@PathVariable("seminarId") long seminarId,
-                                               @PathVariable("classId") long cClassId,
-                                               @RequestBody QuestionInfoVO questionInfoVO) throws MyException {
-        Question question = new Question();
-        if ((Long) seminarId == null) {
-            throw new MyException("seminarId不能为空", MyException.ID_FORMAT_ERROR);
-        }
-        if ((Long) cClassId == null) {
-            throw new MyException("classId不能为空", MyException.ID_FORMAT_ERROR);
-        }
-        CClassSeminar cClassSeminar = cClassSeminarService.getCClassSeminar(cClassId, seminarId);
-        question.setcClassSeminarId(cClassSeminar.getId());
-        if (questionInfoVO.getAttendanceId() == null) {
-            throw new MyException("attendanceId不能为空", MyException.ID_FORMAT_ERROR);
-        }
-        question.setAttendanceId(questionInfoVO.getAttendanceId());
-        if (questionInfoVO.getTeamId() == null) {
-            throw new MyException("teamId不能为空", MyException.ID_FORMAT_ERROR);
-        }
-        question.setTeamId(questionInfoVO.getTeamId());
-        if (questionInfoVO.getStudentId() == null) {
-            throw new MyException("studentId不能为空", MyException.ID_FORMAT_ERROR);
-        }
-        question.setStudentId(questionInfoVO.getStudentId());
-        //默认未被选中
-        question.setSelected(0);
-        return ResponseEntity.ok().body(cClassSeminarService.addQuestion(question));
+    public ResponseEntity<Integer> createQuestion(@PathVariable("seminarId") long seminarId,
+                                                  @PathVariable("classId") long cClassId,
+                                                  @RequestBody QuestionInfoVO questionInfoVO) throws MyException {
+        //TODO 发起提问
+        return ResponseEntity.ok(1);
     }
 
     /**

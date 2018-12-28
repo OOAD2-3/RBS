@@ -243,7 +243,7 @@ public class ApplicationService {
      * @Date: 19:07 2018/12/27
      */
     @Transactional(rollbackFor = Exception.class)
-    public boolean updateSeminarShareApplicationStatus(long requestId, Integer status) throws MyException{
+    public boolean updateSeminarShareApplicationStatus(long requestId, Integer status) throws Exception {
         //如果同意，创建副本
         if(status== ShareSeminarApplication.STATUS_ACCEPT){
             ShareSeminarApplication shareSeminarApplication=shareDao.getShareSeminarApplicationById(requestId);
@@ -317,7 +317,7 @@ public class ApplicationService {
      * @Author: WinstonDeng
      * @Date: 23:09 2018/12/27
      */
-    public boolean removeSeminarShare(long requestId) throws MyException {
+    public boolean removeSeminarShare(long requestId) throws Exception {
         return shareDao.removeSeminarShare(requestId);
     }
 }
