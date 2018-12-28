@@ -42,7 +42,7 @@ public class TeamController {
      */
     @PostMapping
     @ResponseBody
-    public Map<String, Object> createTeam(@RequestBody Team team) throws Exception {
+    public long createTeam(@RequestBody Team team) throws Exception {
         if (team.getName() == null || team.getCourseId() == 0 || team.getcClassId() == 0 || team.getLeaderId() == 0) {
             throw new MyException("存在为空的字段！请检查字段的问题", MyException.ERROR);
         }
@@ -59,7 +59,7 @@ public class TeamController {
             trueTeam.setStudents(team.getStudents());
         }
 
-        return getTeamById(teamService.createTeam(trueTeam));
+        return teamService.createTeam(trueTeam);
     }
 
     /**
@@ -73,6 +73,7 @@ public class TeamController {
     public Map<String, Object> getTeamById(@PathVariable("teamId") long teamId) throws MyException {
         Team team = teamService.getTeamById(teamId);
         Map<String, Object> map = new HashMap<>();
+
         map.put("teamInfo", new TeamBaseInfoVO(team));
         map.put("course", new CourseInfoVO(team.getCourse()));
         map.put("class", new CClassInfoVO(team.getcClass()));
