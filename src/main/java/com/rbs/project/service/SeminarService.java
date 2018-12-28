@@ -94,7 +94,6 @@ public class SeminarService {
         for (Seminar temp
                 : seminars) {
             serialList.add(temp.getSerial());
-            System.out.println(temp.getSerial());
         }
         //若该序号已存在，则+1，直到发现不存在的值，作为讨论课序号
         while(serialList.contains(serial)){
@@ -105,23 +104,19 @@ public class SeminarService {
         seminarDao.addSeminar(seminar);
         //新增班级讨论课 TODO 级联新增seminar_score 已完成
         cClassSeminarDao.addCClassSeminar(seminar);
-        /*
         if(hasEmail){
             //发邮件通知课程下所有班级所有小组成员
             String message="第"+seminar.getSerial()+"节讨论课:"+seminar.getName()+"已发布，请注意查看！";
             sendSemianrEmail(seminar,message);
         }
-        */
-        //TODO 删除此句
-        System.out.println(seminar.toString());
-        if(courseDao.listAllCoursesByTeamMainCourseId(seminar.getId()).isEmpty()){
-            createSeminarId = seminar.getId();
-            return createSeminarId;
-        }
-        //如果有从课程，则同步更新
-        seminarCopyToSubCourse(seminar,flagRound,ADD_SEMINAR);
-        //获得主键
+
         createSeminarId = seminar.getId();
+        //找到以当前课程为主课程的所有从课程
+        if(!courseDao.listAllCoursesBySeminarMainCourseId(seminar.getCourseId()).isEmpty()){
+            //如果有从课程，则同步更新
+            seminarCopyToSubCourse(seminar,flagRound);
+        }
+        //获得主键
         return createSeminarId;
     }
 
@@ -153,21 +148,10 @@ public class SeminarService {
         if (seminar.getVisible() == null) {
             throw new MyException("visible不能为空", MyException.ERROR);
         }
-        /*
         //发邮件通知课程下所有班级所有小组成员
         String message="第"+seminar.getSerial()+"节讨论课:"+seminar.getName()+"已修改，请注意查看！";
         sendSemianrEmail(seminar,message);
-        */
-        //TODO 删除此句
-        System.out.println(seminar.toString());
-        Seminar tempSeminar=seminarDao.findSeminarById(seminar.getId());
-        seminar.setSerial(tempSeminar.getSerial());
-        seminar.setCourseId(tempSeminar.getCourseId());
-        if(courseDao.listAllCoursesByTeamMainCourseId(seminar.getCourseId()).isEmpty()){
-            return seminarDao.updateSeminarById(seminar);
-        }
-        //如果有从课程，则同步更新
-        seminarCopyToSubCourse(seminar,flagRound,UPDATE_SEMINAR);
+
         return seminarDao.updateSeminarById(seminar);
     }
 
@@ -301,7 +285,9 @@ public class SeminarService {
             List<Student> students=studentDao.listByTeamId(team.getId());
             for (Student student
                     :students){
-                emailService.sendEmail(new String[]{student.getEmail()},message);
+                if(student.getEmail()!=null){
+                    emailService.sendEmail(new String[]{student.getEmail()},message);
+                }
             }
         }
     }
@@ -311,13 +297,13 @@ public class SeminarService {
      * @Author: WinstonDeng
      * @Date: 0:29 2018/12/29
      */
-    private void seminarCopyToSubCourse(Seminar seminar,boolean flagRound,int ...hasSomething) throws Exception {
+    private void seminarCopyToSubCourse(Seminar seminar,boolean flagRound) throws Exception {
         List<Course> courses=courseDao.listAllCoursesBySeminarMainCourseId(seminar.getCourseId());
         for(Course course
                 :courses){
             //创建讨论课副本
             seminar.setCourseId(course.getId());
-            Round roundCopyToSubCourse=seminar.getRound();
+            Round roundCopyToSubCourse=roundDao.findById(seminar.getRoundId());
             roundCopyToSubCourse.setCourseId(course.getId());
             if(flagRound){
                 //新建轮次
@@ -346,18 +332,8 @@ public class SeminarService {
                 roundCopyToSubCourse.setId(roundDao.getByCourseIdAndSerial(course.getId(),roundCopyToSubCourse.getSerial()).getId());
             }
             seminar.setRoundId(roundCopyToSubCourse.getId());
-            for(int i:hasSomething){
-                //新建讨论课
-                if(i==ADD_SEMINAR){
-                    addSemianr(seminar,true);
-                    break;
-                }
-                //修改讨论课
-                if(i==UPDATE_SEMINAR){
-                    updateSeminar(seminar);
-                    break;
-                }
-            }
+            //新建讨论课
+            addSemianr(seminar,true);
         }
     }
 }

@@ -174,9 +174,10 @@ public class RoundDao {
             if(round.getSerial()==serial){
               result=round;
               break;
-            } else{
-                throw new MyException("查找轮次错误！未找到该记录",MyException.NOT_FOUND_ERROR);
             }
+        }
+        if(result==null){
+            throw new MyException("查询轮次错误！未找到该记录",MyException.NOT_FOUND_ERROR);
         }
         return result;
     }
