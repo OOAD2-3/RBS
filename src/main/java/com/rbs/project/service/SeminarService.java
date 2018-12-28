@@ -110,6 +110,8 @@ public class SeminarService {
             String message="第"+seminar.getSerial()+"节讨论课:"+seminar.getName()+"已发布，请注意查看！";
             sendSemianrEmail(seminar,message);
         }
+        //TODO 删除此句
+        System.out.println(seminar.toString());
         //如果有从课程，则同步更新
         seminarCopyToSubCourse(seminar,flagRound,ADD_SEMINAR);
         //获得主键
@@ -128,7 +130,7 @@ public class SeminarService {
         //是否新建了轮次
         boolean flagRound=false;
         //如果轮次为空，则新建一个轮次，级联修改
-        if ((Long) seminar.getRoundId() == null) {
+        if ( seminar.getRoundId() == -1) {
             seminar = addRoundBussiness(seminar);
             flagRound=true;
         }
@@ -148,6 +150,8 @@ public class SeminarService {
         //发邮件通知课程下所有班级所有小组成员
         String message="第"+seminar.getSerial()+"节讨论课:"+seminar.getName()+"已修改，请注意查看！";
         sendSemianrEmail(seminar,message);
+        //TODO 删除此句
+        System.out.println(seminar.toString());
         //如果有从课程，则同步更新
         seminarCopyToSubCourse(seminar,flagRound,UPDATE_SEMINAR);
         return seminarDao.updateSeminarById(seminar);
@@ -187,7 +191,9 @@ public class SeminarService {
                 :courses){
             List<Seminar> seminars=seminarDao.findSeminarByCourseId(course.getId());
             for (Seminar temp:seminars){
-                removeSeminarById(temp.getId(),true);
+                if(seminar.getSerial().equals(temp.getSerial())){
+                    removeSeminarById(temp.getId(),true);
+                }
             }
         }
         return true;
@@ -298,8 +304,9 @@ public class SeminarService {
         }
         for(Course course
                 :courses){
-            Seminar seminarCopyToSubCourse=seminar;
-            seminarCopyToSubCourse.setCourseId(course.getId());
+            //创建讨论课副本
+            Seminar seminarCopy=seminar;
+            seminarCopy.setCourseId(course.getId());
             Round roundCopyToSubCourse=seminar.getRound();
             roundCopyToSubCourse.setCourseId(course.getId());
             if(flagRound){
@@ -328,7 +335,7 @@ public class SeminarService {
             }else {
                 roundCopyToSubCourse.setId(roundDao.getByCourseIdAndSerial(course.getId(),roundCopyToSubCourse.getSerial()).getId());
             }
-            seminarCopyToSubCourse.setRoundId(roundCopyToSubCourse.getId());
+            seminarCopy.setRoundId(roundCopyToSubCourse.getId());
             for(int i:hasSomething){
                 //新建讨论课
                 if(i==ADD_SEMINAR){

@@ -38,6 +38,9 @@ public class SeminarController {
     @Autowired
     private CClassService cClassService;
 
+    @Autowired
+    private CourseService courseService;
+
     /**
      * Description: 新增讨论课
      *
@@ -52,6 +55,10 @@ public class SeminarController {
         Seminar seminar = new Seminar();
         if (createSeminarDTO.getCourseId() == null) {
             throw new MyException("courseId不能为空", MyException.ID_FORMAT_ERROR);
+        }
+        //如果是从课程，直接报错
+        if(courseService.getCourseById(createSeminarDTO.getCourseId()).getSeminarMainCourseId()==0){
+            throw new MyException("从课程无法创建讨论课",MyException.ERROR);
         }
         seminar.setCourseId(createSeminarDTO.getCourseId());
         if (createSeminarDTO.getRoundId() == null) {
@@ -147,6 +154,11 @@ public class SeminarController {
         if (seminarId == 0) {
             throw new MyException("seminarId不能为空", MyException.ID_FORMAT_ERROR);
         }
+        long courseId=seminarService.getSeminarById(seminarId).getCourseId();
+        //如果是从课程，直接报错
+        if(courseService.getCourseById(courseId).getSeminarMainCourseId()==0){
+            throw new MyException("从课程无法删除讨论课",MyException.ERROR);
+        }
         return ResponseEntity.ok().body(seminarService.removeSeminarById(seminarId,true));
     }
 
@@ -161,6 +173,11 @@ public class SeminarController {
     public ResponseEntity<Boolean> updateSeminarById(@PathVariable("seminarId") long seminarId, @RequestBody UpdateSeminarDTO updateSeminarDTO) throws Exception {
         if (seminarId == 0) {
             throw new MyException("seminarId不能为空", MyException.ID_FORMAT_ERROR);
+        }
+        long courseId=seminarService.getSeminarById(seminarId).getCourseId();
+        //如果是从课程，直接报错
+        if(courseService.getCourseById(courseId).getSeminarMainCourseId()==0){
+            throw new MyException("从课程无法修改讨论课",MyException.ERROR);
         }
         //DTO转Entity
         Seminar seminar = new Seminar();
