@@ -73,9 +73,6 @@ public class SeminarService {
         if (seminar.getVisible() == null) {
             throw new MyException("visible不能为空", MyException.ERROR);
         }
-        if (seminar.getSerial() == null) {
-            throw new MyException("serial不能为空", MyException.ERROR);
-        }
         //新增的讨论课序号
         int serial=1;
         //判断序号是否存在
@@ -84,6 +81,7 @@ public class SeminarService {
         for (Seminar temp
                 : seminars) {
             serialList.add(temp.getSerial());
+            System.out.println(temp.getSerial());
         }
         //若该序号已存在，则+1，直到发现不存在的值，作为讨论课序号
         while(serialList.contains(serial)){
@@ -128,9 +126,6 @@ public class SeminarService {
         }
         if (seminar.getVisible() == null) {
             throw new MyException("visible不能为空", MyException.ERROR);
-        }
-        if (seminar.getSerial() == null) {
-            throw new MyException("seria;不能为空", MyException.ERROR);
         }
         //发邮件通知课程下所有班级所有小组成员
         String message="第"+seminar.getSerial()+"节讨论课:"+seminar.getName()+"已修改，请注意查看！";
