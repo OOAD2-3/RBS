@@ -86,10 +86,9 @@ public class AttendanceService {
         attendance.setPresent(Attendance.PRESENT_NO_START);
         attendanceDao.addAttendance(attendance);
 
-        //TODO 新增roundScore应该在新增Round和新增队伍的时候
-
-        //新增seminarScore
-        seminarScoreDao.addSeminarScore(cClassSeminarId, teamId);
+        //新增roundScore 应该在新增Round和新增队伍的时候
+        //新增seminarScore 增改在新建seminar的时候创建
+        //seminarScoreDao.addSeminarScore(cClassSeminarId, teamId);
 
         return true;
     }
