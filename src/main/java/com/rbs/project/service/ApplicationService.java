@@ -328,7 +328,7 @@ public class ApplicationService {
         for(Seminar seminar:seminars){
             seminarService.removeSeminarById(seminar.getId(),false);
         }
-        //再删除轮次
+        //调用dao内部再删除轮次
         return shareDao.removeSeminarShare(requestId);
     }
 
@@ -342,7 +342,7 @@ public class ApplicationService {
         List<ShareSeminarApplication> unHandleList=new ArrayList<>();
         for(ShareSeminarApplication shareSeminarApplication
                 :shareSeminarApplications){
-            if(shareSeminarApplication.getStatus().equals(ShareSeminarApplication.STATUS_UNHANDLE)){
+            if(shareSeminarApplication.getStatus()==null){
                 unHandleList.add(shareSeminarApplication);
             }
         }
@@ -359,7 +359,7 @@ public class ApplicationService {
         List<ShareTeamApplication> unHandleList=new ArrayList<>();
         for(ShareTeamApplication shareTeamApplication
                 :shareTeamApplications){
-            if(shareTeamApplication.getStatus().equals(ShareTeamApplication.STATUS_UNHANDLE)){
+            if(shareTeamApplication.getStatus()==null){
                 unHandleList.add(shareTeamApplication);
             }
         }

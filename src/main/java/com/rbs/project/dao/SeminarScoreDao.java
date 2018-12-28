@@ -184,10 +184,7 @@ public class SeminarScoreDao {
      * @Author: WinstonDeng
      * @Date: 14:29 2018/12/28
      */
-    public boolean deleteSeminarScoreByCClassSeminarId(long cClassSeminarId) throws MyException {
-        if (!seminarScoreMapper.deleteByCClassSeminarId(cClassSeminarId)) {
-            throw new MyException("删除讨论课成绩错误！数据库处理错误", MyException.ERROR);
-        }
-        return true;
+    public boolean deleteSeminarScoreByCClassSeminarId(long cClassSeminarId) throws MyException{
+       return seminarScoreMapper.deleteByCClassSeminarId(cClassSeminarId);
     }
 }
