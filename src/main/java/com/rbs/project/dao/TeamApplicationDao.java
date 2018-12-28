@@ -115,9 +115,6 @@ public class TeamApplicationDao {
      * @Date: 15:03 2018/12/25
      */
     public boolean deleteTeamValidApplicationByTeamId(long teamId) throws MyException {
-        if(!teamValidApplicationMapper.deleteByTeamId(teamId)){
-            throw new MyException("删除队伍合法状态错误！数据库处理错误",MyException.ERROR);
-        }
-        return true;
+        return teamValidApplicationMapper.deleteByTeamId(teamId);
     }
 }

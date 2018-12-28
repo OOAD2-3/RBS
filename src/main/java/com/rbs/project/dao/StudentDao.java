@@ -196,6 +196,11 @@ public class StudentDao {
         return true;
     }
 
+    /**
+     * Description:删除学生
+     * @Author: 17Wang
+     * @Time: 13:25 2018/12/28
+    */
     public boolean deleteStudentByStudentId(long studentId) throws MyException {
         try {
             getStudentById(studentId);

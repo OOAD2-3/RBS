@@ -102,10 +102,7 @@ public class AttendanceDao {
      * @Time: 23:14 2018/12/21
      */
     public boolean deleteAttendanceById(long attendanceId) throws Exception {
-        if (!attendanceMapper.deleteAttendanceById(attendanceId)) {
-            throw new MyException("通过id删除展示信息！数据库处理错误", MyException.ERROR);
-        }
-        return true;
+        return attendanceMapper.deleteAttendanceById(attendanceId);
     }
 
 

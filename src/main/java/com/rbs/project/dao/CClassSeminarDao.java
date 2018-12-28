@@ -65,7 +65,7 @@ public class CClassSeminarDao {
     }
 
     /**
-     * Description:
+     * Description: 通过课程找班级讨论课列表
      * @Author: 17Wang
      * @Time: 12:57 2018/12/28
      */

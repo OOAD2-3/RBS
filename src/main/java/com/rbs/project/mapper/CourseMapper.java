@@ -72,7 +72,7 @@ public interface CourseMapper {
      * @param id
      * @return
      */
-    boolean deleteById(long id);
+    boolean deleteById(long id) throws Exception;
 
 
 
