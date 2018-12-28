@@ -412,7 +412,7 @@ public class TeamDao {
      */
     private boolean myMemberLimitStrategy(long strategyId, long teamId) {
         //队伍成员限制策略
-        List<MemberLimitStrategy> memberLimitStrategies = memberLimitStrategyMapper.findById(strategyId);
+        MemberLimitStrategy memberLimitStrategy = memberLimitStrategyMapper.findById(strategyId);
         //拿到team的member信息
         Team team = null;
         try {
@@ -420,13 +420,12 @@ public class TeamDao {
         } catch (MyException e) {
             e.printStackTrace();
         }
-        for (MemberLimitStrategy memberLimitStrategy : memberLimitStrategies) {
-            //如果有一个不符合就不行
-            if (team.getStudents().size() < memberLimitStrategy.getMinMember() ||
-                    team.getStudents().size() > memberLimitStrategy.getMaxMember()) {
-                return false;
-            }
+        //如果有一个不符合就不行
+        if (team.getStudents().size() < memberLimitStrategy.getMinMember() ||
+                team.getStudents().size() > memberLimitStrategy.getMaxMember()) {
+            return false;
         }
+
 
         return true;
     }
@@ -445,25 +444,24 @@ public class TeamDao {
         } catch (MyException e) {
             e.printStackTrace();
         }
-        List<CourseMemberLimitStrategy> courseMemberLimitStrategies = courseMemberLimitStrategyMapper.findById(strategyId);
-        for (CourseMemberLimitStrategy courseMemberLimitStrategy : courseMemberLimitStrategies) {
-            //获取一个 课程人数限制策略组 的策略的course是哪一个
-            Long courseId = courseMemberLimitStrategy.getCourseId();
-            int teamMemberCount = 0;
+        CourseMemberLimitStrategy courseMemberLimitStrategy = courseMemberLimitStrategyMapper.findById(strategyId);
+        //获取一个 课程人数限制策略组 的策略的course是哪一个
+        Long courseId = courseMemberLimitStrategy.getCourseId();
+        int teamMemberCount = 0;
 
-            //找到这个Team的所有学生，每个学生找到所有的course信息，如果这个学生存在courseId的课程，teamMemberCount++,break+break（两段break）
-            List<Student> students = studentMapper.findByTeamId(teamId);
-            for (Student student : students) {
-                List<Course> courses = courseMapper.findByStudentId(student.getId());
-                for (Course course : courses) {
-                    if (course.getId() == courseId) {
-                        teamMemberCount++;
-                        break;
-                    }
+        //找到这个Team的所有学生，每个学生找到所有的course信息，如果这个学生存在courseId的课程，teamMemberCount++,break+break（两段break）
+        List<Student> students = studentMapper.findByTeamId(teamId);
+        for (Student student : students) {
+            List<Course> courses = courseMapper.findByStudentId(student.getId());
+            for (Course course : courses) {
+                if (course.getId() == courseId) {
+                    teamMemberCount++;
+                    break;
                 }
             }
+        }
 
-            //===========================================================测试
+        //===========================================================测试
             /*Team test = null;
 
             System.out.println("Strategy Course Id " + courseId);
@@ -483,15 +481,15 @@ public class TeamDao {
             System.out.println(test.getId());
             System.out.println(test.getName());
             System.out.println(teamMemberCount);*/
-            //===========================================================测试
+        //===========================================================测试
 
 
-            //如果有一个不符合返回false
-            if (teamMemberCount < courseMemberLimitStrategy.getMinMember() ||
-                    teamMemberCount > courseMemberLimitStrategy.getMaxMember()) {
-                return false;
-            }
+        //如果有一个不符合返回false
+        if (teamMemberCount < courseMemberLimitStrategy.getMinMember() ||
+                teamMemberCount > courseMemberLimitStrategy.getMaxMember()) {
+            return false;
         }
+
 
         return true;
     }

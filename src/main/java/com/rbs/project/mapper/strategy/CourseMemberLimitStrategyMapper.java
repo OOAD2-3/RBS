@@ -21,6 +21,7 @@ public interface CourseMemberLimitStrategyMapper {
      *
      * @param courseMemberLimitStrategy
      * @return
+     * @throws Exception
      */
     boolean insertStrategy(CourseMemberLimitStrategy courseMemberLimitStrategy) throws Exception;
 
@@ -46,5 +47,5 @@ public interface CourseMemberLimitStrategyMapper {
      * @param id
      * @return
      */
-    List<CourseMemberLimitStrategy> findById(long id);
+    CourseMemberLimitStrategy findById(long id);
 }

@@ -12,4 +12,9 @@
         SELECT * FROM team_strategy WHERE course_id=#{courseId}
     </select>
 
+    <insert id="insertStrategy" parameterType="com.rbs.project.pojo.strategy.TeamStrategy">
+        INSERT INTO team_strategy(course_id, strategy_serial, strategy_name, strategy_id)
+        VALUES (#{courseId},#{strategySerial},#{strategyName},#{strategyId})
+    </insert>
+
 </mapper>

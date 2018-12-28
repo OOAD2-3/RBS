@@ -1,5 +1,6 @@
 package com.rbs.project.controller;
 
+import com.rbs.project.dao.AttendanceDao;
 import com.rbs.project.exception.MyException;
 import com.rbs.project.pojo.dto.CreateSeminarDTO;
 import com.rbs.project.pojo.dto.UpdateSeminarDTO;
@@ -7,6 +8,7 @@ import com.rbs.project.pojo.entity.*;
 import com.rbs.project.pojo.vo.CClassInfoVO;
 import com.rbs.project.pojo.vo.QuestionInfoVO;
 import com.rbs.project.service.*;
+import com.rbs.project.socket.StudentPool;
 import com.rbs.project.utils.JsonUtils;
 import com.rbs.project.utils.UserUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -285,20 +287,6 @@ public class SeminarController {
         }
         question.setId(questionInfoVO.getQuestionId());
         return ResponseEntity.ok().body(cClassSeminarService.updateQuestion(question));
-    }
-
-    /**
-     * Description: 发起提问
-     *
-     * @Author: WinstonDeng
-     * @Date: 22:15 2018/12/22
-     */
-    @PostMapping("/{seminarId}/class/{classId}/question")
-    public ResponseEntity<Integer> createQuestion(@PathVariable("seminarId") long seminarId,
-                                                  @PathVariable("classId") long cClassId,
-                                                  @RequestBody QuestionInfoVO questionInfoVO) throws MyException {
-        //TODO 发起提问
-        return ResponseEntity.ok(1);
     }
 
     /**

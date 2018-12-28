@@ -9,6 +9,7 @@ import com.rbs.project.pojo.vo.*;
 import com.rbs.project.service.*;
 import com.rbs.project.utils.FileLoadUtils;
 import com.rbs.project.utils.JsonUtils;
+import com.rbs.project.utils.UserUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -71,34 +72,33 @@ public class CourseController {
         course.setTeamStartTime(JsonUtils.StringToTimestamp(courseAndStrategyDTO.getTeamStartTime()));
         course.setTeamEndTime(JsonUtils.StringToTimestamp(courseAndStrategyDTO.getTeamEndTime()));
 
-        course.setCourseMemberLimitStrategy(courseAndStrategyDTO.getCourseMemberLimitStrategy());
-        //设置冲突课程的Id
-        List<Course> conflictCourses = new ArrayList<>();
-        for (Long conflictCourse : courseAndStrategyDTO.getConflictCourses()) {
-            Course temp = new Course();
-            temp.setId(conflictCourse);
-            conflictCourses.add(temp);
-        }
-        course.setConflictCourses(conflictCourses);
-        //如果人数策略
-        if (course.getCourseMemberLimitStrategy() == null) {
-            CourseMemberLimitStrategy courseMemberLimitStrategy = new CourseMemberLimitStrategy();
-            courseMemberLimitStrategy.setMaxMember(99);
-            courseMemberLimitStrategy.setMinMember(0);
-            course.setCourseMemberLimitStrategy(courseMemberLimitStrategy);
-        }
-        //冲突策略为空时
-        if (course.getConflictCourses() == null) {
+        course.setMemberLimitStrategy(courseAndStrategyDTO.getMemberLimitStrategy());
+        course.setCourseMemberLimitStrategies(courseAndStrategyDTO.getCourseMemberLimitStrategies());
+
+        List<List<Course>> lists = new ArrayList<>();
+        //冲突课程List套List  因此得赋初值
+        if (courseAndStrategyDTO.getConflictCourses() != null) {
+            for (List<Long> longs : courseAndStrategyDTO.getConflictCourses()) {
+                List<Course> courses = new ArrayList<>();
+                for (Long l : longs) {
+                    Course temp = new Course();
+                    temp.setId(l);
+                    courses.add(temp);
+                }
+                lists.add(courses);
+            }
+            course.setConflictCourses(lists);
+        } else {
             course.setConflictCourses(new ArrayList<>());
         }
-        //设置最大人数
-        if (course.getCourseMemberLimitStrategy().getMaxMember() == null) {
-            course.getCourseMemberLimitStrategy().setMaxMember(99);
+        //判断表示是否存在
+        int flag;
+        if (courseAndStrategyDTO.getCourseMemberLimitFlag() != null) {
+            flag = courseAndStrategyDTO.getCourseMemberLimitFlag();
+        } else {
+            flag = -1;
         }
-        //设置最小人数
-        if (course.getCourseMemberLimitStrategy().getMinMember() == null) {
-            course.getCourseMemberLimitStrategy().setMinMember(0);
-        }
+
 
         if (course.getName() == null) {
             throw new MyException("课程名不能为空", MyException.ERROR);
@@ -114,7 +114,7 @@ public class CourseController {
                 course.getReportPercentage() == null) {
             throw new MyException("计算分数规则不能为空", MyException.ERROR);
         }
-        return ResponseEntity.ok(courseService.createCourse(course));
+        return ResponseEntity.ok(courseService.createCourse(course, flag));
     }
 
     /**
@@ -206,9 +206,13 @@ public class CourseController {
         Team team = teamService.getTeamByCourseIdAndStudentId(courseId);
         Map<String, Object> map = new HashMap<>();
         map.put("teamInfo", new TeamBaseInfoVO(team));
-        map.put("course", new CourseInfoVO(team.getCourse()));
-        map.put("class", new CClassInfoVO(team.getcClass()));
+
+        Course course = courseService.getCourseById(courseId);
+        map.put("course", new CourseInfoVO(course));
+        CClass cClass = cClassService.getCClassByStudentIdAndCourseId(UserUtils.getNowUser().getId(), courseId);
+        map.put("class", new CClassInfoVO(cClass));
         map.put("leader", new UserVO(team.getLeader()));
+        map.put("isLeader", UserUtils.getNowUser().getId() == team.getLeaderId() ? true : false);
 
         List<UserVO> userVOS = new ArrayList<>();
         for (Student student : team.getStudents()) {
@@ -308,7 +312,7 @@ public class CourseController {
     @GetMapping("/{courseId}/seminars")
     @ResponseBody
     public ResponseEntity<Map<String, Object>> listAllSeminarsUnderRoundInCoursePage(@PathVariable("courseId") long courseId) throws MyException {
-        if ( courseId == 0) {
+        if (courseId == 0) {
             throw new MyException("课程id不能为空", MyException.ERROR);
         }
         Map<String, Object> map = new HashMap<>();
@@ -341,7 +345,7 @@ public class CourseController {
     @ResponseBody
     public ResponseEntity<List<ShareInfoVO>> listAllSharesByCourseId(@PathVariable("courseId") long courseId) throws Exception {
         List<ShareInfoVO> shareInfoVOS = new ArrayList<>();
-        if ( courseId == 0) {
+        if (courseId == 0) {
             throw new MyException("courseId不能为空", MyException.ID_FORMAT_ERROR);
         }
         //  1.共享讨论课
@@ -399,64 +403,68 @@ public class CourseController {
 
     /**
      * Description: 新增队伍共享申请
+     *
      * @Author: WinstonDeng
      * @Date: 22:23 2018/12/26
      */
     @PostMapping("/{courseId}/teamshare")
     @ResponseBody
-    public ResponseEntity<Boolean> createTeamShareRequest(@PathVariable("courseId")long courseId,@RequestBody Map<String,String> map)throws Exception{
-        if(courseId==0){
-            throw new MyException("courseId不能为空",MyException.ID_FORMAT_ERROR);
+    public ResponseEntity<Boolean> createTeamShareRequest(@PathVariable("courseId") long courseId, @RequestBody Map<String, String> map) throws Exception {
+        if (courseId == 0) {
+            throw new MyException("courseId不能为空", MyException.ID_FORMAT_ERROR);
         }
-        String subCourseId="subCourseId";
-        if(map.get(subCourseId)==null){
-            throw new MyException("subCourseId不能为空",MyException.ID_FORMAT_ERROR);
+        String subCourseId = "subCourseId";
+        if (map.get(subCourseId) == null) {
+            throw new MyException("subCourseId不能为空", MyException.ID_FORMAT_ERROR);
         }
-        return ResponseEntity.ok().body(applicationService.addTeamShareRequest(courseId,Long.parseLong(map.get(subCourseId))));
+        return ResponseEntity.ok().body(applicationService.addTeamShareRequest(courseId, Long.parseLong(map.get(subCourseId))));
     }
 
     /**
      * Description: 取消队伍共享
+     *
      * @Author: WinstonDeng
      * @Date: 22:32 2018/12/26
      */
     @DeleteMapping("/teamshare/{teamshareId}")
     @ResponseBody
-    public ResponseEntity<Boolean> deleteTeamShare(@PathVariable("teamshareId") long requestId) throws Exception{
-        if(requestId==0){
-            throw new MyException("teamshareId不能为空",MyException.ID_FORMAT_ERROR);
+    public ResponseEntity<Boolean> deleteTeamShare(@PathVariable("teamshareId") long requestId) throws Exception {
+        if (requestId == 0) {
+            throw new MyException("teamshareId不能为空", MyException.ID_FORMAT_ERROR);
         }
         return ResponseEntity.ok().body(applicationService.removeTeamShare(requestId));
     }
 
     /**
      * Description: 新增讨论课共享申请
+     *
      * @Author: WinstonDeng
      * @Date: 22:23 2018/12/26
      */
     @PostMapping("/{courseId}/seminarshare")
     @ResponseBody
-    public ResponseEntity<Boolean> createSeminarShareRequest(@PathVariable("courseId")long courseId,@RequestBody Map<String,String> map)throws Exception{
-        if(courseId==0){
-            throw new MyException("courseId不能为空",MyException.ID_FORMAT_ERROR);
+    public ResponseEntity<Boolean> createSeminarShareRequest(@PathVariable("courseId") long courseId, @RequestBody Map<String, String> map) throws Exception {
+        if (courseId == 0) {
+            throw new MyException("courseId不能为空", MyException.ID_FORMAT_ERROR);
         }
-        String subCourseId="subCourseId";
-        if(map.get(subCourseId)==null){
-            throw new MyException("subCourseId不能为空",MyException.ID_FORMAT_ERROR);
+        String subCourseId = "subCourseId";
+        if (map.get(subCourseId) == null) {
+            throw new MyException("subCourseId不能为空", MyException.ID_FORMAT_ERROR);
         }
-        return ResponseEntity.ok().body(applicationService.addSeminarShareRequest(courseId,Long.parseLong(map.get(subCourseId))));
+        return ResponseEntity.ok().body(applicationService.addSeminarShareRequest(courseId, Long.parseLong(map.get(subCourseId))));
     }
 
     /**
      * Description: 取消讨论课共享
+     *
      * @Author: WinstonDeng
      * @Date: 22:32 2018/12/26
      */
     @DeleteMapping("/seminarshare/{seminarshareId}")
     @ResponseBody
-    public ResponseEntity<Boolean> deleteSeminarShare(@PathVariable("seminarshareId") long requestId) throws Exception{
-        if(requestId==0){
-            throw new MyException("seminarshareId不能为空",MyException.ID_FORMAT_ERROR);
+    public ResponseEntity<Boolean> deleteSeminarShare(@PathVariable("seminarshareId") long requestId) throws Exception {
+        if (requestId == 0) {
+            throw new MyException("seminarshareId不能为空", MyException.ID_FORMAT_ERROR);
         }
         return ResponseEntity.ok().body(applicationService.removeSeminarShare(requestId));
     }

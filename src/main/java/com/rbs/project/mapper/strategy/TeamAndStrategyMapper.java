@@ -17,10 +17,23 @@ import java.util.List;
 @Repository
 public interface TeamAndStrategyMapper {
     /**
+     * 找到最大的id
+     *
+     * @return
+     */
+    long findMaxId();
+    /**
      * 通过id获取策略信息
      *
      * @param id
      * @return
      */
     List<TeamAndStrategy> findById(long id);
+
+    /**
+     * 新增一条策略
+     * @param teamAndStrategy
+     * @return
+     */
+    boolean insertStrategy(TeamAndStrategy teamAndStrategy);
 }

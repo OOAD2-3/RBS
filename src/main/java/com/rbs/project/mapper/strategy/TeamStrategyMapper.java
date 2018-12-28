@@ -15,6 +15,7 @@ import java.util.List;
 @Mapper
 @Repository
 public interface TeamStrategyMapper {
+
     /**
      * 通过课程id获取
      *
@@ -22,4 +23,12 @@ public interface TeamStrategyMapper {
      * @return
      */
     List<TeamStrategy> findByCourseId(long courseId);
+
+    /**
+     * 新增一条策略
+     *
+     * @param teamStrategy
+     * @return
+     */
+    boolean insertStrategy(TeamStrategy teamStrategy);
 }

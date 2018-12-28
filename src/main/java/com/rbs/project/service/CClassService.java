@@ -136,6 +136,16 @@ public class CClassService {
         return cClassDao.listByCourseId(courseId);
     }
 
+    /**
+     * Description: 获取一个学生在一个课程下的班级
+     *
+     * @Author: 17Wang
+     * @Time: 14:27 2018/12/28
+     */
+    public CClass getCClassByStudentIdAndCourseId(long studentId, long courseId) throws MyException {
+        return cClassDao.getCClassByStudentIdAndCourseId(studentId, courseId);
+    }
+
 
     /**
      * Description: 按id删除班级

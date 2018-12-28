@@ -2,6 +2,7 @@ package com.rbs.project.pojo.vo;
 
 import com.rbs.project.pojo.entity.Course;
 import com.rbs.project.pojo.strategy.CourseMemberLimitStrategy;
+import com.rbs.project.pojo.strategy.MemberLimitStrategy;
 import com.rbs.project.utils.JsonUtils;
 
 import java.util.ArrayList;
@@ -27,8 +28,9 @@ public class CourseAndStrategyVO {
     private Long teacherId;
     private String teacherName;
 
-    private CourseMemberLimitStrategy courseMemberLimitStrategy;
-    private List<CourseInfoVO> conflictCourses;
+    private List<CourseMemberLimitStrategy> courseMemberLimitStrategies;
+    private MemberLimitStrategy memberLimitStrategy;
+    private List<List<CourseInfoVO>> conflictCourses;
     private Boolean ShareTeam;
     private Boolean ShareSeminar;
 
@@ -40,20 +42,28 @@ public class CourseAndStrategyVO {
         id = course.getId();
         name = course.getName();
         intro = course.getIntro();
-        teamMainCourseId=course.getTeamMainCourseId();
-        seminarMainCourseId=course.getSeminarMainCourseId();
+        teamMainCourseId = course.getTeamMainCourseId();
+        seminarMainCourseId = course.getSeminarMainCourseId();
         presentationPercentage = course.getPresentationPercentage();
         questionPercentage = course.getQuestionPercentage();
         reportPercentage = course.getReportPercentage();
         teamStartTime = JsonUtils.TimestampToString(course.getTeamStartTime());
         teamEndTime = JsonUtils.TimestampToString(course.getTeamEndTime());
-        teacherId=course.getTeacherId();
-        teacherName=course.getTeacher().getTeacherName();
-        courseMemberLimitStrategy = course.getCourseMemberLimitStrategy();
-        conflictCourses = new ArrayList<>();
-        for (Course conflictCourse : course.getConflictCourses()) {
-            conflictCourses.add(new CourseInfoVO(conflictCourse));
+        teacherId = course.getTeacherId();
+        teacherName = course.getTeacher().getTeacherName();
+
+        courseMemberLimitStrategies = course.getCourseMemberLimitStrategies();
+        memberLimitStrategy = course.getMemberLimitStrategy();
+        List<List<CourseInfoVO>> lists = new ArrayList<>();
+        for (List<Course> courses : course.getConflictCourses()) {
+            List<CourseInfoVO> courseInfoVOS = new ArrayList<>();
+            for (Course c : courses) {
+                courseInfoVOS.add(new CourseInfoVO(c));
+            }
+            lists.add(courseInfoVOS);
         }
+        conflictCourses = lists;
+
         if (course.getTeamMainCourseId() == 0) {
             ShareTeam = false;
         }
@@ -158,14 +168,6 @@ public class CourseAndStrategyVO {
         this.teamEndTime = teamEndTime;
     }
 
-    public CourseMemberLimitStrategy getCourseMemberLimitStrategy() {
-        return courseMemberLimitStrategy;
-    }
-
-    public void setCourseMemberLimitStrategy(CourseMemberLimitStrategy courseMemberLimitStrategy) {
-        this.courseMemberLimitStrategy = courseMemberLimitStrategy;
-    }
-
     public Boolean isShareTeam() {
         return ShareTeam;
     }
@@ -186,19 +188,51 @@ public class CourseAndStrategyVO {
         this.id = id;
     }
 
-    public List<CourseInfoVO> getConflictCourses() {
-        return conflictCourses;
-    }
-
-    public void setConflictCourses(List<CourseInfoVO> conflictCourses) {
-        this.conflictCourses = conflictCourses;
-    }
-
     public Boolean getShareTeam() {
         return ShareTeam;
     }
 
     public Boolean getShareSeminar() {
         return ShareSeminar;
+    }
+
+    public Long getTeacherId() {
+        return teacherId;
+    }
+
+    public void setTeacherId(Long teacherId) {
+        this.teacherId = teacherId;
+    }
+
+    public String getTeacherName() {
+        return teacherName;
+    }
+
+    public void setTeacherName(String teacherName) {
+        this.teacherName = teacherName;
+    }
+
+    public MemberLimitStrategy getMemberLimitStrategy() {
+        return memberLimitStrategy;
+    }
+
+    public void setMemberLimitStrategy(MemberLimitStrategy memberLimitStrategy) {
+        this.memberLimitStrategy = memberLimitStrategy;
+    }
+
+    public List<List<CourseInfoVO>> getConflictCourses() {
+        return conflictCourses;
+    }
+
+    public void setConflictCourses(List<List<CourseInfoVO>> conflictCourses) {
+        this.conflictCourses = conflictCourses;
+    }
+
+    public List<CourseMemberLimitStrategy> getCourseMemberLimitStrategies() {
+        return courseMemberLimitStrategies;
+    }
+
+    public void setCourseMemberLimitStrategies(List<CourseMemberLimitStrategy> courseMemberLimitStrategies) {
+        this.courseMemberLimitStrategies = courseMemberLimitStrategies;
     }
 }

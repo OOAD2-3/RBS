@@ -33,12 +33,14 @@ public class CourseService {
      * @Author: 17Wang
      * @Time: 19:45 2018/12/18
      */
-    public boolean createCourse(Course course) throws Exception {
+    public boolean createCourse(Course course, Integer flag) throws Exception {
         //设置当前教师
         Teacher teacher = (Teacher) UserUtils.getNowUser();
         course.setTeacherId(teacher.getId());
+        //增加六个策略表
 
-        return courseDao.addCourse(course);
+
+        return courseDao.addCourse(course, flag);
     }
 
     /**
@@ -50,10 +52,9 @@ public class CourseService {
     public Course getCourseById(long courseId, int... hasSomething) throws MyException {
         if (hasSomething.length == 0) {
             return courseDao.getCourseById(courseId,
-                    CourseDao.HAS_COURSE_MEMBER_LIMIT_STRATEGY,
+                    CourseDao.HAS_STRATEGY,
                     CourseDao.HAS_SEMINAR,
                     CourseDao.HAS_CCLASS,
-                   CourseDao.HAS_CONFLICT_COURSES,
                     CourseDao.HAS_TEACHER);
         }
         return courseDao.getCourseById(courseId, hasSomething);
@@ -84,8 +85,8 @@ public class CourseService {
                 classes.add(cClassDao.getCClassByStudentIdAndCourseId(user.getId(), course.getId()));
                 course.setcClasses(classes);
             }
-        }else if(user instanceof Teacher){
-            List<Course> courses=courseDao.listAllCoursesByTeacherId(user.getId(),CourseDao.HAS_TEACHER);
+        } else if (user instanceof Teacher) {
+            List<Course> courses = courseDao.listAllCoursesByTeacherId(user.getId(), CourseDao.HAS_TEACHER);
             user.setCourses(courses);
         }
         return user.getCourses();

@@ -10,8 +10,8 @@
         SELECT max(id) FROM conflict_course_strategy;
     </select>
 
-    <insert id="insertOneLine">
-        INSERT INTO conflict_course_strategy
+    <insert id="insertOneLine" parameterType="com.rbs.project.pojo.strategy.ConflictCourseStrategy">
+        INSERT INTO conflict_course_strategy(id, course_id)
         VALUES (#{id},#{courseId})
     </insert>
 

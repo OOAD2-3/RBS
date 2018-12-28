@@ -2,6 +2,7 @@ package com.rbs.project.pojo.dto;
 
 import com.rbs.project.pojo.entity.Course;
 import com.rbs.project.pojo.strategy.CourseMemberLimitStrategy;
+import com.rbs.project.pojo.strategy.MemberLimitStrategy;
 import com.rbs.project.pojo.vo.CourseInfoVO;
 import com.rbs.project.utils.JsonUtils;
 
@@ -24,8 +25,11 @@ public class CourseAndStrategyDTO {
     private String teamStartTime;
     private String teamEndTime;
 
-    private CourseMemberLimitStrategy courseMemberLimitStrategy;
-    private List<Long> conflictCourses;
+    private MemberLimitStrategy memberLimitStrategy;
+    private List<CourseMemberLimitStrategy> courseMemberLimitStrategies;
+    private List<List<Long>> conflictCourses;
+    private Integer courseMemberLimitFlag;
+
     private Boolean ShareTeam;
     private Boolean ShareSeminar;
 
@@ -97,12 +101,20 @@ public class CourseAndStrategyDTO {
         this.teamEndTime = teamEndTime;
     }
 
-    public CourseMemberLimitStrategy getCourseMemberLimitStrategy() {
-        return courseMemberLimitStrategy;
+    public MemberLimitStrategy getMemberLimitStrategy() {
+        return memberLimitStrategy;
     }
 
-    public void setCourseMemberLimitStrategy(CourseMemberLimitStrategy courseMemberLimitStrategy) {
-        this.courseMemberLimitStrategy = courseMemberLimitStrategy;
+    public void setMemberLimitStrategy(MemberLimitStrategy memberLimitStrategy) {
+        this.memberLimitStrategy = memberLimitStrategy;
+    }
+
+    public List<CourseMemberLimitStrategy> getCourseMemberLimitStrategies() {
+        return courseMemberLimitStrategies;
+    }
+
+    public void setCourseMemberLimitStrategies(List<CourseMemberLimitStrategy> courseMemberLimitStrategies) {
+        this.courseMemberLimitStrategies = courseMemberLimitStrategies;
     }
 
     public Boolean isShareTeam() {
@@ -125,11 +137,11 @@ public class CourseAndStrategyDTO {
         this.id = id;
     }
 
-    public List<Long> getConflictCourses() {
+    public List<List<Long>> getConflictCourses() {
         return conflictCourses;
     }
 
-    public void setConflictCourses(List<Long> conflictCourses) {
+    public void setConflictCourses(List<List<Long>> conflictCourses) {
         this.conflictCourses = conflictCourses;
     }
 
@@ -139,5 +151,13 @@ public class CourseAndStrategyDTO {
 
     public Boolean getShareSeminar() {
         return ShareSeminar;
+    }
+
+    public Integer getCourseMemberLimitFlag() {
+        return courseMemberLimitFlag;
+    }
+
+    public void setCourseMemberLimitFlag(Integer courseMemberLimitFlag) {
+        this.courseMemberLimitFlag = courseMemberLimitFlag;
     }
 }

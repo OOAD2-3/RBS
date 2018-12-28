@@ -15,17 +15,18 @@ import java.util.concurrent.CopyOnWriteArrayList;
  * @Author: 17Wang
  * @Date: 14:55 2018/12/25
  */
+@Component
 public class StudentPool {
-    private static Map<Long, List<Student>> map = new ConcurrentHashMap<>();
+    private Map<Long, List<Student>> map = new ConcurrentHashMap<>();
 
-    private static Random random = new Random();
+    private Random random = new Random();
 
-    public static void put(Long attendanceId, Student student) {
+    public void put(Long attendanceId, Student student) {
         List<Student> studentList = map.getOrDefault(attendanceId, new CopyOnWriteArrayList<>());
         studentList.add(student);
     }
 
-    public static Student pick(Long attendanceId) {
+    public Student pick(Long attendanceId) {
         List<Student> studentList = map.get(attendanceId);
         if (studentList == null) {
             return null;
@@ -38,12 +39,12 @@ public class StudentPool {
         return student;
     }
 
-    public static int size(Long attendanceId) {
+    public int size(Long attendanceId) {
         return map.getOrDefault(attendanceId, new CopyOnWriteArrayList<>()).size();
     }
 
     //清空一个展示的所有提问
-    public static boolean clearAll(Long attendanceId) {
+    public boolean clearAll(Long attendanceId) {
         List<Student> students = map.get(attendanceId);
         if (students == null) {
             return true;
