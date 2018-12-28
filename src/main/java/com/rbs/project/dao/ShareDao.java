@@ -349,7 +349,7 @@ public class ShareDao {
      * @Author: WinstonDeng
      * @Date: 23:22 2018/12/27
      */
-    public boolean removeSeminarShare(long requestId) throws MyException{
+    public boolean removeSeminarShare(long requestId) throws Exception {
         ShareSeminarApplication shareSeminarApplication=shareSeminarApplicationMapper.findById(requestId);
         long subCourseId=shareSeminarApplication.getSubCourseId();
         List<Round> rounds = roundMapper.findByCourseId(subCourseId);
