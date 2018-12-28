@@ -43,7 +43,6 @@ public class ShareTeamApplication {
      */
     private Teacher subCourseTeacher;
 
-    public final static Integer STATUS_UNHANDLE=null;
     public final static int STATUS_ACCEPT = 1;
     public final static int STATUS_REJECT=0;
 

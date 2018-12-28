@@ -226,7 +226,7 @@ public class ShareDao {
             throw new MyException("发起组队共享申请错误！两课程是冲突课程", MyException.ERROR);
         }
         //2. 检查主课程是否为组队共享从课程 和 从课程是否已接受共享
-        if (courseMapper.findById(courseId).getTeamMainCourseId() != 0 &&
+        if (courseMapper.findById(courseId).getTeamMainCourseId() != 0 ||
                 courseMapper.findById(subCourseId).getTeamMainCourseId() != 0) {
             throw new MyException("发起组队共享申请错误！从课程不能发起共享", MyException.ERROR);
         }
@@ -325,7 +325,7 @@ public class ShareDao {
      */
     public boolean addSeminarShareApplication(long courseId, long subCourseId) throws MyException {
         //1. 检查主课程是否为组队共享从课程 和 从课程是否已接受共享
-        if (courseMapper.findById(courseId).getSeminarMainCourseId() != 0 &&
+        if (courseMapper.findById(courseId).getSeminarMainCourseId() != 0 ||
                 courseMapper.findById(subCourseId).getSeminarMainCourseId() != 0) {
             throw new MyException("发起讨论课共享申请错误！从课程不能发起共享", MyException.ERROR);
         }
