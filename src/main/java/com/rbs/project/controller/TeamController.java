@@ -135,6 +135,17 @@ public class TeamController {
     }
 
     /**
+     * Description: 组员退组
+     * @Author: 17Wang
+     * @Time: 1:35 2018/12/29
+     */
+    @DeleteMapping("/{teamId}/myself")
+    @ResponseBody
+    public ResponseEntity<Boolean> quitTeam(@PathVariable("teamId") long teamId) throws Exception{
+        return ResponseEntity.ok(teamService.quitTeam(teamId));
+    }
+
+    /**
      * Description: 新增team合法化请求
      *
      * @Author: 17Wang

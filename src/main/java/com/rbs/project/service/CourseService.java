@@ -61,6 +61,15 @@ public class CourseService {
     }
 
     /**
+     * Description: 判断选修课程策略是否或 还是 与
+     * @Author: 17Wang
+     * @Time: 3:20 2018/12/29
+    */
+    public boolean judgeCourseMemberLimitIsAndStyle(long courseId){
+        return courseDao.judgeCourseMemberLimitIsAndStyle(courseId);
+    }
+
+    /**
      * Description: 获取所有课程
      *
      * @Author: 17Wang

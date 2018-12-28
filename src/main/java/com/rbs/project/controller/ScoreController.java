@@ -1,6 +1,8 @@
 package com.rbs.project.controller;
 
 import com.rbs.project.exception.MyException;
+import com.rbs.project.pojo.dto.ClassSeminarAndScoreDTO;
+import com.rbs.project.pojo.dto.ScoreDTO;
 import com.rbs.project.pojo.entity.RoundScore;
 import com.rbs.project.pojo.entity.SeminarScore;
 import com.rbs.project.pojo.vo.ScoreVO;
@@ -51,6 +53,20 @@ public class ScoreController {
         return map;
     }
 
+    @PutMapping("/seminarscore")
+    @ResponseBody
+    public ResponseEntity<Boolean> updateAllSeminarScore(@RequestBody ClassSeminarAndScoreDTO allScore) throws Exception {
+        List<SeminarScore> seminarScores=new ArrayList<>();
+        for(ScoreDTO scoreDTO:allScore.getScoreDTOS()){
+            SeminarScore seminarScore=new SeminarScore();
+            seminarScore.setPresentationScore(scoreDTO.getPresentationScore());
+            seminarScore.setQuestionScore(scoreDTO.getQuestionScore());
+            seminarScore.setReportScore(scoreDTO.getReportScore());
+            seminarScores.add(seminarScore);
+        }
+
+        return ResponseEntity.ok(scoreService.updateAllScoreByCClassSeminar(allScore.getClassId(),allScore.getSeminarId(),seminarScores));
+    }
     /**
      * Description: （展示）打分或者修改分数
      *
@@ -98,6 +114,7 @@ public class ScoreController {
     @GetMapping("/roundscore")
     @ResponseBody
     public Map<String, Object> listAllRoundScore(@RequestParam("roundId") long roundId) throws MyException {
+        //带有队伍信息的
         List<RoundScore> roundScores = scoreService.listAllRoundScoreByRoundId(roundId);
         return null;
     }

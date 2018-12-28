@@ -122,7 +122,7 @@ public class RequestController {
      * @Author: WinstonDeng
      * @Date: 15:32 2018/12/28
      */
-    @GetMapping()
+    @GetMapping
     @ResponseBody
     public ResponseEntity<List<RequestInfoVO>> listAllUnhandleRequest() throws Exception{
         //获取当前的老师

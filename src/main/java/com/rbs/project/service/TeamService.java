@@ -119,7 +119,7 @@ public class TeamService {
 
         //TODO 建立小组讨论课关系seminar_score 已完成
         List<CClassSeminar> cClassSeminars = cClassSeminarDao.listByCourseId(team.getCourseId());
-        for(CClassSeminar cClassSeminar:cClassSeminars){
+        for (CClassSeminar cClassSeminar : cClassSeminars) {
             seminarScoreDao.addSeminarScore(cClassSeminar.getId(), team.getId());
         }
 
@@ -236,6 +236,9 @@ public class TeamService {
             //获取team信息，主要是为了拿classId
             //因为只有主课程能修改team，所以拿team表里的class没有任何问题
             Team team = teamDao.getTeamById(teamId);
+            if (team.getStatus() == Team.STATUS_IN_REVIEW) {
+                throw new MyException("小队还在申请中！不能添加成员", MyException.AUTHORIZATION_ERROR);
+            }
             //如果该学生已有队伍
             Team tempTeam = null;
             try {
@@ -270,6 +273,11 @@ public class TeamService {
     public boolean removeMemberFromTeam(long teamId, long memberId) throws Exception {
         //自己不能踢出自己
         Team myTeam = teamDao.getTeamById(teamId);
+        //审核中的队伍不能删除成员
+        System.out.println(myTeam.getStatus());
+        if (myTeam.getStatus() == Team.STATUS_IN_REVIEW) {
+            throw new MyException("小队还在申请中！不能删除成员", MyException.AUTHORIZATION_ERROR);
+        }
         if (myTeam.getLeaderId() == memberId) {
             throw new MyException("自己不能踢出自己么么", MyException.AUTHORIZATION_ERROR);
         }
@@ -296,6 +304,11 @@ public class TeamService {
      * @Time: 10:45 2018/12/23
      */
     public boolean dissolveTeam(long teamId) throws Exception {
+        Team team = teamDao.getTeamById(teamId);
+        //审核中的队伍不能删除成员
+        if (team.getStatus() == Team.STATUS_IN_REVIEW) {
+            throw new MyException("小队还在申请中！不能解散小组", MyException.AUTHORIZATION_ERROR);
+        }
         //删除这个小组
         teamDao.deleteTeamById(teamId);
         return true;
@@ -312,7 +325,20 @@ public class TeamService {
         //获取当前登录用户
         Student user = (Student) UserUtils.getNowUser();
         //获取登录用户的队伍信息
-        Team team = teamDao.getTeamById(teamId);
+        Team team = teamDao.getTeamById(teamId, TeamDao.HAS_MEMBERS);
+        //审核中的队伍不能删除成员
+        if (team.getStatus() == Team.STATUS_IN_REVIEW) {
+            throw new MyException("小队还在申请中！不能退出小组", MyException.AUTHORIZATION_ERROR);
+        }
+        boolean flag = false;
+        for (Student student : team.getStudents()) {
+            if (student.getId() == user.getId()) {
+                flag = true;
+            }
+        }
+        if (!flag) {
+            throw new MyException("你已经退出了该小组", MyException.NOT_FOUND_ERROR);
+        }
         //判断当前登录用户是否是队长
         if (user.getId() == team.getLeaderId()) {
             throw new MyException("队长不能退出队伍！只能解散！么么", MyException.AUTHORIZATION_ERROR);
@@ -330,6 +356,6 @@ public class TeamService {
         } else {
             teamDao.updateStatusByTeamId(Team.STATUS_ERROR, team.getId());
         }
-        return false;
+        return true;
     }
 }

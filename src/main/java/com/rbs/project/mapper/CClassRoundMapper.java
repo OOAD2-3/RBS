@@ -37,6 +37,14 @@ public interface CClassRoundMapper {
     boolean updateEnrollNumber(CClassRound cClassRound);
 
     /**
+     * 锁定课程轮次
+     * @param roundId
+     * @param teamId
+     * @return
+     */
+    CClassRound findByRoundIdAndTeamId(@Param("roundId") long roundId,@Param("teamId") long teamId);
+
+    /**
      * 通过roundId查找所有班级轮次
      * @param roundId
      * @return

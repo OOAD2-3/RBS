@@ -20,19 +20,19 @@ public class SeminarScore {
     /**
      * 本次讨论课总分
      */
-    private double totalScore;
+    private Double totalScore;
     /**
      * 本次讨论课展示分
      */
-    private double presentationScore;
+    private Double presentationScore;
     /**
      * 本次讨论课报告分
      */
-    private double reportScore;
+    private Double reportScore;
     /**
      * 本次讨论课提问分
      */
-    private double questionScore;
+    private Double questionScore;
 
     //关系
     /**
@@ -62,35 +62,35 @@ public class SeminarScore {
         this.teamId = teamId;
     }
 
-    public double getTotalScore() {
+    public Double getTotalScore() {
         return totalScore;
     }
 
-    public void setTotalScore(double totalScore) {
+    public void setTotalScore(Double totalScore) {
         this.totalScore = totalScore;
     }
 
-    public double getPresentationScore() {
+    public Double getPresentationScore() {
         return presentationScore;
     }
 
-    public void setPresentationScore(double presentationScore) {
+    public void setPresentationScore(Double presentationScore) {
         this.presentationScore = presentationScore;
     }
 
-    public double getReportScore() {
+    public Double getReportScore() {
         return reportScore;
     }
 
-    public void setReportScore(double reportScore) {
+    public void setReportScore(Double reportScore) {
         this.reportScore = reportScore;
     }
 
-    public double getQuestionScore() {
+    public Double getQuestionScore() {
         return questionScore;
     }
 
-    public void setQuestionScore(double questionScore) {
+    public void setQuestionScore(Double questionScore) {
         this.questionScore = questionScore;
     }
 
@@ -109,6 +109,21 @@ public class SeminarScore {
     public void setTeam(Team team) {
         this.team = team;
     }
-//====================== toString ====================
 
+
+    //====================== toString ====================
+
+    @Override
+    public String toString() {
+        return "SeminarScore{" +
+                "cClassSeminarId=" + cClassSeminarId +
+                ", teamId=" + teamId +
+                ", totalScore=" + totalScore +
+                ", presentationScore=" + presentationScore +
+                ", reportScore=" + reportScore +
+                ", questionScore=" + questionScore +
+                ", cClassSeminar=" + cClassSeminar +
+                ", team=" + team +
+                '}';
+    }
 }

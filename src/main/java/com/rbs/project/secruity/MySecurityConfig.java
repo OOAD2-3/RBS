@@ -74,6 +74,9 @@ public class MySecurityConfig extends WebSecurityConfigurerAdapter {
 
                 .and()
                 .authorizeRequests()
+                .antMatchers("/rbs-websocket/**").permitAll()
+                .antMatchers("/app/**").permitAll()
+                .antMatchers("/topic/**").permitAll()
 
                 .anyRequest()
                 .access("@RBAC.hasPermission(request,authentication)")

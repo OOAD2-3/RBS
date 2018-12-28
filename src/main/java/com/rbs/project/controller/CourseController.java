@@ -159,7 +159,14 @@ public class CourseController {
     @ResponseBody
     public ResponseEntity<CourseAndStrategyVO> getCourseById(@PathVariable("courseId") long courseId) throws MyException {
         Course course = courseService.getCourseById(courseId);
-        return ResponseEntity.ok(new CourseAndStrategyVO(course));
+        List<CourseMemberLimitStrategyVO> courseMemberLimitStrategyVOS = new ArrayList<>();
+        for (CourseMemberLimitStrategy courseMemberLimitStrategy : course.getCourseMemberLimitStrategies()) {
+            courseMemberLimitStrategyVOS.add(new CourseMemberLimitStrategyVO(courseMemberLimitStrategy).setCourseName(courseService.getCourseById(courseMemberLimitStrategy.getCourseId(),-1).getName()));
+        }
+        CourseAndStrategyVO courseAndStrategyVO=new CourseAndStrategyVO(course)
+                .setCourseMemberLimitStrategyVOS(courseMemberLimitStrategyVOS)
+                .setCourseMemberLimitStrategyStyle(courseService.judgeCourseMemberLimitIsAndStyle(courseId));
+        return ResponseEntity.ok(courseAndStrategyVO);
     }
 
     /**

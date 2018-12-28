@@ -1,6 +1,7 @@
 package com.rbs.project.pojo.vo;
 
 import com.rbs.project.pojo.entity.Attendance;
+import com.rbs.project.pojo.entity.SeminarScore;
 import com.rbs.project.utils.JsonUtils;
 
 /**
@@ -19,6 +20,8 @@ public class AttendanceVO implements Comparable<AttendanceVO> {
     private String reportDDL;
     private TeamBaseInfoVO teamBaseInfoVO;
     private Integer teamOrder;
+
+    private Double presentationScore;;
 
     public AttendanceVO() {
 
@@ -106,6 +109,15 @@ public class AttendanceVO implements Comparable<AttendanceVO> {
 
     public void setTeamOrder(Integer teamOrder) {
         this.teamOrder = teamOrder;
+    }
+
+    public Double getPresentationScore() {
+        return presentationScore;
+    }
+
+    public AttendanceVO setPresentationScore(Double presentationScore) {
+        this.presentationScore = presentationScore;
+        return this;
     }
 
     @Override

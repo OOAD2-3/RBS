@@ -38,6 +38,23 @@ public interface SeminarScoreMapper {
     List<SeminarScore> listAllBySeminarIdAndCClassId(@Param("seminarId") long seminarId, @Param("classId") long classId);
 
     /**
+     * 查找一个队伍在一个轮次下的所有讨论课成绩
+     *
+     * @param roundId
+     * @param teamId
+     * @return
+     */
+    List<SeminarScore> findByRoundIdAndTeamId(@Param("roundId") long roundId, @Param("teamId") long teamId);
+
+    /**
+     * 查找一个班级讨论课的小组展示的分数
+     * @param cClassSeminarId
+     * @param teamId
+     * @return
+     */
+    SeminarScore findByClassSeminarIdAndTeamId(@Param("cClassSeminarId") long cClassSeminarId, @Param("teamId") long teamId);
+
+    /**
      * 新增一个队伍的一个讨论课分数信息
      *
      * @param cClassSeminarId
@@ -97,7 +114,21 @@ public interface SeminarScoreMapper {
                              @Param("teamId") long teamId, @Param("totalScore") double totalScore) throws Exception;
 
     /**
+     * 修改展示的提问成绩
+     *
+     * @param seminarId
+     * @param classId
+     * @param teamId
+     * @param questionScore
+     * @return
+     * @throws Exception
+     */
+    boolean updateQuestionScore(@Param("seminarId") long seminarId, @Param("classId") long classId,
+                                @Param("teamId") long teamId, @Param("questionScore") double questionScore) throws Exception;
+
+    /**
      * 通过team_id删除记录
+     *
      * @param teamId
      * @return
      */
@@ -105,6 +136,7 @@ public interface SeminarScoreMapper {
 
     /**
      * 通过班级讨论课删除轮次成绩
+     *
      * @param cClassSeminarId
      * @return
      */

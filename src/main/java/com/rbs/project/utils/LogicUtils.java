@@ -22,28 +22,42 @@ public class LogicUtils {
      * @Time: 20:38 2018/12/22
      */
     public static double calculateSeminarTotalScore(SeminarScore seminarScore, Course course) throws MyException {
+        if (seminarScore == null) {
+            throw new MyException("计算一次讨论课成绩的总分出错！传入讨论课成绩不存在", MyException.ERROR);
+        }
         if (course == null) {
             throw new MyException("计算一次讨论课成绩的总分出错！传入课程不存在", MyException.ERROR);
         }
         double presentationPercentage = course.getPresentationPercentage() / 100.0;
         double questionPercentage = course.getQuestionPercentage() / 100.0;
         double reportPercentage = course.getReportPercentage() / 100.0;
-        return seminarScore.getPresentationScore() * presentationPercentage +
-                seminarScore.getQuestionScore() * questionPercentage +
-                seminarScore.getReportScore() * reportPercentage;
+
+        double presentationScore = seminarScore.getPresentationScore() * presentationPercentage;
+        double questionScore = seminarScore.getQuestionScore() * questionPercentage;
+        double reportScore = seminarScore.getReportScore() * reportPercentage;
+
+        return presentationScore + questionScore + reportScore;
     }
 
     /**
-     * Description: 计算一次轮次课成绩的总分
+     * Description: 计算一个轮次成绩的总分
      *
      * @Author: 17Wang
-     * @Time: 21:11 2018/12/22
+     * @Time: 22:54 2018/12/28
      */
-    public static RoundScore calculateRoundScore(long roundId, long teamId) {
-        return null;
+    public static double calculateRoundTotalScore(RoundScore roundScore, Course course) throws MyException {
+        if (roundScore == null) {
+            throw new MyException("计算一次轮次成绩的总分出错！传入轮次成绩不存在", MyException.ERROR);
+        }
+        if (course == null) {
+            throw new MyException("计算一个轮次成绩的总分出错！传入课程不存在", MyException.ERROR);
+        }
+        double presentationPercentage = course.getPresentationPercentage() / 100.0;
+        double questionPercentage = course.getQuestionPercentage() / 100.0;
+        double reportPercentage = course.getReportPercentage() / 100.0;
+        return roundScore.getPresentationScore() * presentationPercentage +
+                roundScore.getQuestionScore() * questionPercentage +
+                roundScore.getReportScore() * reportPercentage;
     }
-
-
-
 
 }
