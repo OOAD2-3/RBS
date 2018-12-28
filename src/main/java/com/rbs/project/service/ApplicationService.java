@@ -268,9 +268,9 @@ public class ApplicationService {
                 for(Seminar seminar
                         :seminars){
                     //除了id courseId roundId全复制
-                    seminar.setCourseId(subCourseId);
-                    seminar.setRoundId(round.getId());
                     Seminar tempSeminar=new Seminar(seminar);
+                    tempSeminar.setCourseId(subCourseId);
+                    tempSeminar.setRoundId(tempRound.getId());
                     //TODO 调用seminarService新建业务 级联操作 已完成
                     seminarService.addSemianr(tempSeminar,false);
                 }
