@@ -48,5 +48,10 @@
         where id=#{id}
     </delete>
 
+    <select id="findBySubTeacherId" parameterType="Long" resultMap="tab_share_seminar_application" resultType="com.rbs.project.pojo.entity.ShareSeminarApplication">
+        select id,main_course_id,sub_course_id,sub_course_teacher_id,status
+        from share_seminar_application
+        where sub_course_teacher_id=#{subTeacherId}
+    </select>
 </mapper>
 

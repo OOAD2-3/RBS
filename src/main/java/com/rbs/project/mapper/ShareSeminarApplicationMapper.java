@@ -69,4 +69,11 @@ public interface ShareSeminarApplicationMapper {
      * @return
      */
     boolean deleteSeminarShareApplication(long id);
+
+    /**
+     *  获取所有讨论课共享申请
+     * @param subTeacherId
+     * @return
+     */
+    List<ShareSeminarApplication> findBySubTeacherId(long subTeacherId);
 }

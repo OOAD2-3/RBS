@@ -71,5 +71,10 @@ public interface ShareTeamApplicationMapper {
      */
     boolean deleteTeamShareApplication(long id);
 
-
+    /**
+     * 通过从课程老师id获取所有组队恭喜申请
+     * @param subTeacherId
+     * @return
+     */
+    List<ShareTeamApplication> findBySubTeacherId(long subTeacherId);
 }
