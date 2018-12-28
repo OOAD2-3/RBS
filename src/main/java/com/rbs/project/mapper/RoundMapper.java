@@ -1,6 +1,7 @@
 package com.rbs.project.mapper;
 
 import com.rbs.project.pojo.entity.Round;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -54,11 +55,5 @@ public interface RoundMapper {
      */
     boolean deleteById(long id) throws Exception;
 
-    /**
-     * 通过课程和轮次号 唯一确定一个轮次
-     * @param courseId
-     * @param serial
-     * @return
-     */
-    Round findByCourseIdAndSerial(long courseId, int serial);
+
 }

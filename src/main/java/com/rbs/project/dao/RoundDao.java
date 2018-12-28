@@ -168,10 +168,16 @@ public class RoundDao {
      * @Date: 0:54 2018/12/29
      */
     public Round getByCourseIdAndSerial(long courseId, int serial) throws MyException{
-        Round round=roundMapper.findByCourseIdAndSerial(courseId,serial);
-        if(round==null){
-            throw new MyException("查找轮次错误！未找到该记录",MyException.NOT_FOUND_ERROR);
+        List<Round> rounds=roundMapper.findByCourseId(courseId);
+        Round result=null;
+        for(Round round:rounds){
+            if(round.getSerial()==serial){
+              result=round;
+              break;
+            } else{
+                throw new MyException("查找轮次错误！未找到该记录",MyException.NOT_FOUND_ERROR);
+            }
         }
-        return round;
+        return result;
     }
 }

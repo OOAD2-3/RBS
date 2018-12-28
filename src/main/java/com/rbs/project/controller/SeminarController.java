@@ -57,7 +57,7 @@ public class SeminarController {
             throw new MyException("courseId不能为空", MyException.ID_FORMAT_ERROR);
         }
         //如果是从课程，直接报错
-        if(courseService.getCourseById(createSeminarDTO.getCourseId()).getSeminarMainCourseId()==0){
+        if(courseService.getCourseById(createSeminarDTO.getCourseId()).getSeminarMainCourseId()!=0){
             throw new MyException("从课程无法创建讨论课",MyException.ERROR);
         }
         seminar.setCourseId(createSeminarDTO.getCourseId());
@@ -156,7 +156,7 @@ public class SeminarController {
         }
         long courseId=seminarService.getSeminarById(seminarId).getCourseId();
         //如果是从课程，直接报错
-        if(courseService.getCourseById(courseId).getSeminarMainCourseId()==0){
+        if(courseService.getCourseById(courseId).getSeminarMainCourseId()!=0){
             throw new MyException("从课程无法删除讨论课",MyException.ERROR);
         }
         return ResponseEntity.ok().body(seminarService.removeSeminarById(seminarId,true));
@@ -176,7 +176,7 @@ public class SeminarController {
         }
         long courseId=seminarService.getSeminarById(seminarId).getCourseId();
         //如果是从课程，直接报错
-        if(courseService.getCourseById(courseId).getSeminarMainCourseId()==0){
+        if(courseService.getCourseById(courseId).getSeminarMainCourseId()!=0){
             throw new MyException("从课程无法修改讨论课",MyException.ERROR);
         }
         //DTO转Entity
