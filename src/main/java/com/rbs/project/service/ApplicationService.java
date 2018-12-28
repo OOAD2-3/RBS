@@ -261,7 +261,7 @@ public class ApplicationService {
                     :rounds){
                 //除了Id courseId全复制
                 Round tempRound=new Round(round);
-                tempRound.setCourseId(round.getCourseId());
+                tempRound.setCourseId(subCourseId);
                 roundDao.addRound(tempRound);
                 //  2.2 新建seminar副本
                 List<Seminar> seminars=seminarDao.listAllSeminarsByRoundId(round.getId());
@@ -330,5 +330,39 @@ public class ApplicationService {
         }
         //再删除轮次
         return shareDao.removeSeminarShare(requestId);
+    }
+
+    /**
+     * Description: 获取所有待办讨论课共享申请
+     * @Author: WinstonDeng
+     * @Date: 17:06 2018/12/28
+     */
+    public List<ShareSeminarApplication> listSeminarShareApplicationByTeacherId(long subTeacherId) throws Exception{
+        List<ShareSeminarApplication> shareSeminarApplications=shareDao.listAllShareSeminarApplicationsByTeacherId(subTeacherId,ShareDao.HAS_MAIN_COURSE,ShareDao.HAS_MAIN_COURSE_TEACHER);
+        List<ShareSeminarApplication> unHandleList=new ArrayList<>();
+        for(ShareSeminarApplication shareSeminarApplication
+                :shareSeminarApplications){
+            if(shareSeminarApplication.getStatus().equals(ShareSeminarApplication.STATUS_UNHANDLE)){
+                unHandleList.add(shareSeminarApplication);
+            }
+        }
+        return unHandleList;
+    }
+
+    /**
+     * Description:
+     * @Author: WinstonDeng
+     * @Date: 17:17 2018/12/28
+     */
+    public List<ShareTeamApplication> listTeamShareApplicationByTeacherId(long subTeacherId) throws Exception {
+        List<ShareTeamApplication> shareTeamApplications=shareDao.listAllShareTeamApplicationsByTeacherId(subTeacherId,ShareDao.HAS_MAIN_COURSE,ShareDao.HAS_MAIN_COURSE_TEACHER);
+        List<ShareTeamApplication> unHandleList=new ArrayList<>();
+        for(ShareTeamApplication shareTeamApplication
+                :shareTeamApplications){
+            if(shareTeamApplication.getStatus().equals(ShareTeamApplication.STATUS_UNHANDLE)){
+                unHandleList.add(shareTeamApplication);
+            }
+        }
+        return unHandleList;
     }
 }
