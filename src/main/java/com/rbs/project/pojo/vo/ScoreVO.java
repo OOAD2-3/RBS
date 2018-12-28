@@ -11,26 +11,26 @@ import com.rbs.project.pojo.entity.SeminarScore;
  */
 public class ScoreVO {
     private TeamBaseInfoVO teamBaseInfoVO;
-    private double totalScore;
-    private double reportScore;
-    private double questionScore;
-    private double presentationScore;
+    private Double totalScore;
+    private Double reportScore;
+    private Double questionScore;
+    private Double presentationScore;
 
     public ScoreVO revertSeminarScore(SeminarScore seminarScore) {
         teamBaseInfoVO = new TeamBaseInfoVO(seminarScore.getTeam());
-        totalScore=seminarScore.getTotalScore();
-        reportScore=seminarScore.getReportScore();
-        questionScore=seminarScore.getQuestionScore();
-        presentationScore=seminarScore.getPresentationScore();
+        totalScore = seminarScore.getTotalScore();
+        reportScore = seminarScore.getReportScore();
+        questionScore = seminarScore.getQuestionScore();
+        presentationScore = seminarScore.getPresentationScore();
         return this;
     }
 
     public ScoreVO revertSeminarScore(RoundScore roundScore) {
         teamBaseInfoVO = new TeamBaseInfoVO(roundScore.getTeam());
-        totalScore=roundScore.getTotalScore();
-        reportScore=roundScore.getReportScore();
-        questionScore=roundScore.getQuestionScore();
-        presentationScore=roundScore.getPresentationScore();
+        totalScore = roundScore.getTotalScore();
+        reportScore = roundScore.getReportScore();
+        questionScore = roundScore.getQuestionScore();
+        presentationScore = roundScore.getPresentationScore();
         return this;
     }
 
@@ -42,35 +42,35 @@ public class ScoreVO {
         this.teamBaseInfoVO = teamBaseInfoVO;
     }
 
-    public double getTotalScore() {
+    public Double getTotalScore() {
         return totalScore;
     }
 
-    public void setTotalScore(double totalScore) {
+    public void setTotalScore(Double totalScore) {
         this.totalScore = totalScore;
     }
 
-    public double getReportScore() {
+    public Double getReportScore() {
         return reportScore;
     }
 
-    public void setReportScore(double reportScore) {
+    public void setReportScore(Double reportScore) {
         this.reportScore = reportScore;
     }
 
-    public double getQuestionScore() {
+    public Double getQuestionScore() {
         return questionScore;
     }
 
-    public void setQuestionScore(double questionScore) {
+    public void setQuestionScore(Double questionScore) {
         this.questionScore = questionScore;
     }
 
-    public double getPresentationScore() {
+    public Double getPresentationScore() {
         return presentationScore;
     }
 
-    public void setPresentationScore(double presentationScore) {
+    public void setPresentationScore(Double presentationScore) {
         this.presentationScore = presentationScore;
     }
 }

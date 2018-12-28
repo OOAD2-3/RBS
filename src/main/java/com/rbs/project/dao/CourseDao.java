@@ -150,6 +150,20 @@ public class CourseDao {
     }
 
     /**
+     * Description:
+     * @Author: 17Wang
+     * @Time: 3:21 2018/12/29
+    */
+    public boolean judgeCourseMemberLimitIsAndStyle(long courseId){
+        for(TeamStrategy teamStrategy:teamStrategyMapper.findByCourseId(courseId)){
+            if(teamStrategy.getStrategyName()=="CourseMemberLimitStrategy"){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
      * Description: 通过id锁定课程
      *
      * @Author: 17Wang

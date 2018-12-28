@@ -47,6 +47,14 @@ public interface SeminarScoreMapper {
     List<SeminarScore> findByRoundIdAndTeamId(@Param("roundId") long roundId, @Param("teamId") long teamId);
 
     /**
+     * 查找一个班级讨论课的小组展示的分数
+     * @param cClassSeminarId
+     * @param teamId
+     * @return
+     */
+    SeminarScore findByClassSeminarIdAndTeamId(@Param("cClassSeminarId") long cClassSeminarId, @Param("teamId") long teamId);
+
+    /**
      * 新增一个队伍的一个讨论课分数信息
      *
      * @param cClassSeminarId

@@ -56,6 +56,15 @@ public class SeminarScoreDao {
     }
 
     /**
+     * Description:
+     * @Author: 17Wang
+     * @Time: 3:40 2018/12/29
+    */
+    public SeminarScore getByClassSeminarIdAndTeamId(long classSeminarId,long teamId){
+        return seminarScoreMapper.findByClassSeminarIdAndTeamId(classSeminarId,teamId);
+    }
+
+    /**
      * Description:获取一个班级下的一节讨论课的所有展示成绩
      *
      * @Author: 17Wang

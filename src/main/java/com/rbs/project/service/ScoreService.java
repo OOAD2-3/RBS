@@ -69,6 +69,15 @@ public class ScoreService {
     }
 
     /**
+     * Description: 获取一节展示的分数
+     * @Author: 17Wang
+     * @Time: 3:39 2018/12/29
+    */
+    public SeminarScore getSeminarScoreByClassSeminarIdAndTeamId(long classSeminarId,long teamId){
+        return seminarScoreDao.getByClassSeminarIdAndTeamId(classSeminarId,teamId);
+    }
+
+    /**
      * Description: 修改展示的展示分数
      *
      * @Author: 17Wang
@@ -113,6 +122,21 @@ public class ScoreService {
         //修改轮次的提问分数
         roundScoreDao.updateQuestionScore(seminarDao.findSeminarById(seminarId).getRoundId(), teamId);
 
+        return true;
+    }
+
+    /**
+     * Description: 修改3*6个分数
+     * @Author: 17Wang
+     * @Time: 4:49 2018/12/29
+    */
+    @Transactional(rollbackFor = Exception.class)
+    public boolean updateAllScoreByCClassSeminar(long classId,long seminarId,List<SeminarScore> seminarScores) throws Exception {
+        for(SeminarScore seminarScore:seminarScores){
+            seminarScoreDao.updatePresentationScore(seminarId, classId, seminarScore.getTeamId(), seminarScore.getPresentationScore());
+            seminarScoreDao.updateQuestionScore(seminarId,classId ,seminarScore.getTeamId() ,seminarScore.getQuestionScore() );
+            seminarScoreDao.updateReportScore(seminarId,classId ,seminarScore.getTeamId() ,seminarScore.getReportScore() );
+        }
         return true;
     }
 

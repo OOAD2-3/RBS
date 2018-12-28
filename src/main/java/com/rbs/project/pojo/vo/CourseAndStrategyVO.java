@@ -28,7 +28,8 @@ public class CourseAndStrategyVO {
     private Long teacherId;
     private String teacherName;
 
-    private List<CourseMemberLimitStrategy> courseMemberLimitStrategies;
+    private boolean courseMemberLimitStrategyStyle;
+    private List<CourseMemberLimitStrategyVO> courseMemberLimitStrategyVOS;
     private MemberLimitStrategy memberLimitStrategy;
     private List<List<CourseInfoVO>> conflictCourses;
     private Boolean ShareTeam;
@@ -52,7 +53,6 @@ public class CourseAndStrategyVO {
         teacherId = course.getTeacherId();
         teacherName = course.getTeacher().getTeacherName();
 
-        courseMemberLimitStrategies = course.getCourseMemberLimitStrategies();
         memberLimitStrategy = course.getMemberLimitStrategy();
         List<List<CourseInfoVO>> lists = new ArrayList<>();
         for (List<Course> courses : course.getConflictCourses()) {
@@ -212,11 +212,21 @@ public class CourseAndStrategyVO {
         this.conflictCourses = conflictCourses;
     }
 
-    public List<CourseMemberLimitStrategy> getCourseMemberLimitStrategies() {
-        return courseMemberLimitStrategies;
+    public List<CourseMemberLimitStrategyVO> getCourseMemberLimitStrategyVOS() {
+        return courseMemberLimitStrategyVOS;
     }
 
-    public void setCourseMemberLimitStrategies(List<CourseMemberLimitStrategy> courseMemberLimitStrategies) {
-        this.courseMemberLimitStrategies = courseMemberLimitStrategies;
+    public CourseAndStrategyVO setCourseMemberLimitStrategyVOS(List<CourseMemberLimitStrategyVO> courseMemberLimitStrategyVOS) {
+        this.courseMemberLimitStrategyVOS = courseMemberLimitStrategyVOS;
+        return this;
+    }
+
+    public boolean isCourseMemberLimitStrategyStyle() {
+        return courseMemberLimitStrategyStyle;
+    }
+
+    public CourseAndStrategyVO setCourseMemberLimitStrategyStyle(boolean courseMemberLimitStrategyStyle) {
+        this.courseMemberLimitStrategyStyle = courseMemberLimitStrategyStyle;
+        return this;
     }
 }

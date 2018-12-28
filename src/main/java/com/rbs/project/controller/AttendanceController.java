@@ -2,8 +2,10 @@ package com.rbs.project.controller;
 
 import com.rbs.project.exception.MyException;
 import com.rbs.project.pojo.entity.Attendance;
+import com.rbs.project.pojo.entity.SeminarScore;
 import com.rbs.project.pojo.vo.AttendanceVO;
 import com.rbs.project.service.AttendanceService;
+import com.rbs.project.service.ScoreService;
 import com.rbs.project.utils.FileLoadUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -26,6 +28,9 @@ public class AttendanceController {
     @Autowired
     private AttendanceService attendanceService;
 
+    @Autowired
+    private ScoreService scoreService;
+
     /**
      * Description: 获取一个班级下的一节讨论课的所有的报名
      *
@@ -38,7 +43,8 @@ public class AttendanceController {
         List<Attendance> attendances = attendanceService.listAttendanceByCClassIdAndSeminarId(cClassId, seminarId);
         List<AttendanceVO> attendanceVOS = new ArrayList<>();
         for (Attendance attendance : attendances) {
-            attendanceVOS.add(new AttendanceVO(attendance));
+            SeminarScore seminarScore=scoreService.getSeminarScoreByClassSeminarIdAndTeamId(attendance.getcClassSeminarId(),attendance.getTeamId());
+            attendanceVOS.add(new AttendanceVO(attendance).setPresentationScore(seminarScore.getPresentationScore()));
         }
         Collections.sort(attendanceVOS);
         return attendanceVOS;

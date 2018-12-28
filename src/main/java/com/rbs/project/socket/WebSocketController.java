@@ -89,7 +89,21 @@ public class WebSocketController {
     @MessageMapping("/teacher/class/{classId}/seminar/{seminarId}/pickQuestion")
     @SendTo("/topic/client/class/{classId}/seminar/{seminarId}/pickQuestion")
     public UserVO pickQuestion(@DestinationVariable("classId") long classId, @DestinationVariable("seminarId") long seminarId, Long attendanceId) {
-
         return new UserVO(studentPool.pick(attendanceId));
     }
+
+    /**
+     * Description: 学生点击提问
+     * 1、将提问的学生放到提问池中
+     * 2、给订阅了SendTo的客户端发送 当前提问的数量
+     *
+     * @Author: 17Wang
+     * @Time: 2:30 2018/12/29
+    */
+    @MessageMapping("/teacher/class/{classId}/seminar/{seminarId}/raiseQuestion")
+    @SendTo("/topic/client/class/{classId}/seminar/{seminarId}/raiseQuestion")
+    public Integer raiseQuestion(@DestinationVariable("classId") long classId, @DestinationVariable("seminarId") long seminarId, Long attendanceId){
+        return 1;
+    }
+
 }

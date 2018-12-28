@@ -33,6 +33,12 @@
         WHERE seminar.round_id=#{roundId} AND seminar_score.team_id=#{teamId}
     </select>
 
+    <select id="findByClassSeminarIdAndTeamId" resultMap="tab_seminar_score">
+        SELECT seminar_score.*
+        FROM seminar_score
+        WHERE klass_seminar_id=#{cClassSeminarId} AND team_id=#{teamId}
+    </select>
+
     <insert id="insertSeminarScore">
         INSERT INTO seminar_score(klass_seminar_id, team_id)
         VALUES (#{cClassSeminarId},#{teamId})
