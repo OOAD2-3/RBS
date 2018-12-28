@@ -41,6 +41,9 @@ public class CourseDao {
     @Autowired
     private ShareTeamApplicationMapper shareTeamApplicationMapper;
 
+    @Autowired
+    private TeacherMapper teacherMapper;
+
     /**
      * 组队人数限制策略
      */
@@ -51,6 +54,7 @@ public class CourseDao {
     public static final int HAS_CONFLICT_COURSES = 1;
     public static final int HAS_CCLASS = 2;
     public static final int HAS_SEMINAR = 3;
+    public static final int HAS_TEACHER = 4;
 
     private void hasSomethingFun(Course course, int... hasSomething) {
         for (int i : hasSomething) {
@@ -79,6 +83,9 @@ public class CourseDao {
                 }
 
                 course.setConflictCourses(conflictCourses);
+            }
+            if (i == HAS_TEACHER) {
+                course.setTeacher(teacherMapper.findById(course.getTeacherId()));
             }
         }
     }
@@ -169,13 +176,13 @@ public class CourseDao {
         }
 
         //TODO 删除share_seminar_application 待测试
-        if(!shareSeminarApplicationMapper.deleteByCourseId(courseId)){
-            throw new MyException("删除share_seminar_application失败！数据库处理错误",MyException.ERROR );
+        if (!shareSeminarApplicationMapper.deleteByCourseId(courseId)) {
+            throw new MyException("删除share_seminar_application失败！数据库处理错误", MyException.ERROR);
         }
 
         //TODO 删除share_team_application 待测试
-        if(!shareTeamApplicationMapper.deleteByCourseId(courseId)){
-            throw new MyException("删除share_team_application失败！数据库处理错误",MyException.ERROR );
+        if (!shareTeamApplicationMapper.deleteByCourseId(courseId)) {
+            throw new MyException("删除share_team_application失败！数据库处理错误", MyException.ERROR);
         }
 
         return true;
@@ -183,35 +190,51 @@ public class CourseDao {
 
     /**
      * Description: 更新从课程team_main_course_id字段
+     *
      * @Author: WinstonDeng
      * @Date: 10:21 2018/12/27
      */
-    public boolean updateTeamMainCourseId(long subCourseId, long mainCourseId) throws MyException{
-        Course course=courseMapper.findById(subCourseId);
-        if(course==null){
-            throw new MyException("更新从课程team_main_course_id错误！未找到该课程",MyException.NOT_FOUND_ERROR);
+    public boolean updateTeamMainCourseId(long subCourseId, long mainCourseId) throws MyException {
+        Course course = courseMapper.findById(subCourseId);
+        if (course == null) {
+            throw new MyException("更新从课程team_main_course_id错误！未找到该课程", MyException.NOT_FOUND_ERROR);
         }
         course.setTeamMainCourseId(mainCourseId);
-        if(!courseMapper.updateTeamMainCourseId(course)){
-            throw new MyException("更新从课程team_main_course_id错误！数据库处理错误",MyException.ERROR);
+        if (!courseMapper.updateTeamMainCourseId(course)) {
+            throw new MyException("更新从课程team_main_course_id错误！数据库处理错误", MyException.ERROR);
         }
         return true;
     }
 
     /**
      * Description: 通过id修改讨论课共享主课程字段
+     *
      * @Author: WinstonDeng
      * @Date: 21:15 2018/12/27
      */
-    public boolean updateSeminarMainCourseId(long subCourseId, long mainCourseId) throws MyException{
-        Course course=courseMapper.findById(subCourseId);
-        if(course==null){
-            throw new MyException("更新从课程seminar_main_course_id错误！未找到该课程",MyException.NOT_FOUND_ERROR);
+    public boolean updateSeminarMainCourseId(long subCourseId, long mainCourseId) throws MyException {
+        Course course = courseMapper.findById(subCourseId);
+        if (course == null) {
+            throw new MyException("更新从课程seminar_main_course_id错误！未找到该课程", MyException.NOT_FOUND_ERROR);
         }
         course.setSeminarMainCourseId(mainCourseId);
-        if(!courseMapper.updateSeminarMainCourseId(course)){
-            throw new MyException("更新从课程seminar_main_course_id错误！数据库处理错误",MyException.ERROR);
+        if (!courseMapper.updateSeminarMainCourseId(course)) {
+            throw new MyException("更新从课程seminar_main_course_id错误！数据库处理错误", MyException.ERROR);
         }
         return true;
+    }
+
+    /**
+     * Description: 通过老师id查看当前已有课程
+     * @Author: WinstonDeng
+     * @Date: 15:41 2018/12/28
+     */
+    public List<Course> listAllCoursesByTeacherId(long teacherId, int ...hasSomething) {
+         List<Course> courses=courseMapper.findByTeacherId(teacherId);
+         for(Course course
+                 :courses){
+             hasSomethingFun(course,hasSomething);
+         }
+         return courses;
     }
 }

@@ -45,7 +45,7 @@ public class CClassController {
         boolean flag=false;
         String text="fileName";
         if(file.get(text)!=null){
-            //直接解析，补充原来没有的学生
+            //直接解析，student表补充原来没有的学生, klass_student要添加
             flag=cClassService.transStudentListFileToDataBase(cClassId,request.getServletContext().getRealPath("/resources/studentfile/"),file.get(text));
         }
         return ResponseEntity.ok().body(flag);

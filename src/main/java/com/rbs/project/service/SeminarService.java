@@ -40,6 +40,9 @@ public class SeminarService {
     private RoundScoreDao roundScoreDao;
 
     @Autowired
+    private SeminarScoreDao seminarScoreDao;
+
+    @Autowired
     private StudentDao studentDao;
 
     @Autowired
@@ -52,7 +55,7 @@ public class SeminarService {
      * @Date: 16:25 2018/12/18
      */
     @Transactional(rollbackFor = Exception.class)
-    public long addSemianr(Seminar seminar) throws Exception {
+    public long addSemianr(Seminar seminar,boolean hasEmail) throws Exception {
         //初始化新增讨论课id
         long createSeminarId = -1;
         //如果轮次为空，则新建一个轮次，级联修改
@@ -89,12 +92,13 @@ public class SeminarService {
         seminar.setSerial(serial);
         //新增讨论课
         seminarDao.addSeminar(seminar);
-        //新增班级讨论课  TODO 新增SeminarScore 这个课程下的所有小组
+        //新增班级讨论课 TODO 级联新增seminar_score 已完成
         cClassSeminarDao.addCClassSeminar(seminar);
-
-        //发邮件通知课程下所有班级所有小组成员
-        String message="第"+seminar.getSerial()+"节讨论课:"+seminar.getName()+"已发布，请注意查看！";
-        sendSemianrEmail(seminar,message);
+        if(hasEmail){
+            //发邮件通知课程下所有班级所有小组成员
+            String message="第"+seminar.getSerial()+"节讨论课:"+seminar.getName()+"已发布，请注意查看！";
+            sendSemianrEmail(seminar,message);
+        }
         //获得主键
         createSeminarId = seminar.getId();
         return createSeminarId;
@@ -141,19 +145,27 @@ public class SeminarService {
      * @Date: 16:29 2018/12/18
      */
     @Transactional(rollbackFor = Exception.class)
-    public boolean removeSeminarById(long seminarId) throws Exception {
+    public boolean removeSeminarById(long seminarId,boolean hasEmail) throws Exception {
         if ((Long) seminarId == null) {
             throw new MyException("seminarId不能为空", MyException.ERROR);
         }
         Seminar seminar=seminarDao.findSeminarById(seminarId);
         //级联删除
-        // 1. 删除班级讨论课
+        List<CClassSeminar> cClassSeminars=cClassSeminarDao.findBySeminarId(seminarId);
+        for(CClassSeminar cClassSeminar
+                :cClassSeminars){
+            // 1. 删除seminar_score
+            seminarScoreDao.deleteSeminarScoreByCClassSeminarId(cClassSeminar.getId());
+        }
+        // 2. 删除班级讨论课
         seminarDao.removeCClassSeminarBySeminarId(seminarId);
-        // 2. 删除讨论课
+        // 3. 删除讨论课
         seminarDao.removeSeminarById(seminarId);
-        //发邮件通知课程下所有班级所有小组成员
-        String message="第"+seminar.getSerial()+"节讨论课:"+seminar.getName()+"已删除，请注意查看！";
-        sendSemianrEmail(seminar,message);
+        if(hasEmail){
+            //发邮件通知课程下所有班级所有小组成员
+            String message="第"+seminar.getSerial()+"节讨论课:"+seminar.getName()+"已删除，请注意查看！";
+            sendSemianrEmail(seminar,message);
+        }
         return true;
     }
 

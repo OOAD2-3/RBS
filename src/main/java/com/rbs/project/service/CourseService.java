@@ -53,7 +53,8 @@ public class CourseService {
                     CourseDao.HAS_COURSE_MEMBER_LIMIT_STRATEGY,
                     CourseDao.HAS_SEMINAR,
                     CourseDao.HAS_CCLASS,
-                   CourseDao.HAS_CONFLICT_COURSES);
+                   CourseDao.HAS_CONFLICT_COURSES,
+                    CourseDao.HAS_TEACHER);
         }
         return courseDao.getCourseById(courseId, hasSomething);
     }
@@ -65,7 +66,7 @@ public class CourseService {
      * @Time: 17:41 2018/12/23
      */
     public List<Course> listAllCourses() {
-        return courseDao.listAllCourses();
+        return courseDao.listAllCourses(CourseDao.HAS_TEACHER);
     }
 
     /**
@@ -83,6 +84,9 @@ public class CourseService {
                 classes.add(cClassDao.getCClassByStudentIdAndCourseId(user.getId(), course.getId()));
                 course.setcClasses(classes);
             }
+        }else if(user instanceof Teacher){
+            List<Course> courses=courseDao.listAllCoursesByTeacherId(user.getId(),CourseDao.HAS_TEACHER);
+            user.setCourses(courses);
         }
         return user.getCourses();
     }
