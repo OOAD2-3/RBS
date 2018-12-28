@@ -3,6 +3,7 @@ package com.rbs.project.service;
 import com.rbs.project.dao.*;
 import com.rbs.project.exception.MyException;
 import com.rbs.project.pojo.entity.*;
+import com.rbs.project.pojo.relationship.CClassStudent;
 import com.rbs.project.utils.LogicUtils;
 import com.rbs.project.utils.UserUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +42,12 @@ public class TeamService {
 
     @Autowired
     private SeminarScoreDao seminarScoreDao;
+
+    @Autowired
+    private CourseDao courseDao;
+
+    @Autowired
+    private ApplicationService applicationService;
 
     /**
      * Description: 新建一个Team
@@ -130,6 +137,13 @@ public class TeamService {
         }
         teamDao.addTeamStudentByTeamIdAndStudentId(team.getId(), team.getLeaderId());
 
+        //如果有从课程，同步team
+        //从课程
+        List<Course> courses=courseDao.listAllCoursesByTeamMainCourseId(team.getCourseId());
+        List<Student> mainCourseStudents=studentDao.listByTeamId(team.getId());
+        for(Course course:courses){
+            applicationService.teamMapToSubCourse(team,course.getId());
+        }
         //返回team的id
         return team.getId();
     }

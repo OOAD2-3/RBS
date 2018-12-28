@@ -48,6 +48,16 @@ public class SeminarService {
     @Autowired
     private EmailService emailService;
 
+    @Autowired
+    private CourseDao courseDao;
+
+    @Autowired
+    private RoundService roundService;
+
+    private final static int ADD_SEMINAR=0;
+    private final static int UPDATE_SEMINAR=1;
+
+
     /**
      * Description: 新建讨论课
      *
@@ -58,10 +68,13 @@ public class SeminarService {
     public long addSemianr(Seminar seminar,boolean hasEmail) throws Exception {
         //初始化新增讨论课id
         long createSeminarId = -1;
+        //是否新建了轮次
+        boolean flagRound=false;
         //如果轮次为空，则新建一个轮次，级联修改
         //判断为null太傻吊。接进来数据null的set不进来，沙雕转换为-1，就不是空了，这里再判断，自己难为自己
         if (seminar.getRoundId() == -1) {
             seminar = addRoundBussiness(seminar);
+            flagRound=true;
         }
         //其他判空
         if (seminar.getName() == null) {
@@ -97,6 +110,8 @@ public class SeminarService {
             String message="第"+seminar.getSerial()+"节讨论课:"+seminar.getName()+"已发布，请注意查看！";
             sendSemianrEmail(seminar,message);
         }
+        //如果有从课程，则同步更新
+        seminarCopyToSubCourse(seminar,flagRound,ADD_SEMINAR);
         //获得主键
         createSeminarId = seminar.getId();
         return createSeminarId;
@@ -110,9 +125,12 @@ public class SeminarService {
      */
     @Transactional(rollbackFor = Exception.class)
     public boolean updateSeminar(Seminar seminar) throws Exception {
+        //是否新建了轮次
+        boolean flagRound=false;
         //如果轮次为空，则新建一个轮次，级联修改
         if ((Long) seminar.getRoundId() == null) {
             seminar = addRoundBussiness(seminar);
+            flagRound=true;
         }
         //其他判空
         if ((Long) seminar.getCourseId() == null) {
@@ -130,6 +148,8 @@ public class SeminarService {
         //发邮件通知课程下所有班级所有小组成员
         String message="第"+seminar.getSerial()+"节讨论课:"+seminar.getName()+"已修改，请注意查看！";
         sendSemianrEmail(seminar,message);
+        //如果有从课程，则同步更新
+        seminarCopyToSubCourse(seminar,flagRound,UPDATE_SEMINAR);
         return seminarDao.updateSeminarById(seminar);
     }
 
@@ -161,6 +181,15 @@ public class SeminarService {
             String message="第"+seminar.getSerial()+"节讨论课:"+seminar.getName()+"已删除，请注意查看！";
             sendSemianrEmail(seminar,message);
         }
+        //如果有从课程，同步更新
+        List<Course> courses=courseDao.listAllCoursesBySeminarMainCourseId(seminar.getCourseId());
+        for(Course course
+                :courses){
+            List<Seminar> seminars=seminarDao.findSeminarByCourseId(course.getId());
+            for (Seminar temp:seminars){
+                removeSeminarById(temp.getId(),true);
+            }
+        }
         return true;
     }
 
@@ -171,11 +200,11 @@ public class SeminarService {
      * @Date: 20:50 2018/12/20
      */
     public Seminar getSeminarById(long seminarId) throws MyException {
-        //TODO 无意义
-        if ((Long) seminarId == null) {
-            throw new MyException("seminarId不能为空", MyException.ERROR);
+        Seminar seminar=seminarDao.findSeminarById(seminarId, SeminarDao.HAS_ROUND,SeminarDao.HAS_COURSE);
+        if (seminar == null) {
+            throw new MyException("按id查找讨论课错误！未找到该记录", MyException.ERROR);
         }
-        return seminarDao.findSeminarById(seminarId, SeminarDao.HAS_ROUND,SeminarDao.HAS_COURSE);
+        return seminar;
     }
 
     /**
@@ -204,6 +233,7 @@ public class SeminarService {
         round.setId(roundId);
         //      2.新增klass_round记录
         //与新建的seminar建立关系
+        seminar.setRound(round);
         seminar.setRoundId(round.getId());
         //对该课程下的所有班级，新建klass_round记录，并设置其中enrollNumber字段
         List<CClass> cClasses = cClassDao.listByCourseId(seminar.getCourseId());
@@ -212,8 +242,7 @@ public class SeminarService {
             cClassRound.setcClassId(cClass.getId());
             cClassRound.setRoundId(seminar.getRoundId());
             //默认1次
-            final int defaultEnrollNumber = 1;
-            cClassRound.setEnrollNumber(defaultEnrollNumber);
+            cClassRound.setEnrollNumber(CClassRound.DEFAULT_ENROLL_NUM);
             cClassDao.addCClassRound(cClassRound);
         }
         //      3.新增round_score记录
@@ -253,6 +282,64 @@ public class SeminarService {
             for (Student student
                     :students){
                 emailService.sendEmail(new String[]{student.getEmail()},message);
+            }
+        }
+    }
+
+    /**
+     * Description: 【私有】共享同步业务逻辑
+     * @Author: WinstonDeng
+     * @Date: 0:29 2018/12/29
+     */
+    private void seminarCopyToSubCourse(Seminar seminar,boolean flagRound,int ...hasSomething) throws Exception {
+        List<Course> courses=courseDao.listAllCoursesBySeminarMainCourseId(seminar.getCourseId());
+        if(courses.isEmpty()){
+            return;
+        }
+        for(Course course
+                :courses){
+            Seminar seminarCopyToSubCourse=seminar;
+            seminarCopyToSubCourse.setCourseId(course.getId());
+            Round roundCopyToSubCourse=seminar.getRound();
+            roundCopyToSubCourse.setCourseId(course.getId());
+            if(flagRound){
+                //新建轮次
+                roundCopyToSubCourse.setId(0);
+                roundDao.addRound(roundCopyToSubCourse);
+                //新建班级轮次
+                List<CClass> cClasses=cClassDao.listByCourseId(course.getId());
+                for(CClass cClass
+                        :cClasses){
+                    List<Team> teams=teamDao.listByCClassId(cClass.getId());
+                    //新建班级轮次
+                    CClassRound cClassRound=new CClassRound();
+                    cClassRound.setcClassId(cClass.getId());
+                    cClassRound.setRoundId(roundCopyToSubCourse.getId());
+                    cClassRound.setEnrollNumber(CClassRound.DEFAULT_ENROLL_NUM);
+                    cClassDao.addCClassRound(cClassRound);
+                    //新建轮次成绩
+                    for(Team team:teams){
+                        RoundScore roundScore=new RoundScore();
+                        roundScore.setRoundId(roundCopyToSubCourse.getId());
+                        roundScore.setTeamId(team.getId());
+                        roundScoreDao.addRoundScore(roundScore);
+                    }
+                }
+            }else {
+                roundCopyToSubCourse.setId(roundDao.getByCourseIdAndSerial(course.getId(),roundCopyToSubCourse.getSerial()).getId());
+            }
+            seminarCopyToSubCourse.setRoundId(roundCopyToSubCourse.getId());
+            for(int i:hasSomething){
+                //新建讨论课
+                if(i==ADD_SEMINAR){
+                    addSemianr(seminar,true);
+                    break;
+                }
+                //修改讨论课
+                if(i==UPDATE_SEMINAR){
+                    updateSeminar(seminar);
+                    break;
+                }
             }
         }
     }

@@ -53,4 +53,12 @@ public interface RoundMapper {
      * @throws Exception
      */
     boolean deleteById(long id) throws Exception;
+
+    /**
+     * 通过课程和轮次号 唯一确定一个轮次
+     * @param courseId
+     * @param serial
+     * @return
+     */
+    Round findByCourseIdAndSerial(long courseId, int serial);
 }

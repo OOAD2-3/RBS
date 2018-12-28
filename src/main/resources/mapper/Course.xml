@@ -83,4 +83,18 @@
         set seminar_main_course_id=#{seminarMainCourseId}
         where id=#{id}
     </update>
+
+    <select id="findBySeminarMainCourseId" parameterType="Long" resultMap="tab_course" resultType="com.rbs.project.pojo.entity.Course">
+      select id,teacher_id,course_name,introduction,presentation_percentage,question_percentage,report_percentage,
+        team_start_time,team_end_time,team_main_course_id,seminar_main_course_id
+      from course
+      where seminar_main_course_id=#{seminarMainCourseId}
+    </select>
+
+    <select id="findByTeamMainCourseId" parameterType="Long" resultMap="tab_course" resultType="com.rbs.project.pojo.entity.Course">
+      select id,teacher_id,course_name,introduction,presentation_percentage,question_percentage,report_percentage,
+        team_start_time,team_end_time,team_main_course_id,seminar_main_course_id
+      from course
+      where team_main_course_id=#{teamMainCourseId}
+    </select>
 </mapper>
