@@ -239,6 +239,7 @@ public class ShareDao {
         shareTeamApplication.setMainCourseId(courseId);
         shareTeamApplication.setSubCourseId(subCourse.getId());
         shareTeamApplication.setSubCourseTeacherId(subCourse.getTeacherId());
+        shareTeamApplication.setStatus(ShareTeamApplication.STATUS_UNHANDLE);
         if (!shareTeamApplicationMapper.addShareTeamApplication(shareTeamApplication)) {
             throw new MyException("发起队伍共享请求错误！数据库处理错误", MyException.ERROR);
         }
@@ -337,6 +338,7 @@ public class ShareDao {
         shareSeminarApplication.setMainCourseId(courseId);
         shareSeminarApplication.setSubCourseId(subCourse.getId());
         shareSeminarApplication.setSubCourseTeacherId(subCourse.getTeacherId());
+        shareSeminarApplication.setStatus(ShareSeminarApplication.STATUS_UNHANDLE);
         if (!shareSeminarApplicationMapper.addShareSeminarApplication(shareSeminarApplication)) {
             throw new MyException("发起讨论课共享请求错误！数据库处理错误", MyException.ERROR);
         }
@@ -349,7 +351,7 @@ public class ShareDao {
      * @Author: WinstonDeng
      * @Date: 23:22 2018/12/27
      */
-    public boolean removeSeminarShare(long requestId) throws Exception {
+    public boolean removeSeminarShare(long requestId) throws Exception{
         ShareSeminarApplication shareSeminarApplication=shareSeminarApplicationMapper.findById(requestId);
         long subCourseId=shareSeminarApplication.getSubCourseId();
         List<Round> rounds = roundMapper.findByCourseId(subCourseId);
