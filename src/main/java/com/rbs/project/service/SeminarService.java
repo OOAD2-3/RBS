@@ -89,8 +89,9 @@ public class SeminarService {
         seminar.setSerial(serial);
         //新增讨论课
         seminarDao.addSeminar(seminar);
-        //新增班级讨论课
+        //新增班级讨论课  TODO 新增SeminarScore 这个课程下的所有小组
         cClassSeminarDao.addCClassSeminar(seminar);
+
         //发邮件通知课程下所有班级所有小组成员
         String message="第"+seminar.getSerial()+"节讨论课:"+seminar.getName()+"已发布，请注意查看！";
         sendSemianrEmail(seminar,message);
@@ -163,6 +164,7 @@ public class SeminarService {
      * @Date: 20:50 2018/12/20
      */
     public Seminar getSeminarById(long seminarId) throws MyException {
+        //TODO 无意义
         if ((Long) seminarId == null) {
             throw new MyException("seminarId不能为空", MyException.ERROR);
         }

@@ -33,6 +33,13 @@ public interface CClassSeminarMapper {
     List<CClassSeminar> findByCClassId(long cClassId);
 
     /**
+     * 通过课程找班级讨论课列表
+     * @param courseId
+     * @return
+     */
+    List<CClassSeminar> findByCourseId(long courseId);
+
+    /**
      * 通过讨论课id查找班级讨论课
      * @param seminarId
      * @return

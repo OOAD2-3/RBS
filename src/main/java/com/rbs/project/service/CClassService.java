@@ -1,8 +1,11 @@
 package com.rbs.project.service;
 
 import com.rbs.project.dao.CClassDao;
+import com.rbs.project.dao.CClassSeminarDao;
+import com.rbs.project.dao.SeminarDao;
 import com.rbs.project.dao.StudentDao;
 import com.rbs.project.exception.MyException;
+import com.rbs.project.pojo.entity.Seminar;
 import com.rbs.project.pojo.relationship.CClassStudent;
 import com.rbs.project.pojo.entity.CClass;
 import com.rbs.project.pojo.entity.Student;
@@ -29,8 +32,15 @@ public class CClassService {
     @Autowired
     private StudentDao studentDao;
 
+    @Autowired
+    private CClassSeminarDao cClassSeminarDao;
+
+    @Autowired
+    private SeminarDao seminarDao;
+
     /**
      * Description: 创建班级
+     *
      * @Author: WinstonDeng
      * @Date: 11:34 2018/12/12
      */
@@ -38,53 +48,68 @@ public class CClassService {
         //新建记录的主键值 初始化为-1
         long createCClassId = -1;
         //判空
-        if((Long)courseId==null){
-            throw new MyException("courseId不能为空",MyException.ERROR);
+        if ((Long) courseId == null) {
+            throw new MyException("courseId不能为空", MyException.ERROR);
         }
-        if(cClass.getGrade()==null){
-            throw new MyException("grade不能为空",MyException.ERROR);
+        if (cClass.getGrade() == null) {
+            throw new MyException("grade不能为空", MyException.ERROR);
         }
-        if(cClass.getSerial()==null){
-            throw new MyException("serial不能为空",MyException.ERROR);
+        if (cClass.getSerial() == null) {
+            throw new MyException("serial不能为空", MyException.ERROR);
         }
-        if(cClass.getTime()==null){
-            throw new MyException("time不能为空",MyException.ERROR);
+        if (cClass.getTime() == null) {
+            throw new MyException("time不能为空", MyException.ERROR);
         }
-        if(cClass.getPlace()==null){
-            throw new MyException("location不能为空",MyException.ERROR);
+        if (cClass.getPlace() == null) {
+            throw new MyException("location不能为空", MyException.ERROR);
         }
 
         cClass.setCourseId(courseId);
-        cClassDao.addCClass(courseId,cClass);
+        //插入klass表
+        cClassDao.addCClass(courseId, cClass);
+
+        //TODO 建立班级讨论课联系 已完成
+        //1.获取这个班级属于的课程下的所有讨论课
+        List<Seminar> seminars = seminarDao.findSeminarByCourseId(cClass.getCourseId());
+        //2.建立班级和讨论课之间的联系
+        for (Seminar seminar : seminars) {
+            cClassSeminarDao.addCClassSeminar(seminar);
+        }
+
+        //TODO 建立班级轮次关系klass_round
+
+
         //获得主键
-        createCClassId=cClass.getId();
+        createCClassId = cClass.getId();
         return createCClassId;
     }
+
     /**
      * Description: 解析名单excel文件 并导入数据库
+     *
      * @Author: WinstonDeng
      * @Date: 14:44 2018/12/12
      */
     @Transactional(rollbackFor = Exception.class)
-    public boolean transStudentListFileToDataBase(long cclassId,String filePath, String fileName) throws MyException {
+    public boolean transStudentListFileToDataBase(long cclassId, String filePath, String fileName) throws MyException {
         //读取路径
-        Set<Student> students= ExcelUtils.transExcelToSet(filePath+fileName);
-        for(Student student
-                :students){
+        Set<Student> students = ExcelUtils.transExcelToSet(filePath + fileName);
+        for (Student student
+                : students) {
             //通过学号判断是否存在
             try {
                 studentDao.getStudentByAccount(student.getUsername());
-            }catch (MyException e){
+            } catch (MyException e) {
                 //默认密码
                 student.setPassword("123456");
                 //初始状态
                 student.setActive(false);
                 //增加到student
-                long studentId=studentDao.addStudent(student);
+                long studentId = studentDao.addStudent(student);
                 student.setId(studentId);
             }
             //不管新班级中，学生存不存在，都要增加到klass_student
-            CClassStudent cClassStudent =new CClassStudent();
+            CClassStudent cClassStudent = new CClassStudent();
             cClassStudent.setcClassId(cclassId);
             cClassStudent.setCourseId(cClassDao.getById(cclassId).getCourseId());
             cClassStudent.setStudentId(student.getId());
@@ -95,12 +120,13 @@ public class CClassService {
 
     /**
      * Description: 通过课程查看班级列表
+     *
      * @Author: WinstonDeng
      * @Date: 10:42 2018/12/17
      */
-    public List<CClass> listCClassesByCourseId(long courseId) throws MyException{
-        if((Long)courseId==null){
-            throw new MyException("courseId不能为空",MyException.ERROR);
+    public List<CClass> listCClassesByCourseId(long courseId) throws MyException {
+        if ((Long) courseId == null) {
+            throw new MyException("courseId不能为空", MyException.ERROR);
         }
         return cClassDao.listByCourseId(courseId);
     }
@@ -108,12 +134,13 @@ public class CClassService {
 
     /**
      * Description: 按id删除班级
+     *
      * @Author: WinstonDeng
      * @Date: 11:10 2018/12/18
      */
-    public boolean removeCClassById(long cClassId) throws MyException{
-        if((Long)cClassId==null){
-            throw new MyException("cClassId不能为空",MyException.ERROR);
+    public boolean removeCClassById(long cClassId) throws MyException {
+        if ((Long) cClassId == null) {
+            throw new MyException("cClassId不能为空", MyException.ERROR);
         }
         return cClassDao.removeCClass(cClassId);
     }
@@ -121,10 +148,11 @@ public class CClassService {
 
     /**
      * Description: 按id获取班级
+     *
      * @Author: WinstonDeng
      * @Date: 21:19 2018/12/26
      */
-    public CClass getClassById(long cClassId) throws MyException{
+    public CClass getClassById(long cClassId) throws MyException {
         return cClassDao.getById(cClassId);
     }
 }

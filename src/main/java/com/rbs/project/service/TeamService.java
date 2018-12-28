@@ -33,6 +33,12 @@ public class TeamService {
     @Autowired
     private CClassDao cClassDao;
 
+    @Autowired
+    private RoundScoreDao roundScoreDao;
+
+    @Autowired
+    private RoundDao roundDao;
+
     /**
      * Description: 新建一个Team
      *
@@ -87,6 +93,24 @@ public class TeamService {
         //插入 team表
         //在这个方法同时插入到klass_team中
         teamDao.addTeam(team);
+
+        //TODO 建立班级队伍关系klass_team 已完成
+        teamDao.addCClassTeam(team.getId(), team.getcClassId());
+
+        //TODO 建立小组轮次关系round_score 已完成
+        //获取这个小组属于的课程下的所有轮次
+        RoundScore roundScore=new RoundScore();
+        roundScore.setTeamId(team.getId());
+        for(Round round: roundDao.listByCourseId(team.getCourseId())){
+            roundScore.setRoundId(round.getId());
+            roundScoreDao.addRoundScore(roundScore);
+        }
+
+
+        //TODO 建立小组讨论课关系seminar_score
+
+
+
 
         //判断队伍是否合法
         if (teamDao.teamStrategy(team.getId())) {

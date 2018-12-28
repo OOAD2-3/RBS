@@ -35,7 +35,7 @@ public interface TeamMapper {
     Team findByLeaderId(long leaderId);
 
     /**
-     * 通过班级查找队伍列表
+     * 通过班级查找队伍列表，通过klass_team关系找的
      *
      * @param cClassId
      * @return
