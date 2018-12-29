@@ -21,15 +21,16 @@ public class StudentPool {
 
     private Random random = new Random();
 
-    public void put(Long attendanceId, Student student) {
+    public void put(Long attendanceId, Student student) throws Exception {
         List<Student> studentList = map.getOrDefault(attendanceId, new CopyOnWriteArrayList<>());
         for (Student s : studentList) {
             //如果存在该学生
-            if (s == student) {
-                return;
+            if (s.getId() == student.getId()) {
+                throw new Exception();
             }
         }
         studentList.add(student);
+        map.put(attendanceId, studentList);
     }
 
     public Student pick(Long attendanceId) {
@@ -51,6 +52,7 @@ public class StudentPool {
 
     /**
      * Description: 清空一个展示的所有提问
+     *
      * @Author: WinstonDeng
      * @Date: 10:36 2018/12/29
      */

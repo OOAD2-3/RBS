@@ -32,9 +32,10 @@ public class StudentService {
 
     /**
      * Description: 通过id获取一个学生
+     *
      * @Author: 17Wang
      * @Time: 8:49 2018/12/29
-    */
+     */
     public Student findStudentById(long studentId) throws MyException {
         return studentDao.getStudentById(studentId);
     }
@@ -61,10 +62,11 @@ public class StudentService {
 
     /**
      * Description:获取一个课程下没有组队的所有学生
+     *
      * @Author: 17Wang
      * @Time: 13:19 2018/12/23
-    */
-    public List<Student> listByCourseIdAndTeamId(long courseId){
+     */
+    public List<Student> listByCourseIdAndTeamId(long courseId) {
         return studentDao.listByCourseIdAndTeamIdIsNULL(courseId);
     }
 
@@ -89,8 +91,12 @@ public class StudentService {
             temp.setStudentName(student.getStudentName());
             studentDao.updateStudentNameByStudent(temp);
         }
+
         //修改学生邮箱
-        if (!temp.getEmail().equals(student.getEmail())) {
+        if (temp.getEmail() == null) {
+            temp.setEmail(" ");
+        }
+        if (!temp.getEmail().equals(student.getEmail()) && student.getEmail() != null) {
             temp.setEmail(student.getEmail());
             studentDao.updateEmailByStudent(temp);
         }
@@ -119,9 +125,10 @@ public class StudentService {
 
     /**
      * Description: 删除学生
+     *
      * @Author: 17Wang
      * @Time: 22:04 2018/12/17
-    */
+     */
     public boolean deleteStudent(long studentId) throws MyException {
         return studentDao.deleteStudentByStudentId(studentId);
     }

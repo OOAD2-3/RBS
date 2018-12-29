@@ -1,16 +1,22 @@
 package com.rbs.project.controller;
 
+import com.rbs.project.controller.vo.UserVO;
 import com.rbs.project.exception.MyException;
+import com.rbs.project.pojo.entity.CClassSeminar;
 import com.rbs.project.pojo.entity.Question;
 import com.rbs.project.pojo.entity.Student;
 import com.rbs.project.service.AttendanceService;
 import com.rbs.project.service.CClassSeminarService;
 import com.rbs.project.service.QuestionService;
+import com.rbs.project.service.StudentService;
 import com.rbs.project.socket.StudentPool;
 import com.rbs.project.utils.UserUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Description:
@@ -28,7 +34,10 @@ public class QuestionController {
     private AttendanceService attendanceService;
 
     @Autowired
-    private StudentPool studentPool;
+    private StudentService studentService;
+
+    @Autowired
+    private CClassSeminarService cClassSeminarService;
 
     /**
      * Description: 写入数据库的question
@@ -38,7 +47,7 @@ public class QuestionController {
      */
     @PostMapping("/student/{studentId}")
     @ResponseBody
-    public ResponseEntity<Boolean> raiseQuestion(@RequestBody Question question,@PathVariable("studentId") long studentId) throws MyException {
+    public ResponseEntity<Boolean> raiseQuestion(@RequestBody Question question, @PathVariable("studentId") long studentId) throws MyException {
         Question newQuestion = new Question();
 
         //设置CClassSeminarId
@@ -57,4 +66,16 @@ public class QuestionController {
         return ResponseEntity.ok(questionService.addQuestion(newQuestion));
     }
 
+    @GetMapping("/student")
+    @ResponseBody
+    public List<UserVO> listStudent(@RequestParam("seminarId") long seminarId, @RequestParam("cClassId") long cClassId) throws MyException {
+        CClassSeminar cClassSeminar = cClassSeminarService.getCClassSeminar(cClassId, seminarId);
+
+        List<UserVO> userVOS = new ArrayList<>();
+        for (Question question : questionService.getQuestionBycClassSeminarId(cClassSeminar.getId())) {
+            userVOS.add(new UserVO(studentService.findStudentById(question.getStudentId())));
+        }
+
+        return userVOS;
+    }
 }

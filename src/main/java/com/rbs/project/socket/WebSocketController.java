@@ -37,6 +37,13 @@ public class WebSocketController {
     @Autowired
     private StudentService studentService;
 
+    @MessageMapping("/student/{studentId}")
+    @SendTo("/topic/client/student/{studentId}")
+    public Integer questionStudentNumber(@DestinationVariable("studentId") long studentId, Map<String, Long> msg) {
+        Long attendanceId = msg.get("attendanceId");
+        return studentPool.size(attendanceId);
+    }
+
     /**
      * Description:
      * 老师发送一个到服务器说切换到下一组
@@ -66,7 +73,7 @@ public class WebSocketController {
         System.out.println("pickQuestion:" + attendanceId);
         Student student = studentPool.pick(attendanceId);
         if (student == null) {
-            return new UserVO();
+            return null;
         }
         return new UserVO(studentPool.pick(attendanceId));
     }
@@ -81,7 +88,7 @@ public class WebSocketController {
      */
     @MessageMapping("/teacher/class/{classId}/seminar/{seminarId}/raiseQuestion")
     @SendTo("/topic/client/class/{classId}/seminar/{seminarId}/raiseQuestion")
-    public Integer raiseQuestion(@DestinationVariable("classId") long classId, @DestinationVariable("seminarId") long seminarId, Map<String, Long> msg) throws MyException {
+    public Integer raiseQuestion(@DestinationVariable("classId") long classId, @DestinationVariable("seminarId") long seminarId, Map<String, Long> msg) throws Exception {
         Long attendanceId = msg.get("attendanceId");
         Long studentId = msg.get("studentId");
         System.out.println("msg: " + attendanceId + " " + studentId);

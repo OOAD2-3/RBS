@@ -78,6 +78,15 @@ public class QuestionDao {
     }
 
     /**
+     * Description:
+     * @Author: 17Wang
+     * @Time: 12:54 2018/12/29
+    */
+    public List<Question> getByCClassSeminarId(long cClassSemianrId){
+        return questionMapper.findByCClassSeminarId(cClassSemianrId);
+    }
+
+    /**
      * Description: 通过cClassSeminarId查找提问
      *
      * @Author: WinstonDeng
