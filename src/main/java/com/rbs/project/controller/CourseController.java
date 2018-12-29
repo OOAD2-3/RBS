@@ -160,10 +160,15 @@ public class CourseController {
     public ResponseEntity<CourseAndStrategyVO> getCourseById(@PathVariable("courseId") long courseId) throws MyException {
         Course course = courseService.getCourseById(courseId);
         List<CourseMemberLimitStrategyVO> courseMemberLimitStrategyVOS = new ArrayList<>();
-        for (CourseMemberLimitStrategy courseMemberLimitStrategy : course.getCourseMemberLimitStrategies()) {
-            courseMemberLimitStrategyVOS.add(new CourseMemberLimitStrategyVO(courseMemberLimitStrategy).setCourseName(courseService.getCourseById(courseMemberLimitStrategy.getCourseId(),-1).getName()));
+
+        if (course.getCourseMemberLimitStrategies() != null) {
+            for (CourseMemberLimitStrategy courseMemberLimitStrategy : course.getCourseMemberLimitStrategies()) {
+                System.out.println(courseMemberLimitStrategy.getCourseId());
+                courseMemberLimitStrategyVOS.add(new CourseMemberLimitStrategyVO(courseMemberLimitStrategy).setCourseName(courseService.getCourseById(courseMemberLimitStrategy.getCourseId(), -1).getName()));
+            }
         }
-        CourseAndStrategyVO courseAndStrategyVO=new CourseAndStrategyVO(course)
+
+        CourseAndStrategyVO courseAndStrategyVO = new CourseAndStrategyVO(course)
                 .setCourseMemberLimitStrategyVOS(courseMemberLimitStrategyVOS)
                 .setCourseMemberLimitStrategyStyle(courseService.judgeCourseMemberLimitIsAndStyle(courseId));
         return ResponseEntity.ok(courseAndStrategyVO);

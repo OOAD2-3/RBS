@@ -1,6 +1,7 @@
 package com.rbs.project.dao;
 
 import com.rbs.project.exception.MyException;
+import com.rbs.project.mapper.AdminMapper;
 import com.rbs.project.mapper.CourseMapper;
 import com.rbs.project.mapper.StudentMapper;
 import com.rbs.project.mapper.TeacherMapper;
@@ -26,6 +27,9 @@ public class UserDao {
 
     @Autowired
     private CourseMapper courseMapper;
+
+    @Autowired
+    private AdminMapper adminMapper;
 
     /**
      * 是否加入课程关系
@@ -57,6 +61,9 @@ public class UserDao {
         User user = studentMapper.findByAccount(username);
         if (user == null) {
             user = teacherMapper.findByAccount(username);
+        }
+        if (user == null) {
+            user = adminMapper.findByAccount(username);
         }
         hasSomethingFun(user, hasSomething);
         return user;

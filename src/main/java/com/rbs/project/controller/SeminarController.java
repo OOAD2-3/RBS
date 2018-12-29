@@ -250,7 +250,6 @@ public class SeminarController {
 
     /**
      * Description: 查看班级下讨论课的所有提问
-     * ！！！！应有websocket！！！！！
      *
      * @Author: WinstonDeng
      * @Date: 16:05 2018/12/22
@@ -270,40 +269,6 @@ public class SeminarController {
             questionInfoVOS.add(new QuestionInfoVO(question));
         }
         return ResponseEntity.ok().body(questionInfoVOS);
-    }
-
-    /**
-     * Description: 修改班级下讨论课的提问
-     * 1.选择提问
-     * 2.打分
-     * ！！！！！websocket通知！！！！！！
-     *
-     * @Author: WinstonDeng
-     * @Date: 16:40 2018/12/22
-     */
-    @PutMapping("/{seminarId}/class/{classId}/question")
-    @ResponseBody
-    public ResponseEntity<Boolean> updateQuestion(@PathVariable("seminarId") long seminarId,
-                                                  @PathVariable("classId") long cClassId,
-                                                  @RequestBody QuestionInfoVO questionInfoVO) throws MyException {
-        if ((Long) seminarId == null) {
-            throw new MyException("seminarId不能为空", MyException.ID_FORMAT_ERROR);
-        }
-        if ((Long) cClassId == null) {
-            throw new MyException("classId不能为空", MyException.ID_FORMAT_ERROR);
-        }
-        Question question = new Question();
-        question.setScore(questionInfoVO.getScore());
-        if (questionInfoVO.getSelected() == true) {
-            question.setSelected(1);
-        } else if (questionInfoVO.getSelected() == false) {
-            question.setSelected(0);
-        }
-        if (questionInfoVO.getQuestionId() == null) {
-            throw new MyException("questionId不能为空", MyException.ID_FORMAT_ERROR);
-        }
-        question.setId(questionInfoVO.getQuestionId());
-        return ResponseEntity.ok().body(cClassSeminarService.updateQuestion(question));
     }
 
     /**
