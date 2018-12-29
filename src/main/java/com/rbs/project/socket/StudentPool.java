@@ -49,7 +49,11 @@ public class StudentPool {
         return map.getOrDefault(attendanceId, new CopyOnWriteArrayList<>()).size();
     }
 
-    //清空一个展示的所有提问
+    /**
+     * Description: 清空一个展示的所有提问
+     * @Author: WinstonDeng
+     * @Date: 10:36 2018/12/29
+     */
     public boolean clearAll(Long attendanceId) {
         List<Student> students = map.get(attendanceId);
         if (students == null) {

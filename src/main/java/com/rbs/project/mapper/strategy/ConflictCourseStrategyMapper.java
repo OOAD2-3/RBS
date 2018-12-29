@@ -36,9 +36,9 @@ public interface ConflictCourseStrategyMapper {
 
     /**
      * 删除有关该课程的所有冲突策略
-     *
      * @param courseId
      * @return
+     * @throws Exception
      */
     boolean deleteByCourseId(long courseId) throws Exception;
 

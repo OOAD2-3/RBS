@@ -34,4 +34,13 @@ public class UpdateRoundDTO {
     public void setQuestionScoreMethod(Integer questionScoreMethod) {
         this.questionScoreMethod = questionScoreMethod;
     }
+
+    @Override
+    public String toString() {
+        return "UpdateRoundDTO{" +
+                "presentationScoreMethod=" + presentationScoreMethod +
+                ", reportScoreMethod=" + reportScoreMethod +
+                ", questionScoreMethod=" + questionScoreMethod +
+                '}';
+    }
 }

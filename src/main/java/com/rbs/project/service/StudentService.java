@@ -74,7 +74,7 @@ public class StudentService {
      * @Author: 17Wang
      * @Time: 23:23 2018/12/16
      */
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public Student resetStudentInfo(Student student) throws MyException {
         Student temp = studentDao.getStudentById(student.getId());
 
@@ -104,7 +104,7 @@ public class StudentService {
      * @Author: 17Wang
      * @Time: 22:04 2018/12/17
      */
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public Student resetStudentPassword(Student student) throws MyException {
         Student temp = studentDao.getStudentById(student.getId());
 

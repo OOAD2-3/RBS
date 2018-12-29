@@ -11,7 +11,7 @@ import com.rbs.project.pojo.entity.User;
  * @Date: 16:29 2018/12/16
  */
 public class UserVO {
-    private long id;
+    private Long id;
     private String account;
     private String name;
     private String email;
@@ -31,11 +31,11 @@ public class UserVO {
         }
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -61,5 +61,15 @@ public class UserVO {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    @Override
+    public String toString() {
+        return "UserVO{" +
+                "id=" + id +
+                ", account='" + account + '\'' +
+                ", name='" + name + '\'' +
+                ", email='" + email + '\'' +
+                '}';
     }
 }

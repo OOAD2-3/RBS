@@ -56,4 +56,14 @@ public class SeminarInfoVO {
     public void setSeminarSerial(Integer seminarSerial) {
         this.seminarSerial = seminarSerial;
     }
+
+    @Override
+    public String toString() {
+        return "SeminarInfoVO{" +
+                "seminarId=" + seminarId +
+                ", seminarName='" + seminarName + '\'' +
+                ", seminarSerial=" + seminarSerial +
+                ", visible=" + visible +
+                '}';
+    }
 }

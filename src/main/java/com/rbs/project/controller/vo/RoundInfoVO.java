@@ -53,4 +53,13 @@ public class RoundInfoVO {
     public void setSeminarInfoVOS(List<SeminarInfoVO> seminarInfoVOS) {
         this.seminarInfoVOS = seminarInfoVOS;
     }
+
+    @Override
+    public String toString() {
+        return "RoundInfoVO{" +
+                "roundId=" + roundId +
+                ", roundSerial=" + roundSerial +
+                ", seminarInfoVOS=" + seminarInfoVOS +
+                '}';
+    }
 }

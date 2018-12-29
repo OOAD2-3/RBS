@@ -160,4 +160,24 @@ public class CourseAndStrategyDTO {
     public void setCourseMemberLimitFlag(Integer courseMemberLimitFlag) {
         this.courseMemberLimitFlag = courseMemberLimitFlag;
     }
+
+    @Override
+    public String toString() {
+        return "CourseAndStrategyDTO{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", intro='" + intro + '\'' +
+                ", presentationPercentage=" + presentationPercentage +
+                ", questionPercentage=" + questionPercentage +
+                ", reportPercentage=" + reportPercentage +
+                ", teamStartTime='" + teamStartTime + '\'' +
+                ", teamEndTime='" + teamEndTime + '\'' +
+                ", memberLimitStrategy=" + memberLimitStrategy +
+                ", courseMemberLimitStrategies=" + courseMemberLimitStrategies +
+                ", conflictCourses=" + conflictCourses +
+                ", courseMemberLimitFlag=" + courseMemberLimitFlag +
+                ", ShareTeam=" + ShareTeam +
+                ", ShareSeminar=" + ShareSeminar +
+                '}';
+    }
 }

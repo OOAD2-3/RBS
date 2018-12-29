@@ -47,4 +47,14 @@ public class ScoreDTO {
     public void setPresentationScore(Double presentationScore) {
         this.presentationScore = presentationScore;
     }
+
+    @Override
+    public String toString() {
+        return "ScoreDTO{" +
+                "teamId=" + teamId +
+                ", reportScore=" + reportScore +
+                ", questionScore=" + questionScore +
+                ", presentationScore=" + presentationScore +
+                '}';
+    }
 }

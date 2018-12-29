@@ -67,4 +67,15 @@ public class CreateCClassDTO {
     public void setFileName(String fileName) {
         this.fileName = fileName;
     }
+
+    @Override
+    public String toString() {
+        return "CreateCClassDTO{" +
+                "grade=" + grade +
+                ", serial=" + serial +
+                ", time='" + time + '\'' +
+                ", classroom='" + classroom + '\'' +
+                ", fileName='" + fileName + '\'' +
+                '}';
+    }
 }
