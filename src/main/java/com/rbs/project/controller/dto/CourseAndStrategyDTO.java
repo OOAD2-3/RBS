@@ -1,9 +1,9 @@
-package com.rbs.project.pojo.dto;
+package com.rbs.project.controller.dto;
 
 import com.rbs.project.pojo.entity.Course;
 import com.rbs.project.pojo.strategy.CourseMemberLimitStrategy;
 import com.rbs.project.pojo.strategy.MemberLimitStrategy;
-import com.rbs.project.pojo.vo.CourseInfoVO;
+import com.rbs.project.controller.vo.CourseInfoVO;
 import com.rbs.project.utils.JsonUtils;
 
 import java.util.ArrayList;

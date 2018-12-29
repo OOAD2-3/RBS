@@ -1,12 +1,12 @@
 package com.rbs.project.controller;
 
 import com.rbs.project.exception.MyException;
-import com.rbs.project.pojo.dto.UpdateRoundDTO;
+import com.rbs.project.controller.dto.UpdateRoundDTO;
 import com.rbs.project.pojo.entity.CClass;
 import com.rbs.project.pojo.entity.Round;
 import com.rbs.project.pojo.relationship.CClassRound;
-import com.rbs.project.pojo.vo.CClassInfoVO;
-import com.rbs.project.pojo.vo.RoundInfoVO;
+import com.rbs.project.controller.vo.CClassInfoVO;
+import com.rbs.project.controller.vo.RoundInfoVO;
 import com.rbs.project.service.CClassService;
 import com.rbs.project.service.RoundService;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -3,7 +3,7 @@ package com.rbs.project.controller;
 import com.rbs.project.exception.MyException;
 import com.rbs.project.pojo.entity.Attendance;
 import com.rbs.project.pojo.entity.SeminarScore;
-import com.rbs.project.pojo.vo.AttendanceVO;
+import com.rbs.project.controller.vo.AttendanceVO;
 import com.rbs.project.service.AttendanceService;
 import com.rbs.project.service.ScoreService;
 import com.rbs.project.utils.FileLoadUtils;

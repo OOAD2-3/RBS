@@ -2,11 +2,11 @@ package com.rbs.project.controller;
 
 import com.rbs.project.dao.AttendanceDao;
 import com.rbs.project.exception.MyException;
-import com.rbs.project.pojo.dto.CreateSeminarDTO;
-import com.rbs.project.pojo.dto.UpdateSeminarDTO;
+import com.rbs.project.controller.dto.CreateSeminarDTO;
+import com.rbs.project.controller.dto.UpdateSeminarDTO;
 import com.rbs.project.pojo.entity.*;
-import com.rbs.project.pojo.vo.CClassInfoVO;
-import com.rbs.project.pojo.vo.QuestionInfoVO;
+import com.rbs.project.controller.vo.CClassInfoVO;
+import com.rbs.project.controller.vo.QuestionInfoVO;
 import com.rbs.project.service.*;
 import com.rbs.project.socket.StudentPool;
 import com.rbs.project.utils.JsonUtils;

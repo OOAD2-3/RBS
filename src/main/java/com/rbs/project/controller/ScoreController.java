@@ -1,11 +1,11 @@
 package com.rbs.project.controller;
 
 import com.rbs.project.exception.MyException;
-import com.rbs.project.pojo.dto.ClassSeminarAndScoreDTO;
-import com.rbs.project.pojo.dto.ScoreDTO;
+import com.rbs.project.controller.dto.ClassSeminarAndScoreDTO;
+import com.rbs.project.controller.dto.ScoreDTO;
 import com.rbs.project.pojo.entity.*;
 import com.rbs.project.pojo.strategy.TeamStrategy;
-import com.rbs.project.pojo.vo.*;
+import com.rbs.project.controller.vo.*;
 import com.rbs.project.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

@@ -2,7 +2,7 @@ package com.rbs.project.controller;
 
 import com.rbs.project.exception.MyException;
 import com.rbs.project.pojo.entity.Teacher;
-import com.rbs.project.pojo.vo.UserVO;
+import com.rbs.project.controller.vo.UserVO;
 import com.rbs.project.service.TeacherService;
 import com.rbs.project.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;

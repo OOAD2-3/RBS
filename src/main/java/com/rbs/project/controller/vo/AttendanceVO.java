@@ -1,4 +1,4 @@
-package com.rbs.project.pojo.vo;
+package com.rbs.project.controller.vo;
 
 import com.rbs.project.pojo.entity.Attendance;
 import com.rbs.project.pojo.entity.SeminarScore;

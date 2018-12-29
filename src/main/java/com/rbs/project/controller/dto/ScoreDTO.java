@@ -1,6 +1,6 @@
-package com.rbs.project.pojo.dto;
+package com.rbs.project.controller.dto;
 
-import com.rbs.project.pojo.vo.ScoreVO;
+import com.rbs.project.controller.vo.ScoreVO;
 
 import java.util.List;
 
