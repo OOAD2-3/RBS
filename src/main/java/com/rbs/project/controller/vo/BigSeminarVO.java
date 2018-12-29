@@ -74,4 +74,16 @@ public class BigSeminarVO {
     public void setSeminarReportScore(Double seminarReportScore) {
         this.seminarReportScore = seminarReportScore;
     }
+
+    @Override
+    public String toString() {
+        return "BigSeminarVO{" +
+                "seminarId=" + seminarId +
+                ", classId=" + classId +
+                ", seminarName='" + seminarName + '\'' +
+                ", seminarPresentationScore=" + seminarPresentationScore +
+                ", seminarQuestionScore=" + seminarQuestionScore +
+                ", seminarReportScore=" + seminarReportScore +
+                '}';
+    }
 }

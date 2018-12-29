@@ -11,7 +11,7 @@ import com.rbs.project.pojo.entity.TeamValidApplication;
  * @Date: 15:54 2018/12/23
  */
 public class TeamValidApplicationVO {
-    private long id;
+    private Long id;
     private CourseInfoVO courseInfoVO;
     private TeamBaseInfoVO teamBaseInfoVO;
     private String reason;
@@ -29,11 +29,11 @@ public class TeamValidApplicationVO {
         return this;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -59,5 +59,15 @@ public class TeamValidApplicationVO {
 
     public void setReason(String reason) {
         this.reason = reason;
+    }
+
+    @Override
+    public String toString() {
+        return "TeamValidApplicationVO{" +
+                "id=" + id +
+                ", courseInfoVO=" + courseInfoVO +
+                ", teamBaseInfoVO=" + teamBaseInfoVO +
+                ", reason='" + reason + '\'' +
+                '}';
     }
 }

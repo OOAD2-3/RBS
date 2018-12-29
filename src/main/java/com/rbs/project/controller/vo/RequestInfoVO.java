@@ -81,4 +81,16 @@ public class RequestInfoVO {
     public void setShareType(String shareType) {
         this.shareType = shareType;
     }
+
+    @Override
+    public String toString() {
+        return "RequestInfoVO{" +
+                "requestId=" + requestId +
+                ", mainCourseId=" + mainCourseId +
+                ", mainCourseName='" + mainCourseName + '\'' +
+                ", mainTeacherId=" + mainTeacherId +
+                ", mainTeacherName='" + mainTeacherName + '\'' +
+                ", shareType='" + shareType + '\'' +
+                '}';
+    }
 }

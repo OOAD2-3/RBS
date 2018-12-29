@@ -9,8 +9,8 @@ import com.rbs.project.pojo.strategy.CourseMemberLimitStrategy;
  * @Date: 3:03 2018/12/29
  */
 public class CourseMemberLimitStrategyVO {
-    private long id;
-    private long courseId;
+    private Long id;
+    private Long courseId;
     private String courseName;
     private Integer minMember;
     private Integer maxMember;
@@ -25,19 +25,19 @@ public class CourseMemberLimitStrategyVO {
         return this;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public long getCourseId() {
+    public Long getCourseId() {
         return courseId;
     }
 
-    public void setCourseId(long courseId) {
+    public void setCourseId(Long courseId) {
         this.courseId = courseId;
     }
 
@@ -59,5 +59,16 @@ public class CourseMemberLimitStrategyVO {
 
     public void setMaxMember(Integer maxMember) {
         this.maxMember = maxMember;
+    }
+
+    @Override
+    public String toString() {
+        return "CourseMemberLimitStrategyVO{" +
+                "id=" + id +
+                ", courseId=" + courseId +
+                ", courseName='" + courseName + '\'' +
+                ", minMember=" + minMember +
+                ", maxMember=" + maxMember +
+                '}';
     }
 }

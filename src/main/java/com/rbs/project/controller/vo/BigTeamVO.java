@@ -44,4 +44,13 @@ public class BigTeamVO {
     public void setBigRoundScoreVO(BigRoundScoreVO bigRoundScoreVO) {
         this.bigRoundScoreVO = bigRoundScoreVO;
     }
+
+    @Override
+    public String toString() {
+        return "BigTeamVO{" +
+                "teamBaseInfoVO=" + teamBaseInfoVO +
+                ", bigSeminarVOS=" + bigSeminarVOS +
+                ", bigRoundScoreVO=" + bigRoundScoreVO +
+                '}';
+    }
 }

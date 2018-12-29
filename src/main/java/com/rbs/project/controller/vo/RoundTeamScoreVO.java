@@ -11,9 +11,13 @@ import java.util.List;
  * @Date: 4:59 2018/12/29
  */
 public class RoundTeamScoreVO {
-    //轮次信息
+    /**
+     * //轮次信息
+     */
     private RoundInfoVO roundInfoVO;
-    //学生信息
+    /**
+     * //学生信息
+     */
     private List<BigTeamVO> bigTeamVOS;
 
     public RoundInfoVO getRoundInfoVO() {
@@ -30,6 +34,14 @@ public class RoundTeamScoreVO {
 
     public void setBigTeamVOS(List<BigTeamVO> bigTeamVOS) {
         this.bigTeamVOS = bigTeamVOS;
+    }
+
+    @Override
+    public String toString() {
+        return "RoundTeamScoreVO{" +
+                "roundInfoVO=" + roundInfoVO +
+                ", bigTeamVOS=" + bigTeamVOS +
+                '}';
     }
 }
 

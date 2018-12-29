@@ -37,4 +37,13 @@ public class ClassSeminarAndScoreDTO {
     public void setScoreDTOS(List<ScoreDTO> scoreDTOS) {
         this.scoreDTOS = scoreDTOS;
     }
+
+    @Override
+    public String toString() {
+        return "ClassSeminarAndScoreDTO{" +
+                "classId=" + classId +
+                ", seminarId=" + seminarId +
+                ", scoreDTOS=" + scoreDTOS +
+                '}';
+    }
 }

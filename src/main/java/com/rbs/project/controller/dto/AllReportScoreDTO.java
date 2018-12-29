@@ -27,4 +27,12 @@ public class AllReportScoreDTO {
     public void setReportScore(Double reportScore) {
         this.reportScore = reportScore;
     }
+
+    @Override
+    public String toString() {
+        return "AllReportScoreDTO{" +
+                "teamId=" + teamId +
+                ", reportScore=" + reportScore +
+                '}';
+    }
 }

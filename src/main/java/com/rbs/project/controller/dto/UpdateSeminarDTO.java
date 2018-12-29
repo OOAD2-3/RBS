@@ -98,4 +98,17 @@ public class UpdateSeminarDTO {
     public void setMaxTeam(Integer maxTeam) {
         this.maxTeam = maxTeam;
     }
+
+    @Override
+    public String toString() {
+        return "UpdateSeminarDTO{" +
+                "topic='" + topic + '\'' +
+                ", intro='" + intro + '\'' +
+                ", visible=" + visible +
+                ", roundId=" + roundId +
+                ", enrollStartTime='" + enrollStartTime + '\'' +
+                ", enrollEndTime='" + enrollEndTime + '\'' +
+                ", maxTeam=" + maxTeam +
+                '}';
+    }
 }

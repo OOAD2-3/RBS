@@ -101,4 +101,18 @@ public class QuestionInfoVO {
     public void setAttendanceId(Long attendanceId) {
         this.attendanceId = attendanceId;
     }
+
+    @Override
+    public String toString() {
+        return "QuestionInfoVO{" +
+                "questionId=" + questionId +
+                ", teamId=" + teamId +
+                ", teamSerial='" + teamSerial + '\'' +
+                ", attendanceId=" + attendanceId +
+                ", selected=" + selected +
+                ", score=" + score +
+                ", studentId=" + studentId +
+                ", studentName='" + studentName + '\'' +
+                '}';
+    }
 }

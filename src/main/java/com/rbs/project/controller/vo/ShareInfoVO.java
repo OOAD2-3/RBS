@@ -88,4 +88,19 @@ public class ShareInfoVO {
     public void setSubTeacherName(String subTeacherName) {
         this.subTeacherName = subTeacherName;
     }
+
+    @Override
+    public String toString() {
+        return "ShareInfoVO{" +
+                "shareId=" + shareId +
+                ", mainCourseId=" + mainCourseId +
+                ", mainCourseName='" + mainCourseName + '\'' +
+                ", mainTeacherName='" + mainTeacherName + '\'' +
+                ", subCourseId=" + subCourseId +
+                ", subCourseName='" + subCourseName + '\'' +
+                ", subTeacherName='" + subTeacherName + '\'' +
+                ", shareType='" + shareType + '\'' +
+                ", Info='" + Info + '\'' +
+                '}';
+    }
 }

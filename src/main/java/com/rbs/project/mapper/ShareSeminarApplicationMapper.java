@@ -27,6 +27,7 @@ public interface ShareSeminarApplicationMapper {
      *
      * @param mainCourseId
      * @return
+     * @throws Exception
      */
     List<ShareSeminarApplication> findByMainCourseId(long mainCourseId) throws Exception;
 
