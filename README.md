@@ -5,6 +5,9 @@
 由数据库标准组提供：
 - [数据库标准](https://github.com/Black-W/DatabaseStandard) 
 ## 2. RestfulAPI
+组内接口文档：
+- [组内接口](https://docs.qq.com/sheet/DU1RFT2lPRVVUR21r?opendocxfrom=admin&tab=ufozz1)
+
 由Controller标准组提供，仅供参考接口url，输入返回具体不同：
 - [API标准](https://github.com/TanYJie/ControllerWorkingGroup) 
 ## 3. 需求说明
