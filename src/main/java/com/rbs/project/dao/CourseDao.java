@@ -364,4 +364,22 @@ public class CourseDao {
         }
         return courses;
     }
+
+    /**
+     * Description: 找到讨论课共享主课程为courseId的从课程列表
+     * @Author: WinstonDeng
+     * @Date: 0:49 2018/12/29
+     */
+    public List<Course> listAllCoursesBySeminarMainCourseId(long courseId) {
+        return courseMapper.findBySeminarMainCourseId(courseId);
+    }
+
+    /**
+     * Description: 找到队伍共享主课程为courseId的从课程列表
+     * @Author: WinstonDeng
+     * @Date: 2:14 2018/12/29
+     */
+    public List<Course> listAllCoursesByTeamMainCourseId(long courseId) {
+        return courseMapper.findByTeamMainCourseId(courseId);
+    }
 }

@@ -169,6 +169,25 @@ public class Seminar {
     }
 //================ toString =======================
 
+    @Override
+    public String toString() {
+        return "Seminar{" +
+                "id=" + id +
+                ", roundId=" + roundId +
+                ", courseId=" + courseId +
+                ", name='" + name + '\'' +
+                ", intro='" + intro + '\'' +
+                ", maxTeam=" + maxTeam +
+                ", visible=" + visible +
+                ", serial=" + serial +
+                ", enrollStartTime=" + enrollStartTime +
+                ", enrollEndTime=" + enrollEndTime +
+                ", round=" + round +
+                ", course=" + course +
+                ", cClassSeminars=" + cClassSeminars +
+                '}';
+    }
+
 //================ 构造方法 除了id courseId roundId全复制============
 
     public Seminar(){

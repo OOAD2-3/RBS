@@ -101,4 +101,17 @@ public interface CourseMapper {
      */
     boolean updateSeminarMainCourseId(Course course);
 
+    /**
+     * 找到讨论课主课程为seminarMainCourseId的从课程列表
+     * @param seminarMainCourseId
+     * @return
+     */
+    List<Course> findBySeminarMainCourseId(long seminarMainCourseId);
+
+    /**
+     * 找到队伍主课程为teamMainCourseId的从课程列表
+     * @param teamMainCourseId
+     * @return
+     */
+    List<Course> findByTeamMainCourseId(long teamMainCourseId);
 }

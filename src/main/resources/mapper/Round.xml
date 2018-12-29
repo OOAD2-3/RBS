@@ -39,4 +39,11 @@
         from round
         where id=#{id}
     </delete>
+
+    <select id="findByCourseIdAndSerial"  resultMap="tab_round" resultType="com.rbs.project.pojo.entity.Round">
+        select id,course_id,round_serial,presentation_score_method,report_score_method,question_score_method
+        from round
+        where course_id=#{courseId}
+          and round_serial=#{serial}
+    </select>
 </mapper>

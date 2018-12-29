@@ -49,6 +49,12 @@ public class ApplicationService {
     @Autowired
     private SeminarService seminarService;
 
+    @Autowired
+    private SeminarScoreDao seminarScoreDao;
+
+    @Autowired
+    private RoundScoreDao roundScoreDao;
+
     /**
      * Description: 查看team的请求
      * 1、需要加上主从课程！
@@ -149,27 +155,7 @@ public class ApplicationService {
             List<Team> mainCourseTeams=teamDao.listByCourseId(shareTeamApplication.getMainCourseId());
             for(Team team
                     :mainCourseTeams){
-                //主课程学生
-                List<Student> mainCourseStudents=studentDao.listByTeamId(team.getId());
-                //从课程学生
-                List<CClassStudent> subCourseStudents=new ArrayList<>();
-                for(Student student
-                        :mainCourseStudents){
-                    System.out.println(student.getId());
-                    //如果这个学生在从课程
-                    CClassStudent temp=studentDao.getByIdAndCourseId(student.getId(),shareTeamApplication.getSubCourseId());
-                    if(temp!=null){
-                        subCourseStudents.add(temp);
-                    }
-                }
-                //如果没有从课程学生
-                if(subCourseStudents.isEmpty()){
-                    continue;
-                }
-                //通过主课程学生确定从课程学生共享后队伍所在班级
-                long cClassIdInSubCourseTeam= getCClassIdByStrategy(subCourseStudents);
-                //建立klass_team表的新关系
-                teamDao.addCClassTeam(team.getId(),cClassIdInSubCourseTeam);
+                teamMapToSubCourse(team,shareTeamApplication.getSubCourseId());
             }
             //  3.建立主从课程映射
             //  从课程使用队伍学生时，要先确认自己是从课程
@@ -182,11 +168,51 @@ public class ApplicationService {
     }
 
     /**
+     * Description: 把主课程的队伍映射到从课程
+     * @Author: WinstonDeng
+     * @Date: 1:35 2018/12/29
+     */
+    public void teamMapToSubCourse(Team team,long subCourseId) throws Exception {
+        //主课程学生
+        List<Student> mainCourseStudents=studentDao.listByTeamId(team.getId());
+        //从课程学生
+        List<CClassStudent> subCourseStudents=new ArrayList<>();
+        for(Student student
+                :mainCourseStudents){
+            //如果这个学生在从课程
+            CClassStudent temp=studentDao.getByIdAndCourseId(student.getId(),subCourseId);
+            if(temp!=null){
+                subCourseStudents.add(temp);
+            }
+        }
+        //如果有从课程学生
+        if(!subCourseStudents.isEmpty()){
+            //通过主课程学生确定从课程学生共享后队伍所在班级
+            long cClassIdInSubCourseTeam= getCClassIdByStrategy(subCourseStudents);
+            //建立klass_team表的新关系
+            teamDao.addCClassTeam(team.getId(),cClassIdInSubCourseTeam);
+            //建立从课程seminar_score
+            List<CClassSeminar> cClassSeminars=cClassSeminarDao.listByCClassId(cClassIdInSubCourseTeam);
+            for(CClassSeminar cClassSeminar:cClassSeminars){
+                seminarScoreDao.addSeminarScore(cClassSeminar.getId(),team.getId());
+            }
+            //建立从课程round_score
+            List<Round> rounds=roundDao.listByCourseId(subCourseId);
+            for(Round round:rounds){
+                RoundScore roundScore=new RoundScore();
+                roundScore.setRoundId(round.getId());
+                roundScore.setTeamId(team.getId());
+                roundScoreDao.addRoundScore(roundScore);
+            }
+        }
+    }
+
+    /**
      * Description: 从课程分班策略
      * @Author: WinstonDeng
      * @Date: 15:39 2018/12/25
      */
-    private long getCClassIdByStrategy(List<CClassStudent> subCourseStudents) {
+    public long getCClassIdByStrategy(List<CClassStudent> subCourseStudents) {
         //小组人数
         final int memberNum=subCourseStudents.size();
         //计数器
