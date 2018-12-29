@@ -7,6 +7,7 @@
 ## 2. RestfulAPI
 由Controller标准组提供，仅供参考接口url，输入返回具体不同：
 - [API标准](https://github.com/TanYJie/ControllerWorkingGroup) 
+- [组内接口](https://docs.qq.com/sheet/DU1RFT2lPRVVUR21r?opendocxfrom=admin&tab=ufozz1)
 ## 3. 需求说明
 - 需求由标准组统一汇总制订。
 ## 4. 界面说明
