@@ -1,4 +1,4 @@
-package com.rbs.project.pojo.dto;
+package com.rbs.project.controller.dto;
 
 /**
  * @Author: WinstonDeng

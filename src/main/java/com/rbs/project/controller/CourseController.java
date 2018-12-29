@@ -1,11 +1,11 @@
 package com.rbs.project.controller;
 
 import com.rbs.project.exception.MyException;
-import com.rbs.project.pojo.dto.CourseAndStrategyDTO;
-import com.rbs.project.pojo.dto.CreateCClassDTO;
+import com.rbs.project.controller.dto.CourseAndStrategyDTO;
+import com.rbs.project.controller.dto.CreateCClassDTO;
 import com.rbs.project.pojo.entity.*;
 import com.rbs.project.pojo.strategy.CourseMemberLimitStrategy;
-import com.rbs.project.pojo.vo.*;
+import com.rbs.project.controller.vo.*;
 import com.rbs.project.service.*;
 import com.rbs.project.utils.FileLoadUtils;
 import com.rbs.project.utils.JsonUtils;

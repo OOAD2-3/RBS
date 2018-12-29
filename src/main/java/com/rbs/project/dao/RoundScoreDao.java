@@ -48,6 +48,15 @@ public class RoundScoreDao {
     }
 
     /**
+     * Description:
+     * @Author: 17Wang
+     * @Time: 6:00 2018/12/29
+    */
+    public RoundScore getByRoundIdAndTeamId(long roundId,long teamId){
+        return roundScoreMapper.findByRoundIdAndTeamId(roundId, teamId);
+    }
+
+    /**
      * Description: 新增轮次分数
      *
      * @Author: 17Wang

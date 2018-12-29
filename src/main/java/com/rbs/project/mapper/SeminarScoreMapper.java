@@ -48,11 +48,21 @@ public interface SeminarScoreMapper {
 
     /**
      * 查找一个班级讨论课的小组展示的分数
+     *
      * @param cClassSeminarId
      * @param teamId
      * @return
      */
     SeminarScore findByClassSeminarIdAndTeamId(@Param("cClassSeminarId") long cClassSeminarId, @Param("teamId") long teamId);
+
+    /**
+     * 一个队伍 一节讨论课只能报名一次 所有这两个id可以锁定一个分数
+     *
+     * @param seminarId
+     * @param teamId
+     * @return
+     */
+    SeminarScore findBySeminarIdAndTeamId(@Param("seminarId") long seminarId, @Param("teamId") long teamId);
 
     /**
      * 新增一个队伍的一个讨论课分数信息

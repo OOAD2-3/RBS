@@ -1,12 +1,16 @@
 package com.rbs.project.socket;
 
 import com.rbs.project.dao.AttendanceDao;
+import com.rbs.project.exception.MyException;
 import com.rbs.project.pojo.entity.Attendance;
 import com.rbs.project.pojo.entity.Student;
 import com.rbs.project.pojo.entity.User;
-import com.rbs.project.pojo.vo.AttendanceVO;
-import com.rbs.project.pojo.vo.UserVO;
+import com.rbs.project.controller.vo.AttendanceVO;
+import com.rbs.project.controller.vo.UserVO;
+import com.rbs.project.secruity.jwt.JwtUserDetailsService;
 import com.rbs.project.service.AttendanceService;
+import com.rbs.project.service.StudentService;
+import com.rbs.project.utils.UserUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -31,14 +35,7 @@ public class WebSocketController {
     private StudentPool studentPool;
 
     @Autowired
-    private AttendanceService attendanceService;
-
-    @MessageMapping("/hello")
-    @SendTo("/topic/greetings")
-    public Map<String,String> test(Map<String,String> message){
-        Map<String,String> map=new HashMap<>();
-        return message;
-    }
+    private StudentService studentService;
 
     /**
      * Description:
@@ -50,33 +47,10 @@ public class WebSocketController {
      */
     @MessageMapping("/teacher/class/{classId}/seminar/{seminarId}/nextTeam")
     @SendTo("/topic/client/class/{classId}/seminar/{seminarId}/nextTeam")
-    public AttendanceVO nextTeam(@DestinationVariable("classId") long classId,
-                                 @DestinationVariable("seminarId") long seminarId,
-                                 Long attendanceId) throws Exception {
-        Attendance attendance = attendanceService.getAttendanceById(attendanceId);
-        //测试成功没问题 最大TeamOrder
-        long maxTeamOrder = attendanceService.getMaxTeamOrderByClassIdAndSeminarId(classId,seminarId);
-
-        //修改当前讨论课的状态
-        attendanceService.turnStatusToIsPresent(attendanceId);
-        //找出下一个即将进行的信息
-        Attendance nextAtteandance = null;
-        int teamOrder = attendance.getTeamOrder() + 1;
-        while (attendance == null && teamOrder <= maxTeamOrder) {
-            attendance.setTeamOrder(teamOrder);
-            nextAtteandance = attendanceService.getAttendanceBycClassIdAndSeminarIdAndTeamOrder(attendance, AttendanceDao.HAS_TEAM);
-            teamOrder++;
-        }
-        //清空已展示完的提问信息
-        studentPool.clearAll(attendanceId);
-
-        //如果是最后一组展示完了，返回null
-        if (attendance == null) {
-            return null;
-        }
-
-        //返回下一组展示的信息
-        return new AttendanceVO(nextAtteandance);
+    public Integer nextTeam(@DestinationVariable("classId") long classId,
+                            @DestinationVariable("seminarId") long seminarId,
+                            Integer teamOrder) throws Exception {
+        return teamOrder;
     }
 
     /**
@@ -89,6 +63,11 @@ public class WebSocketController {
     @MessageMapping("/teacher/class/{classId}/seminar/{seminarId}/pickQuestion")
     @SendTo("/topic/client/class/{classId}/seminar/{seminarId}/pickQuestion")
     public UserVO pickQuestion(@DestinationVariable("classId") long classId, @DestinationVariable("seminarId") long seminarId, Long attendanceId) {
+        System.out.println("pickQuestion:" + attendanceId);
+        Student student = studentPool.pick(attendanceId);
+        if (student == null) {
+            return new UserVO();
+        }
         return new UserVO(studentPool.pick(attendanceId));
     }
 
@@ -99,11 +78,16 @@ public class WebSocketController {
      *
      * @Author: 17Wang
      * @Time: 2:30 2018/12/29
-    */
+     */
     @MessageMapping("/teacher/class/{classId}/seminar/{seminarId}/raiseQuestion")
     @SendTo("/topic/client/class/{classId}/seminar/{seminarId}/raiseQuestion")
-    public Integer raiseQuestion(@DestinationVariable("classId") long classId, @DestinationVariable("seminarId") long seminarId, Long attendanceId){
-        return 1;
+    public Integer raiseQuestion(@DestinationVariable("classId") long classId, @DestinationVariable("seminarId") long seminarId, Map<String, Long> msg) throws MyException {
+        Long attendanceId = msg.get("attendanceId");
+        Long studentId = msg.get("studentId");
+        System.out.println("msg: " + attendanceId + " " + studentId);
+
+        studentPool.put(attendanceId, studentService.findStudentById(studentId));
+        return studentPool.size(attendanceId);
     }
 
 }
