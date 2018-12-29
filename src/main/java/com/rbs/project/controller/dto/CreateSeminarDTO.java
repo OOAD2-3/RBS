@@ -106,4 +106,18 @@ public class CreateSeminarDTO {
     public void setCourseId(Long courseId) {
         this.courseId = courseId;
     }
+
+    @Override
+    public String toString() {
+        return "CreateSeminarDTO{" +
+                "name='" + name + '\'' +
+                ", intro='" + intro + '\'' +
+                ", visible=" + visible +
+                ", enrollStartTime='" + enrollStartTime + '\'' +
+                ", enrollEndTime='" + enrollEndTime + '\'' +
+                ", maxTeam=" + maxTeam +
+                ", roundId=" + roundId +
+                ", courseId=" + courseId +
+                '}';
+    }
 }

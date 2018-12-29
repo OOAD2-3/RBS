@@ -52,4 +52,14 @@ public class TeamBaseInfoVO {
     public void setTeamStatus(Integer teamStatus) {
         this.teamStatus = teamStatus;
     }
+
+    @Override
+    public String toString() {
+        return "TeamBaseInfoVO{" +
+                "id=" + id +
+                ", teamSerials='" + teamSerials + '\'' +
+                ", teamName='" + teamName + '\'' +
+                ", teamStatus=" + teamStatus +
+                '}';
+    }
 }

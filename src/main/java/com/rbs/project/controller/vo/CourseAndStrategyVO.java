@@ -28,7 +28,7 @@ public class CourseAndStrategyVO {
     private Long teacherId;
     private String teacherName;
 
-    private boolean courseMemberLimitStrategyStyle;
+    private Boolean courseMemberLimitStrategyStyle;
     private List<CourseMemberLimitStrategyVO> courseMemberLimitStrategyVOS;
     private MemberLimitStrategy memberLimitStrategy;
     private List<List<CourseInfoVO>> conflictCourses;
@@ -228,5 +228,29 @@ public class CourseAndStrategyVO {
     public CourseAndStrategyVO setCourseMemberLimitStrategyStyle(boolean courseMemberLimitStrategyStyle) {
         this.courseMemberLimitStrategyStyle = courseMemberLimitStrategyStyle;
         return this;
+    }
+
+    @Override
+    public String toString() {
+        return "CourseAndStrategyVO{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", intro='" + intro + '\'' +
+                ", presentationPercentage=" + presentationPercentage +
+                ", questionPercentage=" + questionPercentage +
+                ", reportPercentage=" + reportPercentage +
+                ", teamStartTime='" + teamStartTime + '\'' +
+                ", teamEndTime='" + teamEndTime + '\'' +
+                ", teamMainCourseId=" + teamMainCourseId +
+                ", seminarMainCourseId=" + seminarMainCourseId +
+                ", teacherId=" + teacherId +
+                ", teacherName='" + teacherName + '\'' +
+                ", courseMemberLimitStrategyStyle=" + courseMemberLimitStrategyStyle +
+                ", courseMemberLimitStrategyVOS=" + courseMemberLimitStrategyVOS +
+                ", memberLimitStrategy=" + memberLimitStrategy +
+                ", conflictCourses=" + conflictCourses +
+                ", ShareTeam=" + ShareTeam +
+                ", ShareSeminar=" + ShareSeminar +
+                '}';
     }
 }

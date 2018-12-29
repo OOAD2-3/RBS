@@ -11,7 +11,7 @@ import com.rbs.project.utils.JsonUtils;
  * @Date: 17:20 2018/12/21
  */
 public class AttendanceVO implements Comparable<AttendanceVO> {
-    private long id;
+    private Long id;
     private Integer present;
     private String pptName;
     private String pptUrl;
@@ -45,11 +45,11 @@ public class AttendanceVO implements Comparable<AttendanceVO> {
         teamOrder = attendance.getTeamOrder();
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -129,5 +129,21 @@ public class AttendanceVO implements Comparable<AttendanceVO> {
     @Override
     public int compareTo(AttendanceVO o) {
         return this.getTeamOrder().compareTo(o.getTeamOrder());
+    }
+
+    @Override
+    public String toString() {
+        return "AttendanceVO{" +
+                "id=" + id +
+                ", present=" + present +
+                ", pptName='" + pptName + '\'' +
+                ", pptUrl='" + pptUrl + '\'' +
+                ", reportName='" + reportName + '\'' +
+                ", reportUrl='" + reportUrl + '\'' +
+                ", reportDDL='" + reportDDL + '\'' +
+                ", teamBaseInfoVO=" + teamBaseInfoVO +
+                ", teamOrder=" + teamOrder +
+                ", presentationScore=" + presentationScore +
+                '}';
     }
 }

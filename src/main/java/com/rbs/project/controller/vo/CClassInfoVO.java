@@ -76,4 +76,15 @@ public class CClassInfoVO {
     public void setFileName(String fileName) {
         this.fileName = fileName;
     }
+
+    @Override
+    public String toString() {
+        return "CClassInfoVO{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", time='" + time + '\'' +
+                ", classroom='" + classroom + '\'' +
+                ", fileName='" + fileName + '\'' +
+                '}';
+    }
 }

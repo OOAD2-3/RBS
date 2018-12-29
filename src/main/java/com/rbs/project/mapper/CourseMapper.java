@@ -67,18 +67,18 @@ public interface CourseMapper {
 
     /**
      * 新增课程
-     *
      * @param course
      * @return
+     * @throws Exception
      */
     boolean insertCourse(Course course) throws Exception;
     //=========================删除=======================
 
     /**
      * 通过id删除课程
-     *
      * @param id
      * @return
+     * @throws Exception
      */
     boolean deleteById(long id) throws Exception;
 

@@ -8,7 +8,11 @@ import org.springframework.context.ConfigurableApplicationContext;
 
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-
+/**
+ * Description: OOAD究极玩具系统
+ * @Author: WinstonDeng& 17Wang
+ * @Date: 10:35 2018/12/29
+ */
 @SpringBootApplication
 @MapperScan(basePackages = "com.rbs.project.mapper")
 @EnableTransactionManagement

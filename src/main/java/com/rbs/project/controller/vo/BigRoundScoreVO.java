@@ -52,4 +52,14 @@ public class BigRoundScoreVO {
     public void setRoundTotalScore(Double roundTotalScore) {
         this.roundTotalScore = roundTotalScore;
     }
+
+    @Override
+    public String toString() {
+        return "BigRoundScoreVO{" +
+                "roundPresentationScore=" + roundPresentationScore +
+                ", roundQuestionScore=" + roundQuestionScore +
+                ", roundReportScore=" + roundReportScore +
+                ", roundTotalScore=" + roundTotalScore +
+                '}';
+    }
 }

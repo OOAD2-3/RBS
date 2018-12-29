@@ -104,4 +104,18 @@ public class CourseInfoVO {
     public void setcClassInfoVO(CClassInfoVO cClassInfoVO) {
         this.cClassInfoVO = cClassInfoVO;
     }
+
+    @Override
+    public String toString() {
+        return "CourseInfoVO{" +
+                "id=" + id +
+                ", ShareTeam=" + ShareTeam +
+                ", ShareSeminar=" + ShareSeminar +
+                ", teamMainCourseId=" + teamMainCourseId +
+                ", seminarMainCourseId=" + seminarMainCourseId +
+                ", teacherId=" + teacherId +
+                ", name='" + name + '\'' +
+                ", cClassInfoVO=" + cClassInfoVO +
+                '}';
+    }
 }

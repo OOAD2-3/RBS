@@ -2,6 +2,8 @@ package com.rbs.project.pojo.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import java.util.Objects;
+
 /**
  * Description:
  *
@@ -34,4 +36,10 @@ public class Student extends User{
         }
         return ((Student) obj).getId() == this.getId() ? true : false;
     }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(studentName);
+    }
+
 }

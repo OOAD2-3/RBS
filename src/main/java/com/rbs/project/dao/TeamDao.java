@@ -460,30 +460,6 @@ public class TeamDao {
                 }
             }
         }
-
-        //===========================================================测试
-            /*Team test = null;
-
-            System.out.println("Strategy Course Id " + courseId);
-            try {
-                test = getTeamById(teamId, HAS_MEMBERS, HAS_CCLASS, HAS_COURSE, HAS_LEADER);
-            } catch (MyException e) {
-                e.printStackTrace();
-            }
-
-            for (Student student : test.getStudents()) {
-                System.out.print(student + " ");
-                System.out.println(courseMapper.findByStudentId(student.getId()));
-            }
-            System.out.println(test.getCourse());
-            System.out.println(test.getcClass());
-            System.out.println(test.getLeader());
-            System.out.println(test.getId());
-            System.out.println(test.getName());
-            System.out.println(teamMemberCount);*/
-        //===========================================================测试
-
-
         //如果有一个不符合返回false
         if (teamMemberCount < courseMemberLimitStrategy.getMinMember() ||
                 teamMemberCount > courseMemberLimitStrategy.getMaxMember()) {
