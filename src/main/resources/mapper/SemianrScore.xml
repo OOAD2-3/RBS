@@ -39,6 +39,13 @@
         WHERE klass_seminar_id=#{cClassSeminarId} AND team_id=#{teamId}
     </select>
 
+    <select id="findBySeminarIdAndTeamId" resultMap="tab_seminar_score">
+        SELECT seminar_score.*
+	    FROM seminar_score LEFT JOIN klass_seminar
+	      ON seminar_score.klass_seminar_id = klass_seminar.id
+	    WHERE klass_seminar.seminar_id=#{seminarId} AND seminar_score.team_id=#{teamId};
+    </select>
+
     <insert id="insertSeminarScore">
         INSERT INTO seminar_score(klass_seminar_id, team_id)
         VALUES (#{cClassSeminarId},#{teamId})
@@ -60,21 +67,21 @@
         UPDATE seminar_score SET report_score=#{reportScore}
         WHERE team_id=#{teamId}
         AND
-        klass_seminar_id=(SELECT klass_seminar_id FROM klass_seminar WHERE klass_id=#{classId} AND seminar_id=#{seminarId})
+        klass_seminar_id=(SELECT klass_seminar.id FROM klass_seminar WHERE klass_id=#{classId} AND seminar_id=#{seminarId})
     </update>
 
     <update id="updateQuestionScore">
         UPDATE seminar_score SET question_score=#{questionScore}
         WHERE team_id=#{teamId}
         AND
-        klass_seminar_id=(SELECT klass_seminar_id FROM klass_seminar WHERE klass_id=#{classId} AND seminar_id=#{seminarId})
+        klass_seminar_id=(SELECT klass_seminar.id FROM klass_seminar WHERE klass_id=#{classId} AND seminar_id=#{seminarId})
     </update>
 
     <update id="updateTotalScore">
         UPDATE seminar_score SET total_score=#{totalScore}
         WHERE team_id=#{teamId}
         AND
-        klass_seminar_id=(SELECT klass_seminar_id FROM klass_seminar WHERE klass_id=#{classId} AND seminar_id=#{seminarId})
+        klass_seminar_id=(SELECT klass_seminar.id FROM klass_seminar WHERE klass_id=#{classId} AND seminar_id=#{seminarId})
     </update>
 
     <delete id="deleteByTeamId">

@@ -28,9 +28,6 @@ public class ScoreService {
     private TeamDao teamDao;
 
     @Autowired
-    private RoundDao roundDao;
-
-    @Autowired
     private StudentDao studentDao;
 
     @Autowired
@@ -55,6 +52,16 @@ public class ScoreService {
     }
 
     /**
+     * Description: 一个队伍 一节讨论课只能报名一次 所有这两个id可以锁定一个分数
+     *
+     * @Author: 17Wang
+     * @Time: 6:22 2018/12/29
+     */
+    public SeminarScore getSeminarScoreBySeminarIdAndTeamId(long seminarId, long teamId) throws MyException {
+        return seminarScoreDao.getBySeminarIdAndTeamId(seminarId, teamId);
+    }
+
+    /**
      * Description: 获取一个轮次下所有队伍的讨论课的成绩
      *
      * @Author: 17Wang
@@ -69,12 +76,27 @@ public class ScoreService {
     }
 
     /**
+     * Description: 通过roundId和teamId锁定一条轮次分数
+     *
+     * @Author: 17Wang
+     * @Time: 5:58 2018/12/29
+     */
+    public RoundScore getRoundScoreByRoundIdAndTeamId(long roundId, long teamId) throws MyException {
+        RoundScore roundScore = roundScoreDao.getByRoundIdAndTeamId(roundId, teamId);
+        if (roundScore == null) {
+            throw new MyException("通过roundId和teamId锁定一条轮次分数错误！不存在该记录", MyException.NOT_FOUND_ERROR);
+        }
+        return roundScore;
+    }
+
+    /**
      * Description: 获取一节展示的分数
+     *
      * @Author: 17Wang
      * @Time: 3:39 2018/12/29
-    */
-    public SeminarScore getSeminarScoreByClassSeminarIdAndTeamId(long classSeminarId,long teamId){
-        return seminarScoreDao.getByClassSeminarIdAndTeamId(classSeminarId,teamId);
+     */
+    public SeminarScore getSeminarScoreByClassSeminarIdAndTeamId(long classSeminarId, long teamId) {
+        return seminarScoreDao.getByClassSeminarIdAndTeamId(classSeminarId, teamId);
     }
 
     /**
@@ -109,6 +131,7 @@ public class ScoreService {
         return true;
     }
 
+
     /**
      * Description: 修改展示的提问分数的同时修改总分
      *
@@ -127,16 +150,30 @@ public class ScoreService {
 
     /**
      * Description: 修改3*6个分数
+     *
      * @Author: 17Wang
      * @Time: 4:49 2018/12/29
+     */
+    @Transactional(rollbackFor = Exception.class)
+    public boolean updateAllScoreByCClassSeminar(long classId, long seminarId, List<SeminarScore> seminarScores) throws Exception {
+        for (SeminarScore seminarScore : seminarScores) {
+            seminarScoreDao.updatePresentationScore(seminarId, classId, seminarScore.getTeamId(), seminarScore.getPresentationScore());
+            seminarScoreDao.updateQuestionScore(seminarId, classId, seminarScore.getTeamId(), seminarScore.getQuestionScore());
+            seminarScoreDao.updateReportScore(seminarId, classId, seminarScore.getTeamId(), seminarScore.getReportScore());
+        }
+        return true;
+    }
+
+    /**
+     * Description: 修改 3*1 个分数
+     * @Author: 17Wang
+     * @Time: 7:10 2018/12/29
     */
     @Transactional(rollbackFor = Exception.class)
-    public boolean updateAllScoreByCClassSeminar(long classId,long seminarId,List<SeminarScore> seminarScores) throws Exception {
-        for(SeminarScore seminarScore:seminarScores){
-            seminarScoreDao.updatePresentationScore(seminarId, classId, seminarScore.getTeamId(), seminarScore.getPresentationScore());
-            seminarScoreDao.updateQuestionScore(seminarId,classId ,seminarScore.getTeamId() ,seminarScore.getQuestionScore() );
-            seminarScoreDao.updateReportScore(seminarId,classId ,seminarScore.getTeamId() ,seminarScore.getReportScore() );
-        }
+    public boolean updateScoreByCClassSeminar(long classId, long seminarId,SeminarScore seminarScore) throws Exception {
+        seminarScoreDao.updatePresentationScore(seminarId, classId, seminarScore.getTeamId(), seminarScore.getPresentationScore());
+        seminarScoreDao.updateQuestionScore(seminarId, classId, seminarScore.getTeamId(), seminarScore.getQuestionScore());
+        seminarScoreDao.updateReportScore(seminarId, classId, seminarScore.getTeamId(), seminarScore.getReportScore());
         return true;
     }
 

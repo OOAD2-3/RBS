@@ -55,7 +55,7 @@ public class SeminarService {
      * @Date: 16:25 2018/12/18
      */
     @Transactional(rollbackFor = Exception.class)
-    public long addSemianr(Seminar seminar,boolean hasEmail) throws Exception {
+    public long addSemianr(Seminar seminar, boolean hasEmail) throws Exception {
         //初始化新增讨论课id
         long createSeminarId = -1;
         //如果轮次为空，则新建一个轮次，级联修改
@@ -74,17 +74,17 @@ public class SeminarService {
             throw new MyException("visible不能为空", MyException.ERROR);
         }
         //新增的讨论课序号
-        int serial=1;
+        int serial = 1;
         //判断序号是否存在
         List<Seminar> seminars = seminarDao.findSeminarByCourseId(seminar.getCourseId());
-        List<Integer> serialList=new ArrayList<>();
+        List<Integer> serialList = new ArrayList<>();
         for (Seminar temp
                 : seminars) {
             serialList.add(temp.getSerial());
             System.out.println(temp.getSerial());
         }
         //若该序号已存在，则+1，直到发现不存在的值，作为讨论课序号
-        while(serialList.contains(serial)){
+        while (serialList.contains(serial)) {
             serial++;
         }
         seminar.setSerial(serial);
@@ -92,10 +92,10 @@ public class SeminarService {
         seminarDao.addSeminar(seminar);
         //新增班级讨论课 TODO 级联新增seminar_score 已完成
         cClassSeminarDao.addCClassSeminar(seminar);
-        if(hasEmail){
+        if (hasEmail) {
             //发邮件通知课程下所有班级所有小组成员
-            String message="第"+seminar.getSerial()+"节讨论课:"+seminar.getName()+"已发布，请注意查看！";
-            sendSemianrEmail(seminar,message);
+            String message = "第" + seminar.getSerial() + "节讨论课:" + seminar.getName() + "已发布，请注意查看！";
+            sendSemianrEmail(seminar, message);
         }
         //获得主键
         createSeminarId = seminar.getId();
@@ -128,8 +128,8 @@ public class SeminarService {
             throw new MyException("visible不能为空", MyException.ERROR);
         }
         //发邮件通知课程下所有班级所有小组成员
-        String message="第"+seminar.getSerial()+"节讨论课:"+seminar.getName()+"已修改，请注意查看！";
-        sendSemianrEmail(seminar,message);
+        String message = "第" + seminar.getSerial() + "节讨论课:" + seminar.getName() + "已修改，请注意查看！";
+        sendSemianrEmail(seminar, message);
         return seminarDao.updateSeminarById(seminar);
     }
 
@@ -140,15 +140,15 @@ public class SeminarService {
      * @Date: 16:29 2018/12/18
      */
     @Transactional(rollbackFor = Exception.class)
-    public boolean removeSeminarById(long seminarId,boolean hasEmail) throws Exception {
+    public boolean removeSeminarById(long seminarId, boolean hasEmail) throws Exception {
         if ((Long) seminarId == null) {
             throw new MyException("seminarId不能为空", MyException.ERROR);
         }
-        Seminar seminar=seminarDao.findSeminarById(seminarId);
+        Seminar seminar = seminarDao.findSeminarById(seminarId);
         //级联删除
-        List<CClassSeminar> cClassSeminars=cClassSeminarDao.findBySeminarId(seminarId);
-        for(CClassSeminar cClassSeminar
-                :cClassSeminars){
+        List<CClassSeminar> cClassSeminars = cClassSeminarDao.findBySeminarId(seminarId);
+        for (CClassSeminar cClassSeminar
+                : cClassSeminars) {
             // 1. 删除seminar_score
             seminarScoreDao.deleteSeminarScoreByCClassSeminarId(cClassSeminar.getId());
         }
@@ -156,10 +156,10 @@ public class SeminarService {
         seminarDao.removeCClassSeminarBySeminarId(seminarId);
         // 3. 删除讨论课
         seminarDao.removeSeminarById(seminarId);
-        if(hasEmail){
+        if (hasEmail) {
             //发邮件通知课程下所有班级所有小组成员
-            String message="第"+seminar.getSerial()+"节讨论课:"+seminar.getName()+"已删除，请注意查看！";
-            sendSemianrEmail(seminar,message);
+            String message = "第" + seminar.getSerial() + "节讨论课:" + seminar.getName() + "已删除，请注意查看！";
+            sendSemianrEmail(seminar, message);
         }
         return true;
     }
@@ -171,11 +171,17 @@ public class SeminarService {
      * @Date: 20:50 2018/12/20
      */
     public Seminar getSeminarById(long seminarId) throws MyException {
-        //TODO 无意义
-        if ((Long) seminarId == null) {
-            throw new MyException("seminarId不能为空", MyException.ERROR);
-        }
-        return seminarDao.findSeminarById(seminarId, SeminarDao.HAS_ROUND,SeminarDao.HAS_COURSE);
+        return seminarDao.findSeminarById(seminarId, SeminarDao.HAS_ROUND, SeminarDao.HAS_COURSE);
+    }
+
+    /**
+     * Description: 获取一个轮次下的所有讨论课
+     *
+     * @Author: 17Wang
+     * @Time: 6:09 2018/12/29
+     */
+    public List<Seminar> listSeminarByRoundId(long roundId) {
+        return seminarDao.listAllSeminarsByRoundId(roundId);
     }
 
     /**
@@ -242,17 +248,18 @@ public class SeminarService {
 
     /**
      * Description: 发讨论课相关邮件
+     *
      * @Author: WinstonDeng
      * @Date: 1:39 2018/12/28
      */
-    private void sendSemianrEmail(Seminar seminar,String message)throws Exception{
-        List<Team> teams=teamDao.listByCourseId(seminar.getCourseId());
-        for(Team team
-                :teams){
-            List<Student> students=studentDao.listByTeamId(team.getId());
+    private void sendSemianrEmail(Seminar seminar, String message) throws Exception {
+        List<Team> teams = teamDao.listByCourseId(seminar.getCourseId());
+        for (Team team
+                : teams) {
+            List<Student> students = studentDao.listByTeamId(team.getId());
             for (Student student
-                    :students){
-                emailService.sendEmail(new String[]{student.getEmail()},message);
+                    : students) {
+                emailService.sendEmail(new String[]{student.getEmail()}, message);
             }
         }
     }

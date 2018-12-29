@@ -57,11 +57,23 @@ public class SeminarScoreDao {
 
     /**
      * Description:
+     *
      * @Author: 17Wang
      * @Time: 3:40 2018/12/29
-    */
-    public SeminarScore getByClassSeminarIdAndTeamId(long classSeminarId,long teamId){
-        return seminarScoreMapper.findByClassSeminarIdAndTeamId(classSeminarId,teamId);
+     */
+    public SeminarScore getByClassSeminarIdAndTeamId(long classSeminarId, long teamId) {
+        return seminarScoreMapper.findByClassSeminarIdAndTeamId(classSeminarId, teamId);
+    }
+
+    /**
+     * Description: 一个队伍 一节讨论课只能报名一次 所有这两个id可以锁定一个分数
+     *
+     * @Author: 17Wang
+     * @Time: 6:22 2018/12/29
+     */
+    public SeminarScore getBySeminarIdAndTeamId(long seminarId, long teamId) throws MyException {
+        SeminarScore seminarScore = seminarScoreMapper.findBySeminarIdAndTeamId(seminarId, teamId);
+        return seminarScore;
     }
 
     /**
@@ -114,7 +126,6 @@ public class SeminarScoreDao {
     public boolean updatePresentationScore(long seminarId, long classId, long teamId, double presentationScore) throws Exception {
         //检查是否有该行
         SeminarScore seminarScore = getSeminarScoreBySeminarIdAndCClassIdAndTeamId(seminarId, classId, teamId);
-        System.out.println("seminarScoreDao: "+seminarScore);
         if (!seminarScoreMapper.updatePresentationScore(seminarId, classId, teamId, presentationScore)) {
             throw new MyException("修改展示的展示分数错误！数据库执行错误", MyException.ERROR);
         }
@@ -131,6 +142,7 @@ public class SeminarScoreDao {
     public boolean updateReportScore(long seminarId, long classId, long teamId, double reportScore) throws Exception {
         //检查是否有该行
         getSeminarScoreBySeminarIdAndCClassIdAndTeamId(seminarId, classId, teamId);
+        System.out.println(seminarId+" "+classId+" "+teamId);
         if (!seminarScoreMapper.updateReportScore(seminarId, classId, teamId, reportScore)) {
             throw new MyException("修改展示的报告分数错误！数据库执行错误", MyException.ERROR);
         }
@@ -193,7 +205,7 @@ public class SeminarScoreDao {
      * @Author: WinstonDeng
      * @Date: 14:29 2018/12/28
      */
-    public boolean deleteSeminarScoreByCClassSeminarId(long cClassSeminarId) throws MyException{
-       return seminarScoreMapper.deleteByCClassSeminarId(cClassSeminarId);
+    public boolean deleteSeminarScoreByCClassSeminarId(long cClassSeminarId) throws MyException {
+        return seminarScoreMapper.deleteByCClassSeminarId(cClassSeminarId);
     }
 }

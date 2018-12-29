@@ -23,6 +23,12 @@ public class StudentPool {
 
     public void put(Long attendanceId, Student student) {
         List<Student> studentList = map.getOrDefault(attendanceId, new CopyOnWriteArrayList<>());
+        for (Student s : studentList) {
+            //如果存在该学生
+            if (s == student) {
+                return;
+            }
+        }
         studentList.add(student);
     }
 

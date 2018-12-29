@@ -32,17 +32,16 @@ public class RbacAuthorityDecision {
         Set<String> urls = new HashSet();
         Set<UrlAuthorization> urlAuthorizations = new HashSet<>();
         urlAuthorizations.add(new UrlAuthorization("/**/**").addAllMethod());
+        urlAuthorizations.add(new UrlAuthorization("/user/**").addAllMethod());
 
         if (userInfo instanceof Student) {
             System.out.println("我是学生" + ((Student) userInfo).getStudentName());
-            urlAuthorizations.add(new UrlAuthorization("/student/**").addAllMethod());
             urlAuthorizations.add(new UrlAuthorization("/course/**").addGetMethod());
-
 
 
         } else if (userInfo instanceof Teacher) {
             System.out.println("我是老师" + ((Teacher) userInfo).getTeacherName());
-            urlAuthorizations.add(new UrlAuthorization("/teacher/**").addAllMethod());
+            urlAuthorizations.add(new UrlAuthorization("/course/**").addAllMethod());
 
         } else {
             return false;

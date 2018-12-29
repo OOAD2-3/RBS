@@ -48,9 +48,6 @@ public class RoundService {
      * @Date: 22:38 2018/12/21
      */
     public List<Round> listRoundsByCourseId(long courseId) throws MyException {
-        if ((Long) courseId == null) {
-            throw new MyException("courseId不能为空", MyException.NOT_FOUND_ERROR);
-        }
         return roundDao.listByCourseId(courseId, RoundDao.HAS_SEMINAR);
     }
 

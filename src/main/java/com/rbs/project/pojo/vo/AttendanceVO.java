@@ -21,7 +21,8 @@ public class AttendanceVO implements Comparable<AttendanceVO> {
     private TeamBaseInfoVO teamBaseInfoVO;
     private Integer teamOrder;
 
-    private Double presentationScore;;
+    private Double presentationScore;
+    ;
 
     public AttendanceVO() {
 
@@ -34,8 +35,13 @@ public class AttendanceVO implements Comparable<AttendanceVO> {
         pptUrl = attendance.getPptUrl();
         reportName = attendance.getReportName();
         reportUrl = attendance.getReportUrl();
-        reportDDL = JsonUtils.TimestampToString(attendance.getcClassSeminar().getReportDDL());
-        teamBaseInfoVO = new TeamBaseInfoVO(attendance.getTeam());
+        if (attendance.getcClassSeminar() != null) {
+            reportDDL = JsonUtils.TimestampToString(attendance.getcClassSeminar().getReportDDL());
+        }
+        if (attendance.getTeam() != null) {
+            teamBaseInfoVO = new TeamBaseInfoVO(attendance.getTeam());
+        }
+
         teamOrder = attendance.getTeamOrder();
     }
 

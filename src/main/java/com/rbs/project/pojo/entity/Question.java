@@ -33,9 +33,12 @@ public class Question {
      */
     private double score;
     /**
-     * 是否被提问
+     * 是否被提问0没被提问，1被提问
      */
     private Integer selected;
+
+    public static final int IS_SELECTED = 1;
+    public static final int IS_NO_SELECTED = 0;
 
     //关系
     /**

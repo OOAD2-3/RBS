@@ -1,6 +1,5 @@
 package com.rbs.project.mapper;
 
-import com.rbs.project.exception.MyException;
 import com.rbs.project.pojo.entity.Attendance;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;

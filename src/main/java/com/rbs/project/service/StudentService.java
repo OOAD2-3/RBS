@@ -31,6 +31,15 @@ public class StudentService {
     }
 
     /**
+     * Description: 通过id获取一个学生
+     * @Author: 17Wang
+     * @Time: 8:49 2018/12/29
+    */
+    public Student findStudentById(long studentId) throws MyException {
+        return studentDao.getStudentById(studentId);
+    }
+
+    /**
      * Description: 通过姓名或者学号查询一个学生信息
      *
      * @Author: 17Wang

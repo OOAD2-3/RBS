@@ -123,7 +123,6 @@ public class CourseDao {
         List<ConflictCourseStrategy> conflictCourseStrategies = conflictCourseStrategyMapper.findById(strategyId);
         List<Course> courses = new ArrayList<>();
         for (ConflictCourseStrategy conflictCourseStrategy : conflictCourseStrategies) {
-            System.out.println(conflictCourseStrategy.getCourseId());
             try {
                 courses.add(getCourseById(conflictCourseStrategy.getCourseId(), HAS_TEACHER));
             } catch (MyException e) {
@@ -151,12 +150,13 @@ public class CourseDao {
 
     /**
      * Description:
+     *
      * @Author: 17Wang
      * @Time: 3:21 2018/12/29
-    */
-    public boolean judgeCourseMemberLimitIsAndStyle(long courseId){
-        for(TeamStrategy teamStrategy:teamStrategyMapper.findByCourseId(courseId)){
-            if(teamStrategy.getStrategyName()=="CourseMemberLimitStrategy"){
+     */
+    public boolean judgeCourseMemberLimitIsAndStyle(long courseId) {
+        for (TeamStrategy teamStrategy : teamStrategyMapper.findByCourseId(courseId)) {
+            if (teamStrategy.getStrategyName() == "CourseMemberLimitStrategy") {
                 return true;
             }
         }

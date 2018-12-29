@@ -197,7 +197,7 @@ public class SeminarDao {
      * @Author: WinstonDeng
      * @Date: 21:11 2018/12/27
      */
-    public List<Seminar> listAllSeminarsByRoundId(long roundId) throws MyException {
+    public List<Seminar> listAllSeminarsByRoundId(long roundId) {
         return seminarMapper.findByRoundId(roundId);
     }
 }
