@@ -38,4 +38,11 @@
         from klass_round
         where round_id=#{roundId}
     </select>
+
+    <delete id="deleteByPrimaryKeys">
+        delete
+        from klass_round
+        where klass_id=#{cClassId}
+          and round_id=#{roundId}
+    </delete>
 </mapper>
