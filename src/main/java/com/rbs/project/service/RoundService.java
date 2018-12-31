@@ -35,7 +35,7 @@ public class RoundService {
      * @Date: 19:20 2018/12/21
      */
     public Round getRoundById(long roundId) throws MyException {
-        if ((Long) roundId == null) {
+        if ( roundId == 0 ) {
             throw new MyException("roundId不能为空", MyException.ERROR);
         }
         return roundDao.findById(roundId);

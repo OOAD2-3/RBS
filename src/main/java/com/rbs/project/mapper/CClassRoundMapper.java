@@ -50,4 +50,12 @@ public interface CClassRoundMapper {
      * @return
      */
     List<CClassRound> findByRoundId(long roundId);
+
+    /**
+     * 通过班级和轮次id 删除记录
+     * @param cClassId
+     * @param roundId
+     * @return
+     */
+    boolean deleteByPrimaryKeys(@Param("cClassId") long cClassId,@Param("roundId") long roundId);
 }
