@@ -55,12 +55,15 @@ public class CourseAndStrategyVO {
 
         memberLimitStrategy = course.getMemberLimitStrategy();
         List<List<CourseInfoVO>> lists = new ArrayList<>();
-        for (List<Course> courses : course.getConflictCourses()) {
-            List<CourseInfoVO> courseInfoVOS = new ArrayList<>();
-            for (Course c : courses) {
-                courseInfoVOS.add(new CourseInfoVO(c));
+        if (course.getConflictCourses() != null) {
+            for (List<Course> courses : course.getConflictCourses()) {
+                List<CourseInfoVO> courseInfoVOS = new ArrayList<>();
+                for (Course c : courses) {
+                    courseInfoVOS.add(new CourseInfoVO(c));
+                }
+                lists.add(courseInfoVOS);
             }
-            lists.add(courseInfoVOS);
+
         }
         conflictCourses = lists;
 

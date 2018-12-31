@@ -6,6 +6,8 @@ import com.rbs.project.pojo.entity.Question;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * Description:
  *
@@ -25,6 +27,15 @@ public class QuestionService {
      */
     public boolean addQuestion(Question question) throws MyException {
         return questionDao.addQuestion(question);
+    }
+
+    /**
+     * Description:
+     * @Author: 17Wang
+     * @Time: 12:53 2018/12/29
+    */
+    public List<Question> getQuestionBycClassSeminarId(long cClassSemianrId){
+        return questionDao.getByCClassSeminarId(cClassSemianrId);
     }
 
 }
