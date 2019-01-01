@@ -163,12 +163,11 @@ public class CourseController {
         try {
             if (course.getCourseMemberLimitStrategies() != null) {
                 for (CourseMemberLimitStrategy courseMemberLimitStrategy : course.getCourseMemberLimitStrategies()) {
-                    System.out.println(courseMemberLimitStrategy.getCourseId());
                     courseMemberLimitStrategyVOS.add(new CourseMemberLimitStrategyVO(courseMemberLimitStrategy).setCourseName(courseService.getCourseById(courseMemberLimitStrategy.getCourseId(), -1).getName()));
                 }
             }
         }catch (Exception e){
-            System.out.println("小问题");
+            System.out.println("courseController:小问题");
         }
         CourseAndStrategyVO courseAndStrategyVO = new CourseAndStrategyVO(course)
                 .setCourseMemberLimitStrategyVOS(courseMemberLimitStrategyVOS)

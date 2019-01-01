@@ -178,7 +178,6 @@ public class CClassSeminarDao {
             List<CClassSeminar> temp = cClassSeminarMapper.findByCClassId(cClass.getId());
             for (CClassSeminar cClassSeminar : temp) {
                 if (cClassSeminar.getStatus() == CClassSeminar.STATUS_UNDERWAY) {
-                    System.out.println(cClassSeminar.getId());
                     cClassSeminars.add(cClassSeminar);
                 }
             }
@@ -203,7 +202,6 @@ public class CClassSeminarDao {
                 List<CClassSeminar> temp = cClassSeminarMapper.findByCClassId(cClass.getId());
                 for (CClassSeminar cClassSeminar : temp) {
                     if (cClassSeminar.getStatus() == CClassSeminar.STATUS_UNDERWAY) {
-                        System.out.println(cClassSeminar.getId());
                         cClassSeminars.add(cClassSeminar);
                     }
                 }

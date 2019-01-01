@@ -147,6 +147,10 @@ public class StudentDao {
      * @Time: 16:03 2018/12/16
      */
     public boolean updateEmailByStudent(Student student) throws MyException {
+        if (student.getEmail() == null) {
+            student.setEmail(" ");
+        }
+
         try {
             getStudentById(student.getId());
         } catch (MyException e) {

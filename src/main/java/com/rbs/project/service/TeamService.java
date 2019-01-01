@@ -57,7 +57,7 @@ public class TeamService {
      */
     @Transactional(rollbackFor = Exception.class)
     public Long createTeam(Team team) throws Exception {
-        //如果出错，说明这个leader已经在这个课程下没有小组
+        //如果出错，说明这个leader已经在这个课程下有小组
         Team myTeam;
         try {
             myTeam = teamDao.getTeamBycClassIdAndStudentId(team.getcClassId(), team.getLeaderId());
@@ -104,9 +104,6 @@ public class TeamService {
         //在这个方法同时插入到klass_team中
         teamDao.addTeam(team);
 
-        //TODO 建立班级队伍关系klass_team 已完成
-        teamDao.addCClassTeam(team.getId(), team.getcClassId());
-
         //TODO 建立小组轮次关系round_score 已完成
         //获取这个小组属于的课程下的所有轮次
         RoundScore roundScore = new RoundScore();
@@ -140,6 +137,7 @@ public class TeamService {
         //如果有从课程，同步team
         //从课程
         List<Course> courses=courseDao.listAllCoursesByTeamMainCourseId(team.getCourseId());
+        //TODO 没用到的字段为什么？
         List<Student> mainCourseStudents=studentDao.listByTeamId(team.getId());
         for(Course course:courses){
             applicationService.teamMapToSubCourse(team,course.getId());
@@ -274,7 +272,6 @@ public class TeamService {
         //自己不能踢出自己
         Team myTeam = teamDao.getTeamById(teamId);
         //审核中的队伍不能删除成员
-        System.out.println(myTeam.getStatus());
         if (myTeam.getStatus() == Team.STATUS_IN_REVIEW) {
             throw new MyException("小队还在申请中！不能删除成员", MyException.AUTHORIZATION_ERROR);
         }

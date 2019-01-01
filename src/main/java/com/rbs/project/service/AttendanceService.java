@@ -103,7 +103,6 @@ public class AttendanceService {
     public boolean deleteAttendance(long attendanceId) throws Exception {
         //查找有没有这个
         Attendance attendance = attendanceDao.getById(attendanceId);
-        System.out.println(attendance);
         long cClassSeminarId = attendance.getcClassSeminarId();
         long teamId = attendance.getTeamId();
         long seminarId = cClassSeminarDao.getCClassSeminarById(cClassSeminarId).getSeminarId();
