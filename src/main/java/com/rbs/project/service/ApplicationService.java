@@ -3,6 +3,7 @@ package com.rbs.project.service;
 import com.rbs.project.dao.*;
 import com.rbs.project.exception.MyException;
 import com.rbs.project.pojo.entity.*;
+import com.rbs.project.pojo.relationship.CClassRound;
 import com.rbs.project.pojo.relationship.CClassStudent;
 import com.rbs.project.utils.LogicUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,6 +55,9 @@ public class ApplicationService {
 
     @Autowired
     private RoundScoreDao roundScoreDao;
+
+    @Autowired
+    private CClassDao cClassDao;
 
     /**
      * Description: 查看team的请求
@@ -285,14 +289,36 @@ public class ApplicationService {
             seminarDao.deleteSeminarByCourseId(subCourseId);
             //2.建立副本
             //  2.1 新建round副本
+            //  获取所有主课程轮次
             List<Round> rounds = roundDao.listByCourseId(mainCourseId);
             for (Round round
                     : rounds) {
+                //新建 轮次副本
                 //除了Id courseId全复制
                 Round tempRound = new Round(round);
                 tempRound.setCourseId(subCourseId);
                 roundDao.addRound(tempRound);
+                //新增klass_round
+                List<CClass> cClasses=cClassDao.listByCourseId(subCourseId);
+                for (CClass cClass : cClasses) {
+                    CClassRound cClassRound = new CClassRound();
+                    cClassRound.setcClassId(cClass.getId());
+                    cClassRound.setRoundId(tempRound.getId());
+                    //默认1次
+                    cClassRound.setEnrollNumber(CClassRound.DEFAULT_ENROLL_NUM);
+                    cClassDao.addCClassRound(cClassRound);
+                }
+                //新增round_score
+                List<Team> teams = teamDao.listByCourseId(subCourseId);
+                for (Team team
+                        : teams) {
+                    RoundScore roundScore = new RoundScore();
+                    roundScore.setRoundId(tempRound.getId());
+                    roundScore.setTeamId(team.getId());
+                    roundScoreDao.addRoundScore(roundScore);
+                }
                 //  2.2 新建seminar副本
+                //获取所有主课程讨论课
                 List<Seminar> seminars = seminarDao.listAllSeminarsByRoundId(round.getId());
                 for (Seminar seminar
                         : seminars) {
@@ -303,11 +329,6 @@ public class ApplicationService {
                     //TODO 调用seminarService新建业务 级联操作 已完成
                     seminarService.addSemianr(tempSeminar, false);
                 }
-            }
-            //  2.3 新建class_seminar副本
-            List<Seminar> seminars = seminarDao.findSeminarByCourseId(subCourseId);
-            for (Seminar seminar : seminars) {
-                cClassSeminarDao.addCClassSeminar(seminar);
             }
             //3.创建主从关系，仅表示是从课程，不作为映射关系
             courseDao.updateSeminarMainCourseId(subCourseId, mainCourseId);

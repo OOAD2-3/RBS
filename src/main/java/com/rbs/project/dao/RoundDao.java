@@ -86,12 +86,7 @@ public class RoundDao {
      * @Date: 19:21 2018/12/21
      */
     public Round findById(long roundId,int ...hasSomething) throws MyException {
-        Round round=null;
-        try {
-            round=roundMapper.findById(roundId);
-        }catch (Exception e){
-            throw new MyException("查找轮次错误！数据库处理错误",MyException.ERROR);
-        }
+        Round round=roundMapper.findById(roundId);
         if(round==null){
             throw new MyException("查找轮次错误！轮次不存在",MyException.NOT_FOUND_ERROR);
         }

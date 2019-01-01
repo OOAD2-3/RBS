@@ -100,9 +100,9 @@ public class SeminarService {
             serial++;
         }
         seminar.setSerial(serial);
-        //新增讨论课
+        //1. 新增讨论课
         seminarDao.addSeminar(seminar);
-        //新增班级讨论课 TODO 级联新增seminar_score 已完成
+        //2. 新增班级讨论课 TODO 级联新增seminar_score 已完成
         cClassSeminarDao.addCClassSeminar(seminar);
         if (hasEmail) {
             //发邮件通知课程下所有班级所有小组成员

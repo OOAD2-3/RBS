@@ -40,6 +40,9 @@ public class SeminarDao {
     @Autowired
     private RoundScoreMapper roundScoreMapper;
 
+    @Autowired
+    private CClassRoundMapper cClassRoundMapper;
+
     public final static int HAS_CClASS_SEMINAR = 0;
     public final static int HAS_ROUND = 1;
     public final static int HAS_COURSE = 2;
@@ -188,6 +191,10 @@ public class SeminarDao {
             roundMapper.deleteById(round.getId());
             //  1.5 删除round_score
             roundScoreMapper.deleteByRoundId(round.getId());
+            //  1.6 删除klass_round
+            for(CClass cClass:cClasses){
+                cClassRoundMapper.deleteByPrimaryKeys(cClass.getId(),round.getId());
+            }
         }
         return true;
     }

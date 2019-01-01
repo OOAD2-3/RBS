@@ -26,12 +26,6 @@ public class QuestionDao {
     private CClassSeminarMapper cClassSeminarMapper;
 
     @Autowired
-    private CClassMapper cClassMapper;
-
-    @Autowired
-    private SeminarMapper seminarMapper;
-
-    @Autowired
     private TeamMapper teamMapper;
 
     @Autowired
