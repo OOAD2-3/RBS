@@ -88,13 +88,9 @@ public class RoundScoreDao {
         if (round.getPresentationScoreMethod() == Round.SCORE_AVERAGE) {
             double sumPresentationScore = 0.0;
             for (SeminarScore seminarScore : seminarScores) {
-                System.out.println("roundScoreDao: " + seminarScore);
-                System.out.println("roundScoreDao: roundId: " + round.getId() + "teamId: " + seminarScore.getTeamId());
-
                 sumPresentationScore += seminarScore.getPresentationScore();
             }
             presentationScore = sumPresentationScore / cClassRound.getEnrollNumber();
-            System.out.println("roundScoreDao: presentationScore: " + presentationScore);
         }
         //如果是最高分
         if (round.getPresentationScoreMethod() == Round.SCORE_MAX) {

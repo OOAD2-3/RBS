@@ -119,7 +119,12 @@ public class UserService {
         }
 
         //放入需要设置的邮箱
-        user.setEmail(email);
+        if (email != null) {
+            user.setEmail(email);
+        } else {
+            user.setEmail(" ");
+        }
+
         if (user instanceof Student) {
             studentDao.updateEmailByStudent((Student) user);
         } else if (user instanceof Teacher) {

@@ -97,7 +97,6 @@ public class ApplicationService {
         teamApplicationDao.addTeamValidApplication(teamValidApplication);
 
         //小组状态
-        System.out.println(teamValidApplication.getId());
         if (team.getStatus() != Team.STATUS_IN_REVIEW) {
             teamDao.updateStatusByTeamId(Team.STATUS_IN_REVIEW,
                     teamApplicationDao.getTeamValidRequestById(teamValidApplication.getId()).getTeamId());

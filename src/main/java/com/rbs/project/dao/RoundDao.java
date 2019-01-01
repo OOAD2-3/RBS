@@ -56,7 +56,6 @@ public class RoundDao {
             roundMapper.insertRound(round);
             createRoundId=round.getId();
         }catch (Exception e){
-            System.out.println(e.getCause()+" "+e.getMessage());
             throw new MyException("新增轮次错误！数据库处理错误",MyException.ERROR);
         }
         return createRoundId;

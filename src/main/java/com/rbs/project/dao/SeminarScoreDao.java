@@ -142,7 +142,6 @@ public class SeminarScoreDao {
     public boolean updateReportScore(long seminarId, long classId, long teamId, double reportScore) throws Exception {
         //检查是否有该行
         getSeminarScoreBySeminarIdAndCClassIdAndTeamId(seminarId, classId, teamId);
-        System.out.println(seminarId+" "+classId+" "+teamId);
         if (!seminarScoreMapper.updateReportScore(seminarId, classId, teamId, reportScore)) {
             throw new MyException("修改展示的报告分数错误！数据库执行错误", MyException.ERROR);
         }
