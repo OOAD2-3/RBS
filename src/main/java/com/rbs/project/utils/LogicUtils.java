@@ -55,9 +55,22 @@ public class LogicUtils {
         double presentationPercentage = course.getPresentationPercentage() / 100.0;
         double questionPercentage = course.getQuestionPercentage() / 100.0;
         double reportPercentage = course.getReportPercentage() / 100.0;
-        return roundScore.getPresentationScore() * presentationPercentage +
-                roundScore.getQuestionScore() * questionPercentage +
-                roundScore.getReportScore() * reportPercentage;
+        Double presentationScore = Double.valueOf(0);
+        Double questionScore = Double.valueOf(0);
+        Double reportScore = Double.valueOf(0);
+        if (roundScore.getPresentationScore() != null) {
+            presentationScore = roundScore.getPresentationScore();
+        }
+        if (roundScore.getQuestionScore() != null) {
+            questionScore = roundScore.getQuestionScore();
+        }
+        if (roundScore.getReportScore() != null) {
+            reportScore = roundScore.getReportScore();
+        }
+
+        return presentationScore * presentationPercentage +
+                questionScore * questionPercentage +
+                reportScore * reportPercentage;
     }
 
 }

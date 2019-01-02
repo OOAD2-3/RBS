@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -245,6 +246,7 @@ public class SeminarController {
             throw new MyException("status不能为空", MyException.ERROR);
         }
         cClassSeminar.setStatus(Integer.parseInt(updateMap.get(status)));
+        cClassSeminar.setReportDDL(JsonUtils.StringToTimestamp("2019-02-01 23:59:59"));
         return ResponseEntity.ok().body(cClassSeminarService.updateCClassSeminar(cClassSeminar));
     }
 

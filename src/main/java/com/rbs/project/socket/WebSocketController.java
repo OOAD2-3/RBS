@@ -45,6 +45,9 @@ public class WebSocketController {
     @Autowired
     private TeamService teamService;
 
+    @Autowired
+    private AttendanceService attendanceService;
+
     @MessageMapping("/student/{studentId}")
     @SendTo("/topic/client/student/{studentId}")
     public Integer questionStudentNumber(@DestinationVariable("studentId") long studentId, Map<String, Long> msg) {
@@ -62,9 +65,14 @@ public class WebSocketController {
      */
     @MessageMapping("/teacher/class/{classId}/seminar/{seminarId}/nextTeam")
     @SendTo("/topic/client/class/{classId}/seminar/{seminarId}/nextTeam")
-    public Integer nextTeam(@DestinationVariable("classId") long classId,
+    public Long nextTeam(@DestinationVariable("classId") long classId,
                             @DestinationVariable("seminarId") long seminarId,
-                            Integer teamOrder) throws Exception {
+                            Map<String, Long> map) throws Exception {
+        Long teamOrder = map.get("teamOrder");
+        Long attendanceId = map.get("attendanceId");
+        attendanceService.turnStatusToIsPresent(attendanceId);
+
+        studentPool.clearAll(attendanceId);
         return teamOrder;
     }
 
