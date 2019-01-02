@@ -36,7 +36,11 @@ public class AttendanceVO implements Comparable<AttendanceVO> {
         reportName = attendance.getReportName();
         reportUrl = attendance.getReportUrl();
         if (attendance.getcClassSeminar() != null) {
-            reportDDL = JsonUtils.TimestampToString(attendance.getcClassSeminar().getReportDDL());
+            if(attendance.getcClassSeminar().getReportDDL()==null){
+                reportDDL=null;
+            }else {
+                reportDDL = JsonUtils.TimestampToString(attendance.getcClassSeminar().getReportDDL());
+            }
         }
         if (attendance.getTeam() != null) {
             teamBaseInfoVO = new TeamBaseInfoVO(attendance.getTeam());
