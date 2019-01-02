@@ -185,9 +185,11 @@ public class ApplicationService {
         for (Student student
                 : mainCourseStudents) {
             //如果这个学生在从课程
-            CClassStudent temp = studentDao.getByIdAndCourseId(student.getId(), subCourseId);
+            List<CClassStudent> temp = studentDao.getByIdAndCourseId(student.getId(), subCourseId);
             if (temp != null) {
-                subCourseStudents.add(temp);
+                for (CClassStudent cClassStudent:temp){
+                    subCourseStudents.add(cClassStudent);
+                }
             }
         }
         //如果有从课程学生

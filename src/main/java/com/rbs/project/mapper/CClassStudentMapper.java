@@ -3,7 +3,10 @@ package com.rbs.project.mapper;
 
 import com.rbs.project.pojo.relationship.CClassStudent;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 /**
  * Description:
@@ -36,5 +39,13 @@ public interface CClassStudentMapper {
      * @return
      * @throws Exception
      */
-    CClassStudent getByIdAndCourseId(long studentId, long courseId) throws Exception;
+    List<CClassStudent> getByIdAndCourseId(@Param("studentId") long studentId,@Param("courseId") long courseId) throws Exception;
+
+    /**
+     *
+     * @param cClassId
+     * @param studentId
+     * @return
+     */
+    CClassStudent getByPrimaryKeys(@Param("cClassId") long cClassId,@Param("studentId") long studentId);
 }
