@@ -47,11 +47,11 @@ public class QuestionController {
      */
     @PostMapping("/student/{studentId}")
     @ResponseBody
-    public ResponseEntity<Boolean> raiseQuestion(@RequestBody Question question, @PathVariable("studentId") long studentId) throws MyException {
+    public ResponseEntity<Boolean> raiseQuestion(@RequestBody Question question, @PathVariable("studentId") long studentId) throws Exception {
         Question newQuestion = new Question();
 
         //设置CClassSeminarId
-        newQuestion.setcClassSeminarId(attendanceService.getAttendanceById(newQuestion.getAttendanceId()).getcClassSeminarId());
+        newQuestion.setcClassSeminarId(attendanceService.getAttendanceById(question.getAttendanceId()).getcClassSeminarId());
         //设置attendanceId
         newQuestion.setAttendanceId(question.getAttendanceId());
         //设置teamId

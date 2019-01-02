@@ -98,12 +98,12 @@ public class ApplicationService {
         teamValidApplication.setTeamId(teamId);
         teamValidApplication.setTeacherId(courseDao.getCourseById(team.getCourseId()).getTeacherId());
         teamValidApplication.setReason(reason);
-        teamApplicationDao.addTeamValidApplication(teamValidApplication);
+        Long id = teamApplicationDao.addTeamValidApplication(teamValidApplication);
 
         //小组状态
         if (team.getStatus() != Team.STATUS_IN_REVIEW) {
             teamDao.updateStatusByTeamId(Team.STATUS_IN_REVIEW,
-                    teamApplicationDao.getTeamValidRequestById(teamValidApplication.getId()).getTeamId());
+                    teamApplicationDao.getTeamValidRequestById(id).getTeamId());
         }
 
         return true;
@@ -299,7 +299,7 @@ public class ApplicationService {
                 tempRound.setCourseId(subCourseId);
                 roundDao.addRound(tempRound);
                 //新增klass_round
-                List<CClass> cClasses=cClassDao.listByCourseId(subCourseId);
+                List<CClass> cClasses = cClassDao.listByCourseId(subCourseId);
                 for (CClass cClass : cClasses) {
                     CClassRound cClassRound = new CClassRound();
                     cClassRound.setcClassId(cClass.getId());

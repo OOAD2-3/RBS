@@ -82,16 +82,18 @@ public class TeamApplicationDao {
      * @Author: 17Wang
      * @Time: 13:49 2018/12/23
      */
-    public boolean addTeamValidApplication(TeamValidApplication teamValidApplication) throws Exception {
+    public Long addTeamValidApplication(TeamValidApplication teamValidApplication) throws Exception {
         //判断表里是否已存在该请求
         TeamValidApplication myApplication = teamValidApplicationMapper.findByTeamIdAndTeacherId(teamValidApplication.getTeamId(), teamValidApplication.getTeacherId());
         if (myApplication != null) {
             //更新reason字段
-            return teamValidApplicationMapper.updateReasonById(teamValidApplication.getReason(), myApplication.getId());
+            teamValidApplicationMapper.updateReasonById(teamValidApplication.getReason(), myApplication.getId());
+            return myApplication.getId();
         }
         //确认状态为UNDO
         teamValidApplication.setStatus(TeamValidApplication.STATUS_UNDO);
-        return teamValidApplicationMapper.insertApplication(teamValidApplication);
+        teamValidApplicationMapper.insertApplication(teamValidApplication);
+        return teamValidApplication.getId();
     }
 
     /**
