@@ -226,9 +226,6 @@ public class StudentDao {
         if (studentMapper.findByAccount(student.getUsername()) == null) {
             try {
                 studentMapper.insertStudent(student);
-                //TODO 建立班级学生关系klass_student
-
-
                 studentId = student.getId();
             } catch (Exception e) {
                 throw new MyException("新增学生错误！数据库处理错误", MyException.ERROR);
@@ -244,7 +241,7 @@ public class StudentDao {
      * @Author: WinstonDeng
      * @Date: 16:10 2018/12/26
      */
-    public CClassStudent getByIdAndCourseId(long studentId, long subCourseId) {
+    public CClassStudent getByIdAndCourseId(long studentId, long subCourseId)throws Exception{
         return cClassStudentMapper.getByIdAndCourseId(studentId, subCourseId);
     }
 }

@@ -67,12 +67,7 @@ public class RoundDao {
      * @Date: 16:01 2018/12/20
      */
     public List<Round> listByCourseId(long courseId,int ...hasSomething) throws MyException{
-        List<Round> rounds=null;
-        try {
-            rounds=roundMapper.findByCourseId(courseId);
-        }catch (Exception e){
-            throw new MyException("查看轮次错误！数据库处理错误",MyException.ERROR);
-        }
+        List<Round> rounds=roundMapper.findByCourseId(courseId);
         for(Round round
                 :rounds){
             hasSomethingFun(round,hasSomething);

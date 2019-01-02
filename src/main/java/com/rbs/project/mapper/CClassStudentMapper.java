@@ -34,6 +34,7 @@ public interface CClassStudentMapper {
      * @param studentId
      * @param courseId
      * @return
+     * @throws Exception
      */
-    CClassStudent getByIdAndCourseId(long studentId, long courseId);
+    CClassStudent getByIdAndCourseId(long studentId, long courseId) throws Exception;
 }
