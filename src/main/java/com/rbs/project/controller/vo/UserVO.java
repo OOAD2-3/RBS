@@ -15,8 +15,9 @@ public class UserVO {
     private String account;
     private String name;
     private String email;
+    private Long teamId;
 
-    public UserVO(){
+    public UserVO() {
 
     }
 
@@ -24,8 +25,10 @@ public class UserVO {
         id = user.getId();
         account = user.getUsername();
         email = user.getEmail();
+
         if (user instanceof Student) {
             name = ((Student) user).getStudentName();
+            teamId = ((Student) user).getTeamId();
         } else if (user instanceof Teacher) {
             name = ((Teacher) user).getTeacherName();
         }
@@ -61,6 +64,14 @@ public class UserVO {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public Long getTeamId() {
+        return teamId;
+    }
+
+    public void setTeamId(Long teamId) {
+        this.teamId = teamId;
     }
 
     @Override

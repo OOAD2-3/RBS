@@ -18,12 +18,25 @@ public class Student extends User{
      */
     private String studentName;
 
+    /**
+     * 属于哪个小组，websocket要用
+     */
+    private Long teamId;
+
     public String getStudentName() {
         return studentName;
     }
 
     public void setStudentName(String studentName) {
         this.studentName = studentName;
+    }
+
+    public Long getTeamId() {
+        return teamId;
+    }
+
+    public void setTeamId(Long teamId) {
+        this.teamId = teamId;
     }
 
     @Override

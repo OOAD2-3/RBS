@@ -1,5 +1,6 @@
 package com.rbs.project.socket;
 
+import com.rbs.project.exception.MyException;
 import com.rbs.project.pojo.entity.Student;
 import org.springframework.stereotype.Component;
 
@@ -26,10 +27,12 @@ public class StudentPool {
         for (Student s : studentList) {
             //如果存在该学生
             if (s.getId() == student.getId()) {
-                throw new Exception();
+                throw new MyException("你已经报名过一次了", MyException.ERROR);
             }
         }
+
         studentList.add(student);
+        System.out.println("报名——当前池子剩于学生："+studentList.size());
         map.put(attendanceId, studentList);
     }
 
@@ -38,6 +41,7 @@ public class StudentPool {
         if (studentList == null) {
             return null;
         }
+        System.out.println("抽取——当前池子剩于学生："+studentList.size());
         int randomIndex = random.nextInt(studentList.size());
         Student student = studentList.get(randomIndex);
 

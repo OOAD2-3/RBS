@@ -114,6 +114,7 @@ public class CClassDao {
     public CClass getCClassByStudentIdAndCourseId(long studentId, long courseId) throws MyException {
         CClass cClass = cClassMapper.findByStudentIdAndCourseId(studentId, courseId);
         if (cClass == null) {
+            System.out.println("CClassDao:"+studentId+" "+courseId);
             throw new MyException("通过学生号和课程号查找该学生在该课程下属于哪个班错误！不存在改行", MyException.NOT_FOUND_ERROR);
         }
         return cClass;
