@@ -48,13 +48,17 @@ public class RequestController {
         List<TeamValidApplication> teamValidApplications = applicationService.listTeamApplicationByTeacherId(teacher.getId());
         List<TeamValidApplicationVO> teamValidApplicationVOS = new ArrayList<>();
         for (TeamValidApplication teamValidApplication : teamValidApplications) {
-            Team team = teamService.getTeamById(teamValidApplication.getTeamId(), TeamDao.HAS_CCLASS);
-            if (team.getStatus() == Team.STATUS_IN_REVIEW) {
-                Course course = courseService.getCourseById(team.getCourseId(), -1);
-                teamValidApplicationVOS.add(
-                        new TeamValidApplicationVO(teamValidApplication)
-                                .setTeam(team)
-                                .setCourse(course));
+            try {
+                Team team = teamService.getTeamById(teamValidApplication.getTeamId(), TeamDao.HAS_CCLASS);
+                if (team.getStatus() == Team.STATUS_IN_REVIEW) {
+                    Course course = courseService.getCourseById(team.getCourseId(), -1);
+                    teamValidApplicationVOS.add(
+                            new TeamValidApplicationVO(teamValidApplication)
+                                    .setTeam(team)
+                                    .setCourse(course));
+                }
+            }catch (Exception e){
+                e.printStackTrace();
             }
         }
 

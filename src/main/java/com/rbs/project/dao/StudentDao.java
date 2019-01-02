@@ -241,7 +241,7 @@ public class StudentDao {
      * @Author: WinstonDeng
      * @Date: 16:10 2018/12/26
      */
-    public CClassStudent getByIdAndCourseId(long studentId, long subCourseId)throws Exception{
+    public List<CClassStudent> getByIdAndCourseId(long studentId, long subCourseId)throws Exception{
         return cClassStudentMapper.getByIdAndCourseId(studentId, subCourseId);
     }
 }

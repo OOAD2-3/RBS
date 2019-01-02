@@ -167,9 +167,7 @@ public class CClassDao {
      */
     public boolean addCClassStudent(CClassStudent cClassStudent) throws MyException {
         //如果不存在记录，才新增
-        try {
-            cClassStudentMapper.getByIdAndCourseId(cClassStudent.getStudentId(),cClassStudent.getCourseId());
-        }catch (Exception e){
+        if(cClassStudentMapper.getByPrimaryKeys(cClassStudent.getcClassId(),cClassStudent.getStudentId())==null) {
             if(!cClassStudentMapper.insertCClassStudent(cClassStudent)){
                 throw new MyException("新增班级学生错误！数据库处理错误", MyException.ERROR);
             }
