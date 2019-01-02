@@ -101,9 +101,9 @@ public class CClassService {
         Set<Student> students = ExcelUtils.transExcelToSet(filePath + fileName);
         for (Student student
                 : students) {
-            //通过学号判断是否存在
             try {
-                studentDao.getStudentByAccount(student.getUsername());
+                long stdId=studentDao.getStudentByAccount(student.getUsername()).getId();
+                student.setId(stdId);
             } catch (MyException e) {
                 //默认密码
                 student.setPassword("123456");
