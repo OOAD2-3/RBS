@@ -137,8 +137,7 @@ public class TeamService {
         //如果有从课程，同步team
         //从课程
         List<Course> courses=courseDao.listAllCoursesByTeamMainCourseId(team.getCourseId());
-        //TODO 没用到的字段为什么？
-        List<Student> mainCourseStudents=studentDao.listByTeamId(team.getId());
+
         for(Course course:courses){
             applicationService.teamMapToSubCourse(team,course.getId());
         }
