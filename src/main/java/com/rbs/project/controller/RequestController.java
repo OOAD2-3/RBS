@@ -48,18 +48,22 @@ public class RequestController {
         List<TeamValidApplication> teamValidApplications = applicationService.listTeamApplicationByTeacherId(teacher.getId());
         List<TeamValidApplicationVO> teamValidApplicationVOS = new ArrayList<>();
         for (TeamValidApplication teamValidApplication : teamValidApplications) {
-            Team team = teamService.getTeamById(teamValidApplication.getTeamId(),TeamDao.HAS_CCLASS);
-            Course course = courseService.getCourseById(team.getCourseId(),-1);
-            teamValidApplicationVOS.add(
-                    new TeamValidApplicationVO(teamValidApplication)
-                    .setTeam(team)
-                    .setCourse(course));
+            Team team = teamService.getTeamById(teamValidApplication.getTeamId(), TeamDao.HAS_CCLASS);
+            if (team.getStatus() == Team.STATUS_IN_REVIEW) {
+                Course course = courseService.getCourseById(team.getCourseId(), -1);
+                teamValidApplicationVOS.add(
+                        new TeamValidApplicationVO(teamValidApplication)
+                                .setTeam(team)
+                                .setCourse(course));
+            }
         }
+
         return teamValidApplicationVOS;
     }
 
     /**
      * Description: 更新小组合法状态
+     *
      * @Author: 17（Winston补充的注释，看到删掉）
      * @Date: 14:24 2018/12/26
      */
@@ -71,71 +75,74 @@ public class RequestController {
 
     /**
      * Description: 按id处理共享队伍请求 同意/拒绝 注意这里输入的是字符串accept/reject
+     *
      * @Author: WinstonDeng
      * @Date: 20:02 2018/12/24
      */
     @PutMapping("/teamshare/{teamshareId}")
     @ResponseBody
-    public ResponseEntity<Boolean> handleTeamShareRequest(@PathVariable("teamshareId") long requestId, @RequestBody Map<String,String> handle) throws Exception {
-        String handleType="handleType";
-        String accept="accept";
-        String reject="reject";
-        Integer status=null;
-        if(handle.get(handleType)==null){
-            throw new MyException("handleType不能为空",MyException.ERROR);
-        } else if(handle.get(handleType).equals(accept)){
-            status= ShareTeamApplication.STATUS_ACCEPT;
-        } else if(handle.get(handleType).equals(reject)){
-            status=ShareTeamApplication.STATUS_REJECT;
-        }else{
-            throw new MyException("handleType格式错误，只能输入accept或reject",MyException.ERROR);
+    public ResponseEntity<Boolean> handleTeamShareRequest(@PathVariable("teamshareId") long requestId, @RequestBody Map<String, String> handle) throws Exception {
+        String handleType = "handleType";
+        String accept = "accept";
+        String reject = "reject";
+        Integer status = null;
+        if (handle.get(handleType) == null) {
+            throw new MyException("handleType不能为空", MyException.ERROR);
+        } else if (handle.get(handleType).equals(accept)) {
+            status = ShareTeamApplication.STATUS_ACCEPT;
+        } else if (handle.get(handleType).equals(reject)) {
+            status = ShareTeamApplication.STATUS_REJECT;
+        } else {
+            throw new MyException("handleType格式错误，只能输入accept或reject", MyException.ERROR);
         }
-        return ResponseEntity.ok().body(applicationService.updateTeamShareApplicationStatus(requestId,status));
+        return ResponseEntity.ok().body(applicationService.updateTeamShareApplicationStatus(requestId, status));
     }
 
     /**
      * Description: 按id处理共享讨论课请求 同意/拒绝 注意这里输入的是字符串accept/reject
+     *
      * @Author: WinstonDeng
      * @Date: 18:12 2018/12/27
      */
     @PutMapping("/seminarshare/{seminarshareId}")
     @ResponseBody
-    public ResponseEntity<Boolean> handleSeminarShareRequest(@PathVariable("seminarshareId")long requestId,@RequestBody Map<String,String> handle) throws Exception{
-        String handleType="handleType";
-        String accept="accept";
-        String reject="reject";
-        Integer status=null;
-        if(handle.get(handleType)==null){
-            throw new MyException("handleType不能为空",MyException.ERROR);
-        }else if(handle.get(handleType).equals(accept)){
-            status= ShareSeminarApplication.STATUS_ACCEPT;
-        }else if(handle.get(handleType).equals(reject)){
-            status=ShareSeminarApplication.STATUS_REJECT;
-        }else {
-            throw new MyException("handleType格式错误，只能输入accept或reject",MyException.ERROR);
+    public ResponseEntity<Boolean> handleSeminarShareRequest(@PathVariable("seminarshareId") long requestId, @RequestBody Map<String, String> handle) throws Exception {
+        String handleType = "handleType";
+        String accept = "accept";
+        String reject = "reject";
+        Integer status = null;
+        if (handle.get(handleType) == null) {
+            throw new MyException("handleType不能为空", MyException.ERROR);
+        } else if (handle.get(handleType).equals(accept)) {
+            status = ShareSeminarApplication.STATUS_ACCEPT;
+        } else if (handle.get(handleType).equals(reject)) {
+            status = ShareSeminarApplication.STATUS_REJECT;
+        } else {
+            throw new MyException("handleType格式错误，只能输入accept或reject", MyException.ERROR);
         }
-        return ResponseEntity.ok().body(applicationService.updateSeminarShareApplicationStatus(requestId,status));
+        return ResponseEntity.ok().body(applicationService.updateSeminarShareApplicationStatus(requestId, status));
     }
 
     /**
      * Description: 获取所有待办共享申请
+     *
      * @Author: WinstonDeng
      * @Date: 15:32 2018/12/28
      */
     @GetMapping
     @ResponseBody
-    public ResponseEntity<List<RequestInfoVO>> listAllUnhandleRequest() throws Exception{
+    public ResponseEntity<List<RequestInfoVO>> listAllUnhandleRequest() throws Exception {
         //获取当前的老师
-        Teacher teacher=(Teacher) UserUtils.getNowUser();
-        List<RequestInfoVO> requestInfoVOS=new ArrayList<>();
+        Teacher teacher = (Teacher) UserUtils.getNowUser();
+        List<RequestInfoVO> requestInfoVOS = new ArrayList<>();
         //讨论课共享请求
-        List<ShareSeminarApplication> shareSeminarApplications=applicationService.listSeminarShareApplicationByTeacherId(teacher.getId());
-        for(ShareSeminarApplication shareSeminarApplication:shareSeminarApplications){
+        List<ShareSeminarApplication> shareSeminarApplications = applicationService.listSeminarShareApplicationByTeacherId(teacher.getId());
+        for (ShareSeminarApplication shareSeminarApplication : shareSeminarApplications) {
             requestInfoVOS.add(new RequestInfoVO(shareSeminarApplication));
         }
         //组队共享请求
-        List<ShareTeamApplication> shareTeamApplications=applicationService.listTeamShareApplicationByTeacherId(teacher.getId());
-        for(ShareTeamApplication shareTeamApplication:shareTeamApplications){
+        List<ShareTeamApplication> shareTeamApplications = applicationService.listTeamShareApplicationByTeacherId(teacher.getId());
+        for (ShareTeamApplication shareTeamApplication : shareTeamApplications) {
             requestInfoVOS.add(new RequestInfoVO(shareTeamApplication));
         }
         return ResponseEntity.ok().body(requestInfoVOS);

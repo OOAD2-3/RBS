@@ -1,15 +1,19 @@
 package com.rbs.project.socket;
 
+import com.rbs.project.controller.vo.TeamBaseInfoVO;
 import com.rbs.project.dao.AttendanceDao;
+import com.rbs.project.dao.TeamDao;
 import com.rbs.project.exception.MyException;
 import com.rbs.project.pojo.entity.Attendance;
 import com.rbs.project.pojo.entity.Student;
+import com.rbs.project.pojo.entity.Team;
 import com.rbs.project.pojo.entity.User;
 import com.rbs.project.controller.vo.AttendanceVO;
 import com.rbs.project.controller.vo.UserVO;
 import com.rbs.project.secruity.jwt.JwtUserDetailsService;
 import com.rbs.project.service.AttendanceService;
 import com.rbs.project.service.StudentService;
+import com.rbs.project.service.TeamService;
 import com.rbs.project.utils.UserUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
@@ -18,6 +22,7 @@ import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
+import java.rmi.MarshalledObject;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -36,6 +41,9 @@ public class WebSocketController {
 
     @Autowired
     private StudentService studentService;
+
+    @Autowired
+    private TeamService teamService;
 
     @MessageMapping("/student/{studentId}")
     @SendTo("/topic/client/student/{studentId}")
@@ -69,13 +77,17 @@ public class WebSocketController {
      */
     @MessageMapping("/teacher/class/{classId}/seminar/{seminarId}/pickQuestion")
     @SendTo("/topic/client/class/{classId}/seminar/{seminarId}/pickQuestion")
-    public UserVO pickQuestion(@DestinationVariable("classId") long classId, @DestinationVariable("seminarId") long seminarId, Long attendanceId) {
+    public Map<String, Object> pickQuestion(@DestinationVariable("classId") long classId, @DestinationVariable("seminarId") long seminarId, Long attendanceId) throws MyException {
         System.out.println("pickQuestion:" + attendanceId);
         Student student = studentPool.pick(attendanceId);
         if (student == null) {
             return null;
         }
-        return new UserVO(studentPool.pick(attendanceId));
+        Map<String, Object> map = new HashMap();
+        map.put("student", new UserVO(student));
+        Team team = teamService.getTeamById(student.getTeamId(), TeamDao.HAS_CCLASS);
+        map.put("team", new TeamBaseInfoVO(team));
+        return map;
     }
 
     /**
@@ -91,9 +103,13 @@ public class WebSocketController {
     public Integer raiseQuestion(@DestinationVariable("classId") long classId, @DestinationVariable("seminarId") long seminarId, Map<String, Long> msg) throws Exception {
         Long attendanceId = msg.get("attendanceId");
         Long studentId = msg.get("studentId");
+        Long teamId = msg.get("teamId");
         System.out.println("msg: " + attendanceId + " " + studentId);
 
-        studentPool.put(attendanceId, studentService.findStudentById(studentId));
+        Student student = studentService.findStudentById(studentId);
+        student.setTeamId(teamId);
+
+        studentPool.put(attendanceId, student);
         return studentPool.size(attendanceId);
     }
 

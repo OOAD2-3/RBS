@@ -150,7 +150,11 @@ public class ScoreController {
                     //设置讨论课基本信息 和 设置讨论课分数信息
                     SeminarScore seminarScore = scoreService.getSeminarScoreBySeminarIdAndTeamId(seminar.getId(), team.getId());
                     BigSeminarVO bigSeminarVO = new BigSeminarVO(seminar, seminarScore);
-                    long classId = cClassService.getCClassByStudentIdAndCourseId(team.getLeaderId(), courseId).getId();
+                    long classId = 0;
+                    try {
+                        classId = cClassService.getCClassByStudentIdAndCourseId(team.getLeaderId(), courseId).getId();
+                    } catch (Exception e) {
+                    }
                     bigSeminarVO.setClassId(classId);
                     bigSeminarVOS.add(bigSeminarVO);
                 }
