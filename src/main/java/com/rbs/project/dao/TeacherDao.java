@@ -117,6 +117,10 @@ public class TeacherDao {
      * @Time: 16:05 2018/12/16
      */
     public boolean updateEmailByTeacher(Teacher teacher) throws MyException {
+        if (teacher.getEmail() == null) {
+            teacher.setEmail(" ");
+        }
+
         try {
             getTeacherById(teacher.getId());
         } catch (MyException e) {
@@ -168,9 +172,10 @@ public class TeacherDao {
 
     /**
      * Description: 通过id删除老师
+     *
      * @Author: 17Wang
      * @Time: 15:43 2018/12/18
-    */
+     */
     public boolean deleteTeacherByTeacherId(long teacherId) throws MyException {
         try {
             getTeacherById(teacherId);
@@ -178,19 +183,17 @@ public class TeacherDao {
             throw new MyException("删除老师错误！不存在该用户", MyException.NOT_FOUND_ERROR);
         }
 
-        if (!teacherMapper.deleteTeacherById(teacherId)) {
-            throw new MyException("删除老师错误！数据库处理错误", MyException.ERROR);
-        }
-        return true;
+        return teacherMapper.deleteTeacherById(teacherId);
     }
 
     /**
      * Description: 新增老师
+     *
      * @Author: 17Wang
      * @Time: 15:43 2018/12/18
-    */
+     */
     public boolean addTeacher(Teacher teacher) throws MyException {
-        if(!teacherMapper.insertTeacher(teacher)){
+        if (!teacherMapper.insertTeacher(teacher)) {
             throw new MyException("新增老师错误！数据库处理错误", MyException.ERROR);
         }
         return true;

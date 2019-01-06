@@ -8,22 +8,10 @@ package com.rbs.project.pojo.strategy;
  */
 public class TeamAndStrategy {
     private long id;
-    /**
-     *  “与”组队策略1实现类名称
-     */
-    private String strategyAName;
-    /**
-     * “与”组队策略1_id
-     */
-    private long strategyAId;
-    /**
-     *  “与”组队策略2实现类名称
-     */
-    private String strategyBName;
-    /**
-     * “与”组队策略2_id
-     */
-    private long strategyBId;
+
+    private String strategyName;
+
+    private long strategyId;
 
     //==================================================getter AND setter==================================================//
 
@@ -35,35 +23,19 @@ public class TeamAndStrategy {
         this.id = id;
     }
 
-    public String getStrategyAName() {
-        return strategyAName;
+    public String getStrategyName() {
+        return strategyName;
     }
 
-    public void setStrategyAName(String strategyAName) {
-        this.strategyAName = strategyAName;
+    public void setStrategyName(String strategyName) {
+        this.strategyName = strategyName;
     }
 
-    public long getStrategyAId() {
-        return strategyAId;
+    public long getStrategyId() {
+        return strategyId;
     }
 
-    public void setStrategyAId(long strategyAId) {
-        this.strategyAId = strategyAId;
-    }
-
-    public String getStrategyBName() {
-        return strategyBName;
-    }
-
-    public void setStrategyBName(String strategyBName) {
-        this.strategyBName = strategyBName;
-    }
-
-    public long getStrategyBId() {
-        return strategyBId;
-    }
-
-    public void setStrategyBId(long strategyBId) {
-        this.strategyBId = strategyBId;
+    public void setStrategyId(long strategyId) {
+        this.strategyId = strategyId;
     }
 }

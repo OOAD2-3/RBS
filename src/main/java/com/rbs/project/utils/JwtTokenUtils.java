@@ -13,7 +13,9 @@ import java.util.Date;
  * @Date: 12:34 2018/12/10
  */
 public class JwtTokenUtils {
-    // 加盐
+    /**
+     *  加盐
+     */
     private static String salt="wangshiqi";
 
     public static String generateToken(String subject, int expirationSeconds) {

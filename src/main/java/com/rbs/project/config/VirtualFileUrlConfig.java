@@ -12,11 +12,16 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
  */
 @Configuration
 public class VirtualFileUrlConfig extends WebMvcConfigurerAdapter {
+
+
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
     //文件磁盘url 映射
     //配置server虚拟路径，handler为前台访问的目录，locations为files相对应的本地路径
-        registry.addResourceHandler("/studentfile/**").addResourceLocations("file:D:/projectTemp/studentfile/");
+        registry.addResourceHandler("/static/**").addResourceLocations("classpath:/static/");
+        registry.addResourceHandler("/studentfile/**").addResourceLocations("/resources/studentfile/");
+        registry.addResourceHandler("/ppt/**").addResourceLocations("/resources/ppt/");
+        registry.addResourceHandler("/report/**").addResourceLocations("/resources/report/");
     }
 
 }

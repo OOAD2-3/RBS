@@ -1,13 +1,17 @@
 # RBS
-以下为项目简介：（声明本项目成员均参与了各层标准组）
+【讨论课管理系统】
+以下为项目简介：
 ## 1. 数据库
 由数据库标准组提供：
 - [数据库标准](https://github.com/Black-W/DatabaseStandard) 
 ## 2. RestfulAPI
+组内接口文档：
+- [组内接口](https://docs.qq.com/sheet/DU1RFT2lPRVVUR21r?opendocxfrom=admin&tab=ufozz1)
+
 由Controller标准组提供，仅供参考接口url，输入返回具体不同：
 - [API标准](https://github.com/TanYJie/ControllerWorkingGroup) 
 ## 3. 需求说明
-
+- 需求由标准组统一汇总制订。
 ## 4. 界面说明
 由界面标准组提供，界面仅供参考元素，布局样式各自发挥：
 - [学生及教师移动端](https://pro.modao.cc/app/8TwH3i3V6EGH1q70idMCpZTsR2VUxwl#screen=sE25F4AB9081539853923391) 

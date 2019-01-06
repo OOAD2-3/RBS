@@ -31,6 +31,16 @@ public class StudentService {
     }
 
     /**
+     * Description: 通过id获取一个学生
+     *
+     * @Author: 17Wang
+     * @Time: 8:49 2018/12/29
+     */
+    public Student findStudentById(long studentId) throws MyException {
+        return studentDao.getStudentById(studentId);
+    }
+
+    /**
      * Description: 通过姓名或者学号查询一个学生信息
      *
      * @Author: 17Wang
@@ -51,12 +61,22 @@ public class StudentService {
     }
 
     /**
+     * Description:获取一个课程下没有组队的所有学生
+     *
+     * @Author: 17Wang
+     * @Time: 13:19 2018/12/23
+     */
+    public List<Student> listByCourseIdAndTeamId(long courseId) {
+        return studentDao.listByCourseIdAndTeamIdIsNULL(courseId);
+    }
+
+    /**
      * Description:管理员修改某一学生的信息
      *
      * @Author: 17Wang
      * @Time: 23:23 2018/12/16
      */
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public Student resetStudentInfo(Student student) throws MyException {
         Student temp = studentDao.getStudentById(student.getId());
 
@@ -71,8 +91,12 @@ public class StudentService {
             temp.setStudentName(student.getStudentName());
             studentDao.updateStudentNameByStudent(temp);
         }
+
         //修改学生邮箱
-        if (!temp.getEmail().equals(student.getEmail())) {
+        if (temp.getEmail() == null) {
+            temp.setEmail(" ");
+        }
+        if (!temp.getEmail().equals(student.getEmail()) && student.getEmail() != null) {
             temp.setEmail(student.getEmail());
             studentDao.updateEmailByStudent(temp);
         }
@@ -86,7 +110,7 @@ public class StudentService {
      * @Author: 17Wang
      * @Time: 22:04 2018/12/17
      */
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public Student resetStudentPassword(Student student) throws MyException {
         Student temp = studentDao.getStudentById(student.getId());
 
@@ -101,9 +125,10 @@ public class StudentService {
 
     /**
      * Description: 删除学生
+     *
      * @Author: 17Wang
      * @Time: 22:04 2018/12/17
-    */
+     */
     public boolean deleteStudent(long studentId) throws MyException {
         return studentDao.deleteStudentByStudentId(studentId);
     }

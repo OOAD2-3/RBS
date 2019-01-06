@@ -1,8 +1,10 @@
 package com.rbs.project.pojo.entity;
 
 import com.rbs.project.pojo.strategy.CourseMemberLimitStrategy;
+import com.rbs.project.pojo.strategy.MemberLimitStrategy;
 
 import java.sql.Timestamp;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -58,9 +60,17 @@ public class Course {
 
     //关系
     /**
-     * 课程组队限制
+     * 课程组队人数限制
      */
-    private CourseMemberLimitStrategy courseMemberLimitStrategy;
+    private MemberLimitStrategy memberLimitStrategy;
+    /**
+     * 课程组队选修人数限制
+     */
+    private List<CourseMemberLimitStrategy> courseMemberLimitStrategies;
+    /**
+     * 冲突的课程
+     */
+    private List<List<Course>> conflictCourses;
     /**
      * 一个老师
      */
@@ -93,6 +103,7 @@ public class Course {
      * 多个班级学生
      */
     private List<Student> students;
+
 
     //==================================================getter AND setter==================================================//
 
@@ -184,12 +195,28 @@ public class Course {
         return seminarMainCourseId;
     }
 
-    public CourseMemberLimitStrategy getCourseMemberLimitStrategy() {
-        return courseMemberLimitStrategy;
+    public MemberLimitStrategy getMemberLimitStrategy() {
+        return memberLimitStrategy;
     }
 
-    public void setCourseMemberLimitStrategy(CourseMemberLimitStrategy courseMemberLimitStrategy) {
-        this.courseMemberLimitStrategy = courseMemberLimitStrategy;
+    public void setMemberLimitStrategy(MemberLimitStrategy memberLimitStrategy) {
+        this.memberLimitStrategy = memberLimitStrategy;
+    }
+
+    public List<CourseMemberLimitStrategy> getCourseMemberLimitStrategies() {
+        return courseMemberLimitStrategies;
+    }
+
+    public void setCourseMemberLimitStrategies(List<CourseMemberLimitStrategy> courseMemberLimitStrategies) {
+        this.courseMemberLimitStrategies = courseMemberLimitStrategies;
+    }
+
+    public List<List<Course>> getConflictCourses() {
+        return conflictCourses;
+    }
+
+    public void setConflictCourses(List<List<Course>> conflictCourses) {
+        this.conflictCourses = conflictCourses;
     }
 
     public Teacher getTeacher() {
@@ -258,7 +285,6 @@ public class Course {
 
     //======================= toString=============================
 
-
     @Override
     public String toString() {
         return "Course{" +
@@ -273,7 +299,9 @@ public class Course {
                 ", teamEndTime=" + teamEndTime +
                 ", teamMainCourseId=" + teamMainCourseId +
                 ", seminarMainCourseId=" + seminarMainCourseId +
-                ", courseMemberLimitStrategy=" + courseMemberLimitStrategy +
+                ", memberLimitStrategy=" + memberLimitStrategy +
+                ", courseMemberLimitStrategies=" + courseMemberLimitStrategies +
+                ", conflictCourses=" + conflictCourses +
                 ", teacher=" + teacher +
                 ", teamMainCourse=" + teamMainCourse +
                 ", seminarMainCourse=" + seminarMainCourse +
@@ -283,5 +311,16 @@ public class Course {
                 ", teams=" + teams +
                 ", students=" + students +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+        return ((Course) obj).getId() == this.id ? true : false;
     }
 }

@@ -6,6 +6,8 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 /**
  * Description:
  *
@@ -16,24 +18,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface CClassStudentMapper {
     /**
-     * 通过主键获取teamId
-     *
-     * @param cClassId
-     * @param studentId
-     * @return
-     */
-    Long getTeamIdByPrimaryKeys(@Param("cClassId") long cClassId, @Param("studentId") long studentId);
-
-    /**
-     * 通过主键获取一行
-     *
-     * @param cClassId
-     * @param studentId
-     * @return
-     */
-    Object getByPrimaryKeys(@Param("cClassId") long cClassId, @Param("studentId") long studentId);
-
-    /**
      * 新增班级学生
      * @param cClassStudent
      * @return
@@ -41,12 +25,27 @@ public interface CClassStudentMapper {
     boolean insertCClassStudent(CClassStudent cClassStudent);
 
     /**
-     * 修改学生在这个班级下的所属team
-     *
+     * 批量修改team_id为null
      * @param teamId
+     * @return
+     * @throws Exception
+     */
+    boolean updateTeamIdCollectionToNull(long teamId) throws Exception;
+
+    /**
+     * 通过学生id 和 课程id 确认该记录是否存在，仅用于共享
+     * @param studentId
+     * @param courseId
+     * @return
+     * @throws Exception
+     */
+    List<CClassStudent> getByIdAndCourseId(@Param("studentId") long studentId,@Param("courseId") long courseId) throws Exception;
+
+    /**
+     *
      * @param cClassId
      * @param studentId
      * @return
      */
-    boolean updateTeamIdByPrimaryKeys(@Param("teamId") long teamId, @Param("cClassId") long cClassId, @Param("studentId") long studentId) throws Exception;
+    CClassStudent getByPrimaryKeys(@Param("cClassId") long cClassId,@Param("studentId") long studentId);
 }

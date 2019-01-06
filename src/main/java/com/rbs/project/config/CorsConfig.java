@@ -7,7 +7,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 
 /**
- * Description:
+ * Description: 配置跨域
  *
  * @Author: 17Wang
  * @Date: 17:47 2018/12/21
@@ -19,6 +19,7 @@ public class CorsConfig {
         corsConfiguration.addAllowedOrigin("*");
         corsConfiguration.addAllowedHeader("*");
         corsConfiguration.addAllowedMethod("*");
+        corsConfiguration.setAllowCredentials(true);
         return corsConfiguration;
     }
 

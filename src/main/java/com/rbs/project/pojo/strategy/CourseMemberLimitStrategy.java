@@ -1,12 +1,10 @@
 package com.rbs.project.pojo.strategy;
 
 /**
- * @Author: WinstonDeng
- * @Description: course_member_limit_strategy 表记录的是
- *                 当一个队伍中有多门课程的同学时，对选修某门课程的学生人数的限制
- * @Date: Created in 14:47 2018/12/15
- * @Modified by:
- */
+ * Description: 课程人数策略
+ * @Author: 17Wang
+ * @Time: 15:03 2018/12/28
+*/
 public class CourseMemberLimitStrategy {
 
     private long id;

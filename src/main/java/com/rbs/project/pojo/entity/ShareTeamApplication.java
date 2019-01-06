@@ -31,6 +31,10 @@ public class ShareTeamApplication {
      */
     private Course mainCourse;
     /**
+     * 主课程老师
+     */
+    private Teacher mainCourseTeacher;
+    /**
      * 一个从课程
      */
     private Course subCourse;
@@ -38,6 +42,10 @@ public class ShareTeamApplication {
      * 一个从课程老师
      */
     private Teacher subCourseTeacher;
+
+    public final static Integer STATUS_UNHANDLE=null;
+    public final static int STATUS_ACCEPT = 1;
+    public final static int STATUS_REJECT=0;
 
     //==================================================getter AND setter==================================================//
 
@@ -103,6 +111,14 @@ public class ShareTeamApplication {
 
     public void setSubCourseTeacher(Teacher subCourseTeacher) {
         this.subCourseTeacher = subCourseTeacher;
+    }
+
+    public Teacher getMainCourseTeacher() {
+        return mainCourseTeacher;
+    }
+
+    public void setMainCourseTeacher(Teacher mainCourseTeacher) {
+        this.mainCourseTeacher = mainCourseTeacher;
     }
 //===================== toString =========================
 

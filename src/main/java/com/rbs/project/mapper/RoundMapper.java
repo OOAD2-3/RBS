@@ -1,6 +1,7 @@
 package com.rbs.project.mapper;
 
 import com.rbs.project.pojo.entity.Round;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -14,7 +15,8 @@ import java.util.List;
 @Repository
 public interface RoundMapper {
     /**
-     *  通过id查找轮次
+     * 通过id查找轮次
+     *
      * @param id
      * @return
      */
@@ -22,6 +24,7 @@ public interface RoundMapper {
 
     /**
      * 通过courseId查找轮次列表
+     *
      * @param courseId
      * @return
      */
@@ -29,8 +32,28 @@ public interface RoundMapper {
 
     /**
      * 新增轮次
+     *
      * @param round
      * @return
      */
     boolean insertRound(Round round);
+
+    /**
+     * 按id修改分数计算方法
+     *
+     * @param round
+     * @return
+     */
+    boolean updateScoreMethod(Round round);
+
+    /**
+     * 通过id删除轮次
+     *
+     * @param id
+     * @return
+     * @throws Exception
+     */
+    boolean deleteById(long id) throws Exception;
+
+
 }

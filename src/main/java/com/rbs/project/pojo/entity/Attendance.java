@@ -28,6 +28,8 @@ public class Attendance {
      * 是否在展示
      */
     private Integer present;
+    public final static int PRESENT_NO_START = 0;
+    public final static int PRESENT_START = 1;
     /**
      * ppt文件名
      */
@@ -44,10 +46,8 @@ public class Attendance {
      * 报告文件路径
      */
     private String reportUrl;
-    /**
-     * 报告截止日期
-     */
-    private Timestamp reportDDL;
+
+
 
     //关系
     /**
@@ -160,14 +160,23 @@ public class Attendance {
         this.questions = questions;
     }
 
-    public Timestamp getReportDDL() {
-        return reportDDL;
-    }
-
-    public void setReportDDL(Timestamp reportDDL) {
-        this.reportDDL = reportDDL;
-    }
-
     //================= toString =======================
 
+    @Override
+    public String toString() {
+        return "Attendance{" +
+                "id=" + id +
+                ", cClassSeminarId=" + cClassSeminarId +
+                ", teamId=" + teamId +
+                ", teamOrder=" + teamOrder +
+                ", present=" + present +
+                ", pptName='" + pptName + '\'' +
+                ", pptUrl='" + pptUrl + '\'' +
+                ", reportName='" + reportName + '\'' +
+                ", reportUrl='" + reportUrl + '\'' +
+                ", cClassSeminar=" + cClassSeminar +
+                ", team=" + team +
+                ", questions=" + questions +
+                '}';
+    }
 }

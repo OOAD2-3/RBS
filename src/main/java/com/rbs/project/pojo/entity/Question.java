@@ -31,11 +31,14 @@ public class Question {
     /**
      * 提问分数
      */
-    private BigDecimal score;
+    private double score;
     /**
-     * 是否被提问
+     * 是否被提问0没被提问，1被提问
      */
     private Integer selected;
+
+    public static final int IS_SELECTED = 1;
+    public static final int IS_NO_SELECTED = 0;
 
     //关系
     /**
@@ -97,11 +100,11 @@ public class Question {
         this.studentId = studentId;
     }
 
-    public BigDecimal getScore() {
+    public double getScore() {
         return score;
     }
 
-    public void setScore(BigDecimal score) {
+    public void setScore(double score) {
         this.score = score;
     }
 

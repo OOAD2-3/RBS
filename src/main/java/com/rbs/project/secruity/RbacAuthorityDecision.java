@@ -1,5 +1,6 @@
 package com.rbs.project.secruity;
 
+import com.rbs.project.pojo.entity.Admin;
 import com.rbs.project.pojo.entity.Student;
 import com.rbs.project.pojo.entity.Teacher;
 import org.springframework.context.annotation.Bean;
@@ -30,36 +31,44 @@ public class RbacAuthorityDecision {
 
         //获取资源
         Set<String> urls = new HashSet();
-        urls.add("/user/**");
+        Set<UrlAuthorization> urlAuthorizations = new HashSet<>();
+        urlAuthorizations.add(new UrlAuthorization("/**/**").addAllMethod());
+        urlAuthorizations.add(new UrlAuthorization("/user/**").addAllMethod());
+
         if (userInfo instanceof Student) {
-            System.out.println("我是学生");
-
-            // 这些 url 都是要登录后才能访问，且其他的 url 都不能访问！
-            // 学生的接口权限
-            urls.add("/student/**");
-
+            System.out.println("我是学生" + ((Student) userInfo).getStudentName());
+            urlAuthorizations.add(new UrlAuthorization("/course/**").addGetMethod());
+            urlAuthorizations.add(new UrlAuthorization("/seminar/**").addGetMethod().addPostMethod());
+            urlAuthorizations.add(new UrlAuthorization("/team/**").addAllMethod());
+            urlAuthorizations.add(new UrlAuthorization("/attendance/**").addAllMethod());
+            urlAuthorizations.add(new UrlAuthorization("/seminarscore/**").addGetMethod());
+            urlAuthorizations.add(new UrlAuthorization("/roundscore/**").addGetMethod());
+            urlAuthorizations.add(new UrlAuthorization("/request/**").addAllMethod());
 
         } else if (userInfo instanceof Teacher) {
-            System.out.println("我是老师");
+            System.out.println("我是老师" + ((Teacher) userInfo).getTeacherName());
+            urlAuthorizations.add(new UrlAuthorization("/course/**").addAllMethod());
+            urlAuthorizations.add(new UrlAuthorization("/seminar/**").addAllMethod());
+            urlAuthorizations.add(new UrlAuthorization("/class/**").addAllMethod());
+            urlAuthorizations.add(new UrlAuthorization("/team/**").addAllMethod());
+            urlAuthorizations.add(new UrlAuthorization("/attendance/**").addAllMethod());
+            urlAuthorizations.add(new UrlAuthorization("/seminarscore/**").addAllMethod());
+            urlAuthorizations.add(new UrlAuthorization("/roundscore/**").addAllMethod());
+            urlAuthorizations.add(new UrlAuthorization("/request/**").addAllMethod());
 
-            // 这些 url 都是要登录后才能访问，且其他的 url 都不能访问！
-            // 老师的接口权限
-            urls.add("/teacher/**");
-            urls.add("/student/**");
-            urls.add("/course/**");
-            urls.add("/class/**");
-            urls.add("/team/**");
-            urls.add("/attendance/**");
-        } else {
-            return false;
+
+        } else if (userInfo instanceof Admin) {
+            System.out.println("我是管理员" + ((Admin) userInfo).getUsername());
+            urlAuthorizations.add(new UrlAuthorization("/**/**").addAllMethod());
         }
 
         //当前接口和权限接口进行匹配
         AntPathMatcher antPathMatcher = new AntPathMatcher();
-        for (String url : urls) {
-            if (antPathMatcher.match(url, request.getRequestURI())) {
+        for (UrlAuthorization urlAuthorization : urlAuthorizations) {
+            //判断接口url是否相等 并判断接口url的请求方法
+            if (antPathMatcher.match(urlAuthorization.getUrl(), request.getRequestURI())
+                    && urlAuthorization.getMethod().contains(request.getMethod())) {
                 hasPermission = true;
-                break;
             }
         }
 

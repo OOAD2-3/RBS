@@ -5,6 +5,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
+import java.net.URLEncoder;
 import java.util.List;
 
 /**
@@ -16,20 +17,13 @@ import java.util.List;
 
 public class FileLoadUtils {
 
-    /**
-     *  设置文件存储路径 上传路径
-     */
-    private static String filePath="/studentfile/" ;
-    /**
-     *  设置文件下载路径
-     */
-    private static String realPath;
+
     /**
      * Description: 单文件上传
      * @Author: WinstonDeng
      * @Date: 13:11 2018/12/12
      */
-    public static String upload(MultipartFile file){
+    public static String upload(String filePath,MultipartFile file){
 
         try {
             if (file.isEmpty()) {
@@ -46,6 +40,7 @@ public class FileLoadUtils {
             System.out.println("文件的后缀名为：" + suffixName);
 
             //fileName中有后缀，所以没必要再加suffixName
+            System.out.println(filePath);
             String path = filePath + fileName ;
             File dest = new File(path);
             // 检测是否存在目录
@@ -103,11 +98,10 @@ public class FileLoadUtils {
      * @Author: WinstonDeng
      * @Date: 13:16 2018/12/12
      */
-    public static String downloadFile(HttpServletRequest request, HttpServletResponse response, String realPath, String fileName) {
-        //String fileName = "upload.txt";// 设置文件名，根据业务需要替换成要下载的文件名
+    public static String downloadFile(HttpServletRequest request,HttpServletResponse response, String realPath, String fileName) throws UnsupportedEncodingException {
+        System.out.println(realPath);
+        System.out.println(fileName);
         if (fileName != null) {
-
-
             File file = new File(realPath , fileName);
             if (file.exists()) {
                 // 设置强制下载不打开
@@ -146,8 +140,11 @@ public class FileLoadUtils {
                     }
                 }
             }
+            else {
+                System.out.println("未找到");
+            }
         }
-        return null;
+        return "下载错误";
     }
 
 }

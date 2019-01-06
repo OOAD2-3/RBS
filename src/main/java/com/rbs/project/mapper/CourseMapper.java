@@ -40,23 +40,78 @@ public interface CourseMapper {
      * @return
      */
     List<Course> findByStudentId(long studentId);
+
+    /**
+     * 通过班级获取课程
+     *
+     * @param cClassId
+     * @return
+     */
+    Course findByCClassId(long cClassId);
+
+    /**
+     * 获取所有的课程
+     *
+     * @return
+     */
+    List<Course> listAllCourse();
+
+    /**
+     * 获取与当前课程冲突的所有课程
+     *
+     * @param nowCourseId
+     * @return
+     */
+    List<Course> findAllConflictCourseByNowCourseId(long nowCourseId);
     //=========================新增=======================
 
     /**
      * 新增课程
-     *
      * @param course
      * @return
+     * @throws Exception
      */
     boolean insertCourse(Course course) throws Exception;
     //=========================删除=======================
 
     /**
      * 通过id删除课程
-     *
      * @param id
      * @return
+     * @throws Exception
      */
-    boolean deleteById(long id);
+    boolean deleteById(long id) throws Exception;
+
+
     //=========================修改=======================
+
+    /**
+     * 修改 team_main_course_id
+     *
+     * @param course
+     * @return
+     */
+    boolean updateTeamMainCourseId(Course course);
+
+    /**
+     * 修改 seminar_main_course_id
+     *
+     * @param course
+     * @return
+     */
+    boolean updateSeminarMainCourseId(Course course);
+
+    /**
+     * 找到讨论课主课程为seminarMainCourseId的从课程列表
+     * @param seminarMainCourseId
+     * @return
+     */
+    List<Course> findBySeminarMainCourseId(long seminarMainCourseId);
+
+    /**
+     * 找到队伍主课程为teamMainCourseId的从课程列表
+     * @param teamMainCourseId
+     * @return
+     */
+    List<Course> findByTeamMainCourseId(long teamMainCourseId);
 }

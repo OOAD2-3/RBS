@@ -56,22 +56,36 @@ public class CClassDao {
      */
     public static final int HAS_COURSE = 2;
 
+    private void hasSomethingFun(CClass cClass, int... hasSomething) {
+        for (int i : hasSomething) {
+            if (i == HAS_TEAMS) {
+                List<Team> teams = teamMapper.findByCClassId(cClass.getId());
+                cClass.setTeams(teams);
+            }
+            if (i == HAS_CCLASS_SEMINARS) {
+                List<CClassSeminar> cClassSeminars = cClassSeminarMapper.findByCClassId(cClass.getCourseId());
+                cClass.setcClassSeminars(cClassSeminars);
+            }
+            if (i == HAS_COURSE) {
+                Course course = courseMapper.findById(cClass.getCourseId());
+                cClass.setCourse(course);
+            }
+        }
+    }
+
     /**
      * Description: 通过班级id查看班级
      *
      * @Author: WinstonDeng
      * @Date: 16:30 2018/12/19
      */
-    public CClass getById(long cClassId) throws MyException {
-        CClass cClass = null;
-        if (cClassMapper.findById(cClassId) == null) {
+
+    public CClass getById(long cClassId, int... hasSomething) throws MyException {
+        CClass cClass = cClassMapper.findById(cClassId);
+        if (cClass == null) {
             throw new MyException("通过id查找班级错误！未找到班级", MyException.NOT_FOUND_ERROR);
         }
-        try {
-            cClass = cClassMapper.findById(cClassId);
-        } catch (Exception e) {
-            throw new MyException("通过id查找班级错误！数据库处理错误", MyException.ERROR);
-        }
+        hasSomethingFun(cClass, hasSomething);
         return cClass;
     }
 
@@ -82,34 +96,32 @@ public class CClassDao {
      * @Date: 12:58 2018/12/16
      */
     public List<CClass> listByCourseId(long courseId, int... hasSomething) throws MyException {
-        if (courseMapper.findById(courseId) == null) {
-            throw new MyException("通过课程查找班级列表错误！该课程不存在", MyException.NOT_FOUND_ERROR);
-        }
         List<CClass> cClasses = cClassMapper.findByCourseId(courseId);
 
         for (CClass cClass : cClasses) {
-
-            for (int i : hasSomething) {
-                if (i == HAS_TEAMS) {
-                    List<Team> teams = teamMapper.findByCClassId(cClass.getId());
-                    cClass.setTeams(teams);
-                }
-                if (i == HAS_CCLASS_SEMINARS) {
-                    List<CClassSeminar> cClassSeminars = cClassSeminarMapper.findByCClassId(cClass.getCourseId());
-                    cClass.setcClassSeminars(cClassSeminars);
-                }
-                if (i == HAS_COURSE) {
-                    Course course = courseMapper.findById(cClass.getCourseId());
-                    cClass.setCourse(course);
-                }
-            }
+            hasSomethingFun(cClass, hasSomething);
         }
 
         return cClasses;
     }
 
     /**
-     * Description: 新增课程
+     * Description: 通过学生号和课程号查找该学生在该课程下属于哪个班
+     *
+     * @Author: 17Wang
+     * @Time: 22:34 2018/12/22
+     */
+    public CClass getCClassByStudentIdAndCourseId(long studentId, long courseId) throws MyException {
+        CClass cClass = cClassMapper.findByStudentIdAndCourseId(studentId, courseId);
+        if (cClass == null) {
+            System.out.println("CClassDao:"+studentId+" "+courseId);
+            throw new MyException("通过学生号和课程号查找该学生在该课程下属于哪个班错误！不存在改行", MyException.NOT_FOUND_ERROR);
+        }
+        return cClass;
+    }
+
+    /**
+     * Description: 新增班级
      *
      * @Author: WinstonDeng
      * @Date: 13:01 2018/12/16
@@ -128,7 +140,7 @@ public class CClassDao {
     }
 
     /**
-     * Description: 按id删除课程
+     * Description: 按id删除班级
      * ！！！！！！！！！！！！！缺失级联删除！！！！！！！！！！！！
      *
      * @Author: WinstonDeng
@@ -154,76 +166,44 @@ public class CClassDao {
      * @Date: 16:18 2018/12/19
      */
     public boolean addCClassStudent(CClassStudent cClassStudent) throws MyException {
-        boolean flag = false;
-        if (cClassMapper.findById(cClassStudent.getcClassId()) == null) {
-            throw new MyException("新增班级学生错误！未找到班级", MyException.NOT_FOUND_ERROR);
-        }
-        if (courseMapper.findById(cClassStudent.getCourseId()) == null) {
-            throw new MyException("新增班级学生错误！未找到课程", MyException.NOT_FOUND_ERROR);
-        }
-        if (studentMapper.findById(cClassStudent.getStudentId()) == null) {
-            throw new MyException("新增班级学生错误！未找到学生", MyException.NOT_FOUND_ERROR);
-        }
-        try {
-            flag = cClassStudentMapper.insertCClassStudent(cClassStudent);
-        } catch (Exception e) {
-            throw new MyException("新增班级学生错误！数据库处理错误", MyException.ERROR);
-        }
-        return flag;
-    }
-
-    /**
-     * Description: 修改klass_student表的teamid字段
-     *
-     * @Author: 17Wang
-     * @Time: 13:01 2018/12/19
-     */
-    public boolean updateTeamIdInKlassStudent(long teamId, long cClassId, long studentId) throws Exception {
-        if (cClassStudentMapper.getByPrimaryKeys(cClassId, studentId) == null) {
-            throw new MyException("修改klass_student的teamid字段错误！找不到该行", MyException.NOT_FOUND_ERROR);
-        }
-        if (!cClassStudentMapper.updateTeamIdByPrimaryKeys(teamId, cClassId, studentId)) {
-            throw new MyException("修改klass_student的teamid字段错误！更新失败", MyException.ERROR);
+        //如果不存在记录，才新增
+        if(cClassStudentMapper.getByPrimaryKeys(cClassStudent.getcClassId(),cClassStudent.getStudentId())==null) {
+            if(!cClassStudentMapper.insertCClassStudent(cClassStudent)){
+                throw new MyException("新增班级学生错误！数据库处理错误", MyException.ERROR);
+            }
         }
         return true;
     }
 
     /**
-     * Description: 检查TeamId
-     *
-     * @Author: 17Wang
-     * @Time: 23:23 2018/12/19
-     */
-    public long getTeamIdByPrimaryKeys(long cClassId, long studentId) throws MyException {
-        if (cClassStudentMapper.getByPrimaryKeys(cClassId, studentId) == null) {
-            throw new MyException("修改klass_student的teamid字段错误！找不到该行", MyException.NOT_FOUND_ERROR);
-        }
-        Long l = cClassStudentMapper.getTeamIdByPrimaryKeys(cClassId, studentId);
-        if (l == null) {
-            return 0;
-        }
-        return cClassStudentMapper.getTeamIdByPrimaryKeys(cClassId, studentId);
-    }
-
-    /**
      * Description: 新增班级轮次 对应klass_round表
+     *
      * @Author: WinstonDeng
      * @Date: 15:34 2018/12/20
      */
-    public boolean addCClassRound(CClassRound cClassRound) throws MyException{
-        if(cClassMapper.findById(cClassRound.getcClassId())==null){
-            throw new MyException("新增班级轮次错误！未找到班级",MyException.NOT_FOUND_ERROR);
-        }
-        if(roundMapper.findById(cClassRound.getRoundId())==null){
-            throw new MyException("新增班级轮次错误！未找到轮次",MyException.NOT_FOUND_ERROR);
-        }
-        if(cClassRoundMapper.findByPrimaryKeys(cClassRound.getcClassId(),cClassRound.getRoundId())!=null){
-            throw new MyException("新增班级轮次错误！该班级轮次已存在",MyException.ERROR);
-        }
+    public boolean addCClassRound(CClassRound cClassRound) throws MyException {
         try {
             cClassRoundMapper.insertCClassRound(cClassRound);
-        }catch (Exception e){
-            throw new MyException("新增班级轮次错误！数据库处理出错",MyException.ERROR);
+        } catch (Exception e) {
+            throw new MyException("新增班级轮次错误！数据库处理出错", MyException.ERROR);
+        }
+        return true;
+    }
+
+    /**
+     * Description: 批量修改klass_student的某一teamId为null
+     *
+     * @Author: WinstonDeng
+     * @Date: 11:26 2018/12/25
+     */
+
+    public boolean updateTeamIdCollectionToNull(long teamId) throws Exception {
+        //修改查找学生的方式
+        if (studentMapper.findByTeamId(teamId) == null) {
+            throw new MyException("批量修改班级学生队伍id错误！未找到该队伍下的记录", MyException.NOT_FOUND_ERROR);
+        }
+        if (!cClassStudentMapper.updateTeamIdCollectionToNull(teamId)) {
+            throw new MyException("批量修改班级学生队伍id错误！数据库处理错误", MyException.ERROR);
         }
         return true;
     }
