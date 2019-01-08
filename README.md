@@ -13,7 +13,12 @@
 ## 3. 需求说明
 - 需求由标准组统一汇总制订。
 ## 4. 界面说明
-由界面标准组提供，界面仅供参考元素，布局样式各自发挥：
+1.本组界面：
+- [学生教师移动端](https://github.com/wuluchaoren/RBSFront-dev)
+- [学生教师PC端](https://github.com/wuluchaoren/RBSPCFront-dev)
+- [管理员端](https://github.com/wuluchaoren/RBSAdminFront-dev)
+
+2.基本标准由界面标准组提供原型，界面仅供参考元素，布局样式各自发挥：
 - [学生及教师移动端](https://pro.modao.cc/app/8TwH3i3V6EGH1q70idMCpZTsR2VUxwl#screen=sE25F4AB9081539853923391) 
 - [教师 PC 端](https://free.modao.cc/app/c1e8d636ecb5c1a5bfd006cb94f88d10dc42702e#screen=s6b08d44d304c1c4308912f)
 - [学生 PC 端](https://free.modao.cc/app/989e29332fd42a436d609524c0eb31347ea0e2e7)
